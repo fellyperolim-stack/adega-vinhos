@@ -3,87 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinhos Fellype & Hwlly</title>
+    <title>Fellype & Hwlly - Nosso Legado do Vinho</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Estética profissional e minimalista */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: #2d2d2d; padding: 30px; border-radius: 15px; border: 1px solid #444; }
-        h2 { color: #b03060; text-align: center; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; background: #3d3d3d; color: white; }
-        button { width: 100%; padding: 15px; background: #b03060; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #802040; }
-        button:disabled { background: #555; }
-        #status { text-align: center; margin-top: 15px; font-size: 0.9em; }
+        :root {
+            --vinho-escuro: #4a0404;
+            --vinho-vivo: #800020;
+            --dourado: #d4af37;
+            --bg: #0a0a0a;
+            --card: #161616;
+            --texto: #e0e0e0;
+            --subtexto: #aaa;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Times New Roman', Times, serif; /* Fonte clássica para o texto */
+            background-color: var(--bg);
+            color: var(--texto);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        h1, h2, h3, .nav-logo a {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Fonte moderna para títulos */
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* --- MENU DE NAVEGAÇÃO SUPERIOR (ABAS) --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--vinho-escuro);
+            backdrop-filter: blur(10px);
+        }
+        .nav-logo a {
+            color: var(--dourado);
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado); }
+        
+        /* DROPDOWN (PARA EXPLORAR) */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1a1a1a;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            z-index: 1;
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            text-transform: none;
+            font-size: 0.9rem;
+        }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- HERO SECTION (Abertura com o seu texto) --- */
+        .hero {
+            height: 70vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(10,10,10,1)), 
+                        url('https://images.unsplash.com/photo-1510850463344-671480033ff5?q=80&w=2070') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-emblema { font-size: 3rem; color: var(--vinho-vivo); margin-bottom: 20px; }
+        
+        .hero p.citacao {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--dourado);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .hero p.introducao {
+            font-size: 1.1rem;
+            color: var(--subtexto);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- SEÇÃO DE ESTATÍSTICAS (Dashboad Fixos) --- */
+        .stats-bar {
+            background: var(--card);
+            padding: 50px 20px;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item { text-align: center; min-width: 150px; }
+        .stat-icon { font-size: 2.5rem; color: var(--vinho-vivo); margin-bottom: 10px; }
+        .stat-item h2 { color: var(--dourado); font-size: 3rem; margin: 5px 0; font-weight: bold;}
+        .stat-item p { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; color: var(--subtexto); margin: 0;}
+
+        /* --- CORPO DA PÁGINA (Textos e Listas) --- */
+        .main-content {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 50px;
+        }
+
+        .text-block h2 { color: var(--dourado); font-size: 2rem; border-bottom: 1px solid var(--vinho-escuro); padding-bottom: 10px; }
+        .text-block p { margin-bottom: 20px; color: var(--texto); }
+
+        /* Estilo da Lista de Destinos */
+        .destinos-list {
+            list-style: none;
+            padding: 0;
+            background: var(--card);
+            border-radius: 10px;
+            border: 1px solid #222;
+        }
+
+        .destinos-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid #222;
+            font-size: 0.95rem;
+        }
+        .destinos-list li:last-child { border-bottom: none; }
+        .destinos-list .pais-nome { color: var(--texto); }
+        .destinos-list .pais-count { color: var(--dourado); font-weight: bold; }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid #222;
+            background: #080808;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .navbar { padding: 15px 20px; }
+            .nav-links { display: none; } /* Menu hamburguer precisa de JS */
+            .hero-emblema { font-size: 2rem; }
+            .hero p.citacao { font-size: 1.1rem; }
+            .stats-bar { gap: 30px; padding: 30px 20px; }
+            .stat-item h2 { font-size: 2rem; }
+            .main-content { grid-template-columns: 1fr; gap: 30px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>🍷 Catálogo Fellype & Hwlly</h2>
-        <input type="text" id="wineName" placeholder="Nome do Vinho" required>
-        <input type="text" id="produtor" placeholder="Produtor">
-        <input type="text" id="uva" placeholder="Uva(s)">
-        <input type="text" id="pais" placeholder="País">
-        <input type="number" id="notaF" placeholder="Nota Fellype (0-10)" step="0.1">
-        <input type="number" id="notaH" placeholder="Nota Hwlly (0-10)" step="0.1">
-        <input type="file" id="foto" accept="image/*" capture="camera">
-        <button id="btnSalvar">REGISTRAR VINHO</button>
-        <p id="status"></p>
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <a href="index.html">Fellype & Hwlly</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Página Inicial</a></li>
+            <li><a href="catalogo.html">Vinhos (Adega)</a></li>
+            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
+            <li><a href="cadastro.html">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Explorar <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="catalogo.html?filtro=pais">Por Países</a>
+                    <a href="catalogo.html?filtro=uva">Por Uvas</a>
+                    <a href="catalogo.html?filtro=vinicola">Vinícolas</a>
+                    <a href="catalogo.html?filtro=melhores">Melhores do Mês</a>
+                </div>
+            </li>
+        </ul>
+        <div class="nav-toggle" style="color: white; display: none;"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-emblema">🍷</div>
+        <p class="citacao">
+            "Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."
+        </p>
+        <p class="introducao">
+            Desde o primeiro brinde compartilhado 🥂, embarcamos numa aventura sensorial sem fim 🍷✨. Criamos este espaço para guardar as memórias de nossos encontros, descobertas e celebrações 🎉, celebrando a paixão que nos une a cada gole ❤️.
+        </p>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-icon">🍷</div>
+            <h2>95+</h2>
+            <p>Vinhos Degustados</p>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🌍</div>
+            <h2>11</h2>
+            <p>Países Explorados</p>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon">🗺️</div>
+            <h2>44+</h2>
+            <p>Regiões Distintas</p>
+        </div>
     </div>
 
-    <script>
-        // ESTE É O LINK QUE VOCÊ GEROU NO PASSO DO APPS SCRIPT (TERMINA EM /exec)
-        const WEB_APP_URL = "COLE_AQUI_O_LINK_DO_GOOGLE_APPS_SCRIPT";
+    <main class="main-content">
+        
+        <div class="text-block">
+            <h2>Nossas Descobertas</h2>
+            <p>
+                Ao longo dessa jornada, Portugal figura entre nossos destinos favoritos, ao lado de Chile, Argentina, Espanha e França, sem esquecer as surpresas da Hungria, Uruguai e África do Sul. Passamos por adegas históricas em Mendoza 🏰, brindamos nas colinas de Lisboa 🌄 e nos encantamos com os vinhos do Valle Central chileno 🍇.
+            </p>
+            <p>
+                Compartilhamos preferências por mais de 31 castas 🍇: o frescor vibrante do Chardonnay e do Sauvignon Blanc 🌿, a complexidade dos blends italianos, a intensidade da Syrah 🔥 e a leveza do Torrontés argentino 🌸. Entre nossos rótulos prediletos, destacam-se os da Parras Wine e da Undurraga 🏅, além de preciosidades garimpadas em pequenas vinícolas de Romagna, Western Cape e Luján de Cuyo 🍾.
+            </p>
+            <p>
+                Que este espaço nos transporte sempre de volta às nossas melhores lembranças 💭, aos aromas que marcaram cada encontro e às histórias que apenas nós contamos 📖. Aqui, cada taça é uma cápsula do tempo ⏳ — nosso legado, guardado com carinho e pronto para ser revisitado a dois 💑.
+            </p>
+        </div>
 
-        document.getElementById('btnSalvar').addEventListener('click', async () => {
-            const btn = document.getElementById('btnSalvar');
-            const status = document.getElementById('status');
-            
-            const wineName = document.getElementById('wineName').value;
-            if(!wineName) { alert("O nome do vinho é obrigatório!"); return; }
+        <div class="destinos-block">
+            <h3 style="color: var(--dourado); text-align: center; text-transform: uppercase; font-size: 1rem; letter-spacing: 2px;">
+                Nossos Destinos
+            </h3>
+            <ul class="destinos-list">
+                <li><span class="pais-nome">Chile</span><span class="pais-count">23</span></li>
+                <li><span class="pais-nome">Espanha</span><span class="pais-count">18</span></li>
+                <li><span class="pais-nome">Portugal</span><span class="pais-count">16</span></li>
+                <li><span class="pais-nome">Argentina</span><span class="pais-count">14</span></li>
+                <li><span class="pais-nome">Itália</span><span class="pais-count">6</span></li>
+                <li><span class="pais-nome">França</span><span class="pais-count">6</span></li>
+                <li><span class="pais-nome">Uruguai</span><span class="pais-count">3</span></li>
+                <li><span class="pais-nome">Brasil</span><span class="pais-count">2</span></li>
+                <li><span class="pais-nome">África do Sul</span><span class="pais-count">2</span></li>
+                <li><span class="pais-nome">Austrália</span><span class="pais-count">2</span></li>
+                <li><span class="pais-nome">Hungria</span><span class="pais-count">2</span></li>
+            </ul>
+        </div>
 
-            btn.disabled = true;
-            status.innerText = "Processando... 🍷";
+    </main>
 
-            const fileInput = document.getElementById('foto');
-            let fotoBase64 = "";
+    <footer>
+        Criado com ❤️ para guardar as memórias de Fellype e Hwlly.<br>
+        Ano 2026 • Hospedado via GitHub Pages • Conectado à Planilha Mestra
+    </footer>
 
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fotoBase64 = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(file);
-                });
-            }
-
-            const payload = {
-                wineName: wineName,
-                produtor: document.getElementById('produtor').value,
-                uva: document.getElementById('uva').value,
-                pais: document.getElementById('pais').value,
-                notaF: document.getElementById('notaF').value,
-                notaH: document.getElementById('notaH').value,
-                foto: fotoBase64
-            };
-
-            // Envio direto para o Google (Sem intermediários)
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                status.style.color = "#4CAF50";
-                status.innerText = "✅ Vinho registrado na planilha e foto salva!";
-                document.querySelectorAll('input').forEach(i => i.value = "");
-            })
-            .catch(err => {
-                status.style.color = "#f44336";
-                status.innerText = "❌ Erro na conexão.";
-                console.error(err);
-            })
-            .finally(() => btn.disabled = false);
-        });
-    </script>
 </body>
 </html>
