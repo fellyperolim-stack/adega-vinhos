@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinhos Fellype & Hwlly</title>
+    <style>
+        /* Estética profissional e minimalista */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: #2d2d2d; padding: 30px; border-radius: 15px; border: 1px solid #444; }
+        h2 { color: #b03060; text-align: center; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; background: #3d3d3d; color: white; }
+        button { width: 100%; padding: 15px; background: #b03060; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #802040; }
+        button:disabled { background: #555; }
+        #status { text-align: center; margin-top: 15px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🍷 Catálogo Fellype & Hwlly</h2>
+        <input type="text" id="wineName" placeholder="Nome do Vinho" required>
+        <input type="text" id="produtor" placeholder="Produtor">
+        <input type="text" id="uva" placeholder="Uva(s)">
+        <input type="text" id="pais" placeholder="País">
+        <input type="number" id="notaF" placeholder="Nota Fellype (0-10)" step="0.1">
+        <input type="number" id="notaH" placeholder="Nota Hwlly (0-10)" step="0.1">
+        <input type="file" id="foto" accept="image/*" capture="camera">
+        <button id="btnSalvar">REGISTRAR VINHO</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        // ESTE É O LINK QUE VOCÊ GEROU NO PASSO DO APPS SCRIPT (TERMINA EM /exec)
+        const WEB_APP_URL = "COLE_AQUI_O_LINK_DO_GOOGLE_APPS_SCRIPT";
+
+        document.getElementById('btnSalvar').addEventListener('click', async () => {
+            const btn = document.getElementById('btnSalvar');
+            const status = document.getElementById('status');
+            
+            const wineName = document.getElementById('wineName').value;
+            if(!wineName) { alert("O nome do vinho é obrigatório!"); return; }
+
+            btn.disabled = true;
+            status.innerText = "Processando... 🍷";
+
+            const fileInput = document.getElementById('foto');
+            let fotoBase64 = "";
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fotoBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const payload = {
+                wineName: wineName,
+                produtor: document.getElementById('produtor').value,
+                uva: document.getElementById('uva').value,
+                pais: document.getElementById('pais').value,
+                notaF: document.getElementById('notaF').value,
+                notaH: document.getElementById('notaH').value,
+                foto: fotoBase64
+            };
+
+            // Envio direto para o Google (Sem intermediários)
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                status.style.color = "#4CAF50";
+                status.innerText = "✅ Vinho registrado na planilha e foto salva!";
+                document.querySelectorAll('input').forEach(i => i.value = "");
+            })
+            .catch(err => {
+                status.style.color = "#f44336";
+                status.innerText = "❌ Erro na conexão.";
+                console.error(err);
+            })
+            .finally(() => btn.disabled = false);
+        });
+    </script>
+</body>
+</html>
