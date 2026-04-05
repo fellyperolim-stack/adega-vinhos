@@ -28,12 +28,13 @@
         .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: 0.3s; position: relative; }
         .vinho-card:hover { transform: translateY(-5px); border-color: var(--vinho-vivo); }
         
-        .vinho-img-container { width: 100%; height: 250px; background: #111; overflow: hidden; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; }
+        .vinho-img-container { width: 100%; height: 280px; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .vinho-card:hover .vinho-img { transform: scale(1.05); }
         
         .vinho-info { padding: 20px; }
         .vinho-nome { font-size: 1.2rem; color: var(--dourado); margin: 0 0 10px 0; }
-        .vinho-detalhes { font-size: 0.9rem; color: #aaa; margin-bottom: 15px; }
+        .vinho-detalhes { font-size: 0.9rem; color: #aaa; margin-bottom: 15px; min-height: 45px; }
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; font-weight: bold; }
         .nota-box { text-align: center; flex: 1; }
         .nota-box span { display: block; font-size: 0.7rem; color: #666; text-transform: uppercase; }
@@ -63,8 +64,10 @@
     <div class="vinho-grid" id="vinho-grid"></div>
 
     <script>
-        // SUBSTITUA PELO SEU LINK DO APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        
+        // IMAGEM PADRÃO (PLACEHOLDER)
+        const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
         let vinhos = [];
 
@@ -81,10 +84,18 @@
 
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
-            grid.innerHTML = lista.map(v => `
+            grid.innerHTML = lista.map(v => {
+                // Verifica se existe foto e se não é apenas um link vazio ou espaço
+                const temFoto = v["Foto"] && v["Foto"].toString().trim().length > 10;
+                const urlFoto = temFoto ? v["Foto"] : IMG_PADRAO;
+
+                return `
                 <div class="vinho-card">
                     <div class="vinho-img-container">
-                        <img class="vinho-img" src="${v["Foto"] || 'https://via.placeholder.com/400x300?text=Vinho+Sem+Foto'}" alt="Vinho">
+                        <img class="vinho-img" 
+                             src="${urlFoto}" 
+                             alt="Vinho" 
+                             onerror="this.src='${IMG_PADRAO}'">
                     </div>
                     <div class="vinho-info">
                         <h3 class="vinho-nome">${v["Nome do Vinho"]}</h3>
@@ -98,7 +109,8 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Busca Viva
@@ -106,8 +118,8 @@
             const termo = e.target.value.toLowerCase();
             const filtrados = vinhos.filter(v => 
                 v["Nome do Vinho"].toLowerCase().includes(termo) ||
-                v["Uva(s)"].toLowerCase().includes(termo) ||
-                v["País"].toLowerCase().includes(termo)
+                (v["Uva(s)"] && v["Uva(s)"].toLowerCase().includes(termo)) ||
+                (v["País"] && v["País"].toLowerCase().includes(termo))
             );
             renderVinhos(filtrados);
         });
