@@ -64,10 +64,11 @@
     <div class="vinho-grid" id="vinho-grid"></div>
 
     <script>
+        // SUBSTITUA PELO SEU LINK DO APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         
-        // IMAGEM PADRÃO (PLACEHOLDER)
-        const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
+        // IMAGEM PADRÃO ATUALIZADA (VINHO BRANCO RÚSTICO)
+        const IMG_PADRAO = "https://images.unsplash.com/photo-1596716039572-e1d884766863?q=80&w=600&auto=format&fit=crop";
 
         let vinhos = [];
 
@@ -94,7 +95,7 @@
                     <div class="vinho-img-container">
                         <img class="vinho-img" 
                              src="${urlFoto}" 
-                             alt="Vinho" 
+                             alt="Vinho Branco Padrão" 
                              onerror="this.src='${IMG_PADRAO}'">
                     </div>
                     <div class="vinho-info">
