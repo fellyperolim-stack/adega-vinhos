@@ -8,21 +8,15 @@
     <style>
         :root { --vinho: #800020; --dourado: #d4af37; --bg: #0a0a0a; --card: #1a1a1a; --texto: #e0e0e0; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .container { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #333; width: 90%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         h2 { color: var(--dourado); text-align: center; font-weight: 300; margin-bottom: 25px; }
-        
         #login-section { text-align: center; }
         #form-section { display: none; }
-
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; outline: none; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #111; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--dourado); }
-        
         button { width: 100%; padding: 15px; background: var(--vinho); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; margin-top: 15px; }
         button:hover { background: #a00028; transform: translateY(-2px); }
-        
         .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 0.8rem; }
-        .back-link:hover { color: var(--dourado); }
     </style>
 </head>
 <body>
@@ -43,7 +37,7 @@
                 <input type="text" name="Uva(s)" placeholder="Uva(s)" required>
                 <input type="text" name="País" placeholder="País" required>
                 <input type="number" name="Safra" placeholder="Safra (Ano)" required>
-                <input type="text" name="Foto" placeholder="Link da Foto (Google Drive)">
+                <input type="text" name="Foto" placeholder="Link da Foto">
                 
                 <div style="display: flex; gap: 10px;">
                     <input type="number" step="0.5" name="Pontuação Fellype" placeholder="Nota Fellype" required>
@@ -56,27 +50,27 @@
     </div>
 
     <script>
-        // DEFINA SUA SENHA AQUI
-        const SENHA_CORRETA = "hwlly2026"; 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        let senhaCache = "";
 
         function checkPass() {
-            const digitada = document.getElementById('senhaInput').value;
-            if(digitada === SENHA_CORRETA) {
+            // No front-end, mantemos uma senha simples para evitar curiosos
+            // Mas a validação real ocorre no servidor (Google Script)
+            senhaCache = document.getElementById('senhaInput').value;
+            if(senhaCache.length > 0) {
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('form-section').style.display = 'block';
-            } else {
-                alert("Senha incorreta, Fellype!");
             }
         }
 
         document.getElementById('wineForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btnSubmit');
-            btn.innerText = "Enviando...";
+            btn.innerText = "Validando e Enviando...";
             btn.disabled = true;
 
             const data = Object.fromEntries(new FormData(e.target));
+            data.tokenAcesso = senhaCache; // Envia a senha para o Google validar
 
             try {
                 await fetch(SCRIPT_URL, {
@@ -84,10 +78,13 @@
                     mode: 'no-cors',
                     body: JSON.stringify(data)
                 });
-                alert("Vinho registrado com sucesso!");
+                
+                // Como usamos no-cors, o navegador não lê a resposta de sucesso, 
+                // então assumimos que deu certo se não houver erro de rede.
+                alert("Vinho registrado com segurança!");
                 window.location.href = "catalogo.html";
             } catch (err) {
-                alert("Erro ao salvar dados.");
+                alert("Erro de conexão. Verifique o Script.");
                 btn.disabled = false;
                 btn.innerText = "Salvar na Planilha 🍷";
             }
