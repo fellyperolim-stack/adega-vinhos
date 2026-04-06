@@ -1,52 +1,113 @@
-<script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-    let senhaValidada = "";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Restrito | Fellype & Hwlly</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --vinho: #800020; --dourado: #d4af37; --bg: #0a0a0a; --card: #1a1a1a; --texto: #e0e0e0; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--texto); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #333; width: 90%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--dourado); text-align: center; font-weight: 300; margin-bottom: 25px; }
+        #login-section { text-align: center; }
+        #form-section { display: none; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #111; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--dourado); }
+        button { width: 100%; padding: 15px; background: var(--vinho); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; margin-top: 15px; }
+        button:hover { background: #a00028; transform: translateY(-2px); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
 
-    async function checkPass() {
-        const campoSenha = document.getElementById('senhaInput');
-        const btnLogin = document.querySelector('#login-section button');
-        const senhaDigitada = campoSenha.value;
+    <div class="container">
+        <div id="login-section">
+            <i class="fas fa-user-lock" style="font-size: 3rem; color: var(--vinho); margin-bottom: 15px;"></i>
+            <h2>Acesso do Sommelier</h2>
+            <input type="password" id="senhaInput" placeholder="Senha de Acesso">
+            <button id="btnLogin" onclick="checkPass()">Desbloquear</button>
+            <a href="index.html" class="back-link">Sair</a>
+        </div>
 
-        btnLogin.innerText = "Verificando...";
-        btnLogin.disabled = true;
+        <div id="form-section">
+            <h2>Cadastrar Novo Vinho</h2>
+            <form id="wineForm">
+                <input type="text" name="Nome do Vinho" placeholder="Nome do Vinho" required>
+                <input type="text" name="Uva(s)" placeholder="Uva(s)" required>
+                <input type="text" name="País" placeholder="País" required>
+                <input type="number" name="Safra" placeholder="Safra (Ano)" required>
+                <input type="text" name="Foto" placeholder="Link da Foto (Google Drive)">
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" step="0.5" name="Pontuação Fellype" placeholder="Nota Fellype" required>
+                    <input type="number" step="0.5" name="Pontuação Hwlly" placeholder="Nota Hwlly" required>
+                </div>
+                <button type="submit" id="btnSubmit">Salvar na Planilha 🍷</button>
+            </form>
+        </div>
+    </div>
 
-        try {
-            // Pergunta ao Google se a senha está certa via URL (GET)
-            const response = await fetch(`${SCRIPT_URL}?action=verificarSenha&senha=${senhaDigitada}`);
-            const data = await response.json();
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        let senhaValidada = "";
 
+        // Função de retorno para o Google validar a senha sem erro de CORS
+        function loginCallback(data) {
+            const btn = document.getElementById('btnLogin');
             if (data.result === "success") {
-                senhaValidada = senhaDigitada; // Guarda a senha correta apenas na memória temporária
+                senhaValidada = document.getElementById('senhaInput').value;
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('form-section').style.display = 'block';
             } else {
                 alert("Senha Inválida!");
-                campoSenha.value = "";
-                btnLogin.innerText = "Desbloquear";
-                btnLogin.disabled = false;
+                document.getElementById('senhaInput').value = "";
+                btn.innerText = "Desbloquear";
+                btn.disabled = false;
             }
-        } catch (err) {
-            alert("Erro ao conectar com o servidor.");
-            btnLogin.disabled = false;
+            // Limpa o script temporário
+            const oldScript = document.getElementById('jsonp-login');
+            if (oldScript) oldScript.remove();
         }
-    }
 
-    document.getElementById('wineForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        btn.innerText = "Salvando...";
-        btn.disabled = true;
+        function checkPass() {
+            const senha = document.getElementById('senhaInput').value;
+            const btn = document.getElementById('btnLogin');
+            if (!senha) return;
 
-        const formData = Object.fromEntries(new FormData(e.target));
-        formData.tokenAcesso = senhaValidada; // Envia a senha para o doPost validar
+            btn.innerText = "Verificando...";
+            btn.disabled = true;
 
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(formData)
+            // Técnica JSONP para burlar o erro de CORS no login
+            const script = document.createElement('script');
+            script.id = 'jsonp-login';
+            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(senha)}&callback=loginCallback`;
+            document.body.appendChild(script);
+        }
+
+        document.getElementById('wineForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerText = "Salvando...";
+            btn.disabled = true;
+
+            const formData = Object.fromEntries(new FormData(e.target));
+            formData.tokenAcesso = senhaValidada;
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(formData)
+                });
+                alert("Vinho salvo com sucesso!");
+                window.location.href = "catalogo.html";
+            } catch (err) {
+                alert("Erro ao salvar.");
+                btn.disabled = false;
+                btn.innerText = "Salvar na Planilha 🍷";
+            }
         });
-
-        alert("Vinho salvo com sucesso!");
-        window.location.href = "catalogo.html";
-    });
-</script>
+    </script>
+</body>
+</html>
