@@ -80,13 +80,14 @@
         
         let step = 0;
         let dataVinho = {};
+        let isValidating = false;
 
         const fluxo = [
             { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
             { key: 'uva', q: "Oi! Ipanemita perguntando: qual a uva?", bot: 'ipanemita', type: 'text' },
             { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text' },
             { key: 'year', q: "Qual a safra?", bot: 'ipanemita', type: 'text' },
-            { key: 'tokenAcesso', q: "Para salvar este vinho, Leblonzito precisa da senha de acesso:", bot: 'leblonzito', type: 'password' }
+            { key: 'tokenAcesso', q: "Quase lá! Leblonzito precisa da senha para salvar:", bot: 'leblonzito', type: 'password' }
         ];
 
         window.onload = () => {
@@ -119,7 +120,6 @@
                 div.className = 'msg msg-user';
             }
 
-            // Se for a senha do usuário, exibe como asteriscos no chat por privacidade visual
             const displayMsg = (type === 'user' && fluxo[step-1]?.type === 'password') ? '••••••••' : text;
 
             div.innerHTML = (type === 'user') ? `<div class="bubble">${displayMsg}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
@@ -144,6 +144,8 @@
         }
 
         async function sendMessage() {
+            if(isValidating) return; // Bloqueia spam enquanto valida a senha
+            
             const input = document.getElementById('userInput');
             const msg = input.value.trim();
             if(!msg) return;
@@ -158,34 +160,37 @@
                 setTimeout(() => {
                     updateHeader(nextStep.bot);
                     addMsg(nextStep.q, nextStep.bot);
-                    // Troca o tipo do input para password se for o campo de senha
                     input.type = nextStep.type;
                 }, 700);
             } else {
-                // Chegou no fim: validar senha antes de abrir o modal de notas
-                validarERecolherNotas();
+                validarSenhaFinal();
             }
         }
 
-        function validarERecolherNotas() {
+        function validarSenhaFinal() {
+            isValidating = true;
             updateHeader('final');
             addMsg("Validando acesso...", 'final');
             
-            // Chama o script para verificar a senha digitada no último passo
             const script = document.createElement('script');
             script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(dataVinho.tokenAcesso)}&callback=authResult`;
             document.body.appendChild(script);
         }
 
-        function authResult(res) {
+        window.authResult = function(res) {
+            isValidating = false;
             if (res.result === "success") {
                 addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
                 setTimeout(() => {
                     document.getElementById('ratingModal').showModal();
                 }, 800);
             } else { 
-                addMsg("Senha incorreta. Recarregue a página para tentar novamente.", 'final');
-                document.getElementById('input-container').style.display = 'none';
+                // Senha incorreta: Reduz o step para permitir nova digitação da senha
+                step--; 
+                addMsg("Senha incorreta, Fellype. Tente novamente:", 'leblonzito');
+                updateHeader('leblonzito');
+                document.getElementById('userInput').type = "password";
+                document.getElementById('userInput').focus();
             }
         }
 
