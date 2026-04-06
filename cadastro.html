@@ -18,24 +18,10 @@
         
         .chat-card { width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
 
-        /* Containers de Avatar */
         .shiba-spotlight { background: #fff; border-radius: 20px; padding: 2px; display: inline-flex; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); border: 1.5px solid var(--gold); overflow: hidden; justify-content: center; align-items: center; }
-        
-        /* Ajuste CRÍTICO para focar no ROSTO */
-        .avatar-lg { width: 100px; height: 100px; border-radius: 15px; object-fit: cover; object-position: center 20%; }
         .avatar-sm { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .zoom-face { transform: scale(1.8); transform-origin: center 20%; }
 
-        /* Zoom específico para o Chat e Header - Focando na cabeça */
-        .zoom-face {
-            transform: scale(1.8); /* Aumenta para esconder o corpo */
-            transform-origin: center 20%; /* Foca o zoom na parte superior (cabeça) */
-        }
-
-        /* Tela de Login */
-        #login-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--black); padding: 40px; transition: transform 0.6s ease; }
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 20px 0 0; font-size: 22px; letter-spacing: 1px; text-align: center; }
-        .input-premium { width: 100%; max-width: 280px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; color: white; text-align: center; margin-top: 30px; font-size: 18px; outline: none; }
-        
         .chat-header { padding: 15px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); }
         .chat-window { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scrollbar-width: none; }
         .msg { max-width: 85%; animation: msgPop 0.3s ease-out; display: flex; align-items: flex-end; gap: 10px; }
@@ -62,24 +48,13 @@
 
     <div class="main-wrapper">
         <div class="chat-card">
-            
-            <div id="login-screen">
-                <div style="display:flex; gap:20px; justify-content: center;">
-                    <div class="shiba-spotlight"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="avatar-lg" alt="Leblonzito"></div>
-                    <div class="shiba-spotlight"><img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita"></div>
-                </div>
-                <h1>ADEGA EXCLUSIVA</h1>
-                <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
-                <button onclick="checkAuth()" class="btn-gold" style="max-width:180px">ENTRAR</button>
-            </div>
-
-            <div id="chat-header" class="chat-header" style="display:none">
+            <div id="chat-header" class="chat-header">
                 <div id="header-content" style="display:flex; align-items:center; gap:12px; width:100%"></div>
             </div>
 
-            <div id="chat-window" class="chat-window" style="display:none"></div>
+            <div id="chat-window" class="chat-window"></div>
 
-            <div id="input-container" class="input-container" style="display:none">
+            <div id="input-container" class="input-container">
                 <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem...">
                 <button class="send-btn" onclick="sendMessage()">➤</button>
             </div>
@@ -103,38 +78,21 @@
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
         const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"; 
         
-        let token = "";
         let step = 0;
         let dataVinho = {};
 
         const fluxo = [
-            { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito' },
-            { key: 'uva', q: "Oi! Ipanemita perguntando: qual a uva?", bot: 'ipanemita' },
-            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito' },
-            { key: 'year', q: "E qual a safra?", bot: 'ipanemita' }
+            { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
+            { key: 'uva', q: "Oi! Ipanemita perguntando: qual a uva?", bot: 'ipanemita', type: 'text' },
+            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text' },
+            { key: 'year', q: "Qual a safra?", bot: 'ipanemita', type: 'text' },
+            { key: 'tokenAcesso', q: "Para salvar este vinho, Leblonzito precisa da senha de acesso:", bot: 'leblonzito', type: 'password' }
         ];
 
-        function checkAuth() {
-            const pass = document.getElementById('passInput').value;
-            const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(pass)}&callback=authResult`;
-            document.body.appendChild(script);
-        }
-
-        function authResult(res) {
-            if (res.result === "success") {
-                token = document.getElementById('passInput').value;
-                document.getElementById('login-screen').style.transform = 'translateY(-100%)';
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('chat-header').style.display = 'flex';
-                    document.getElementById('chat-window').style.display = 'flex';
-                    document.getElementById('input-container').style.display = 'flex';
-                    addMsg(fluxo[0].q, 'leblonzito');
-                    updateHeader('leblonzito');
-                }, 600);
-            } else { alert("Acesso negado."); }
-        }
+        window.onload = () => {
+            updateHeader('leblonzito');
+            addMsg(fluxo[0].q, 'leblonzito');
+        };
 
         function getAvatarHtml(imgUrl) {
             return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face"></div>`;
@@ -161,7 +119,10 @@
                 div.className = 'msg msg-user';
             }
 
-            div.innerHTML = (type === 'user') ? `<div class="bubble">${text}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
+            // Se for a senha do usuário, exibe como asteriscos no chat por privacidade visual
+            const displayMsg = (type === 'user' && fluxo[step-1]?.type === 'password') ? '••••••••' : text;
+
+            div.innerHTML = (type === 'user') ? `<div class="bubble">${displayMsg}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
         }
@@ -193,26 +154,47 @@
 
             step++;
             if(step < fluxo.length) {
-                const nextBot = fluxo[step].bot;
+                const nextStep = fluxo[step];
                 setTimeout(() => {
-                    updateHeader(nextBot);
-                    addMsg(fluxo[step].q, nextBot);
+                    updateHeader(nextStep.bot);
+                    addMsg(nextStep.q, nextStep.bot);
+                    // Troca o tipo do input para password se for o campo de senha
+                    input.type = nextStep.type;
                 }, 700);
             } else {
+                // Chegou no fim: validar senha antes de abrir o modal de notas
+                validarERecolherNotas();
+            }
+        }
+
+        function validarERecolherNotas() {
+            updateHeader('final');
+            addMsg("Validando acesso...", 'final');
+            
+            // Chama o script para verificar a senha digitada no último passo
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(dataVinho.tokenAcesso)}&callback=authResult`;
+            document.body.appendChild(script);
+        }
+
+        function authResult(res) {
+            if (res.result === "success") {
+                addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
                 setTimeout(() => {
-                    updateHeader('final');
-                    addMsg("Tudo pronto! Vamos para as notas?", 'final');
                     document.getElementById('ratingModal').showModal();
-                }, 900);
+                }, 800);
+            } else { 
+                addMsg("Senha incorreta. Recarregue a página para tentar novamente.", 'final');
+                document.getElementById('input-container').style.display = 'none';
             }
         }
 
         function finishAll() {
-            dataVinho.tokenAcesso = token;
             dataVinho.notF = document.getElementById('notF').value;
             dataVinho.notH = document.getElementById('notH').value;
             dataVinho.recompra = document.getElementById('reCompra').value;
             dataVinho.foto = document.getElementById('picUrl').value;
+            
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataVinho) });
             alert("Vinho salvo com sucesso! 🍷🐾");
             location.href = "catalogo.html";
