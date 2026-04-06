@@ -22,48 +22,55 @@
             overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative;
         }
 
-        /* Avatar Styling */
-        .avatar-lg { width: 120px; height: 120px; border-radius: 35px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
-        .avatar-sm { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--gold); flex-shrink: 0; }
+        /* Avatar Container com fundo para destaque */
+        .shiba-spotlight {
+            background: rgba(255, 255, 255, 0.9); /* Fundo branco para destacar os dogs */
+            border-radius: 30px;
+            padding: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar-lg { width: 110px; height: 110px; border-radius: 25px; border: 2px solid var(--gold); }
+        .avatar-sm { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--gold); flex-shrink: 0; }
         
-        /* Ipanemita Filter: Transforma em Shiba Preto/Dourado */
-        .avatar-ipanemita { filter: brightness(0.1) sepia(1) hue-rotate(15deg) saturate(3) contrast(1.2); border-color: #888; }
+        /* Ajuste do Filtro Ipanemita para não sumir */
+        .avatar-ipanemita { 
+            filter: brightness(0.2) contrast(1.1) saturate(0.8) sepia(0.2); 
+            border-color: #555; 
+        }
 
         /* Login Screen */
         #login-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--black); padding: 40px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 24px; letter-spacing: 1px; text-align: center; }
         .input-premium { width: 100%; max-width: 280px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; color: white; text-align: center; margin-top: 30px; font-size: 18px; outline: none; }
-        .input-premium:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.2); }
         
         /* Chat Header */
-        .chat-header { padding: 20px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
-        .header-info { display: flex; align-items: center; gap: 10px; }
-        .multi-avatar { display: flex; gap: -10px; } /* Avatares sobrepostos no final */
+        .chat-header { padding: 20px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.2); }
         
         /* Message Window */
         .chat-window { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scrollbar-width: none; }
-        .msg { max-width: 85%; animation: msgPop 0.4s ease-out; display: flex; align-items: flex-end; gap: 10px; }
+        .msg { max-width: 90%; animation: msgPop 0.4s ease-out; display: flex; align-items: flex-end; gap: 12px; }
         .msg-bot { align-self: flex-start; }
-        .msg-user { align-self: flex-end; flex-direction: row-reverse; } /* Inverte para o usuário */
+        .msg-user { align-self: flex-end; flex-direction: row-reverse; }
         
         .bubble { padding: 14px 18px; border-radius: 20px; font-size: 15px; line-height: 1.6; position: relative; }
-        .msg-bot .bubble { background: linear-gradient(135deg, #fff, #f0f0f0); color: var(--black); border-bottom-left-radius: 4px; }
+        .msg-bot .bubble { background: #fff; color: var(--black); border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .msg-user .bubble { background: linear-gradient(135deg, var(--wine), #2a0707); color: #fff; border-bottom-right-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
         
         /* Input Area */
-        .input-container { padding: 20px; background: rgba(0,0,0,0.4); display: flex; gap: 12px; align-items: center; }
+        .input-container { padding: 20px; background: rgba(0,0,0,0.5); display: flex; gap: 12px; align-items: center; }
         .msg-input { flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px 20px; color: white; outline: none; }
         .send-btn { background: var(--gold); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        @keyframes msgPop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes msgPop { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Modal */
         dialog { border: none; background: var(--black); border: 1px solid var(--gold); border-radius: 30px; padding: 30px; width: 90%; max-width: 380px; color: #fff; }
         dialog::backdrop { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
-        .modal-field { margin-bottom: 20px; }
-        .modal-field label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
-        .modal-field input, .modal-field select { width: 100%; background: var(--glass); border: 1px solid var(--glass-border); padding: 12px; border-radius: 12px; color: white; outline: none; }
-        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: var(--black); border: none; border-radius: 15px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: var(--black); border: none; border-radius: 15px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -74,9 +81,9 @@
         <div class="chat-card">
             
             <div id="login-screen">
-                <div style="display:flex; gap:15px; margin-bottom:30px">
-                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Leblonzito">
-                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg avatar-ipanemita" alt="Ipanemita">
+                <div style="display:flex; gap:20px; margin-bottom:30px">
+                    <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Leblonzito"></div>
+                    <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg avatar-ipanemita" alt="Ipanemita"></div>
                 </div>
                 <h1>Adega Exclusiva</h1>
                 <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
@@ -84,21 +91,8 @@
             </div>
 
             <div id="chat-header" class="chat-header" style="display:none">
-                <div class="header-info" id="header-leblonzito">
-                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm" alt="Leblonzito">
-                    <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6"> Exclusive Sommelier</div></div>
-                </div>
-                <div class="header-info" id="header-ipanemita" style="display:none">
-                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm avatar-ipanemita" alt="Ipanemita">
-                    <div><div style="font-weight:600; color:#ddd">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>
-                </div>
-                <div class="header-info" id="header-final" style="display:none; justify-content:center; width:100%">
-                    <div style="display:flex; gap:-15px">
-                        <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm" style="margin-right:-15px; z-index:2">
-                        <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm avatar-ipanemita" style="z-index:1">
+                <div id="header-content" style="display:flex; align-items:center; gap:12px; width:100%">
                     </div>
-                    <div style="text-align:center"><div style="font-weight:600; color:var(--gold); font-family:'Cinzel'">Sucesso!</div></div>
-                </div>
             </div>
 
             <div id="chat-window" class="chat-window" style="display:none"></div>
@@ -106,22 +100,21 @@
             <div id="input-container" class="input-container" style="display:none">
                 <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem...">
                 <button class="send-btn" onclick="sendMessage()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                 </button>
             </div>
         </div>
     </div>
 
     <dialog id="ratingModal">
-        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:25px; color:var(--gold)">Avaliação</h2>
-        <div class="modal-field"><label>Nota Fellype</label><input type="number" id="notF" placeholder="0-100"></div>
-        <div class="modal-field"><label>Nota Hwlly</label><input type="number" id="notH" placeholder="0-100"></div>
-        <div class="modal-field">
-            <label>Recompraria?</label>
-            <select id="reCompra"><option value="Sim">Com certeza</option><option value="Não">Desta vez não</option></select>
+        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:25px; color:var(--gold)">Avaliação Final</h2>
+        <div style="display:flex; flex-direction:column; gap:15px">
+            <div><label style="font-size:11px; color:var(--gold)">NOTA FELLYPE</label><input type="number" id="notF" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
+            <div><label style="font-size:11px; color:var(--gold)">NOTA HWLLY</label><input type="number" id="notH" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
+            <div><label style="font-size:11px; color:var(--gold)">RECOMPRARIA?</label><select id="reCompra" style="width:100%; padding:10px; border-radius:10px; background:var(--glass); color:white"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+            <div><label style="font-size:11px; color:var(--gold)">FOTO URL</label><input type="text" id="picUrl" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
+            <button class="btn-gold" onclick="finishAll()" style="margin-top:10px">Finalizar</button>
         </div>
-        <div class="modal-field"><label>Foto (Link Drive)</label><input type="text" id="picUrl" placeholder="URL da imagem"></div>
-        <button class="btn-gold" onclick="finishAll()">Concluir Registro</button>
     </dialog>
 
     <script>
@@ -132,13 +125,12 @@
         let dataVinho = {};
 
         const fluxo = [
-            { key: 'wineName', q: "Olá Fellype! Leblonzito aqui. Qual rótulo vamos degustar hoje?", bot: 'leblonzito' },
-            { key: 'uva', q: "Ipanemita na área! Pode me dizer qual a casta principal desse vinho?", bot: 'ipanemita' },
-            { key: 'pais', q: "Leblonzito de volta. De qual país ele se origina?", bot: 'leblonzito' },
-            { key: 'year', q: "Ipanemita perguntando: qual a safra (ano) colhida?", bot: 'ipanemita' }
+            { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito' },
+            { key: 'uva', q: "Oi! Ipanemita perguntando: qual a uva?", bot: 'ipanemita' },
+            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito' },
+            { key: 'year', q: "E qual a safra?", bot: 'ipanemita' }
         ];
 
-        // Autenticação (JSONP)
         function checkAuth() {
             const pass = document.getElementById('passInput').value;
             const script = document.createElement('script');
@@ -155,58 +147,52 @@
                     document.getElementById('chat-header').style.display = 'flex';
                     document.getElementById('chat-window').style.display = 'flex';
                     document.getElementById('input-container').style.display = 'flex';
-                    startChat();
+                    addMsg(fluxo[0].q, 'leblonzito');
+                    updateHeader('leblonzito');
                 }, 600);
             } else { alert("Acesso negado."); }
         }
-
-        // Inicia o Chat alternando
-        function startChat() { addMsg(fluxo[0].q, fluxo[0].bot); updateHeader(fluxo[0].bot); }
 
         function addMsg(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
             
-            // Lógica para o avatar ao lado da mensagem
             let avatarHtml = '';
             if (type === 'leblonzito') {
-                avatarHtml = `<img src="${SHIBA_IMG}" class="avatar-sm">`;
-                div.className = 'msg msg-bot msg-leblonzito';
+                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>`;
+                div.className = 'msg msg-bot';
             } else if (type === 'ipanemita') {
-                avatarHtml = `<img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita">`;
-                div.className = 'msg msg-bot msg-ipanemita';
+                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>`;
+                div.className = 'msg msg-bot';
             } else if (type === 'final') {
-                // NOVO: Mensagem final com os dois avatares
-                avatarHtml = `<div style="display:flex; gap:-10px; margin-right:10px">
-                                <img src="${SHIBA_IMG}" class="avatar-sm" style="margin-right:-15px; z-index:2">
-                                <img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita" style="z-index:1">
+                avatarHtml = `<div style="display:flex; gap:-10px">
+                                <div class="shiba-spotlight" style="padding:2px; z-index:2; margin-right:-15px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
+                                <div class="shiba-spotlight" style="padding:2px; z-index:1"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
                               </div>`;
-                div.className = 'msg msg-bot msg-final';
+                div.className = 'msg msg-bot';
             } else {
                 div.className = 'msg msg-user';
             }
 
-            // Monta a mensagem final: usuário inverte, bot coloca avatar
-            if (type === 'user') {
-                div.innerHTML = `<div class="bubble">${text}</div>`;
-            } else {
-                div.innerHTML = `${avatarHtml}<div class="bubble">${text}</div>`;
-            }
-
+            div.innerHTML = (type === 'user') ? `<div class="bubble">${text}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
         }
 
-        function updateHeader(botName) {
-            // Esconde todos os cabeçalhos
-            document.getElementById('header-leblonzito').style.display = 'none';
-            document.getElementById('header-ipanemita').style.display = 'none';
-            document.getElementById('header-final').style.display = 'none';
-
-            // Mostra o cabeçalho correto
-            if (botName === 'leblonzito') document.getElementById('header-leblonzito').style.display = 'flex';
-            else if (botName === 'ipanemita') document.getElementById('header-ipanemita').style.display = 'flex';
-            else if (botName === 'final') document.getElementById('header-final').style.display = 'flex';
+        function updateHeader(bot) {
+            const head = document.getElementById('header-content');
+            if(bot === 'leblonzito') {
+                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
+                                  <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
+            } else if(bot === 'ipanemita') {
+                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
+                                  <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
+            } else {
+                head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">
+                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
+                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
+                                  </div>`;
+            }
         }
 
         async function sendMessage() {
@@ -220,16 +206,15 @@
 
             step++;
             if(step < fluxo.length) {
-                // Alterna o bot e o cabeçalho
                 const nextBot = fluxo[step].bot;
-                updateHeader(nextBot);
-                setTimeout(() => addMsg(fluxo[step].q, nextBot), 700);
-            } else {
-                // Finalização: Mostra os dois no cabeçalho e na mensagem
-                updateHeader('final');
-                document.getElementById('input-container').style.display = 'none';
                 setTimeout(() => {
-                    addMsg("Maravilha! O registro está pronto. Fellype, gostaríamos da sua avaliação final agora!", 'final');
+                    updateHeader(nextBot);
+                    addMsg(fluxo[step].q, nextBot);
+                }, 700);
+            } else {
+                setTimeout(() => {
+                    updateHeader('final');
+                    addMsg("Tudo pronto! Vamos para as notas?", 'final');
                     document.getElementById('ratingModal').showModal();
                 }, 900);
             }
@@ -241,18 +226,12 @@
             dataVinho.notH = document.getElementById('notH').value;
             dataVinho.recompra = document.getElementById('reCompra').value;
             dataVinho.foto = document.getElementById('picUrl').value;
-
-            // Envio silencioso para a planilha (POST mode: no-cors)
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataVinho) });
-
-            alert("Vinho catalogado com maestria pela dupla! 🍷🐾🐾");
+            alert("Vinho salvo com sucesso! 🍷🐾");
             location.href = "catalogo.html";
         }
 
-        // Listener de Enter
-        document.getElementById('userInput').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') sendMessage();
-        });
+        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
     </script>
 </body>
 </html>
