@@ -18,20 +18,20 @@
         
         .chat-card { width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
 
-        /* Estilo dos Avatares Centralizados */
-        .shiba-spotlight { background: #fff; border-radius: 25px; padding: 4px; display: inline-flex; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); border: 2px solid var(--gold); overflow: hidden; justify-content: center; align-items: center; }
-        .avatar-lg { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; }
+        /* Containers de Avatar */
+        .shiba-spotlight { background: #fff; border-radius: 20px; padding: 2px; display: inline-flex; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); border: 1.5px solid var(--gold); overflow: hidden; justify-content: center; align-items: center; }
         
-        /* Avatares menores (chat/header) com tamanho fixo e object-fit */
-        .avatar-sm { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+        /* Ajuste CRÍTICO para focar no ROSTO */
+        .avatar-lg { width: 100px; height: 100px; border-radius: 15px; object-fit: cover; object-position: center 20%; }
+        .avatar-sm { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 
-        /* NOVA CLASSE: Zoom e Centralização forçada no rosto para avatares menores */
-        .avatar-zoom {
-            transform: scale(2.2) translateY(-10%); /* Dá zoom e sobe a imagem para focar no rosto */
-            transform-origin: center center; /* Garante que o zoom seja a partir do centro */
+        /* Zoom específico para o Chat e Header - Focando na cabeça */
+        .zoom-face {
+            transform: scale(1.8); /* Aumenta para esconder o corpo */
+            transform-origin: center 20%; /* Foca o zoom na parte superior (cabeça) */
         }
 
-        /* Tela de Login Centralizada (aqui o zoom não é necessário, pois os avatares são grandes) */
+        /* Tela de Login */
         #login-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--black); padding: 40px; transition: transform 0.6s ease; }
         h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 20px 0 0; font-size: 22px; letter-spacing: 1px; text-align: center; }
         .input-premium { width: 100%; max-width: 280px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; color: white; text-align: center; margin-top: 30px; font-size: 18px; outline: none; }
@@ -136,10 +136,8 @@
             } else { alert("Acesso negado."); }
         }
 
-        // Função auxiliar para criar HTML do avatar com spotlight e zoom
-        function getAvatarHtml(imgUrl, isIpanemita = false) {
-            const ipanemitaClass = isIpanemita ? 'ipanemita-style' : '';
-            return `<div class="shiba-spotlight" style="padding:3px"><img src="${imgUrl}" class="avatar-sm avatar-zoom ${ipanemitaClass}"></div>`;
+        function getAvatarHtml(imgUrl) {
+            return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face"></div>`;
         }
 
         function addMsg(text, type) {
@@ -151,13 +149,12 @@
                 avatarHtml = getAvatarHtml(IMG_L);
                 div.className = 'msg msg-bot';
             } else if (type === 'ipanemita') {
-                avatarHtml = getAvatarHtml(IMG_I, true);
+                avatarHtml = getAvatarHtml(IMG_I);
                 div.className = 'msg msg-bot';
             } else if (type === 'final') {
-                // Mensagem final com os dois avatares
                 avatarHtml = `<div style="display:flex; gap:-10px">
-                                <div class="shiba-spotlight" style="padding:2px; z-index:2; margin-right:-15px"><img src="${IMG_L}" class="avatar-sm avatar-zoom"></div>
-                                <div class="shiba-spotlight" style="padding:2px; z-index:1"><img src="${IMG_I}" class="avatar-sm avatar-zoom ipanemita-style"></div>
+                                <div class="shiba-spotlight" style="z-index:2; margin-right:-15px"><img src="${IMG_L}" class="avatar-sm zoom-face"></div>
+                                <div class="shiba-spotlight" style="z-index:1"><img src="${IMG_I}" class="avatar-sm zoom-face"></div>
                               </div>`;
                 div.className = 'msg msg-bot';
             } else {
@@ -175,13 +172,12 @@
                 head.innerHTML = `${getAvatarHtml(IMG_L)}
                                   <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
             } else if(bot === 'ipanemita') {
-                head.innerHTML = `${getAvatarHtml(IMG_I, true)}
+                head.innerHTML = `${getAvatarHtml(IMG_I)}
                                   <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
             } else {
-                // Header final centralizado com os dois rostos em zoom
                 head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">
                                     ${getAvatarHtml(IMG_L)}
-                                    ${getAvatarHtml(IMG_I, true)}
+                                    ${getAvatarHtml(IMG_I)}
                                   </div>`;
             }
         }
