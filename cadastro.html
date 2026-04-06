@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adega Exclusiva | Leblonzito & Ipanemita 🍷🐶</title>
+    <title>VinhoChat | Fellype & Hwlly 🍷</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,12 +18,14 @@
         
         .chat-card { width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
 
-        .shiba-spotlight { background: #fff; border-radius: 25px; padding: 4px; display: inline-flex; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); border: 2px solid var(--gold); }
+        /* Estilo dos Avatares Centralizados */
+        .shiba-spotlight { background: #fff; border-radius: 25px; padding: 4px; display: inline-flex; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); border: 2px solid var(--gold); overflow: hidden; }
         .avatar-lg { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; }
         .avatar-sm { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
 
+        /* Tela de Login Centralizada */
         #login-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--black); padding: 40px; transition: transform 0.6s ease; }
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 22px; letter-spacing: 1px; }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 20px 0 0; font-size: 22px; letter-spacing: 1px; text-align: center; }
         .input-premium { width: 100%; max-width: 280px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; color: white; text-align: center; margin-top: 30px; font-size: 18px; outline: none; }
         
         .chat-header { padding: 15px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); }
@@ -37,7 +39,7 @@
         
         .input-container { padding: 20px; background: rgba(0,0,0,0.5); display: flex; gap: 10px; }
         .msg-input { flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px 20px; color: white; outline: none; }
-        .send-btn { background: var(--gold); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; color: #000; font-weight: bold; }
+        .send-btn { background: var(--gold); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; color: #000; font-size: 20px; }
         
         @keyframes msgPop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -54,14 +56,13 @@
         <div class="chat-card">
             
             <div id="login-screen">
-                <div style="display:flex; gap:15px; margin-bottom:25px">
-                    <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Leblonzito"></div>
-                    
-                    <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Ipanemita"></div>
+                <div style="display:flex; gap:20px; justify-content: center;">
+                    <div class="shiba-spotlight"><img src="https://cdn.vectorstock.com/i/1000v/32/51/cute-shiba-inu-emoji-icon-vector-23003251.jpg" class="avatar-lg" alt="Leblonzito"></div>
+                    <div class="shiba-spotlight"><img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita"></div>
                 </div>
-                <h1>Adega Exclusiva</h1>
+                <h1>ADEGA EXCLUSIVA</h1>
                 <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
-                <button onclick="checkAuth()" class="btn-gold" style="max-width:180px">Entrar</button>
+                <button onclick="checkAuth()" class="btn-gold" style="max-width:180px">ENTRAR</button>
             </div>
 
             <div id="chat-header" class="chat-header" style="display:none">
@@ -91,11 +92,8 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         
-        // Link do Leblonzito
-        const IMG_L = "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00"; 
-        
-        // FELLYPE: Troque o link abaixo pelo link direto da Ipanemita que você hospedar
-        const IMG_I = "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00"; 
+        const IMG_L = "https://cdn.vectorstock.com/i/1000v/32/51/cute-shiba-inu-emoji-icon-vector-23003251.jpg"; 
+        const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"; 
         
         let token = "";
         let step = 0;
