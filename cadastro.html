@@ -3,150 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leblonzito | Exclusive Sommelier</title>
+    <title>Adega Exclusiva | Leblonzito & Ipanemita 🍷🐶</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4af37;
-            --gold-dark: #aa8928;
-            --wine: #4a0e0e;
-            --black: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --gold: #d4af37; --gold-dark: #aa8928; --wine: #4a0e0e;
+            --black: #050505; --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; height: 100%; font-family: 'Outfit', sans-serif; background: var(--black); color: #fff; overflow: hidden; }
         
-        body, html {
-            margin: 0; height: 100%; font-family: 'Outfit', sans-serif;
-            background: var(--black); color: #fff; overflow: hidden;
-        }
-
-        /* Fundo Animado */
-        .bg-gradient {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%);
-            z-index: -1;
-        }
-
-        .main-wrapper {
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; padding: 20px;
-        }
-
+        .bg-gradient { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); z-index: -1; }
+        .main-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; padding: 20px; }
+        
         .chat-card {
-            width: 100%; max-width: 480px; height: 85vh;
-            background: var(--glass); backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-radius: 40px;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            position: relative;
+            width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column;
+            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative;
         }
+
+        /* Avatar Styling */
+        .avatar-lg { width: 120px; height: 120px; border-radius: 35px; border: 3px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); }
+        .avatar-sm { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--gold); flex-shrink: 0; }
+        
+        /* Ipanemita Filter: Transforma em Shiba Preto/Dourado */
+        .avatar-ipanemita { filter: brightness(0.1) sepia(1) hue-rotate(15deg) saturate(3) contrast(1.2); border-color: #888; }
 
         /* Login Screen */
-        #login-screen {
-            position: absolute; inset: 0; z-index: 10;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; background: var(--black); padding: 40px;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .avatar-lg {
-            width: 120px; height: 120px; border-radius: 35px;
-            border: 3px solid var(--gold); margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-        }
-
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 24px; letter-spacing: 2px; }
-        
-        .input-premium {
-            width: 100%; max-width: 280px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border); border-radius: 15px;
-            padding: 15px; color: white; text-align: center; margin-top: 30px;
-            font-size: 18px; outline: none; transition: 0.3s;
-        }
-
+        #login-screen { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; background: var(--black); padding: 40px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 24px; letter-spacing: 1px; text-align: center; }
+        .input-premium { width: 100%; max-width: 280px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 15px; padding: 15px; color: white; text-align: center; margin-top: 30px; font-size: 18px; outline: none; }
         .input-premium:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.2); }
-
-        /* Header do Chat */
-        .chat-header {
-            padding: 25px; border-bottom: 1px solid var(--glass-border);
-            display: flex; align-items: center; gap: 15px;
-        }
-
-        .avatar-sm { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--gold); }
-
-        /* Janela de Mensagens */
-        .chat-window {
-            flex-grow: 1; padding: 25px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 20px;
-            scrollbar-width: none;
-        }
-
-        .msg { max-width: 80%; animation: msgPop 0.4s ease-out; }
+        
+        /* Chat Header */
+        .chat-header { padding: 20px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; }
+        .header-info { display: flex; align-items: center; gap: 10px; }
+        .multi-avatar { display: flex; gap: -10px; } /* Avatares sobrepostos no final */
+        
+        /* Message Window */
+        .chat-window { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; scrollbar-width: none; }
+        .msg { max-width: 85%; animation: msgPop 0.4s ease-out; display: flex; align-items: flex-end; gap: 10px; }
         .msg-bot { align-self: flex-start; }
-        .msg-user { align-self: flex-end; }
-
-        .bubble {
-            padding: 14px 18px; border-radius: 22px; font-size: 15px;
-            line-height: 1.6; position: relative;
-        }
-
-        .msg-bot .bubble {
-            background: linear-gradient(135deg, #fff, #f0f0f0);
-            color: var(--black); border-bottom-left-radius: 4px;
-        }
-
-        .msg-user .bubble {
-            background: linear-gradient(135deg, var(--wine), #2a0707);
-            color: #fff; border-bottom-right-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
+        .msg-user { align-self: flex-end; flex-direction: row-reverse; } /* Inverte para o usuário */
+        
+        .bubble { padding: 14px 18px; border-radius: 20px; font-size: 15px; line-height: 1.6; position: relative; }
+        .msg-bot .bubble { background: linear-gradient(135deg, #fff, #f0f0f0); color: var(--black); border-bottom-left-radius: 4px; }
+        .msg-user .bubble { background: linear-gradient(135deg, var(--wine), #2a0707); color: #fff; border-bottom-right-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        
         /* Input Area */
-        .input-container {
-            padding: 20px; background: rgba(0,0,0,0.4);
-            display: flex; gap: 12px; align-items: center;
-        }
+        .input-container { padding: 20px; background: rgba(0,0,0,0.4); display: flex; gap: 12px; align-items: center; }
+        .msg-input { flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px 20px; color: white; outline: none; }
+        .send-btn { background: var(--gold); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        @keyframes msgPop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .msg-input {
-            flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 20px; padding: 12px 20px; color: white; outline: none;
-        }
-
-        .send-btn {
-            background: var(--gold); width: 45px; height: 45px; border-radius: 50%;
-            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: 0.3s;
-        }
-
-        .send-btn:hover { transform: scale(1.1); background: var(--gold-dark); }
-
-        @keyframes msgPop {
-            from { opacity: 0; transform: scale(0.9) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        /* Modal Ultra Premium */
-        dialog {
-            border: none; background: var(--black); border: 1px solid var(--gold);
-            border-radius: 30px; padding: 30px; width: 90%; max-width: 380px; color: #fff;
-        }
-
+        /* Modal */
+        dialog { border: none; background: var(--black); border: 1px solid var(--gold); border-radius: 30px; padding: 30px; width: 90%; max-width: 380px; color: #fff; }
         dialog::backdrop { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
-
         .modal-field { margin-bottom: 20px; }
         .modal-field label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
-        .modal-field input, .modal-field select {
-            width: 100%; background: var(--glass); border: 1px solid var(--glass-border);
-            padding: 12px; border-radius: 12px; color: white; outline: none;
-        }
-
-        .btn-gold {
-            width: 100%; padding: 15px; background: var(--gold); color: var(--black);
-            border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        .modal-field input, .modal-field select { width: 100%; background: var(--glass); border: 1px solid var(--glass-border); padding: 12px; border-radius: 12px; color: white; outline: none; }
+        .btn-gold { width: 100%; padding: 15px; background: var(--gold); color: var(--black); border: none; border-radius: 15px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -157,17 +74,30 @@
         <div class="chat-card">
             
             <div id="login-screen">
-                <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg">
-                <h1>Leblonzito</h1>
+                <div style="display:flex; gap:15px; margin-bottom:30px">
+                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Leblonzito">
+                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg avatar-ipanemita" alt="Ipanemita">
+                </div>
+                <h1>Adega Exclusiva</h1>
                 <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
                 <button onclick="checkAuth()" class="btn-gold" style="margin-top:20px; max-width:200px">Entrar</button>
             </div>
 
             <div id="chat-header" class="chat-header" style="display:none">
-                <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm">
-                <div>
-                    <div style="font-weight:600; color:var(--gold)">Leblonzito</div>
-                    <div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div>
+                <div class="header-info" id="header-leblonzito">
+                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm" alt="Leblonzito">
+                    <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6"> Exclusive Sommelier</div></div>
+                </div>
+                <div class="header-info" id="header-ipanemita" style="display:none">
+                    <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm avatar-ipanemita" alt="Ipanemita">
+                    <div><div style="font-weight:600; color:#ddd">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>
+                </div>
+                <div class="header-info" id="header-final" style="display:none; justify-content:center; width:100%">
+                    <div style="display:flex; gap:-15px">
+                        <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm" style="margin-right:-15px; z-index:2">
+                        <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm avatar-ipanemita" style="z-index:1">
+                    </div>
+                    <div style="text-align:center"><div style="font-weight:600; color:var(--gold); font-family:'Cinzel'">Sucesso!</div></div>
                 </div>
             </div>
 
@@ -196,18 +126,19 @@
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        const SHIBA_IMG = "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00";
         let token = "";
         let step = 0;
         let dataVinho = {};
 
         const fluxo = [
-            { key: 'wineName', q: "Seja bem-vindo à adega. Qual rótulo vamos degustar hoje?" },
-            { key: 'uva', q: "E as uvas? Pode me dizer a casta principal?" },
-            { key: 'pais', q: "De qual país ele veio?" },
-            { key: 'year', q: "Para finalizar o básico, qual a safra?" }
+            { key: 'wineName', q: "Olá Fellype! Leblonzito aqui. Qual rótulo vamos degustar hoje?", bot: 'leblonzito' },
+            { key: 'uva', q: "Ipanemita na área! Pode me dizer qual a casta principal desse vinho?", bot: 'ipanemita' },
+            { key: 'pais', q: "Leblonzito de volta. De qual país ele se origina?", bot: 'leblonzito' },
+            { key: 'year', q: "Ipanemita perguntando: qual a safra (ano) colhida?", bot: 'ipanemita' }
         ];
 
-        // Autenticação
+        // Autenticação (JSONP)
         function checkAuth() {
             const pass = document.getElementById('passInput').value;
             const script = document.createElement('script');
@@ -224,20 +155,58 @@
                     document.getElementById('chat-header').style.display = 'flex';
                     document.getElementById('chat-window').style.display = 'flex';
                     document.getElementById('input-container').style.display = 'flex';
-                    addMsg(fluxo[0].q, 'bot');
+                    startChat();
                 }, 600);
-            } else {
-                alert("Acesso negado.");
-            }
+            } else { alert("Acesso negado."); }
         }
+
+        // Inicia o Chat alternando
+        function startChat() { addMsg(fluxo[0].q, fluxo[0].bot); updateHeader(fluxo[0].bot); }
 
         function addMsg(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
-            div.className = `msg msg-${type}`;
-            div.innerHTML = `<div class="bubble">${text}</div>`;
+            
+            // Lógica para o avatar ao lado da mensagem
+            let avatarHtml = '';
+            if (type === 'leblonzito') {
+                avatarHtml = `<img src="${SHIBA_IMG}" class="avatar-sm">`;
+                div.className = 'msg msg-bot msg-leblonzito';
+            } else if (type === 'ipanemita') {
+                avatarHtml = `<img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita">`;
+                div.className = 'msg msg-bot msg-ipanemita';
+            } else if (type === 'final') {
+                // NOVO: Mensagem final com os dois avatares
+                avatarHtml = `<div style="display:flex; gap:-10px; margin-right:10px">
+                                <img src="${SHIBA_IMG}" class="avatar-sm" style="margin-right:-15px; z-index:2">
+                                <img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita" style="z-index:1">
+                              </div>`;
+                div.className = 'msg msg-bot msg-final';
+            } else {
+                div.className = 'msg msg-user';
+            }
+
+            // Monta a mensagem final: usuário inverte, bot coloca avatar
+            if (type === 'user') {
+                div.innerHTML = `<div class="bubble">${text}</div>`;
+            } else {
+                div.innerHTML = `${avatarHtml}<div class="bubble">${text}</div>`;
+            }
+
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
+        }
+
+        function updateHeader(botName) {
+            // Esconde todos os cabeçalhos
+            document.getElementById('header-leblonzito').style.display = 'none';
+            document.getElementById('header-ipanemita').style.display = 'none';
+            document.getElementById('header-final').style.display = 'none';
+
+            // Mostra o cabeçalho correto
+            if (botName === 'leblonzito') document.getElementById('header-leblonzito').style.display = 'flex';
+            else if (botName === 'ipanemita') document.getElementById('header-ipanemita').style.display = 'flex';
+            else if (botName === 'final') document.getElementById('header-final').style.display = 'flex';
         }
 
         async function sendMessage() {
@@ -251,12 +220,18 @@
 
             step++;
             if(step < fluxo.length) {
-                setTimeout(() => addMsg(fluxo[step].q, 'bot'), 600);
+                // Alterna o bot e o cabeçalho
+                const nextBot = fluxo[step].bot;
+                updateHeader(nextBot);
+                setTimeout(() => addMsg(fluxo[step].q, nextBot), 700);
             } else {
+                // Finalização: Mostra os dois no cabeçalho e na mensagem
+                updateHeader('final');
+                document.getElementById('input-container').style.display = 'none';
                 setTimeout(() => {
-                    addMsg("Perfeito! Registrando dados básicos... Gostaria de dar sua nota agora?", 'bot');
+                    addMsg("Maravilha! O registro está pronto. Fellype, gostaríamos da sua avaliação final agora!", 'final');
                     document.getElementById('ratingModal').showModal();
-                }, 800);
+                }, 900);
             }
         }
 
@@ -267,10 +242,10 @@
             dataVinho.recompra = document.getElementById('reCompra').value;
             dataVinho.foto = document.getElementById('picUrl').value;
 
-            // Envio silencioso para a planilha
+            // Envio silencioso para a planilha (POST mode: no-cors)
             fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataVinho) });
 
-            alert("Vinho catalogado com maestria! 🍷");
+            alert("Vinho catalogado com maestria pela dupla! 🍷🐾🐾");
             location.href = "catalogo.html";
         }
 
