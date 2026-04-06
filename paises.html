@@ -4,203 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Por Países - Fellype & Hwlly</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
         :root {
-            --vinho-escuro: #4a0404;
-            --vinho-vivo: #800020;
-            --dourado: #d4af37;
-            --dourado-claro: #f1d592;
-            --bg: #0a0a0a;
-            --card: #161616;
-            --texto: #e0e0e0;
-            --subtexto: #aaa;
-            --transicao: all 0.3s ease;
+            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
+            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
+            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
         }
 
         body {
-            margin: 0;
-            font-family: 'Times New Roman', Times, serif;
-            background-color: var(--bg);
-            color: var(--texto);
-            line-height: 1.8;
-            overflow-x: hidden;
+            margin: 0; font-family: 'Times New Roman', Times, serif;
+            background-color: var(--bg); color: var(--texto); line-height: 1.8;
         }
 
-        /* --- 1. BARRA DE NAVEGAÇÃO (IDÊNTICA AO INDEX) --- */
+        /* --- NAVBAR (PADRÃO INDEX) --- */
         .navbar {
-            background: rgba(10, 10, 10, 0.98);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            backdrop-filter: blur(10px);
-            height: 70px;
-            box-sizing: border-box;
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
         }
-        .nav-logo a {
-            color: var(--dourado);
-            font-weight: bold;
-            font-size: 1.3rem;
-            text-decoration: none;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #ccc;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
-            transition: var(--transicao);
-            position: relative;
-            padding-bottom: 5px;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--dourado);
-            transition: var(--transicao);
-        }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; transition: var(--transicao); position: relative; padding-bottom: 5px; }
+        .nav-links a.active, .nav-links a:hover { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
         
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #1a1a1a;
-            min-width: 180px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
-            z-index: 1;
-            border: 1px solid #333;
-            border-radius: 5px;
-            top: 30px;
-        }
-        .dropdown-content a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-transform: none;
-            font-size: 0.9rem;
-        }
-        .dropdown-content a:hover { background-color: var(--vinho-vivo); color: white; }
+        .dropdown { position: relative; }
+        .dropdown-content { display: none; position: absolute; background: #1a1a1a; min-width: 180px; border: 1px solid #333; top: 30px; border-radius: 5px; }
         .dropdown:hover .dropdown-content { display: block; }
-        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .dropdown-content a { padding: 12px; display: block; text-transform: none; }
+        .dropdown-content a:hover { background: var(--vinho-vivo); }
 
-        /* --- 2. CONTEÚDO DA PÁGINA --- */
-        .header-section {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
-        .header-section h1 {
-            color: var(--dourado);
-            font-family: 'Segoe UI', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-        }
-        .shiba-heads { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
-        .shiba-heads img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--dourado); }
+        /* --- CONTEÚDO --- */
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .header-title { text-align: center; margin-bottom: 40px; }
+        .header-title h1 { color: var(--dourado); font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 3px; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 80px; }
+        /* --- ACORDEÃO --- */
+        .country-group { margin-bottom: 15px; border: 1px solid #222; border-radius: 10px; overflow: hidden; }
+        .country-header {
+            background: linear-gradient(90deg, #1a1a1a, #0a0a0a);
+            padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; transition: var(--transicao);
+        }
+        .country-header:hover { background: #222; }
+        .country-header h2 { margin: 0; font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; color: var(--dourado-claro); display: flex; align-items: center; gap: 15px; }
+        .chevron { transition: var(--transicao); color: var(--dourado); }
+        .country-group.active .chevron { transform: rotate(180deg); }
 
-        /* Estilo das Faixas de Países */
-        .country-section { margin-bottom: 50px; }
-        .country-banner {
-            background: linear-gradient(90deg, var(--vinho-escuro), #222);
-            padding: 15px 25px;
-            border-radius: 8px;
-            border-left: 5px solid var(--dourado);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        .country-banner h2 { 
-            margin: 0; font-family: 'Segoe UI', sans-serif; 
-            font-size: 1.4rem; color: var(--dourado-claro); 
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .wine-count { background: var(--dourado); color: #000; padding: 2px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+        .country-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; background: #0d0d0d; }
+        .country-group.active .country-content { max-height: 2000px; padding: 20px; }
 
-        /* Grid de Vinhos Compacto */
-        .wine-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
+        /* --- GRID DE VINHOS --- */
+        .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
         .wine-card {
-            background: var(--card);
-            border: 1px solid #222;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: var(--transicao);
+            background: var(--card); border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 12px;
+            border: 1px solid transparent; transition: 0.3s;
         }
-        .wine-card:hover { transform: translateY(-3px); border-color: var(--dourado); }
-        .wine-img { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; background: #000; }
-        .wine-info { flex-grow: 1; }
-        .wine-info h3 { margin: 0; font-size: 1rem; color: #fff; font-family: 'Segoe UI', sans-serif; line-height: 1.2; }
-        .wine-info p { margin: 5px 0 0; font-size: 0.85rem; color: var(--subtexto); }
-        .wine-rating { 
-            background: rgba(212, 175, 55, 0.1); 
-            color: var(--dourado); 
-            padding: 5px 10px; 
-            border-radius: 6px; 
-            font-weight: bold; 
-            font-size: 0.9rem;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
+        .wine-card:hover { border-color: var(--dourado); }
+        .wine-img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; background: #000; }
+        .wine-info h3 { margin: 0; font-size: 0.95rem; color: #fff; line-height: 1.2; }
+        .wine-info p { margin: 3px 0 0; font-size: 0.8rem; color: var(--subtexto); }
+        .rating-badge { margin-left: auto; background: rgba(212, 175, 55, 0.1); color: var(--dourado); padding: 4px 8px; border-radius: 5px; font-weight: bold; font-size: 0.85rem; border: 1px solid rgba(212, 175, 55, 0.2); }
 
-        #loader { text-align: center; padding: 100px; color: var(--dourado); font-family: 'Segoe UI', sans-serif; }
-
-        @media (max-width: 768px) {
-            .navbar { padding: 15px 20px; }
-            .menu-toggle { display: block; }
-            .nav-links {
-                display: none; flex-direction: column; position: absolute;
-                top: 70px; left: 0; width: 100%; background-color: #1a1a1a;
-                padding: 20px 0; border-bottom: 1px solid #333; text-align: center;
-            }
-            .nav-links.active { display: flex; }
-            .wine-grid { grid-template-columns: 1fr; }
-        }
+        #loader { text-align: center; color: var(--dourado); padding: 50px; font-family: 'Segoe UI', sans-serif; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
-        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
-        <ul class="nav-links" id="nav-links-container">
+        <ul class="nav-links">
             <li><a href="index.html">Página Inicial</a></li>
             <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
             <li><a href="melhores.html">Escolhidos Mês</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
             <li class="dropdown">
-                <a href="javascript:void(0)" class="dropbtn" style="color:var(--dourado)">Explorar <i class="fa fa-caret-down"></i></a>
+                <a href="#" class="active">Explorar <i class="fa fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="paises.html">Por Países</a>
                     <a href="uvas.html">Por Uvas</a>
@@ -210,91 +90,90 @@
         </ul>
     </nav>
 
-    <header class="header-section">
-        <div class="shiba-heads">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" alt="Leblonzito">
-            <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="Ipanemita">
+    <div class="container">
+        <div class="header-title">
+            <h1>Mapa da Adega</h1>
+            <p>Clique no país para ver os rótulos</p>
         </div>
-        <h1>Mapa da Adega</h1>
-        <p style="color: var(--subtexto)">Vinhos organizados por sua origem</p>
-    </header>
 
-    <div id="loader">Leblonzito está organizando as prateleiras...</div>
-    <main class="container" id="main-container" style="display:none;"></main>
+        <div id="loader">Leblonzito e Ipanemita estão carregando os vinhos...</div>
+        <div id="main-content"></div>
+    </div>
 
     <script>
-        // MENU MOBILE
-        document.getElementById('mobile-menu-icon').addEventListener('click', () => {
-            document.getElementById('nav-links-container').classList.toggle('active');
-        });
-
-        // CARREGAMENTO DOS DADOS
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
 
-        async function fetchData() {
+        async function loadWines() {
             try {
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
                 
-                // Mapeamento defensivo para corrigir o erro de "Sem Nome"
-                // Aqui tentamos pegar várias possibilidades de nomes de colunas
-                const vinhosProcessados = data.map(v => ({
-                    nome: v.wineName || v.nome || v.Nome || "Vinho s/ Nome",
-                    pais: v.pais || v.Pais || v.País || "Outros",
-                    uva: v.uva || v.Uva || "Castas Variadas",
-                    ano: v.year || v.ano || v.Ano || "S/A",
-                    foto: v.foto || v.Foto || v.imagem || "",
-                    nota: ((parseFloat(v.notF || v.notaF || 0) + parseFloat(v.notH || v.notaH || 0)) / 2).toFixed(1)
-                }));
+                // Agrupar e processar (Alinhado com as colunas da sua planilha)
+                const grupos = data.reduce((acc, v) => {
+                    // Coluna E (País)
+                    const p = v.pais || "Outros"; 
+                    if (!acc[p]) acc[p] = [];
+                    
+                    // Coluna M (Nota F) e Coluna N (Nota H)
+                    const notaF = parseFloat(v.notF) || 0;
+                    const notaH = parseFloat(v.notH) || 0;
+                    const media = (notaF > 0 && notaH > 0) ? ((notaF + notaH) / 2).toFixed(1) : (notaF || notaH || 0);
 
-                const agrupados = vinhosProcessados.reduce((acc, v) => {
-                    acc[v.pais] = acc[v.pais] || [];
-                    acc[v.pais].push(v);
+                    acc[p].push({
+                        nome: v.wineName || "Vinho sem nome", // Coluna B
+                        uva: v.uva || "Uva não informada",    // Coluna C
+                        foto: v.foto || "",                   // Coluna K
+                        nota: media
+                    });
                     return acc;
                 }, {});
 
-                render(agrupados);
-            } catch (error) {
-                document.getElementById('loader').innerHTML = "Erro ao carregar dados. Verifique a conexão.";
-                console.error(error);
+                render(grupos);
+            } catch (e) {
+                document.getElementById('loader').innerText = "Erro ao carregar os dados.";
             }
         }
 
         function render(grupos) {
-            const main = document.getElementById('main-container');
+            const container = document.getElementById('main-content');
             const loader = document.getElementById('loader');
-            
+            loader.style.display = 'none';
+
             Object.keys(grupos).sort().forEach(pais => {
                 const vinhos = grupos[pais];
-                const section = document.createElement('section');
-                section.className = 'country-section';
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'country-group';
                 
-                section.innerHTML = `
-                    <div class="country-banner">
-                        <h2>${pais}</h2>
-                        <span class="wine-count">${vinhos.length} rótulos</span>
+                groupDiv.innerHTML = `
+                    <div class="country-header" onclick="this.parentElement.classList.toggle('active')">
+                        <h2><i class="fas fa-globe-americas"></i> ${pais}</h2>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span style="font-size:0.9rem; color:var(--subtexto)">${vinhos.length} rótulos</span>
+                            <i class="fas fa-chevron-down chevron"></i>
+                        </div>
                     </div>
-                    <div class="wine-grid">
-                        ${vinhos.map(v => `
-                            <div class="wine-card">
-                                <img src="${v.foto || 'https://via.placeholder.com/150/0a0a0a/d4af37?text=🍷'}" class="wine-img" onerror="this.src='https://via.placeholder.com/150/0a0a0a/d4af37?text=🍷'">
-                                <div class="wine-info">
-                                    <h3>${v.nome}</h3>
-                                    <p>${v.uva} • ${v.ano}</p>
+                    <div class="country-content">
+                        <div class="wine-grid">
+                            ${vinhos.map(v => `
+                                <div class="wine-card">
+                                    <img src="${v.foto || 'https://via.placeholder.com/100/0a0a0a/d4af37?text=🍷'}" 
+                                         class="wine-img" 
+                                         onerror="this.src='https://via.placeholder.com/100/0a0a0a/d4af37?text=🍷'">
+                                    <div class="wine-info">
+                                        <h3>${v.nome}</h3>
+                                        <p>${v.uva}</p>
+                                    </div>
+                                    <div class="rating-badge">★ ${v.nota}</div>
                                 </div>
-                                <div class="wine-rating">★ ${v.nota}</div>
-                            </div>
-                        `).join('')}
+                            `).join('')}
+                        </div>
                     </div>
                 `;
-                main.appendChild(section);
+                container.appendChild(groupDiv);
             });
-
-            loader.style.display = 'none';
-            main.style.display = 'block';
         }
 
-        fetchData();
+        loadWines();
     </script>
 </body>
 </html>
