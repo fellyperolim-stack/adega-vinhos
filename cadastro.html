@@ -22,23 +22,23 @@
             overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative;
         }
 
-        /* Avatar Container com fundo para destaque */
+        /* Avatar Container com fundo (spotlight) para destaque */
         .shiba-spotlight {
-            background: rgba(255, 255, 255, 0.9); /* Fundo branco para destacar os dogs */
+            background: rgba(255, 255, 255, 1); /* Fundo branco puro para destaque total */
             border-radius: 30px;
             padding: 5px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
         }
 
         .avatar-lg { width: 110px; height: 110px; border-radius: 25px; border: 2px solid var(--gold); }
         .avatar-sm { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--gold); flex-shrink: 0; }
         
-        /* Ajuste do Filtro Ipanemita para não sumir */
+        /* Ipanemita com recoloração total (sem filtros) */
         .avatar-ipanemita { 
-            filter: brightness(0.2) contrast(1.1) saturate(0.8) sepia(0.2); 
+            /* A imagem base já está pré-processada para ser preta puro */
             border-color: #555; 
         }
 
@@ -83,7 +83,7 @@
             <div id="login-screen">
                 <div style="display:flex; gap:20px; margin-bottom:30px">
                     <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg" alt="Leblonzito"></div>
-                    <div class="shiba-spotlight"><img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg avatar-ipanemita" alt="Ipanemita"></div>
+                    <div class="shiba-spotlight"><img src="https://lh3.googleusercontent.com/d/1Kp2BvaZ7s_PawvUFGS1qLenPNfaBIJAv8jXI9v7tH" class="avatar-lg avatar-ipanemita" alt="Ipanemita"></div>
                 </div>
                 <h1>Adega Exclusiva</h1>
                 <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
@@ -119,7 +119,8 @@
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-        const SHIBA_IMG = "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00";
+        const SHIBA_IMG_L = "https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00";
+        const SHIBA_IMG_I = "https://lh3.googleusercontent.com/d/1Kp2BvaZ7s_PawvUFGS1qLenPNfaBIJAv8jXI9v7tH"; // Nova imagem recolorida Ipanemita
         let token = "";
         let step = 0;
         let dataVinho = {};
@@ -159,15 +160,15 @@
             
             let avatarHtml = '';
             if (type === 'leblonzito') {
-                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>`;
+                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_L}" class="avatar-sm"></div>`;
                 div.className = 'msg msg-bot';
             } else if (type === 'ipanemita') {
-                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>`;
+                avatarHtml = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_I}" class="avatar-sm avatar-ipanemita"></div>`;
                 div.className = 'msg msg-bot';
             } else if (type === 'final') {
                 avatarHtml = `<div style="display:flex; gap:-10px">
-                                <div class="shiba-spotlight" style="padding:2px; z-index:2; margin-right:-15px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
-                                <div class="shiba-spotlight" style="padding:2px; z-index:1"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
+                                <div class="shiba-spotlight" style="padding:2px; z-index:2; margin-right:-15px"><img src="${SHIBA_IMG_L}" class="avatar-sm"></div>
+                                <div class="shiba-spotlight" style="padding:2px; z-index:1"><img src="${SHIBA_IMG_I}" class="avatar-sm avatar-ipanemita"></div>
                               </div>`;
                 div.className = 'msg msg-bot';
             } else {
@@ -182,15 +183,15 @@
         function updateHeader(bot) {
             const head = document.getElementById('header-content');
             if(bot === 'leblonzito') {
-                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
+                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_L}" class="avatar-sm"></div>
                                   <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
             } else if(bot === 'ipanemita') {
-                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
+                head.innerHTML = `<div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_I}" class="avatar-sm avatar-ipanemita"></div>
                                   <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
             } else {
                 head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">
-                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm"></div>
-                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG}" class="avatar-sm avatar-ipanemita"></div>
+                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_L}" class="avatar-sm"></div>
+                                    <div class="shiba-spotlight" style="padding:3px"><img src="${SHIBA_IMG_I}" class="avatar-sm avatar-ipanemita"></div>
                                   </div>`;
             }
         }
