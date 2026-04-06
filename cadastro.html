@@ -3,200 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2c0514">
-    <title>VinhoChat Premium 🍷</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Leblonzito | Exclusive Sommelier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --wine-deep: #2c0514; --wine-vibrant: #5e0b25; --gold-soft: #c5a059;
-            --gold-bright: #d4af37; --bg-canvas: #140209; --paper: #fdfaf7;
+            --gold: #d4af37;
+            --gold-dark: #aa8928;
+            --wine: #4a0e0e;
+            --black: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Poppins', sans-serif; background: var(--bg-canvas);
-            height: 100vh; margin: 0; display: flex; justify-content: center; align-items: center; color: #fff;
-            background-image: radial-gradient(circle at 20% 30%, #3d081b 0%, transparent 40%);
-        }
-        .adventure-container {
-            width: 100%; max-width: 450px; height: 92vh; background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; display: flex; flex-direction: column; overflow: hidden; position: relative;
-        }
-        /* Login Section */
-        #login-section { padding: 40px; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; }
-        .login-input { width: 100%; padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--gold-soft); color: white; border-radius: 12px; text-align: center; font-size: 18px; }
-        
-        /* Chat Section */
-        #chat-container { display: none; flex-direction: column; height: 100%; }
-        .chat-header { padding: 20px; background: rgba(255, 255, 255, 0.03); display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .guide-avatar { width: 50px; height: 50px; border-radius: 18px; border: 2px solid var(--gold-soft); }
-        .chat-window { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scrollbar-width: none; }
-        
-        /* Bubbles */
-        .message { max-width: 85%; animation: slideIn 0.3s ease-out; }
-        .message-bot { align-self: flex-start; }
-        .message-user { align-self: flex-end; }
-        .message-bubble { padding: 12px 18px; border-radius: 15px; font-size: 14px; line-height: 1.5; }
-        .message-bot .message-bubble { background: #fff; color: var(--wine-deep); border-radius: 4px 15px 15px 15px; }
-        .message-user .message-bubble { background: var(--wine-vibrant); color: #fff; border-radius: 15px 15px 4px 15px; }
 
-        .input-area { padding: 20px; background: rgba(0,0,0,0.3); display: flex; gap: 10px; }
-        .input-wrapper { background: rgba(255,255,255,0.08); border-radius: 20px; flex-grow: 1; padding: 5px 15px; display: flex; align-items: center; }
-        .input-area input { background: none; border: none; color: #fff; width: 100%; padding: 10px 0; outline: none; }
-        .send-btn { background: var(--gold-soft); border: none; width: 45px; height: 45px; border-radius: 15px; color: var(--wine-deep); cursor: pointer; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body, html {
+            margin: 0; height: 100%; font-family: 'Outfit', sans-serif;
+            background: var(--black); color: #fff; overflow: hidden;
+        }
+
+        /* Fundo Animado */
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%);
+            z-index: -1;
+        }
+
+        .main-wrapper {
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; padding: 20px;
+        }
+
+        .chat-card {
+            width: 100%; max-width: 480px; height: 85vh;
+            background: var(--glass); backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 40px;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        /* Login Screen */
+        #login-screen {
+            position: absolute; inset: 0; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; background: var(--black); padding: 40px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .avatar-lg {
+            width: 120px; height: 120px; border-radius: 35px;
+            border: 3px solid var(--gold); margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 24px; letter-spacing: 2px; }
         
-        /* Modal */
-        dialog { border: none; border-radius: 20px; padding: 25px; background: var(--paper); width: 90%; max-width: 350px; }
-        dialog::backdrop { background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
-        .modal-group { margin-bottom: 15px; }
-        .modal-group label { display: block; font-size: 10px; font-weight: bold; color: #888; margin-bottom: 5px; }
-        .modal-group input, .modal-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
-        .btn-final { width: 100%; padding: 15px; background: var(--wine-deep); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .input-premium {
+            width: 100%; max-width: 280px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 15px; color: white; text-align: center; margin-top: 30px;
+            font-size: 18px; outline: none; transition: 0.3s;
+        }
+
+        .input-premium:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.2); }
+
+        /* Header do Chat */
+        .chat-header {
+            padding: 25px; border-bottom: 1px solid var(--glass-border);
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .avatar-sm { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--gold); }
+
+        /* Janela de Mensagens */
+        .chat-window {
+            flex-grow: 1; padding: 25px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 20px;
+            scrollbar-width: none;
+        }
+
+        .msg { max-width: 80%; animation: msgPop 0.4s ease-out; }
+        .msg-bot { align-self: flex-start; }
+        .msg-user { align-self: flex-end; }
+
+        .bubble {
+            padding: 14px 18px; border-radius: 22px; font-size: 15px;
+            line-height: 1.6; position: relative;
+        }
+
+        .msg-bot .bubble {
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            color: var(--black); border-bottom-left-radius: 4px;
+        }
+
+        .msg-user .bubble {
+            background: linear-gradient(135deg, var(--wine), #2a0707);
+            color: #fff; border-bottom-right-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Input Area */
+        .input-container {
+            padding: 20px; background: rgba(0,0,0,0.4);
+            display: flex; gap: 12px; align-items: center;
+        }
+
+        .msg-input {
+            flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 12px 20px; color: white; outline: none;
+        }
+
+        .send-btn {
+            background: var(--gold); width: 45px; height: 45px; border-radius: 50%;
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
+        }
+
+        .send-btn:hover { transform: scale(1.1); background: var(--gold-dark); }
+
+        @keyframes msgPop {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Modal Ultra Premium */
+        dialog {
+            border: none; background: var(--black); border: 1px solid var(--gold);
+            border-radius: 30px; padding: 30px; width: 90%; max-width: 380px; color: #fff;
+        }
+
+        dialog::backdrop { background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
+
+        .modal-field { margin-bottom: 20px; }
+        .modal-field label { display: block; font-size: 11px; color: var(--gold); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+        .modal-field input, .modal-field select {
+            width: 100%; background: var(--glass); border: 1px solid var(--glass-border);
+            padding: 12px; border-radius: 12px; color: white; outline: none;
+        }
+
+        .btn-gold {
+            width: 100%; padding: 15px; background: var(--gold); color: var(--black);
+            border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="adventure-container">
-        <div id="login-section">
-            <h2 style="font-family:'Lora'; color:var(--gold-soft)">Adega Fellype & Hwlly</h2>
-            <p style="font-size:12px; opacity:0.6">Identifique-se, Sommelier</p>
-            <input type="password" id="senhaInput" class="login-input" placeholder="••••">
-            <button class="send-btn" onclick="checkPass()" style="width:100%; margin-top:10px">ENTRAR</button>
-        </div>
+    <div class="bg-gradient"></div>
 
-        <div id="chat-container">
-            <div class="chat-header">
-                <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="guide-avatar">
-                <div><h2 style="margin:0; font-size:16px; color:var(--gold-soft)">Leblonzito</h2><p style="margin:0; font-size:10px; opacity:0.5">IA Sommelier</p></div>
+    <div class="main-wrapper">
+        <div class="chat-card">
+            
+            <div id="login-screen">
+                <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-lg">
+                <h1>Leblonzito</h1>
+                <input type="password" id="passInput" class="input-premium" placeholder="Acesso Privado">
+                <button onclick="checkAuth()" class="btn-gold" style="margin-top:20px; max-width:200px">Entrar</button>
             </div>
-            <div class="chat-window" id="chat-window"></div>
-            <div id="dynamic-actions" style="padding:0 20px"></div>
-            <div class="input-area" id="input-area">
-                <div class="input-wrapper"><input type="text" id="userInput" placeholder="Fale com o Leblonzito..."></div>
-                <button class="send-btn" onclick="handleUserInput()">➤</button>
+
+            <div id="chat-header" class="chat-header" style="display:none">
+                <img src="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:750/plain/https://attic.sh/kg07d8c8yw5b3it3nvthjr8xpe00" class="avatar-sm">
+                <div>
+                    <div style="font-weight:600; color:var(--gold)">Leblonzito</div>
+                    <div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div>
+                </div>
+            </div>
+
+            <div id="chat-window" class="chat-window" style="display:none"></div>
+
+            <div id="input-container" class="input-container" style="display:none">
+                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem...">
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </button>
             </div>
         </div>
     </div>
 
     <dialog id="ratingModal">
-        <h3 style="text-align:center; color:var(--wine-deep)">Avaliação Final 🌟</h3>
-        <div class="modal-group"><label>NOTA FELLYPE</label><input type="number" id="nFellype"></div>
-        <div class="modal-group"><label>NOTA HWLLY</label><input type="number" id="nHwlly"></div>
-        <div class="modal-group">
-            <label>COMPRARIA DE NOVO?</label>
-            <select id="wouldBuy"><option value="Sim">Sim</option><option value="Não">Não</option></select>
+        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:25px; color:var(--gold)">Avaliação</h2>
+        <div class="modal-field"><label>Nota Fellype</label><input type="number" id="notF" placeholder="0-100"></div>
+        <div class="modal-field"><label>Nota Hwlly</label><input type="number" id="notH" placeholder="0-100"></div>
+        <div class="modal-field">
+            <label>Recompraria?</label>
+            <select id="reCompra"><option value="Sim">Com certeza</option><option value="Não">Desta vez não</option></select>
         </div>
-        <div class="modal-group">
-            <label>FOTO (URL DO DRIVE)</label>
-            <input type="text" id="photoUrl" placeholder="Link da foto">
-        </div>
-        <button class="btn-final" onclick="saveRatings()">GUARDAR NA ADEGA</button>
+        <div class="modal-field"><label>Foto (Link Drive)</label><input type="text" id="picUrl" placeholder="URL da imagem"></div>
+        <button class="btn-gold" onclick="finishAll()">Concluir Registro</button>
     </dialog>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-        let senhaValidada = "";
-        let formData = {};
-        let rowIndex = null;
+        let token = "";
         let step = 0;
-        
-        const steps = [
-            { key: 'wineName', q: "Qual o nome do vinho que vamos registrar?" },
-            { key: 'uva', q: "Qual a uva?" },
-            { key: 'pais', q: "Qual o país de origem?" },
-            { key: 'year', q: "Qual a safra (ano)?" }
+        let dataVinho = {};
+
+        const fluxo = [
+            { key: 'wineName', q: "Seja bem-vindo à adega. Qual rótulo vamos degustar hoje?" },
+            { key: 'uva', q: "E as uvas? Pode me dizer a casta principal?" },
+            { key: 'pais', q: "De qual país ele veio?" },
+            { key: 'year', q: "Para finalizar o básico, qual a safra?" }
         ];
 
-        // Lógica de Login (JSONP)
-        function loginCallback(data) {
-            if (data.result === "success") {
-                senhaValidada = document.getElementById('senhaInput').value;
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('chat-container').style.display = 'flex';
-                addMessage("Olá! Sou o Leblonzito. Vamos cadastrar seu vinho? Qual o nome dele?", 'bot');
-            } else { alert("Senha Inválida!"); location.reload(); }
-        }
-
-        function checkPass() {
-            const s = document.getElementById('senhaInput').value;
+        // Autenticação
+        function checkAuth() {
+            const pass = document.getElementById('passInput').value;
             const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(s)}&callback=loginCallback`;
+            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(pass)}&callback=authResult`;
             document.body.appendChild(script);
         }
 
-        function addMessage(text, sender) {
+        function authResult(res) {
+            if (res.result === "success") {
+                token = document.getElementById('passInput').value;
+                document.getElementById('login-screen').style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('chat-header').style.display = 'flex';
+                    document.getElementById('chat-window').style.display = 'flex';
+                    document.getElementById('input-container').style.display = 'flex';
+                    addMsg(fluxo[0].q, 'bot');
+                }, 600);
+            } else {
+                alert("Acesso negado.");
+            }
+        }
+
+        function addMsg(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
-            div.className = `message message-${sender}`;
-            div.innerHTML = `<div class="message-bubble">${text}</div>`;
+            div.className = `msg msg-${type}`;
+            div.innerHTML = `<div class="bubble">${text}</div>`;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
         }
 
-        async function handleUserInput() {
+        async function sendMessage() {
             const input = document.getElementById('userInput');
-            const val = input.value;
-            if(!val) return;
+            const msg = input.value.trim();
+            if(!msg) return;
 
-            addMessage(val, 'user');
+            addMsg(msg, 'user');
             input.value = "";
-            formData[steps[step].key] = val;
-
-            if (step === 0) { // Se for o nome, tenta usar a IA para o resto
-                addMessage("Buscando detalhes com IA...", 'bot');
-                try {
-                    const resp = await fetch(`${SCRIPT_URL}?action=getAI&query=${encodeURIComponent(val)}`);
-                    const ai = await resp.json();
-                    if(ai.uva) {
-                        formData.uva = ai.uva; formData.pais = ai.pais; formData.year = ai.safra;
-                        addMessage(`Encontrei: ${ai.uva} (${ai.pais}). Tudo certo?`, 'bot');
-                        showFinalButton();
-                        return;
-                    }
-                } catch(e) {}
-            }
+            dataVinho[fluxo[step].key] = msg;
 
             step++;
-            if(step < steps.length) {
-                addMessage(steps[step].q, 'bot');
+            if(step < fluxo.length) {
+                setTimeout(() => addMsg(fluxo[step].q, 'bot'), 600);
             } else {
-                showFinalButton();
+                setTimeout(() => {
+                    addMsg("Perfeito! Registrando dados básicos... Gostaria de dar sua nota agora?", 'bot');
+                    document.getElementById('ratingModal').showModal();
+                }, 800);
             }
         }
 
-        function showFinalButton() {
-            document.getElementById('dynamic-actions').innerHTML = `<button class="btn-final" onclick="saveToSheet()">SALVAR DADOS</button>`;
-        }
+        function finishAll() {
+            dataVinho.tokenAcesso = token;
+            dataVinho.notF = document.getElementById('notF').value;
+            dataVinho.notH = document.getElementById('notH').value;
+            dataVinho.recompra = document.getElementById('reCompra').value;
+            dataVinho.foto = document.getElementById('picUrl').value;
 
-        async function saveToSheet() {
-            formData.tokenAcesso = senhaValidada;
-            addMessage("Salvando na planilha...", 'bot');
-            // Usamos mode no-cors para o POST do Apps Script
-            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
-            
-            setTimeout(() => {
-                addMessage("Dados básicos salvos! Agora, as notas finais:", 'bot');
-                document.getElementById('ratingModal').showModal();
-            }, 1500);
-        }
+            // Envio silencioso para a planilha
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataVinho) });
 
-        function saveRatings() {
-            const finalData = {
-                tokenAcesso: senhaValidada,
-                action: "updateRatings",
-                ratingFellype: document.getElementById('nFellype').value,
-                ratingHwlly: document.getElementById('nHwlly').value,
-                wouldBuy: document.getElementById('wouldBuy').value,
-                foto: document.getElementById('photoUrl').value
-            };
-            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(finalData) });
-            alert("Vinho finalizado com sucesso! 🍷");
+            alert("Vinho catalogado com maestria! 🍷");
             location.href = "catalogo.html";
         }
+
+        // Listener de Enter
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') sendMessage();
+        });
     </script>
 </body>
 </html>
