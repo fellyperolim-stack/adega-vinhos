@@ -18,7 +18,7 @@
             overflow-x: hidden;
         }
 
-        /* --- NAVBAR PREMIUM --- */
+        /* --- NAVBAR --- */
         .navbar {
             background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
             align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
@@ -36,14 +36,14 @@
         .dropdown-content a { padding: 12px 16px; display: block; text-transform: none; color: white; font-size: 0.9rem; }
         .dropdown-content a:hover { background: var(--vinho-vivo); }
 
-        /* --- HEADER COM OS SHIBAS (FOCO NO ROSTO) --- */
+        /* --- HEADER COM OS SHIBAS --- */
         .header-section { text-align: center; padding: 60px 20px 40px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
         .header-section h1 { color: var(--dourado); font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 3px; margin: 15px 0 5px; }
         .shiba-heads { display: flex; justify-content: center; gap: 25px; margin-bottom: 10px; }
         .shiba-spotlight { background: #fff; border-radius: 20px; padding: 2px; display: inline-flex; border: 1.5px solid var(--dourado); overflow: hidden; }
         .avatar-lg { width: 100px; height: 100px; border-radius: 15px; object-fit: cover; object-position: center 20%; }
 
-        /* --- CONTEÚDO PRINCIPAL --- */
+        /* --- CONTEÚDO --- */
         .container { max-width: 1000px; margin: 0 auto; padding: 0 20px 80px; }
 
         /* --- ACORDEÃO --- */
@@ -53,13 +53,13 @@
             background: linear-gradient(90deg, #1a1a1a, #0a0a0a);
             padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid transparent;
         }
-        .country-header h2 { margin: 0; font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; color: var(--dourado-claro); display: flex; align-items: center; gap: 15px; }
+        .country-header h2 { margin: 0; font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; color: var(--dourado-claro); display: flex; align-items: center; gap: 15px; text-transform: uppercase; }
         .chevron { transition: var(--transicao); color: var(--dourado); font-size: 1.2rem; }
         .country-group.active .chevron { transform: rotate(180deg); }
         .country-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; background: #0d0d0d; }
         .country-group.active .country-content { max-height: 5000px; padding: 20px; }
 
-        /* --- GRID DE VINHOS --- */
+        /* --- GRID --- */
         .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
         .wine-card { background: var(--card); border-radius: 8px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; transition: 0.3s; }
         .wine-card:hover { border-color: var(--dourado); transform: translateY(-3px); }
@@ -77,7 +77,7 @@
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
         <ul class="nav-links">
             <li><a href="index.html">Página Inicial</a></li>
-            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
+            <li><a href="catalogo.html">Últimos Vinhos</a></li>
             <li><a href="melhores.html">Escolhidos Mês</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
             <li class="dropdown">
@@ -97,19 +97,29 @@
             <div class="shiba-spotlight"><img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita"></div>
         </div>
         <h1>Mapa da Adega</h1>
-        <p style="color: var(--subtexto)">Curadoria Inteligente por Leblonzito & Ipanemita</p>
+        <p style="color: var(--subtexto)">Exploração por Origem e Terroir</p>
     </header>
 
-    <div id="loader"><i class="fas fa-wine-bottle fa-spin"></i> Consultando a planilha...</div>
+    <div id="loader"><i class="fas fa-wine-bottle fa-spin"></i> Consultando registros...</div>
     <main class="container" id="main-content" style="display:none;"></main>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
-        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop"; // Foto genérica de vinho elegante
+        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop";
 
         const getFlag = (paisNome) => {
-            const flags = { "Argentina": "ar", "Chile": "cl", "Espanha": "es", "Portugal": "pt", "Brasil": "br", "França": "fr", "Itália": "it", "África do Sul": "za", "Uruguai": "uy" };
-            return `https://flagcdn.com/w80/${flags[paisNome] || "un"}.png`;
+            if (!paisNome) return 'https://flagcdn.com/w80/un.png';
+            
+            // Normaliza o nome: remove acentos e deixa em minúsculo
+            const n = paisNome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+            
+            const flags = { 
+                "argentina": "ar", "chile": "cl", "espanha": "es", "portugal": "pt", 
+                "brasil": "br", "franca": "fr", "italia": "it", "africa do sul": "za", 
+                "uruguai": "uy", "hungria": "hu", "australia": "au", "alemanha": "de",
+                "estados unidos": "us", "colombia": "co"
+            };
+            return `https://flagcdn.com/w80/${flags[n] || "un"}.png`;
         };
 
         async function loadWines() {
@@ -124,15 +134,14 @@
                         return keyMatch ? v[keyMatch] : null;
                     };
 
-                    const nome = findValue(['vinho', 'rótulo', 'B']) || "Vinho s/ Nome";
-                    const uva = findValue(['uva', 'casta', 'E']) || "Uva s/ info";
+                    const nome = findValue(['vinho', 'rótulo', 'B']) || "Vinho sem nome";
+                    const uva = findValue(['uva', 'casta', 'E']) || "Uva não informada";
                     const pais = findValue(['pais', 'país', 'origem', 'D']) || "Outros";
                     const foto = findValue(['foto', 'imagem', 'link', 'K']) || "";
                     
                     const notaF = parseFloat(findValue(['fellype', 'notaf', 'M']) || 0);
                     const notaH = parseFloat(findValue(['hwlly', 'notah', 'N']) || 0);
                     
-                    // Lógica da nota: Se não tiver nota, mostra "-"
                     let mediaExibicao = "-";
                     if (notaF > 0 || notaH > 0) {
                         mediaExibicao = (notaF > 0 && notaH > 0) ? ((notaF + notaH) / 2).toFixed(1) : (notaF || notaH).toFixed(1);
@@ -165,7 +174,7 @@
                 
                 section.innerHTML = `
                     <div class="country-header" onclick="this.parentElement.classList.toggle('active')">
-                        <h2><img src="${getFlag(pais)}" alt="Bandeira" style="width:30px; border-radius:4px;"> ${pais.toUpperCase()}</h2>
+                        <h2><img src="${getFlag(pais)}" alt="Bandeira" style="width:32px; border-radius:4px; border: 1px solid #333;"> ${pais}</h2>
                         <div style="display:flex; align-items:center; gap:15px;">
                             <span style="font-size:0.9rem; color:var(--subtexto)">${vinhos.length} rótulos</span>
                             <i class="fas fa-chevron-down chevron"></i>
