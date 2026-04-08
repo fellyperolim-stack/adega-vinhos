@@ -6,6 +6,7 @@
     <title>Fellype & Hwlly - Nosso Legado do Vinho</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
     
     <style>
         :root {
@@ -17,85 +18,87 @@
         body {
             margin: 0; font-family: 'Times New Roman', Times, serif;
             background-color: var(--bg); color: var(--texto); line-height: 1.8;
-            overflow-x: hidden;
+            font-size: 1.1rem; overflow-x: hidden;
         }
 
-        h1, h2, h3, .nav-logo a, .nav-links a { font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px; }
+        h1, h2, h3, h4, .nav-logo a, .stat-item p, .nav-links a {
+            font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
+        }
 
-        /* --- NAVBAR (PADRÃO PREMIUM) --- */
+        /* --- 1. BARRA DE NAVEGAÇÃO (MANTIDA ORIGINAL) --- */
         .navbar {
             background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
             align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
         }
-        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; }
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; transition: var(--transicao); }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
-        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); transition: var(--transicao); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
         
-        .dropdown { position: relative; }
-        .dropdown-content { display: none; position: absolute; background: #1a1a1a; min-width: 180px; border: 1px solid #333; top: 30px; border-radius: 5px; right: 0; }
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; border-radius: 5px; top: 30px; }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
         .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content a { padding: 12px 16px; display: block; color: white; text-decoration: none; font-size: 0.9rem; }
-        .dropdown-content a:hover { background: var(--vinho-vivo); }
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-        /* --- HERO --- */
+        /* --- 2. HERO (MANTIDO) --- */
         .hero {
-            height: 70vh;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(10, 10, 10, 1)), 
+            height: 80vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(10, 10, 10, 1)), 
                               url('https://images.unsplash.com/photo-1506377295352-e3154d43602c?q=80&w=2070');
             background-size: cover; background-position: center; background-attachment: fixed;
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;
         }
         .hero-emblema { font-size: 3rem; color: var(--vinho-vivo); margin-bottom: 20px; }
-        .hero p.citacao { font-size: 1.5rem; font-style: italic; color: var(--dourado-claro); max-width: 800px; margin-bottom: 20px; }
+        .hero p.citacao { font-size: 1.6rem; font-style: italic; color: var(--dourado-claro); max-width: 800px; margin: 0 auto 40px; }
+        .hero p.introducao { font-size: 1.1rem; color: #ccc; max-width: 650px; margin: 0 auto; }
 
-        /* --- STATS BAR --- */
+        /* --- 3. STATS BAR (MANTIDA) --- */
         .stats-bar {
-            background: var(--card); padding: 40px 20px; border-top: 1px solid #222; border-bottom: 1px solid #222;
-            display: flex; justify-content: center; gap: 60px; flex-wrap: wrap;
+            background: var(--card); padding: 60px 20px; border-top: 1px solid #222; border-bottom: 1px solid #222;
+            display: flex; justify-content: center; gap: 80px; flex-wrap: wrap;
         }
-        .stat-item { text-align: center; min-width: 120px; }
-        .stat-icon { font-size: 2rem; color: var(--vinho-vivo); margin-bottom: 10px; }
-        .stat-item h2 { color: var(--dourado); font-size: 2.8rem; margin: 0; }
-        .stat-item p { text-transform: uppercase; font-size: 0.7rem; color: var(--subtexto); margin: 0; letter-spacing: 1px; }
+        .stat-item { text-align: center; min-width: 150px; }
+        .stat-icon { font-size: 2.8rem; color: var(--vinho-vivo); margin-bottom: 15px; }
+        .stat-item h2 { color: var(--dourado); font-size: 3.5rem; margin: 5px 0; font-weight: bold; }
+        .stat-item p { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; color: var(--subtexto); margin: 0;}
 
-        /* --- NOVO CONTEÚDO CRIATIVO --- */
-        .main-content { max-width: 1100px; margin: 60px auto; padding: 0 20px; display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 50px; }
+        /* --- 4. CORPO PRINCIPAL --- */
+        .main-content { max-width: 1100px; margin: 80px auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1.2fr; gap: 60px; }
+        .text-block h2 { color: var(--dourado); font-size: 2.2rem; border-bottom: 1px solid var(--vinho-escuro); padding-bottom: 15px; margin-bottom: 30px; }
+        .text-block p { margin-bottom: 25px; color: var(--texto); font-size: 1.15rem; text-align: justify; }
+
+        /* --- UPGRADE CRIATIVO NA LATERAL (SOMMELIERS) --- */
+        .destinos-block { background: var(--card); padding: 30px 20px; border-radius: 15px; border: 1px solid #222; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        .destinos-block h3 { color: var(--dourado); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         
-        .text-block h2 { color: var(--dourado); font-size: 2rem; border-bottom: 1px solid var(--vinho-escuro); padding-bottom: 10px; margin-bottom: 20px; }
-        .text-block p { margin-bottom: 20px; color: var(--texto); font-size: 1.1rem; text-align: justify; }
+        .shiba-profile { margin-bottom: 30px; transition: var(--transicao); }
+        .shiba-profile:hover { transform: scale(1.05); }
+        .shiba-img { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--dourado); object-fit: cover; object-position: center 20%; margin-bottom: 10px; }
+        .shiba-profile h4 { color: var(--dourado-claro); margin: 0; font-size: 1.1rem; }
+        .shiba-profile p { color: var(--subtexto); font-size: 0.85rem; margin: 5px 0; font-style: italic; line-height: 1.4; }
 
-        /* OS GUARDIÕES (SIDEBAR) */
-        .guardioes-box { background: var(--card); border-radius: 15px; padding: 25px; border: 1px solid #222; position: relative; overflow: hidden; }
-        .guardioes-box::before { content: '\f1b0'; font-family: 'Font Awesome 5 Free'; font-weight: 900; position: absolute; top: -20px; right: -10px; font-size: 8rem; color: rgba(212, 175, 55, 0.03); }
-        .guardioes-box h3 { color: var(--dourado); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 20px; text-align: center; }
-        
-        .shiba-card { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.1); }
-        .shiba-card img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid var(--dourado); object-position: center 20%; }
-        .shiba-info h4 { margin: 0; color: var(--dourado-claro); font-size: 1rem; }
-        .shiba-info p { margin: 0; font-size: 0.75rem; color: var(--subtexto); line-height: 1.3; }
-
-        /* BOTÕES DE EXPLORAÇÃO VISUAL */
-        .explore-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 40px; }
-        .explore-card { 
-            position: relative; height: 180px; border-radius: 12px; overflow: hidden; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-decoration: none; transition: 0.4s; border: 1px solid #333;
+        .btn-explorar { 
+            display: inline-block; padding: 12px 25px; background: var(--vinho-vivo); color: white; 
+            text-decoration: none; border-radius: 5px; font-family: 'Segoe UI', sans-serif; 
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            margin-top: 10px; border: 1px solid transparent;
         }
-        .explore-card:hover { transform: translateY(-5px); border-color: var(--dourado); }
-        .explore-card i { font-size: 2.5rem; color: var(--dourado); margin-bottom: 10px; z-index: 2; }
-        .explore-card span { z-index: 2; color: #fff; font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
-        .explore-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, rgba(74,4,4,0.9), rgba(10,10,10,0.8)); z-index: 1; transition: 0.4s; }
-        .explore-card:hover::after { background: rgba(128, 0, 32, 0.9); }
+        .btn-explorar:hover { background: var(--vinho-escuro); border-color: var(--dourado); }
 
-        footer { text-align: center; padding: 40px 20px; color: #555; font-size: 0.8rem; border-top: 1px solid #222; }
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 60px 20px; color: #777; font-size: 0.9rem; border-top: 1px solid #222; background: #080808; }
 
+        @media (max-width: 992px) { .main-content { grid-template-columns: 1fr; gap: 40px; } }
         @media (max-width: 768px) {
-            .main-content { grid-template-columns: 1fr; }
-            .stats-bar { gap: 20px; }
-            .stat-item { min-width: 40%; }
-            .nav-links { display: none; } /* Menu hamburguer simplificado para o exemplo */
+            .navbar { padding: 15px 20px; } .menu-toggle { display: block; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background-color: #1a1a1a; padding: 20px 0; }
+            .nav-links.active { display: flex; }
+            .stat-item { width: 45%; }
         }
     </style>
 </head>
@@ -103,11 +106,14 @@
 
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
-        <ul class="nav-links">
+        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links-container">
             <li><a href="index.html" class="active">Página Inicial</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
+            <li><a href="melhores.html">Escolhidos Mês</a></li>
+            <li><a href="cadastro.html">Cadastrar Novo</a></li>
             <li class="dropdown">
-                <a href="#">Explorar <i class="fa fa-caret-down"></i></a>
+                <a href="javascript:void(0)" class="dropbtn">Explorar <i class="fa fa-caret-down" style="font-size: 0.8rem;"></i></a>
                 <div class="dropdown-content">
                     <a href="paises.html">Por Países</a>
                     <a href="uvas.html">Por Uvas</a>
@@ -119,66 +125,56 @@
 
     <header class="hero">
         <div class="hero-emblema"><i class="fas fa-wine-glass-alt"></i></div>
-        <p class="citacao">"Este cantinho é só nosso: um lembrete afetuoso de cada taça e história vivida juntos."</p>
+        <p class="citacao">"Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."</p>
+        <p class="introducao">Desde o primeiro brinde compartilhado 🥂, embarcamos numa aventura sensorial sem fim 🍷✨. Criamos este espaço para guardar as memórias de nossos encontros, descobertas e celebrações 🎉.</p>
     </header>
 
     <div class="stats-bar">
-        <div class="stat-item"><div class="stat-icon"><i class="fas fa-wine-bottle"></i></div><h2>95+</h2><p>Rótulos</p></div>
-        <div class="stat-item"><div class="stat-icon"><i class="fas fa-globe-americas"></i></div><h2>11</h2><p>Países</p></div>
-        <div class="stat-item"><div class="stat-icon"><i class="fas fa-seedling"></i></div><h2>31+</h2><p>Castas</p></div>
+        <div class="stat-item"><div class="stat-icon"><i class="fas fa-wine-bottle"></i></div><h2>95+</h2><p>Vinhos Degustados</p></div>
+        <div class="stat-item"><div class="stat-icon"><i class="fas fa-globe-americas"></i></div><h2>11</h2><p>Países Explorados</p></div>
+        <div class="stat-item"><div class="stat-icon"><i class="fas fa-map-marked-alt"></i></div><h2>44+</h2><p>Regiões Distintas</p></div>
     </div>
 
     <main class="main-content">
         <article class="text-block">
-            <h2>Nossa Filosofia</h2>
-            <p>
-                Não guardamos apenas vinhos; colecionamos os momentos em que eles foram abertos. De Mendoza a Lisboa, cada rótulo em nossa adega digital carrega o DNA de uma viagem, um jantar ou uma tarde de descobertas.
-            </p>
-            <p>
-                Aqui, a tecnologia serve à memória. Nossa curadoria é viva e reflete nossa evolução no mundo da enologia, celebrando desde os encorpados Malbecs argentinos até o frescor vibrante dos brancos da África do Sul.
-            </p>
+            <h2>Nossas Descobertas</h2>
+            <p>Ao longo dessa jornada, Portugal figura entre nossos destinos favoritos, ao lado de Chile, Argentina, Espanha e França, sem esquecer as surpresas da Hungria, Uruguai e África do Sul. Passamos por adegas históricas em Mendoza 🏰, brindamos nas colinas de Lisboa 🌄 e nos encantamos com os vinhos do Valle Central chileno 🍇.</p>
+            <p>Compartilhamos preferências por mais de 31 castas 🍇: o frescor vibrante do Chardonnay e do Sauvignon Blanc 🌿, a complexidade dos blends italianos, a intensidade da Syrah 🔥 e a leveza do Torrontés argentino 🌸. Entre nossos rótulos prediletos, destacam-se os da Parras Wine e da Undurraga 🏅, além de preciosidades garimpadas em pequenas vinícolas de Romagna, Western Cape e Luján de Cuyo 🍾.</p>
+            <p>Que este espaço nos transporte sempre de volta às nossas melhores lembranças 💭, aos aromas que marcaram cada encontro e às histórias que apenas nós contamos 📖. Aqui, cada taça é uma cápsula do tempo ⏳ — nosso legado, guardado com carinho e pronto para ser revisitado a dois 💑.</p>
         </article>
 
-        <aside class="guardioes-box">
+        <aside class="destinos-block">
             <h3>Sommeliers da Casa</h3>
             
-            <div class="shiba-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" alt="Leblonzito">
-                <div class="shiba-info">
-                    <h4>Leblonzito</h4>
-                    <p>Especialista em vinhos de verão e frescor tropical.</p>
-                </div>
+            <div class="shiba-profile">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="shiba-img" alt="Leblonzito">
+                <h4>Leblonzito</h4>
+                <p>"Curador oficial de brancos leves e momentos ensolarados."</p>
             </div>
 
-            <div class="shiba-card">
-                <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="Ipanemita">
-                <div class="shiba-info">
-                    <h4>Ipanemita</h4>
-                    <p>Curadora de tintos clássicos e terroir de altitude.</p>
-                </div>
+            <div class="shiba-profile">
+                <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="shiba-img" alt="Ipanemita">
+                <h4>Ipanemita</h4>
+                <p>"Especialista em tintos de corpo e aromas complexos."</p>
             </div>
+
+            <a href="paises.html" class="btn-explorar">Explorar por Países</a>
         </aside>
-
-        <section class="explore-grid">
-            <a href="paises.html" class="explore-card">
-                <i class="fas fa-map-marked-alt"></i>
-                <span>Explorar Mapa</span>
-            </a>
-            <a href="uvas.html" class="explore-card">
-                <i class="fas fa-leaf"></i>
-                <span>Variedades</span>
-            </a>
-            <a href="catalogo.html" class="explore-card">
-                <i class="fas fa-list-ul"></i>
-                <span>Ver Tudo</span>
-            </a>
-        </section>
     </main>
 
     <footer>
-        Fellype & Hwlly © 2026<br>
-        Guardado sob a vigilância de Leblonzito & Ipanemita 🐾
+        Criado com ❤️ para guardar as memórias de Fellype e Hwlly.<br>
+        Ano 2026 • Hospedado via GitHub Pages • Sistema Serverless Integrado
     </footer>
 
+    <script>
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        mobileMenuIcon.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
+        });
+    </script>
 </body>
 </html>
