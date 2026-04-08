@@ -11,19 +11,19 @@
         }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--texto); }
 
-        /* NAVBAR IGUAL À HOME */
+        /* NAVBAR */
         .navbar { background: #000; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 1000; }
         .nav-logo a { color: var(--dourado); text-decoration: none; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; }
         .nav-links { list-style: none; display: flex; gap: 20px; }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.8rem; text-transform: uppercase; }
         .nav-links a:hover { color: var(--dourado); }
 
-        /* CABEÇALHO DO CATÁLOGO */
+        /* CABEÇALHO */
         .header-section { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, #111, #0a0a0a); }
         .header-section h1 { color: var(--dourado); margin-bottom: 10px; font-weight: 300; }
         #search { width: 100%; max-width: 600px; padding: 12px 20px; border-radius: 25px; border: 1px solid #333; background: #111; color: white; outline: none; margin-top: 20px; }
 
-        /* GRID DE VINHOS */
+        /* GRID */
         .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
         .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: 0.3s; position: relative; }
         .vinho-card:hover { transform: translateY(-5px); border-color: var(--vinho-vivo); }
@@ -65,8 +65,6 @@
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-        
-        // IMAGEM PADRÃO (PLACEHOLDER)
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
         let vinhos = [];
@@ -82,26 +80,53 @@
             }
         }
 
+        function tratarImagem(valorFoto) {
+            if (!valorFoto || valorFoto.toString().trim().length < 5) return IMG_PADRAO;
+
+            const fotoStr = valorFoto.toString().trim();
+
+            // 1. Caso seja o NOVO formato (Base64)
+            if (fotoStr.startsWith('data:image')) {
+                return fotoStr;
+            }
+
+            // 2. Caso seja o formato LEGADO (Google Drive)
+            if (fotoStr.includes('drive.google.com')) {
+                // Extrai o ID do arquivo do link do Drive
+                const match = fotoStr.match(/[-\w]{25,}/);
+                if (match) {
+                    // Retorna a URL de thumbnail em alta resolução (w1000) para visualização direta
+                    return `https://lh3.googleusercontent.com/u/0/d/${match[0]}=w1000`;
+                }
+            }
+
+            // 3. Caso seja um link direto comum
+            if (fotoStr.startsWith('http')) {
+                return fotoStr;
+            }
+
+            return IMG_PADRAO;
+        }
+
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
             grid.innerHTML = lista.map(v => {
-                // Verifica se existe foto e se não é apenas um link vazio ou espaço
-                const temFoto = v["Foto"] && v["Foto"].toString().trim().length > 10;
-                const urlFoto = temFoto ? v["Foto"] : IMG_PADRAO;
+                
+                const urlExibicao = tratarImagem(v["Foto"]);
 
                 return `
                 <div class="vinho-card">
                     <div class="vinho-img-container">
                         <img class="vinho-img" 
-                             src="${urlFoto}" 
+                             src="${urlExibicao}" 
                              alt="Vinho" 
                              onerror="this.src='${IMG_PADRAO}'">
                     </div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${v["Nome do Vinho"]}</h3>
+                        <h3 class="vinho-nome">${v["Nome do Vinho"] || 'Rótulo Sem Nome'}</h3>
                         <div class="vinho-detalhes">
-                            <span>🍇 ${v["Uva(s)"]}</span><br>
-                            <span>🌍 ${v["País"]} | ${v["Safra"]}</span>
+                            <span>🍇 ${v["Uva(s)"] || 'Uvas não informadas'}</span><br>
+                            <span>🌍 ${v["País"] || 'Origem n/a'} | ${v["Safra"] || 'n/s'}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || '-'}</div></div>
@@ -113,11 +138,10 @@
             }).join('');
         }
 
-        // Busca Viva
         document.getElementById('search').addEventListener('input', (e) => {
             const termo = e.target.value.toLowerCase();
             const filtrados = vinhos.filter(v => 
-                v["Nome do Vinho"].toLowerCase().includes(termo) ||
+                (v["Nome do Vinho"] && v["Nome do Vinho"].toLowerCase().includes(termo)) ||
                 (v["Uva(s)"] && v["Uva(s)"].toLowerCase().includes(termo)) ||
                 (v["País"] && v["País"].toLowerCase().includes(termo))
             );
