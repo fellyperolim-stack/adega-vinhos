@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nossa Adega | Fellype & Hwlly 🍷</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --gold: #d4af37; --wine: #4a0e0e; --vinho-vivo: #800020;
@@ -16,9 +18,9 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: 'Outfit', sans-serif; background: var(--black); color: var(--texto); overflow-x: hidden; }
 
-        /* NAVBAR PADRONIZADA */
+        /* NAVBAR - IDÊNTICA AO INDEX */
         .navbar { 
-            background: rgba(0,0,0,0.9); 
+            background: rgba(0,0,0,0.95); 
             backdrop-filter: blur(10px);
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px 5%; border-bottom: 1px solid var(--glass-border); 
@@ -26,27 +28,27 @@
         }
         .nav-logo a { 
             color: var(--gold); text-decoration: none; font-family: 'Cinzel', serif;
-            font-weight: bold; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: bold; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;
         }
         .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: 0.3s; }
         .nav-links a:hover { color: var(--gold); }
 
-        /* CABEÇALHO PADRONIZADO */
+        /* CABEÇALHO - PADRONIZADO (Título e Subtítulo) */
         .header-section { 
             text-align: center; padding: 60px 20px; 
             background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); 
         }
         .header-section h1 { 
             font-family: 'Cinzel', serif; color: var(--gold); 
-            margin-bottom: 10px; font-weight: 700; font-size: 2.2rem; 
+            margin: 0 0 10px 0; font-weight: 700; font-size: 2.5rem; 
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
-        .header-section p { font-weight: 300; opacity: 0.8; letter-spacing: 1px; }
+        .header-section p { font-weight: 300; opacity: 0.8; letter-spacing: 1px; margin-bottom: 30px; }
 
-        /* CAMPO DE PESQUISA */
+        /* BUSCA - VISUAL PADRONIZADO */
         .search-container {
-            position: relative; width: 100%; max-width: 500px; margin: 30px auto 0;
+            position: relative; width: 100%; max-width: 500px; margin: 0 auto;
         }
         .search-container i {
             position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gold);
@@ -57,33 +59,33 @@
             background: var(--glass); color: white; outline: none; 
             font-family: 'Outfit', sans-serif; transition: 0.3s;
         }
-        #search:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
+        #search:focus { border-color: var(--gold); }
 
-        /* GRID */
+        /* GRID E CARDS - VISUAL PADRONIZADO (BORDAS ARREDONDADAS) */
         .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
-        .vinho-card { background: var(--glass); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-        .vinho-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .vinho-card { 
+            background: var(--glass); border-radius: 20px; overflow: hidden; 
+            border: 1px solid var(--glass-border); transition: 0.4s; position: relative; 
+        }
+        .vinho-card:hover { transform: translateY(-10px); border-color: var(--gold); }
         
-        .vinho-img-container { width: 100%; height: 300px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+        .vinho-img-container { width: 100%; height: 300px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .vinho-card:hover .vinho-img { transform: scale(1.1); }
         
-        /* Badge de Data de Consumo no topo da imagem */
-        .data-badge {
-            position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.7); 
-            backdrop-filter: blur(5px); color: var(--gold); padding: 5px 12px; 
-            border-radius: 15px; font-size: 0.7rem; font-weight: 600; border: 1px solid var(--gold);
+        /* DATA DE CONSUMO NO CARD */
+        .data-consumo-card {
+            font-size: 0.75rem; color: #888; font-style: italic; margin-top: -5px; margin-bottom: 15px; display: block;
         }
 
         .vinho-info { padding: 25px; }
-        .vinho-nome { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold); margin: 0 0 10px 0; letter-spacing: 0.5px; }
+        .vinho-nome { font-family: 'Cinzel', serif; font-size: 1.15rem; color: var(--gold); margin: 0 0 10px 0; }
         .vinho-detalhes { font-size: 0.85rem; color: #bbb; margin-bottom: 20px; line-height: 1.6; }
-        .vinho-detalhes b { color: #fff; font-weight: 400; }
         
         .notas { display: flex; justify-content: space-between; border-top: 1px solid var(--glass-border); padding-top: 15px; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .nota-valor { color: #fff; font-size: 1.2rem; font-weight: 700; font-family: 'Cinzel', serif; }
+        .nota-box span { display: block; font-size: 0.65rem; color: #777; text-transform: uppercase; margin-bottom: 3px; }
+        .nota-valor { color: #fff; font-size: 1.3rem; font-weight: 700; font-family: 'Cinzel', serif; }
 
         #loading { text-align: center; padding: 100px; color: var(--gold); font-family: 'Cinzel', serif; font-size: 1.2rem; }
     </style>
@@ -101,7 +103,7 @@
 
     <div class="header-section">
         <h1>Nossa Adega</h1>
-        <p>Registros de momentos eternizados em taças.</p>
+        <p>Explore os rótulos que marcaram nossa jornada.</p>
         
         <div class="search-container">
             <i class="fas fa-search"></i>
@@ -130,7 +132,7 @@
         }
 
         function tratarImagem(valorFoto) {
-            if (!valorFoto || valorFoto.toString().trim().length < 5) return IMG_PADRAO;
+            if (!valorFoto || valorFoto.toString().length < 5) return IMG_PADRAO;
             const fotoStr = valorFoto.toString().trim();
 
             if (fotoStr.startsWith('data:image')) return fotoStr;
@@ -144,29 +146,36 @@
             return IMG_PADRAO;
         }
 
+        // --- FUNÇÕES ORIGINAIS DE RENDERIZAÇÃO (REVISADAS PARA O NOVO CHAT) ---
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
+            
+            // Corrige a lógica de verificação para as colunas do chat
             grid.innerHTML = lista.map(v => {
                 const urlExibicao = tratarImagem(v["Foto"]);
                 
-                // Formatação da data para exibição amigável
-                const dataConsumo = v["Ano de Consumo"] || "Data n/a";
+                // Mapeia os dados vindo do chat para as colunas do card
+                // Certifique-se de que os nomes vinhos correspondam EXATAMENTE às colunas da sua planilha
+                const nome = v["Nome do Vinho"] || 'Rótulo Sem Nome';
+                const uvas = v["Uva(s)"] || 'Não informado';
+                const pais = v["País"] || 'n/a';
+                const safra = v["Safra"] || 'n/s';
+                const dataConsumo = v["Ano de Consumo"] || 'Data n/a';
 
                 return `
                 <div class="vinho-card">
                     <div class="vinho-img-container">
-                        <div class="data-badge"><i class="far fa-calendar-alt"></i> ${dataConsumo}</div>
                         <img class="vinho-img" 
                              src="${urlExibicao}" 
                              alt="Vinho" 
                              onerror="this.src='${IMG_PADRAO}'">
                     </div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${v["Nome do Vinho"] || 'Rótulo Sem Nome'}</h3>
+                        <h3 class="vinho-nome">${nome}</h3>
+                        <span class="data-consumo-card"><i class="far fa-calendar-alt"></i> ${dataConsumo}</span>
                         <div class="vinho-detalhes">
-                            <span>🍇 <b>Uvas:</b> ${v["Uva(s)"] || 'Não informado'}</span><br>
-                            <span>🌍 <b>Origem:</b> ${v["País"] || 'n/a'} | ${v["Safra"] || 'n/s'}</span><br>
-                            <span>🏢 <b>Produtor:</b> ${v["Produtor"] || 'Não informado'}</span>
+                            <span>🍇 ${uvas}</span><br>
+                            <span>🌍 ${pais} | ${safra}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || '-'}</div></div>
@@ -178,13 +187,15 @@
             }).join('');
         }
 
+        // --- FUNÇÃO DE BUSCA ORIGINAL (CORRIGIDA) ---
         document.getElementById('search').addEventListener('input', (e) => {
             const termo = e.target.value.toLowerCase();
+            
+            // Corrige o mapeamento da busca para as colunas do chat
             const filtrados = vinhos.filter(v => 
                 (v["Nome do Vinho"] && v["Nome do Vinho"].toLowerCase().includes(termo)) ||
                 (v["Uva(s)"] && v["Uva(s)"].toLowerCase().includes(termo)) ||
-                (v["País"] && v["País"].toLowerCase().includes(termo)) ||
-                (v["Produtor"] && v["Produtor"].toLowerCase().includes(termo))
+                (v["País"] && v["País"].toLowerCase().includes(termo))
             );
             renderVinhos(filtrados);
         });
