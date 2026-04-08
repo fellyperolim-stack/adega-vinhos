@@ -43,7 +43,7 @@
         
         input[type="file"] { display: none; }
         .custom-file-upload { display: block; width: 100%; padding: 12px; background: var(--glass); border: 1px dashed var(--gold); border-radius: 10px; text-align: center; cursor: pointer; color: var(--gold); font-size: 13px; }
-        #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
+        #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; margin-left: auto; margin-right: auto; }
     </style>
 </head>
 <body>
@@ -78,7 +78,7 @@
                 <label style="font-size:10px; color:var(--gold)">FOTO DO BRINDE</label>
                 <label class="custom-file-upload">
                     <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
-                    <i class="fas fa-camera"></i> Selecionar ou Tirar Foto
+                    Selecionar ou Tirar Foto
                 </label>
                 <img id="preview">
             </div>
@@ -88,7 +88,6 @@
     </dialog>
 
     <script>
-        // ATENÇÃO: Verifique se essa URL é a da sua ÚLTIMA implantação
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
@@ -177,53 +176,56 @@
             }
         }
 
-        function validarSenhaFinal() {
+        // --- CORREÇÃO DA VALIDAÇÃO (FETCH POST EM VEZ DE JSONP) ---
+        async function validarSenhaFinal() {
             isValidating = true;
             updateHeader('final');
             addMsg("Validando acesso...", 'final');
             
-            const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?action=verificarSenha&senha=${encodeURIComponent(dataVinho.tokenAcesso)}&callback=authResult`;
-            document.body.appendChild(script);
-        }
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "verificarSenha",
+                        senha: dataVinho.tokenAcesso // O script espera 'senha' ou 'tokenAcesso'
+                    })
+                });
 
-        window.authResult = function(res) {
-            isValidating = false;
-            if (res.result === "success") {
-                addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
-                setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
-            } else { 
+                // Tenta ler como texto primeiro caso o Google dê erro
+                const text = await response.text();
+                const res = JSON.parse(text);
+
+                if (res.result === "success") {
+                    isValidating = false;
+                    addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
+                    setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
+                } else {
+                    throw new Error();
+                }
+            } catch (e) {
+                isValidating = false;
                 step--; 
                 addMsg("Senha incorreta, Fellype. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
-                document.getElementById('userInput').focus();
             }
         }
 
-        // --- LÓGICA DE IMAGEM (REDUÇÃO E BASE64) ---
         function handleFile(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    // Redimensiona para caber na planilha (Máx 500px)
                     const canvas = document.createElement('canvas');
                     const MAX_WIDTH = 500;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
-
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // Converte para Base64 com qualidade reduzida
                     base64Image = canvas.toDataURL('image/jpeg', 0.7);
-                    
-                    // Mostra preview
                     const preview = document.getElementById('preview');
                     preview.src = base64Image;
                     preview.style.display = "block";
@@ -238,15 +240,13 @@
             btn.innerHTML = "Salvando... 🍷";
             btn.disabled = true;
 
-            // Prepara o objeto final para o Script
             const payload = {
-                action: "salvarVinho", // Primeiro salva os dados básicos
+                action: "salvarVinho",
                 tokenAcesso: dataVinho.tokenAcesso,
                 wineName: dataVinho.wineName,
                 uva: dataVinho.uva,
                 pais: dataVinho.pais,
                 year: dataVinho.year,
-                // Dados do Modal
                 ratingFellype: document.getElementById('notF').value,
                 ratingHwlly: document.getElementById('notH').value,
                 wouldBuy: document.getElementById('reCompra').value,
@@ -255,18 +255,12 @@
             };
 
             try {
-                // Como o Script agora salva tudo no processFormInput ou saveRatings, 
-                // vamos enviar como 'salvarVinho' e o script cuida do resto
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-
-                alert("Brinde confirmado com sucesso! 🍷🐾");
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+                alert("Vinho salvo com sucesso! 🍷");
                 location.href = "catalogo.html";
             } catch (e) {
-                console.error(e);
-                alert("Vinho salvo! (Pode ignorar erro de CORS se os dados aparecerem na planilha)");
+                // Erros de CORS são comuns, mas o dado costuma chegar na planilha
+                alert("Processado! Verifique sua planilha.");
                 location.href = "catalogo.html";
             }
         }
