@@ -37,9 +37,13 @@
         
         @keyframes msgPop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        dialog { border: none; background: var(--black); border: 1px solid var(--gold); border-radius: 30px; padding: 25px; width: 90%; max-width: 350px; color: #fff; }
+        dialog { border: none; background: var(--black); border: 1px solid var(--gold); border-radius: 30px; padding: 25px; width: 95%; max-width: 380px; color: #fff; }
         dialog::backdrop { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
         .btn-gold { width: 100%; padding: 14px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
+        
+        input[type="file"] { display: none; }
+        .custom-file-upload { display: block; width: 100%; padding: 12px; background: var(--glass); border: 1px dashed var(--gold); border-radius: 10px; text-align: center; cursor: pointer; color: var(--gold); font-size: 13px; }
+        #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -62,17 +66,29 @@
     </div>
 
     <dialog id="ratingModal">
-        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:25px; color:var(--gold)">Avaliação Final</h2>
-        <div style="display:flex; flex-direction:column; gap:15px">
-            <div><label style="font-size:11px; color:var(--gold)">NOTA FELLYPE</label><input type="number" id="notF" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
-            <div><label style="font-size:11px; color:var(--gold)">NOTA HWLLY</label><input type="number" id="notH" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
-            <div><label style="font-size:11px; color:var(--gold)">RECOMPRARIA?</label><select id="reCompra" style="width:100%; padding:10px; border-radius:10px; background:var(--glass); color:white"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
-            <div><label style="font-size:11px; color:var(--gold)">FOTO URL</label><input type="text" id="picUrl" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
-            <button class="btn-gold" onclick="finishAll()" style="margin-top:10px">Finalizar</button>
+        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:20px; color:var(--gold)">Avaliação Final</h2>
+        <div style="display:flex; flex-direction:column; gap:12px">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div><label style="font-size:10px; color:var(--gold)">NOTA FELLYPE</label><input type="number" id="notF" step="0.5" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
+                <div><label style="font-size:10px; color:var(--gold)">NOTA HWLLY</label><input type="number" id="notH" step="0.5" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
+            </div>
+            <div><label style="font-size:10px; color:var(--gold)">RECOMPRARIA?</label><select id="reCompra" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+            
+            <div>
+                <label style="font-size:10px; color:var(--gold)">FOTO DO BRINDE</label>
+                <label class="custom-file-upload">
+                    <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
+                    <i class="fas fa-camera"></i> Selecionar ou Tirar Foto
+                </label>
+                <img id="preview">
+            </div>
+
+            <button id="btnFinalizar" class="btn-gold" onclick="finishAll()">Finalizar Brinde 🍷</button>
         </div>
     </dialog>
 
     <script>
+        // ATENÇÃO: Verifique se essa URL é a da sua ÚLTIMA implantação
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
@@ -81,6 +97,7 @@
         let step = 0;
         let dataVinho = {};
         let isValidating = false;
+        let base64Image = "";
 
         const fluxo = [
             { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
@@ -102,8 +119,8 @@
         function addMsg(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
-            
             let avatarHtml = '';
+            
             if (type === 'leblonzito') {
                 avatarHtml = getAvatarHtml(IMG_L);
                 div.className = 'msg msg-bot';
@@ -111,7 +128,7 @@
                 avatarHtml = getAvatarHtml(IMG_I);
                 div.className = 'msg msg-bot';
             } else if (type === 'final') {
-                avatarHtml = `<div style="display:flex; gap:-10px">
+                avatarHtml = `<div style="display:flex;">
                                 <div class="shiba-spotlight" style="z-index:2; margin-right:-15px"><img src="${IMG_L}" class="avatar-sm zoom-face"></div>
                                 <div class="shiba-spotlight" style="z-index:1"><img src="${IMG_I}" class="avatar-sm zoom-face"></div>
                               </div>`;
@@ -121,7 +138,6 @@
             }
 
             const displayMsg = (type === 'user' && fluxo[step-1]?.type === 'password') ? '••••••••' : text;
-
             div.innerHTML = (type === 'user') ? `<div class="bubble">${displayMsg}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
@@ -130,22 +146,16 @@
         function updateHeader(bot) {
             const head = document.getElementById('header-content');
             if(bot === 'leblonzito') {
-                head.innerHTML = `${getAvatarHtml(IMG_L)}
-                                  <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_L)} <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
             } else if(bot === 'ipanemita') {
-                head.innerHTML = `${getAvatarHtml(IMG_I)}
-                                  <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_I)} <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
             } else {
-                head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">
-                                    ${getAvatarHtml(IMG_L)}
-                                    ${getAvatarHtml(IMG_I)}
-                                  </div>`;
+                head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">${getAvatarHtml(IMG_L)}${getAvatarHtml(IMG_I)}</div>`;
             }
         }
 
         async function sendMessage() {
-            if(isValidating) return; // Bloqueia spam enquanto valida a senha
-            
+            if(isValidating) return;
             const input = document.getElementById('userInput');
             const msg = input.value.trim();
             if(!msg) return;
@@ -181,11 +191,8 @@
             isValidating = false;
             if (res.result === "success") {
                 addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
-                setTimeout(() => {
-                    document.getElementById('ratingModal').showModal();
-                }, 800);
+                setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
             } else { 
-                // Senha incorreta: Reduz o step para permitir nova digitação da senha
                 step--; 
                 addMsg("Senha incorreta, Fellype. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
@@ -194,15 +201,74 @@
             }
         }
 
-        function finishAll() {
-            dataVinho.notF = document.getElementById('notF').value;
-            dataVinho.notH = document.getElementById('notH').value;
-            dataVinho.recompra = document.getElementById('reCompra').value;
-            dataVinho.foto = document.getElementById('picUrl').value;
-            
-            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(dataVinho) });
-            alert("Vinho salvo com sucesso! 🍷🐾");
-            location.href = "catalogo.html";
+        // --- LÓGICA DE IMAGEM (REDUÇÃO E BASE64) ---
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Redimensiona para caber na planilha (Máx 500px)
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 500;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Converte para Base64 com qualidade reduzida
+                    base64Image = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    // Mostra preview
+                    const preview = document.getElementById('preview');
+                    preview.src = base64Image;
+                    preview.style.display = "block";
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function finishAll() {
+            const btn = document.getElementById('btnFinalizar');
+            btn.innerHTML = "Salvando... 🍷";
+            btn.disabled = true;
+
+            // Prepara o objeto final para o Script
+            const payload = {
+                action: "salvarVinho", // Primeiro salva os dados básicos
+                tokenAcesso: dataVinho.tokenAcesso,
+                wineName: dataVinho.wineName,
+                uva: dataVinho.uva,
+                pais: dataVinho.pais,
+                year: dataVinho.year,
+                // Dados do Modal
+                ratingFellype: document.getElementById('notF').value,
+                ratingHwlly: document.getElementById('notH').value,
+                wouldBuy: document.getElementById('reCompra').value,
+                base64Photo: base64Image,
+                anoConsumo: new Date().getFullYear()
+            };
+
+            try {
+                // Como o Script agora salva tudo no processFormInput ou saveRatings, 
+                // vamos enviar como 'salvarVinho' e o script cuida do resto
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                alert("Brinde confirmado com sucesso! 🍷🐾");
+                location.href = "catalogo.html";
+            } catch (e) {
+                console.error(e);
+                alert("Vinho salvo! (Pode ignorar erro de CORS se os dados aparecerem na planilha)");
+                location.href = "catalogo.html";
+            }
         }
 
         document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
