@@ -3,91 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa Adega | Fellype & Hwlly 🍷</title>
+    <title>Nossa Adega | Fellype & Hwlly</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root {
-            --gold: #d4af37; --wine: #4a0e0e; --vinho-vivo: #800020;
-            --black: #050505; --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
-            --texto: #e0e0e0;
+            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
+            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
+            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
         }
-        
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Outfit', sans-serif; background: var(--black); color: var(--texto); overflow-x: hidden; }
 
-        /* NAVBAR - IDÊNTICA AO INDEX */
-        .navbar { 
-            background: rgba(0,0,0,0.95); 
-            backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 5%; border-bottom: 1px solid var(--glass-border); 
-            position: sticky; top: 0; z-index: 1000; 
+        body {
+            margin: 0; font-family: 'Times New Roman', Times, serif;
+            background-color: var(--bg); color: var(--texto); line-height: 1.8;
+            font-size: 1.1rem; overflow-x: hidden;
         }
-        .nav-logo a { 
-            color: var(--gold); text-decoration: none; font-family: 'Cinzel', serif;
-            font-weight: bold; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
-        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold); }
 
-        /* CABEÇALHO - PADRONIZADO (Título e Subtítulo) */
-        .header-section { 
-            text-align: center; padding: 60px 20px; 
-            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); 
+        h1, h2, h3, h4, .nav-logo a, .nav-links a, #search {
+            font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
         }
-        .header-section h1 { 
-            font-family: 'Cinzel', serif; color: var(--gold); 
-            margin: 0 0 10px 0; font-weight: 700; font-size: 2.5rem; 
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-        }
-        .header-section p { font-weight: 300; opacity: 0.8; letter-spacing: 1px; margin-bottom: 30px; }
 
-        /* BUSCA - VISUAL PADRONIZADO */
-        .search-container {
-            position: relative; width: 100%; max-width: 500px; margin: 0 auto;
+        /* --- NAVBAR PADRONIZADA (IGUAL INDEX) --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
         }
-        .search-container i {
-            position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--gold);
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+
+        /* --- SEÇÃO DE BUSCA --- */
+        .search-section {
+            padding: 60px 20px 20px; text-align: center;
+            background: linear-gradient(to bottom, #111, var(--bg));
         }
+        .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 10px; }
+        .search-container { position: relative; max-width: 600px; margin: 30px auto; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
         #search { 
-            width: 100%; padding: 15px 20px 15px 50px; 
-            border-radius: 30px; border: 1px solid var(--glass-border); 
-            background: var(--glass); color: white; outline: none; 
-            font-family: 'Outfit', sans-serif; transition: 0.3s;
+            width: 100%; padding: 15px 20px 15px 55px; border-radius: 30px; 
+            border: 1px solid #333; background: #111; color: white; outline: none;
+            transition: var(--transicao); font-size: 1rem;
         }
-        #search:focus { border-color: var(--gold); }
+        #search:focus { border-color: var(--dourado); box-shadow: 0 0 15px rgba(212,175,55,0.1); }
 
-        /* GRID E CARDS - VISUAL PADRONIZADO (BORDAS ARREDONDADAS) */
-        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; }
+        /* --- GRID DE VINHOS --- */
+        .vinho-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 30px; padding: 40px 5%; max-width: 1300px; margin: 0 auto; 
+        }
         .vinho-card { 
-            background: var(--glass); border-radius: 20px; overflow: hidden; 
-            border: 1px solid var(--glass-border); transition: 0.4s; position: relative; 
+            background: var(--card); border-radius: 12px; overflow: hidden; 
+            border: 1px solid #222; transition: var(--transicao); position: relative; 
         }
-        .vinho-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
         
-        .vinho-img-container { width: 100%; height: 300px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .vinho-card:hover .vinho-img { transform: scale(1.1); }
+        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .vinho-card:hover .vinho-img { transform: scale(1.08); }
         
-        /* DATA DE CONSUMO NO CARD */
-        .data-consumo-card {
-            font-size: 0.75rem; color: #888; font-style: italic; margin-top: -5px; margin-bottom: 15px; display: block;
-        }
-
-        .vinho-info { padding: 25px; }
-        .vinho-nome { font-family: 'Cinzel', serif; font-size: 1.15rem; color: var(--gold); margin: 0 0 10px 0; }
-        .vinho-detalhes { font-size: 0.85rem; color: #bbb; margin-bottom: 20px; line-height: 1.6; }
+        .vinho-info { padding: 20px; }
+        .vinho-nome { font-size: 1.2rem; color: var(--dourado-claro); margin: 0 0 5px 0; font-family: 'Segoe UI', sans-serif; }
+        .vinho-data { font-size: 0.75rem; color: var(--subtexto); display: block; margin-bottom: 15px; font-style: italic; }
+        .vinho-detalhes { font-size: 0.9rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
         
-        .notas { display: flex; justify-content: space-between; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.65rem; color: #777; text-transform: uppercase; margin-bottom: 3px; }
-        .nota-valor { color: #fff; font-size: 1.3rem; font-weight: 700; font-family: 'Cinzel', serif; }
+        .nota-box span { display: block; font-size: 0.7rem; color: var(--subtexto); text-transform: uppercase; letter-spacing: 1px; }
+        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
 
-        #loading { text-align: center; padding: 100px; color: var(--gold); font-family: 'Cinzel', serif; font-size: 1.2rem; }
+        #loading { text-align: center; padding: 100px; color: var(--dourado); font-style: italic; }
+        footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
@@ -95,24 +85,29 @@
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="catalogo.html" style="color: var(--gold);">Adega</a></li>
-            <li><a href="cadastro.html">Cadastrar</a></li>
+            <li><a href="index.html">Página Inicial</a></li>
+            <li><a href="catalogo.html" class="active">Adega</a></li>
+            <li><a href="cadastro.html">Cadastrar Novo</a></li>
         </ul>
     </nav>
 
-    <div class="header-section">
+    <div class="search-section">
         <h1>Nossa Adega</h1>
-        <p>Explore os rótulos que marcaram nossa jornada.</p>
+        <p>Explore as memórias de cada garrafa compartilhada.</p>
         
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Busque por nome, uva ou país...">
+            <input type="text" id="search" placeholder="Pesquisar por nome, uva, país ou produtor...">
         </div>
     </div>
 
     <div id="loading">Consultando o sommelier... 🍷</div>
     <div class="vinho-grid" id="vinho-grid"></div>
+
+    <footer>
+        Criado com ❤️ para as memórias de Fellype e Hwlly.<br>
+        Ano 2026 • Guardado por Leblonzito & Ipanemita 🐾
+    </footer>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
@@ -127,55 +122,46 @@
                 renderVinhos(vinhos);
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
-                document.getElementById('loading').innerHTML = "Erro ao carregar adega. Verifique a conexão.";
+                document.getElementById('loading').innerHTML = "Erro ao carregar adega.";
             }
         }
 
         function tratarImagem(valorFoto) {
             if (!valorFoto || valorFoto.toString().length < 5) return IMG_PADRAO;
             const fotoStr = valorFoto.toString().trim();
-
             if (fotoStr.startsWith('data:image')) return fotoStr;
-
             if (fotoStr.includes('drive.google.com')) {
                 const match = fotoStr.match(/[-\w]{25,}/);
                 if (match) return `https://lh3.googleusercontent.com/u/0/d/${match[0]}=w1000`;
             }
-
-            if (fotoStr.startsWith('http')) return fotoStr;
-            return IMG_PADRAO;
+            return fotoStr.startsWith('http') ? fotoStr : IMG_PADRAO;
         }
 
-        // --- FUNÇÕES ORIGINAIS DE RENDERIZAÇÃO (REVISADAS PARA O NOVO CHAT) ---
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
-            
-            // Corrige a lógica de verificação para as colunas do chat
             grid.innerHTML = lista.map(v => {
-                const urlExibicao = tratarImagem(v["Foto"]);
+                const urlExibicao = tratarImagem(v["Foto"] || v["foto"]);
                 
-                // Mapeia os dados vindo do chat para as colunas do card
-                // Certifique-se de que os nomes vinhos correspondam EXATAMENTE às colunas da sua planilha
-                const nome = v["Nome do Vinho"] || 'Rótulo Sem Nome';
-                const uvas = v["Uva(s)"] || 'Não informado';
-                const pais = v["País"] || 'n/a';
-                const safra = v["Safra"] || 'n/s';
-                const dataConsumo = v["Ano de Consumo"] || 'Data n/a';
+                // Garantia de nomes de colunas vindo do Script atualizado
+                const nome = v["Nome do Vinho"] || v["nome"] || "Rótulo Sem Nome";
+                const uvas = v["Uva(s)"] || v["uva"] || "N/A";
+                const pais = v["País"] || v["pais"] || "N/A";
+                const safra = v["Safra"] || v["safra"] || "-";
+                const dataConsumo = v["Ano de Consumo"] || v["anoConsumo"] || "Data n/a";
+                const produtor = v["Produtor"] || v["produtor"] || "";
 
                 return `
                 <div class="vinho-card">
                     <div class="vinho-img-container">
-                        <img class="vinho-img" 
-                             src="${urlExibicao}" 
-                             alt="Vinho" 
-                             onerror="this.src='${IMG_PADRAO}'">
+                        <img class="vinho-img" src="${urlExibicao}" onerror="this.src='${IMG_PADRAO}'">
                     </div>
                     <div class="vinho-info">
                         <h3 class="vinho-nome">${nome}</h3>
-                        <span class="data-consumo-card"><i class="far fa-calendar-alt"></i> ${dataConsumo}</span>
+                        <span class="vinho-data"><i class="far fa-calendar-alt"></i> Degustado em: ${dataConsumo}</span>
                         <div class="vinho-detalhes">
                             <span>🍇 ${uvas}</span><br>
-                            <span>🌍 ${pais} | ${safra}</span>
+                            <span>🌍 ${pais} | ${safra}</span><br>
+                            ${produtor ? `<span>🍷 ${produtor}</span>` : ''}
                         </div>
                         <div class="notas">
                             <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || '-'}</div></div>
@@ -187,16 +173,21 @@
             }).join('');
         }
 
-        // --- FUNÇÃO DE BUSCA ORIGINAL (CORRIGIDA) ---
+        // --- BUSCA CORRIGIDA ---
         document.getElementById('search').addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase();
+            const termo = e.target.value.toLowerCase().trim();
             
-            // Corrige o mapeamento da busca para as colunas do chat
-            const filtrados = vinhos.filter(v => 
-                (v["Nome do Vinho"] && v["Nome do Vinho"].toLowerCase().includes(termo)) ||
-                (v["Uva(s)"] && v["Uva(s)"].toLowerCase().includes(termo)) ||
-                (v["País"] && v["País"].toLowerCase().includes(termo))
-            );
+            if (termo === "") {
+                renderVinhos(vinhos);
+                return;
+            }
+
+            const filtrados = vinhos.filter(v => {
+                // Pega todos os valores do objeto e transforma em uma string única para busca
+                const searchableString = Object.values(v).join(" ").toLowerCase();
+                return searchableString.includes(termo);
+            });
+            
             renderVinhos(filtrados);
         });
 
