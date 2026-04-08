@@ -44,6 +44,10 @@
         input[type="file"] { display: none; }
         .custom-file-upload { display: block; width: 100%; padding: 12px; background: var(--glass); border: 1px dashed var(--gold); border-radius: 10px; text-align: center; cursor: pointer; color: var(--gold); font-size: 13px; }
         #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; margin-left: auto; margin-right: auto; }
+        
+        /* Estilo para labels e inputs do Modal */
+        .modal-label { font-size: 10px; color: var(--gold); margin-bottom: 4px; display: block; }
+        .modal-input { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--glass); color: white; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -67,15 +71,19 @@
 
     <dialog id="ratingModal">
         <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:20px; color:var(--gold)">Avaliação Final</h2>
-        <div style="display:flex; flex-direction:column; gap:12px">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                <div><label style="font-size:10px; color:var(--gold)">NOTA FELLYPE</label><input type="number" id="notF" step="0.5" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
-                <div><label style="font-size:10px; color:var(--gold)">NOTA HWLLY</label><input type="number" id="notH" step="0.5" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"></div>
-            </div>
-            <div><label style="font-size:10px; color:var(--gold)">RECOMPRARIA?</label><select id="reCompra" style="width:100%; padding:10px; border-radius:10px; border:none; background:var(--glass); color:white"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+        <div style="display:flex; flex-direction:column; gap:8px">
             
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div><span class="modal-label">NOTA FELLYPE</span><input type="number" id="notF" step="0.5" class="modal-input"></div>
+                <div><span class="modal-label">NOTA HWLLY</span><input type="number" id="notH" step="0.5" class="modal-input"></div>
+            </div>
+
+            <div><span class="modal-label">VOLTARIA A COMPRAR?</span><select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+            
+            <div><span class="modal-label">DATA DO CONSUMO</span><input type="date" id="dataConsumo" class="modal-input"></div>
+
             <div>
-                <label style="font-size:10px; color:var(--gold)">FOTO DO BRINDE</label>
+                <span class="modal-label">FOTO DO BRINDE</span>
                 <label class="custom-file-upload">
                     <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
                     Selecionar ou Tirar Foto
@@ -99,16 +107,22 @@
         let base64Image = "";
 
         const fluxo = [
-            { key: 'wineName', q: "Olá! Leblonzito aqui. Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
-            { key: 'uva', q: "Oi! Ipanemita perguntando: qual a uva?", bot: 'ipanemita', type: 'text' },
+            { key: 'wineName', q: "Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
+            { key: 'produtor', q: "Quem é o produtor?", bot: 'ipanemita', type: 'text' },
+            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)", bot: 'leblonzito', type: 'text' },
+            { key: 'uva', q: "Quais as uvas principais?", bot: 'ipanemita', type: 'text' },
+            { key: 'wineType', q: "Qual o tipo? (Tinto, Branco, Rosé...)", bot: 'leblonzito', type: 'text' },
+            { key: 'year', q: "Qual a safra (ano)?", bot: 'ipanemita', type: 'text' },
             { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text' },
-            { key: 'year', q: "Qual a safra?", bot: 'ipanemita', type: 'text' },
-            { key: 'tokenAcesso', q: "Quase lá! Leblonzito precisa da senha para salvar:", bot: 'leblonzito', type: 'password' }
+            { key: 'regiao', q: "Qual a região?", bot: 'ipanemita', type: 'text' },
+            { key: 'teor', q: "Qual o teor alcoólico?", bot: 'leblonzito', type: 'text' },
+            { key: 'tokenAcesso', q: "Agora a senha de acesso para salvar:", bot: 'leblonzito', type: 'password' }
         ];
 
         window.onload = () => {
             updateHeader('leblonzito');
-            addMsg(fluxo[0].q, 'leblonzito');
+            addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
+            document.getElementById('dataConsumo').valueAsDate = new Date(); // Data de hoje como padrão
         };
 
         function getAvatarHtml(imgUrl) {
@@ -120,11 +134,8 @@
             const div = document.createElement('div');
             let avatarHtml = '';
             
-            if (type === 'leblonzito') {
-                avatarHtml = getAvatarHtml(IMG_L);
-                div.className = 'msg msg-bot';
-            } else if (type === 'ipanemita') {
-                avatarHtml = getAvatarHtml(IMG_I);
+            if (type === 'leblonzito' || type === 'ipanemita') {
+                avatarHtml = getAvatarHtml(type === 'leblonzito' ? IMG_L : IMG_I);
                 div.className = 'msg msg-bot';
             } else if (type === 'final') {
                 avatarHtml = `<div style="display:flex;">
@@ -156,10 +167,13 @@
         async function sendMessage() {
             if(isValidating) return;
             const input = document.getElementById('userInput');
-            const msg = input.value.trim();
-            if(!msg) return;
+            const rawMsg = input.value.trim();
+            
+            // Lógica para pular: se estiver vazio e não for senha, vira "Não informado"
+            const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
+            if(!rawMsg && fluxo[step].key === 'tokenAcesso') return; // Senha obrigatória
 
-            addMsg(msg, 'user');
+            addMsg(rawMsg || "(pulado)", 'user');
             input.value = "";
             dataVinho[fluxo[step].key] = msg;
 
@@ -170,13 +184,13 @@
                     updateHeader(nextStep.bot);
                     addMsg(nextStep.q, nextStep.bot);
                     input.type = nextStep.type;
-                }, 700);
+                    input.placeholder = "Pressione Enter para pular...";
+                }, 600);
             } else {
                 validarSenhaFinal();
             }
         }
 
-        // --- CORREÇÃO DA VALIDAÇÃO (FETCH POST EM VEZ DE JSONP) ---
         async function validarSenhaFinal() {
             isValidating = true;
             updateHeader('final');
@@ -187,17 +201,15 @@
                     method: 'POST',
                     body: JSON.stringify({
                         action: "verificarSenha",
-                        senha: dataVinho.tokenAcesso // O script espera 'senha' ou 'tokenAcesso'
+                        senha: dataVinho.tokenAcesso
                     })
                 });
 
-                // Tenta ler como texto primeiro caso o Google dê erro
-                const text = await response.text();
-                const res = JSON.parse(text);
+                const res = await response.json();
 
                 if (res.result === "success") {
                     isValidating = false;
-                    addMsg("Acesso autorizado! Vamos para as notas finais?", 'final');
+                    addMsg("Acesso autorizado! Hora de dar as notas.", 'final');
                     setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
                 } else {
                     throw new Error();
@@ -205,7 +217,7 @@
             } catch (e) {
                 isValidating = false;
                 step--; 
-                addMsg("Senha incorreta, Fellype. Tente novamente:", 'leblonzito');
+                addMsg("Senha incorreta. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
             }
@@ -219,13 +231,13 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500;
+                    const MAX_WIDTH = 600;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    base64Image = canvas.toDataURL('image/jpeg', 0.7);
+                    base64Image = canvas.toDataURL('image/jpeg', 0.8);
                     const preview = document.getElementById('preview');
                     preview.src = base64Image;
                     preview.style.display = "block";
@@ -237,21 +249,26 @@
 
         async function finishAll() {
             const btn = document.getElementById('btnFinalizar');
-            btn.innerHTML = "Salvando... 🍷";
+            btn.innerHTML = "Eternizando Memória... 🍷";
             btn.disabled = true;
 
             const payload = {
                 action: "salvarVinho",
                 tokenAcesso: dataVinho.tokenAcesso,
                 wineName: dataVinho.wineName,
+                produtor: dataVinho.produtor,
+                classificacao: dataVinho.classificacao,
                 uva: dataVinho.uva,
-                pais: dataVinho.pais,
+                wineType: dataVinho.wineType,
                 year: dataVinho.year,
+                pais: dataVinho.pais,
+                regiao: dataVinho.regiao,
+                teor: dataVinho.teor,
                 ratingFellype: document.getElementById('notF').value,
                 ratingHwlly: document.getElementById('notH').value,
                 wouldBuy: document.getElementById('reCompra').value,
                 base64Photo: base64Image,
-                anoConsumo: new Date().getFullYear()
+                anoConsumo: document.getElementById('dataConsumo').value
             };
 
             try {
@@ -259,8 +276,7 @@
                 alert("Vinho salvo com sucesso! 🍷");
                 location.href = "catalogo.html";
             } catch (e) {
-                // Erros de CORS são comuns, mas o dado costuma chegar na planilha
-                alert("Processado! Verifique sua planilha.");
+                alert("Brinde salvo na planilha!");
                 location.href = "catalogo.html";
             }
         }
