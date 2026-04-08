@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa Adega | Fellype & Hwlly</title>
+    <title>Fellype & Hwlly - Nossa Adega</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -31,16 +31,26 @@
             border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
         }
         .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
         .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
         .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
 
-        /* --- SEÇÃO DE BUSCA --- */
-        .search-section {
-            padding: 60px 20px 20px; text-align: center;
-            background: linear-gradient(to bottom, #111, var(--bg));
+        /* DROPDOWN IGUAL INDEX */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { 
+            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
+            border-radius: 5px; top: 30px; right: 0;
         }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); color: white; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- SEÇÃO DE BUSCA --- */
+        .search-section { padding: 60px 20px 20px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
         .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 10px; }
         .search-container { position: relative; max-width: 600px; margin: 30px auto; }
         .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
@@ -49,34 +59,26 @@
             border: 1px solid #333; background: #111; color: white; outline: none;
             transition: var(--transicao); font-size: 1rem;
         }
-        #search:focus { border-color: var(--dourado); box-shadow: 0 0 15px rgba(212,175,55,0.1); }
+        #search:focus { border-color: var(--dourado); }
 
-        /* --- GRID DE VINHOS --- */
-        .vinho-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 30px; padding: 40px 5%; max-width: 1300px; margin: 0 auto; 
-        }
-        .vinho-card { 
-            background: var(--card); border-radius: 12px; overflow: hidden; 
-            border: 1px solid #222; transition: var(--transicao); position: relative; 
-        }
+        /* --- GRID E CARDS --- */
+        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1300px; margin: 0 auto; }
+        .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); }
         .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
-        
         .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .vinho-card:hover .vinho-img { transform: scale(1.08); }
         
         .vinho-info { padding: 20px; }
-        .vinho-nome { font-size: 1.2rem; color: var(--dourado-claro); margin: 0 0 5px 0; font-family: 'Segoe UI', sans-serif; }
+        .vinho-nome { font-size: 1.2rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
         .vinho-data { font-size: 0.75rem; color: var(--subtexto); display: block; margin-bottom: 15px; font-style: italic; }
-        .vinho-detalhes { font-size: 0.9rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
+        .vinho-detalhes { font-size: 0.9rem; color: #ccc; margin-bottom: 20px; }
         
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.7rem; color: var(--subtexto); text-transform: uppercase; letter-spacing: 1px; }
+        .nota-box span { display: block; font-size: 0.65rem; color: var(--subtexto); text-transform: uppercase; }
         .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
 
-        #loading { text-align: center; padding: 100px; color: var(--dourado); font-style: italic; }
+        #loading { text-align: center; padding: 100px; color: var(--dourado); }
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
     </style>
 </head>
@@ -86,18 +88,25 @@
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
         <ul class="nav-links">
             <li><a href="index.html">Página Inicial</a></li>
-            <li><a href="catalogo.html" class="active">Adega</a></li>
+            <li><a href="catalogo.html?filtro=ultimos" class="active">Últimos Vinhos</a></li>
+            <li><a href="melhores.html">Escolhidos Mês</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
+                <div class="dropdown-content">
+                    <a href="paises.html">Por Países</a>
+                    <a href="uvas.html">Por Uvas</a>
+                    <a href="vinicolas.html">Vinícolas</a>
+                </div>
+            </li>
         </ul>
     </nav>
 
     <div class="search-section">
         <h1>Nossa Adega</h1>
-        <p>Explore as memórias de cada garrafa compartilhada.</p>
-        
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Pesquisar por nome, uva, país ou produtor...">
+            <input type="text" id="search" placeholder="Pesquisar vinho, uva ou país...">
         </div>
     </div>
 
@@ -112,7 +121,6 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
-
         let vinhos = [];
 
         async function fetchVinhos() {
@@ -121,73 +129,36 @@
                 vinhos = await response.json();
                 renderVinhos(vinhos);
                 document.getElementById('loading').style.display = 'none';
-            } catch (error) {
-                document.getElementById('loading').innerHTML = "Erro ao carregar adega.";
-            }
-        }
-
-        function tratarImagem(valorFoto) {
-            if (!valorFoto || valorFoto.toString().length < 5) return IMG_PADRAO;
-            const fotoStr = valorFoto.toString().trim();
-            if (fotoStr.startsWith('data:image')) return fotoStr;
-            if (fotoStr.includes('drive.google.com')) {
-                const match = fotoStr.match(/[-\w]{25,}/);
-                if (match) return `https://lh3.googleusercontent.com/u/0/d/${match[0]}=w1000`;
-            }
-            return fotoStr.startsWith('http') ? fotoStr : IMG_PADRAO;
+            } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar."; }
         }
 
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
             grid.innerHTML = lista.map(v => {
-                const urlExibicao = tratarImagem(v["Foto"] || v["foto"]);
+                const foto = v["Foto"] || v["foto"] || "";
+                const url = foto.startsWith('data:image') ? foto : (foto.includes('drive.google') ? `https://lh3.googleusercontent.com/u/0/d/$${foto.match(/[-\w]{25,}/)[0]}=w1000` : (foto || IMG_PADRAO));
                 
-                // Garantia de nomes de colunas vindo do Script atualizado
-                const nome = v["Nome do Vinho"] || v["nome"] || "Rótulo Sem Nome";
-                const uvas = v["Uva(s)"] || v["uva"] || "N/A";
-                const pais = v["País"] || v["pais"] || "N/A";
-                const safra = v["Safra"] || v["safra"] || "-";
-                const dataConsumo = v["Ano de Consumo"] || v["anoConsumo"] || "Data n/a";
-                const produtor = v["Produtor"] || v["produtor"] || "";
-
                 return `
                 <div class="vinho-card">
-                    <div class="vinho-img-container">
-                        <img class="vinho-img" src="${urlExibicao}" onerror="this.src='${IMG_PADRAO}'">
-                    </div>
+                    <div class="vinho-img-container"><img class="vinho-img" src="${url}" onerror="this.src='${IMG_PADRAO}'"></div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${nome}</h3>
-                        <span class="vinho-data"><i class="far fa-calendar-alt"></i> Degustado em: ${dataConsumo}</span>
-                        <div class="vinho-detalhes">
-                            <span>🍇 ${uvas}</span><br>
-                            <span>🌍 ${pais} | ${safra}</span><br>
-                            ${produtor ? `<span>🍷 ${produtor}</span>` : ''}
-                        </div>
+                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Sem Nome"}</h3>
+                        <span class="vinho-data">🗓️ ${v["Ano de Consumo"] || "N/A"}</span>
+                        <div class="vinho-detalhes">🍇 ${v["Uva(s)"] || "N/A"}<br>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</div>
                         <div class="notas">
-                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || '-'}</div></div>
-                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || '-'}</div></div>
+                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
+                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
                         </div>
                     </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
         }
 
-        // --- BUSCA CORRIGIDA ---
         document.getElementById('search').addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase().trim();
-            
-            if (termo === "") {
-                renderVinhos(vinhos);
-                return;
-            }
-
-            const filtrados = vinhos.filter(v => {
-                // Pega todos os valores do objeto e transforma em uma string única para busca
-                const searchableString = Object.values(v).join(" ").toLowerCase();
-                return searchableString.includes(termo);
-            });
-            
+            const termo = e.target.value.toLowerCase();
+            const filtrados = vinhos.filter(v => 
+                Object.values(v).some(val => val && val.toString().toLowerCase().includes(termo))
+            );
             renderVinhos(filtrados);
         });
 
