@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adega Games - Fellype & Hwlly</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
+            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
+            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
+        }
+
+        body {
+            margin: 0; font-family: 'Outfit', sans-serif;
+            background-color: var(--bg); color: var(--texto); line-height: 1.6;
+            overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;
+        }
+
+        /* --- NAVBAR PADRONIZADA --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
+        }
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
+        
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; font-family: 'Segoe UI', sans-serif; }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { 
+            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
+            border-radius: 5px; top: 30px; right: 0;
+        }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- HEADER & SCORE --- */
+        .header-section { text-align: center; padding: 40px 15px 20px; background: linear-gradient(to bottom, #111, var(--bg)); position: relative; }
+        .header-section h1 { color: var(--dourado); font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0 5px; font-size: 2rem; }
+        
+        .score-board {
+            display: inline-block; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--dourado);
+            padding: 8px 20px; border-radius: 30px; color: var(--dourado-claro); font-weight: bold; font-size: 1.1rem; margin-top: 10px;
+        }
+
+        /* --- HUB DE JOGOS (GRID) --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 5% 60px; flex-grow: 1; width: 100%; box-sizing: border-box;}
+        
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; transition: var(--transicao); }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
+            padding: 25px 15px; text-align: center; cursor: pointer; transition: transform 0.3s, border-color 0.3s;
+            position: relative; overflow: hidden; backdrop-filter: blur(10px);
+        }
+        .game-card:hover { transform: translateY(-10px); border-color: var(--dourado); background: rgba(212, 175, 55, 0.05); }
+        .game-icon { font-size: 3rem; color: var(--dourado); margin-bottom: 15px; }
+        .game-card h3 { font-family: 'Cinzel', serif; margin: 0 0 10px 0; font-size: 1.2rem; color: #fff; }
+        .game-card p { font-size: 0.85rem; color: var(--subtexto); margin: 0; }
+        .badge-bot { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; background: var(--vinho-vivo); padding: 3px 8px; border-radius: 10px; font-weight: bold; }
+
+        /* --- TELAS DE JOGO (INTERFACE) --- */
+        .game-screen { display: none; background: rgba(20,20,20,0.8); border: 1px solid var(--dourado); border-radius: 20px; padding: 30px; text-align: center; position: relative; animation: fadeIn 0.5s; min-height: 400px; }
+        .btn-voltar { position: absolute; top: 15px; left: 15px; background: none; border: 1px solid #555; color: #aaa; padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn-voltar:hover { background: #333; color: #fff; }
+        .game-title { font-family: 'Cinzel', serif; color: var(--dourado); margin-bottom: 20px; font-size: 1.8rem; }
+        
+        /* Botões Padrão de Jogo */
+        .btn-game { background: var(--vinho-vivo); color: white; border: 1px solid var(--dourado); padding: 12px 25px; border-radius: 10px; font-size: 1rem; cursor: pointer; transition: 0.3s; font-family: 'Outfit', sans-serif; font-weight: bold; margin: 5px; }
+        .btn-game:hover { background: var(--dourado); color: var(--bg); }
+
+        /* Estilos Específicos: Quiz */
+        .quiz-question { font-size: 1.3rem; margin-bottom: 20px; min-height: 60px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 0 auto; }
+        
+        /* Estilos Específicos: Memória */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 400px; margin: 20px auto; }
+        .memory-card { background: #222; border: 1px solid #444; height: 80px; display: flex; justify-content: center; align-items: center; font-size: 2rem; border-radius: 10px; cursor: pointer; user-select: none; transition: 0.3s; }
+        .memory-card.flipped { background: var(--dourado); border-color: var(--dourado-claro); transform: rotateY(180deg); }
+        .memory-card .icon { display: none; transform: rotateY(180deg); }
+        .memory-card.flipped .icon { display: block; }
+
+        /* Estilos Específicos: Arcade Pega-Uva */
+        .arcade-area { width: 100%; height: 300px; background: #000; border: 2px dashed var(--dourado); border-radius: 10px; position: relative; overflow: hidden; cursor: crosshair; }
+        .uva-target { position: absolute; font-size: 2.5rem; user-select: none; cursor: pointer; animation: popIn 0.3s; }
+        
+        /* Estilos Específicos: Forca */
+        .word-display { font-size: 2rem; letter-spacing: 5px; margin: 20px 0; font-family: monospace; color: var(--dourado-claro); }
+        .keyboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; max-width: 500px; margin: 0 auto; }
+        .key-btn { background: #333; border: none; color: white; width: 35px; height: 35px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .key-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        @media (max-width: 992px) {
+            .navbar { padding: 10px 5%; }
+            .menu-toggle { display: block; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98); padding: 20px; gap: 20px; border-bottom: 1px solid var(--vinho-escuro); text-align: center; }
+            .nav-links.active { display: flex; }
+            .dropdown-content { position: static; background: none; box-shadow: none; border: none; width: 100%; }
+            .memory-grid { grid-template-columns: repeat(3, 1fr); }
+            .game-screen { padding: 40px 15px 20px; }
+            .btn-voltar { top: 5px; left: 5px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
+        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links-container">
+            <li><a href="index.html">Página Inicial</a></li>
+            <li><a href="catalogo.html">Últimos Vinhos</a></li>
+            <li><a href="melhores.html">Escolhidos Mês</a></li>
+            <li><a href="cadastro.html">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="active">Explorar <i class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="paises.html">Por Países</a>
+                    <a href="jogos.html" style="color: var(--dourado);">Lounge de Jogos</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="header-section">
+        <h1>Lounge de Jogos</h1>
+        <p style="color: var(--subtexto); font-size: 0.9rem;">Desafios, memórias e diversão na adega.</p>
+        <div class="score-board"><i class="fas fa-wine-glass-alt"></i> Taças de Ouro: <span id="global-score">0</span></div>
+    </header>
+
+    <main class="container">
+        
+        <div id="games-hub" class="games-grid">
+            <div class="game-card" onclick="openGame('quiz')">
+                <div class="badge-bot">By Leblonzito</div>
+                <div class="game-icon"><i class="fas fa-question-circle"></i></div>
+                <h3>Quiz do Sommelier</h3>
+                <p>Testando a memória de vocês sobre a própria adega!</p>
+            </div>
+            
+            <div class="game-card" onclick="openGame('memory')">
+                <div class="badge-bot">Clássico</div>
+                <div class="game-icon"><i class="fas fa-clone"></i></div>
+                <h3>Memória Enológica</h3>
+                <p>Encontre os pares dos ícones do mundo do vinho.</p>
+            </div>
+
+            <div class="game-card" onclick="openGame('arcade')">
+                <div class="badge-bot">By Ipanemita</div>
+                <div class="game-icon"><i class="fas fa-hand-pointer"></i></div>
+                <h3>Colheita Rápida</h3>
+                <p>Pegue o máximo de uvas em 15 segundos. Agilidade pura!</p>
+            </div>
+
+            <div class="game-card" onclick="openGame('hangman')">
+                <div class="badge-bot">Puzzle</div>
+                <div class="game-icon"><i class="fas fa-font"></i></div>
+                <h3>Forca Etílica</h3>
+                <p>Descubra a palavra misteriosa relacionada a vinhos.</p>
+            </div>
+        </div>
+
+        <div id="game-quiz" class="game-screen">
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <h2 class="game-title">Quiz da Planilha</h2>
+            <div id="quiz-loading" style="color: var(--dourado);"><i class="fas fa-spinner fa-spin"></i> Leblonzito está lendo a planilha...</div>
+            <div id="quiz-content" style="display:none;">
+                <div class="quiz-question" id="quiz-q-text">De qual país é o vinho...</div>
+                <div class="quiz-options" id="quiz-options"></div>
+                <p id="quiz-feedback" style="margin-top:15px; font-weight:bold; height:20px;"></p>
+                <button class="btn-game" id="btn-next-quiz" style="display:none; margin: 20px auto;" onclick="loadNextQuiz()">Próxima Pergunta</button>
+            </div>
+        </div>
+
+        <div id="game-memory" class="game-screen">
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <h2 class="game-title">Memória Enológica</h2>
+            <p>Encontre os pares para ganhar 50 Taças de Ouro!</p>
+            <div class="memory-grid" id="memory-grid"></div>
+            <button class="btn-game" id="btn-restart-memory" style="display:none;" onclick="startMemory()">Jogar Novamente</button>
+        </div>
+
+        <div id="game-arcade" class="game-screen">
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <h2 class="game-title">Colheita da Ipanemita</h2>
+            <p>Tempo: <span id="arcade-time" style="color:var(--dourado); font-size:1.2rem; font-weight:bold;">15</span>s | Uvas: <span id="arcade-score">0</span></p>
+            <button class="btn-game" id="btn-start-arcade" onclick="startArcade()">Iniciar Colheita</button>
+            <div class="arcade-area" id="arcade-area" style="display:none;"></div>
+        </div>
+
+        <div id="game-hangman" class="game-screen">
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left"></i> Voltar</button>
+            <h2 class="game-title">Forca Etílica</h2>
+            <p>Erros permitidos: <span id="hang-errors" style="color:red">0/6</span></p>
+            <div class="word-display" id="hang-word">_ _ _ _ _</div>
+            <p id="hang-msg" style="height:20px; font-weight:bold; color:var(--dourado);"></p>
+            <div class="keyboard" id="hang-keyboard"></div>
+            <button class="btn-game" id="btn-restart-hang" style="display:none; margin-top:20px;" onclick="startHangman()">Nova Palavra</button>
+        </div>
+
+    </main>
+
+    <script>
+        // --- LÓGICA GERAL & NAVBAR ---
+        let totalCoins = parseInt(localStorage.getItem('vinhoCoins')) || 0;
+        document.getElementById('global-score').innerText = totalCoins;
+
+        function addCoins(amount) {
+            totalCoins += amount;
+            document.getElementById('global-score').innerText = totalCoins;
+            localStorage.setItem('vinhoCoins', totalCoins);
+            
+            // Efeito visual de moedas
+            const scoreEl = document.querySelector('.score-board');
+            scoreEl.style.transform = 'scale(1.2)';
+            scoreEl.style.borderColor = 'white';
+            setTimeout(() => { scoreEl.style.transform = 'scale(1)'; scoreEl.style.borderColor = 'var(--dourado)'; }, 300);
+        }
+
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        mobileMenuIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); navLinksContainer.classList.toggle('active');
+        });
+
+        function openGame(id) {
+            document.getElementById('games-hub').style.display = 'none';
+            document.querySelectorAll('.game-screen').forEach(el => el.style.display = 'none');
+            document.getElementById('game-' + id).style.display = 'block';
+            
+            if(id === 'quiz') startQuiz();
+            if(id === 'memory') startMemory();
+            if(id === 'hangman') startHangman();
+        }
+
+        function closeGames() {
+            document.querySelectorAll('.game-screen').forEach(el => el.style.display = 'none');
+            document.getElementById('games-hub').style.display = 'grid';
+            if(arcadeInterval) clearInterval(arcadeInterval);
+            if(arcadeTimeout) clearTimeout(arcadeTimeout);
+        }
+
+        // --- JOGO 1: QUIZ PLANILHA ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
+        let cachedWines = [];
+        
+        async function fetchWinesForQuiz() {
+            if(cachedWines.length > 0) return true;
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                cachedWines = data.filter(v => v[Object.keys(v)[1]] && v[Object.keys(v)[3]]); // Garante q tem Nome e País
+                return true;
+            } catch (e) { return false; }
+        }
+
+        async function startQuiz() {
+            document.getElementById('quiz-loading').style.display = 'block';
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('quiz-feedback').innerText = "";
+            document.getElementById('btn-next-quiz').style.display = 'none';
+            
+            await fetchWinesForQuiz();
+            loadNextQuiz();
+        }
+
+        function loadNextQuiz() {
+            document.getElementById('quiz-loading').style.display = 'none';
+            document.getElementById('quiz-content').style.display = 'block';
+            document.getElementById('quiz-feedback').innerText = "";
+            document.getElementById('btn-next-quiz').style.display = 'none';
+
+            const optsContainer = document.getElementById('quiz-options');
+            optsContainer.innerHTML = "";
+
+            if(cachedWines.length < 4) {
+                document.getElementById('quiz-q-text').innerText = "Oops! Precisamos de mais vinhos na planilha para gerar perguntas exclusivas. Vá cadastrar!";
+                return;
+            }
+
+            // Pega um vinho aleatório
+            const correctWine = cachedWines[Math.floor(Math.random() * cachedWines.length)];
+            const keys = Object.keys(correctWine);
+            const nome = correctWine[keys.find(k => k.toLowerCase().includes('b') || k.toLowerCase().includes('rótulo'))];
+            const paisCorreto = correctWine[keys.find(k => k.toLowerCase().includes('d') || k.toLowerCase().includes('país'))];
+
+            document.getElementById('quiz-q-text').innerText = `De qual país é o rótulo "${nome}"?`;
+
+            // Pega 3 países errados aleatórios
+            let options = new Set([paisCorreto]);
+            while(options.size < 4) {
+                let rw = cachedWines[Math.floor(Math.random() * cachedWines.length)];
+                let rp = rw[keys.find(k => k.toLowerCase().includes('d') || k.toLowerCase().includes('país'))];
+                if(rp) options.add(rp);
+            }
+
+            let finalOptions = Array.from(options).sort(() => Math.random() - 0.5);
+
+            finalOptions.forEach(opt => {
+                let btn = document.createElement('button');
+                btn.className = 'btn-game';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(opt === paisCorreto) {
+                        btn.style.background = 'green';
+                        document.getElementById('quiz-feedback').innerHTML = "Acertou! +10 Taças 🍷";
+                        document.getElementById('quiz-feedback').style.color = 'green';
+                        addCoins(10);
+                    } else {
+                        btn.style.background = 'red';
+                        document.getElementById('quiz-feedback').innerHTML = `Errou! Era ${paisCorreto}.`;
+                        document.getElementById('quiz-feedback').style.color = 'red';
+                    }
+                    Array.from(optsContainer.children).forEach(b => b.disabled = true);
+                    document.getElementById('btn-next-quiz').style.display = 'block';
+                };
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        // --- JOGO 2: MEMÓRIA ---
+        const emojisMemory = ['🍷', '🍇', '🧀', '🥂', '🍾', '🗺️'];
+        let cardsMemory = [];
+        let flippedMemory = [];
+        let matchedMemory = 0;
+
+        function startMemory() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            document.getElementById('btn-restart-memory').style.display = 'none';
+            matchedMemory = 0;
+            flippedMemory = [];
+
+            cardsMemory = [...emojisMemory, ...emojisMemory].sort(() => Math.random() - 0.5);
+
+            cardsMemory.forEach((emoji, index) => {
+                let card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.val = emoji;
+                card.dataset.idx = index;
+                card.innerHTML = `<span class="icon">${emoji}</span>`;
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if(flippedMemory.length >= 2 || card.classList.contains('flipped')) return;
+            card.classList.add('flipped');
+            flippedMemory.push(card);
+
+            if(flippedMemory.length === 2) {
+                setTimeout(checkMemoryMatch, 800);
+            }
+        }
+
+        function checkMemoryMatch() {
+            const [c1, c2] = flippedMemory;
+            if(c1.dataset.val === c2.dataset.val) {
+                matchedMemory += 2;
+                if(matchedMemory === cardsMemory.length) {
+                    addCoins(50);
+                    document.getElementById('btn-restart-memory').style.display = 'block';
+                }
+            } else {
+                c1.classList.remove('flipped');
+                c2.classList.remove('flipped');
+            }
+            flippedMemory = [];
+        }
+
+        // --- JOGO 3: ARCADE COLHEITA ---
+        let arcadeInterval, arcadeTimeout;
+        let arcadeScore = 0;
+
+        function startArcade() {
+            const area = document.getElementById('arcade-area');
+            const timeSpan = document.getElementById('arcade-time');
+            const scoreSpan = document.getElementById('arcade-score');
+            
+            document.getElementById('btn-start-arcade').style.display = 'none';
+            area.style.display = 'block';
+            area.innerHTML = '';
+            arcadeScore = 0;
+            scoreSpan.innerText = "0";
+            
+            let timeLeft = 15;
+            timeSpan.innerText = timeLeft;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timeSpan.innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(countdown);
+                    clearInterval(arcadeInterval);
+                    area.innerHTML = `<div style="color:var(--dourado); padding-top:40px; font-size:1.5rem; font-weight:bold;">Fim de Colheita!<br>+${arcadeScore} Taças 🍇</div>`;
+                    addCoins(arcadeScore);
+                    document.getElementById('btn-start-arcade').style.display = 'inline-block';
+                    document.getElementById('btn-start-arcade').innerText = "Jogar Novamente";
+                }
+            }, 1000);
+
+            arcadeInterval = setInterval(() => {
+                if(Math.random() > 0.3) spawnUva();
+            }, 600);
+        }
+
+        function spawnUva() {
+            const area = document.getElementById('arcade-area');
+            const uva = document.createElement('div');
+            uva.className = 'uva-target';
+            uva.innerText = '🍇';
+            
+            const maxX = area.clientWidth - 40;
+            const maxY = area.clientHeight - 40;
+            uva.style.left = Math.floor(Math.random() * maxX) + 'px';
+            uva.style.top = Math.floor(Math.random() * maxY) + 'px';
+
+            uva.onmousedown = () => {
+                arcadeScore++;
+                document.getElementById('arcade-score').innerText = arcadeScore;
+                uva.innerText = '💥';
+                setTimeout(() => uva.remove(), 150);
+            };
+
+            area.appendChild(uva);
+            setTimeout(() => { if(uva.parentNode) uva.remove(); }, 1200);
+        }
+
+        // --- JOGO 4: FORCA ETÍLICA ---
+        const hangWords = ["TERROIR", "TANNAT", "BARRICA", "SOMMELIER", "DECANTAR", "RESERVA", "CHARDONNAY"];
+        let currentWord = "";
+        let guessedLetters = [];
+        let hangErrors = 0;
+
+        function startHangman() {
+            currentWord = hangWords[Math.floor(Math.random() * hangWords.length)];
+            guessedLetters = [];
+            hangErrors = 0;
+            
+            document.getElementById('btn-restart-hang').style.display = 'none';
+            document.getElementById('hang-msg').innerText = "";
+            updateHangDisplay();
+            generateKeyboard();
+        }
+
+        function updateHangDisplay() {
+            let display = currentWord.split('').map(l => guessedLetters.includes(l) ? l : "_").join(' ');
+            document.getElementById('hang-word').innerText = display;
+            document.getElementById('hang-errors').innerText = `${hangErrors}/6`;
+
+            if(!display.includes("_")) {
+                document.getElementById('hang-msg').innerText = "Você salvou o vinho! +20 Taças 🍷";
+                addCoins(20);
+                endHangman();
+            } else if(hangErrors >= 6) {
+                document.getElementById('hang-msg').innerText = `A garrafa quebrou! A palavra era ${currentWord}.`;
+                endHangman();
+            }
+        }
+
+        function generateKeyboard() {
+            const kb = document.getElementById('hang-keyboard');
+            kb.innerHTML = "";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(letter => {
+                let btn = document.createElement('button');
+                btn.className = 'key-btn';
+                btn.innerText = letter;
+                btn.onclick = () => {
+                    btn.disabled = true;
+                    guessedLetters.push(letter);
+                    if(currentWord.includes(letter)) {
+                        btn.style.background = 'green';
+                    } else {
+                        btn.style.background = 'red';
+                        hangErrors++;
+                    }
+                    updateHangDisplay();
+                };
+                kb.appendChild(btn);
+            });
+        }
+
+        function endHangman() {
+            Array.from(document.getElementById('hang-keyboard').children).forEach(b => b.disabled = true);
+            document.getElementById('btn-restart-hang').style.display = 'block';
+        }
+
+    </script>
+</body>
+</html>
