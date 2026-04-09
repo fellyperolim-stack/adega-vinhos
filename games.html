@@ -79,7 +79,8 @@
         
         /* Botões e Imagens dos Quizzes */
         .game-wine-img { width: 100px; height: 140px; object-fit: cover; border-radius: 8px; border: 2px solid var(--dourado); margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .game-wine-name { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #fff; margin: 5px 0 20px 0; font-weight: bold; }
+        .game-wine-name { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #fff; margin: 5px 0 5px 0; font-weight: bold; }
+        .game-wine-date { font-size: 0.9rem; color: var(--subtexto); margin-bottom: 20px; font-style: italic; display: none; }
         .quiz-question { font-size: 1.1rem; margin-bottom: 15px; color: var(--dourado-claro); }
         
         .quiz-options { display: flex; flex-direction: column; gap: 10px; max-width: 350px; margin: 0 auto; }
@@ -177,6 +178,7 @@
             
             <img src="" id="dyn-img" class="game-wine-img" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop'">
             <div class="game-wine-name" id="dyn-name">Nome do Vinho</div>
+            <div class="game-wine-date" id="dyn-date"><i class="far fa-calendar-alt"></i> Consumido em: <span></span></div>
             <div class="quiz-question" id="dyn-question">Pergunta?</div>
             
             <div class="quiz-options" id="dyn-options"></div>
@@ -216,6 +218,21 @@
             e.stopPropagation(); document.getElementById('nav-links-container').classList.toggle('active');
         });
 
+        // --- FORMATAÇÃO DE DATA ---
+        function formatarDataPlanilha(dataRaw) {
+            if(!dataRaw) return "Data não informada";
+            // Verifica se a data veio no padrão ISO (ex: 2024-05-12T00:00:00.000Z)
+            if(dataRaw.toString().includes('T') || dataRaw.toString().includes('-')) {
+                try {
+                    const d = new Date(dataRaw);
+                    if(!isNaN(d.getTime())) {
+                        return d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                    }
+                } catch(e) { }
+            }
+            return dataRaw;
+        }
+
         // --- DADOS DA PLANILHA ---
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
         let adegaData = [];
@@ -230,7 +247,6 @@
                 
                 adegaData = rawData.map(v => {
                     const keys = Object.keys(v);
-                    // Função blindada para evitar pegar "Data" no lugar de "Nome"
                     const getVal = (matches) => {
                         const k = keys.find(key => matches.some(m => key.toLowerCase().includes(m)));
                         return k ? v[k] : null;
@@ -240,6 +256,7 @@
                         uva: getVal(['uva', 'casta']) || "Blend",
                         pais: getVal(['país', 'pais', 'origem']) || "Outros",
                         foto: getVal(['foto', 'imagem', 'link']) || "",
+                        data: getVal(['data', 'consumo', 'dia']) || "Data não informada",
                         notaF: parseFloat(getVal(['fellype', 'notaf']) || 0),
                         notaH: parseFloat(getVal(['hwlly', 'notah']) || 0)
                     };
@@ -252,7 +269,6 @@
             document.getElementById('games-hub').style.display = 'grid';
         }
 
-        // Inicia o carregamento ao abrir a página
         loadData();
 
         // --- GERENCIADOR DE TELAS ---
@@ -286,7 +302,6 @@
                 return;
             }
 
-            // Filtra se for duelo, precisa ter as duas notas maiores que 0
             let validWines = adegaData;
             if(currentMode === 'duelo') {
                 validWines = adegaData.filter(v => v.notaF > 0 && v.notaH > 0);
@@ -296,6 +311,15 @@
             
             document.getElementById('dyn-img').src = wine.foto || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop';
             document.getElementById('dyn-name').innerText = wine.nome;
+
+            // Exibir a data apenas nos jogos Pais e Uva
+            const dateEl = document.getElementById('dyn-date');
+            if(currentMode === 'pais' || currentMode === 'uva') {
+                dateEl.querySelector('span').innerText = formatarDataPlanilha(wine.data);
+                dateEl.style.display = 'block';
+            } else {
+                dateEl.style.display = 'none';
+            }
 
             if(currentMode === 'pais') setupQuizPais(wine);
             if(currentMode === 'uva') setupQuizUva(wine);
@@ -307,7 +331,6 @@
             btn.className = 'btn-game';
             btn.innerText = text;
             btn.onclick = () => {
-                // Desabilita todos
                 Array.from(document.getElementById('dyn-options').children).forEach(b => b.disabled = true);
                 
                 const fb = document.getElementById('dyn-feedback');
@@ -320,7 +343,6 @@
                     btn.style.background = 'red';
                     fb.style.color = 'red';
                     fb.innerText = msgError;
-                    // Destaca o correto
                     Array.from(document.getElementById('dyn-options').children).forEach(b => {
                         if(b.dataset.correct === "true") b.style.background = 'green';
                     });
@@ -382,7 +404,7 @@
             container.appendChild(createOptionBtn("Notas Iguais (Empate)", vencedor === "Empate", `Acertou na mosca! ${msgFinal}`, `Errou! ${msgFinal}`));
         }
 
-        // --- JOGO 4: FORCA ETÍLICA (Mantido intacto) ---
+        // --- JOGO 4: FORCA ETÍLICA ---
         const hangWords = ["TERROIR", "TANNAT", "BARRICA", "SOMMELIER", "DECANTAR", "RESERVA", "CHARDONNAY", "CABERNET", "MALBEC", "ENOLOGIA"];
         let currentWord = "";
         let guessedLetters = [];
