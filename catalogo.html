@@ -32,10 +32,12 @@
         }
         .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
         
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
         .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
         .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
         /* DROPDOWN */
         .dropdown { position: relative; display: inline-block; }
@@ -81,13 +83,57 @@
 
         #loading { text-align: center; padding: 100px; color: var(--dourado); }
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
+
+        /* --- MELHORIAS MOBILE --- */
+        @media (max-width: 992px) {
+            .navbar { padding: 10px 5%; }
+            .menu-toggle { display: block; }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.98);
+                padding: 20px;
+                gap: 20px;
+                border-bottom: 1px solid var(--vinho-escuro);
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            .nav-links.active { display: flex; }
+
+            .dropdown-content {
+                position: static;
+                background: none;
+                box-shadow: none;
+                border: none;
+                width: 100%;
+            }
+
+            .search-section { padding: 40px 15px 10px; }
+            .search-section h1 { font-size: 1.8rem; }
+            .search-section p.sub-titulo { font-size: 0.9rem; margin-bottom: 20px; }
+
+            .vinho-grid { 
+                grid-template-columns: 1fr; /* Um card por linha no celular */
+                padding: 20px 5%;
+                gap: 20px;
+            }
+
+            .vinho-img-container { height: 250px; }
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
-        <ul class="nav-links">
+        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links-container">
             <li><a href="index.html">Página Inicial</a></li>
             <li><a href="catalogo.html?filtro=ultimos" class="active">Últimos Vinhos</a></li>
             <li><a href="melhores.html">Escolhidos Mês</a></li>
@@ -125,6 +171,27 @@
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
         let vinhos = [];
 
+        // Lógica do Menu Mobile
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        
+        mobileMenuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinksContainer.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            icon.classList.toggle('fa-bars'); 
+            icon.classList.toggle('fa-times');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
+                navLinksContainer.classList.remove('active');
+                const icon = mobileMenuIcon.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
+        });
+
         async function fetchVinhos() {
             try {
                 const response = await fetch(SCRIPT_URL);
@@ -137,7 +204,6 @@
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
             grid.innerHTML = lista.map(v => {
-                // Lógica de imagem aprimorada para evitar o erro de repetição
                 let urlFinal = IMG_PADRAO;
                 const fotoRaw = v["Foto"] || v["foto"];
                 
