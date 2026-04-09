@@ -5,16 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VinhoChat | Fellype & Hwlly 🍷</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --gold: #d4af37; --wine: #4a0e0e;
+            --gold: #d4af37; --wine: #4a0e0e; --vinho-vivo: #800020;
             --black: #050505; --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
+            --transicao: all 0.3s ease; --dourado-claro: #f1d592;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin: 0; height: 100%; font-family: 'Outfit', sans-serif; background: var(--black); color: #fff; overflow: hidden; }
         
+        body, html { 
+            margin: 0; min-height: 100%; font-family: 'Outfit', sans-serif; 
+            background: var(--black); color: #fff; overflow-x: hidden; 
+        }
+        
+        /* --- NAVBAR PADRONIZADA --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
+        }
+        .nav-logo a { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
+        
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; font-family: 'Segoe UI', sans-serif; }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--gold); }
+
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        /* DROPDOWN */
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { 
+            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
+            border-radius: 5px; top: 30px; right: 0;
+        }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- LAYOUT DO CHAT --- */
         .bg-gradient { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); z-index: -1; }
-        .main-wrapper { display: flex; justify-content: center; align-items: center; height: 100vh; padding: 20px; }
+        .main-wrapper { display: flex; justify-content: center; align-items: center; height: calc(100vh - 70px); padding: 20px; }
         
         .chat-card { width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
 
@@ -45,12 +79,46 @@
         .custom-file-upload { display: block; width: 100%; padding: 12px; background: var(--glass); border: 1px dashed var(--gold); border-radius: 10px; text-align: center; cursor: pointer; color: var(--gold); font-size: 13px; }
         #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; margin-left: auto; margin-right: auto; }
         
-        /* Estilo para labels e inputs do Modal */
         .modal-label { font-size: 10px; color: var(--gold); margin-bottom: 4px; display: block; }
         .modal-input { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--glass); color: white; margin-bottom: 10px; }
+
+        /* --- MELHORIAS MOBILE --- */
+        @media (max-width: 992px) {
+            .navbar { padding: 10px 5%; }
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute;
+                top: 70px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98);
+                padding: 20px; gap: 20px; border-bottom: 1px solid var(--wine);
+                text-align: center; box-sizing: border-box;
+            }
+            .nav-links.active { display: flex; }
+            .dropdown-content { position: static; background: none; box-shadow: none; border: none; width: 100%; }
+            .main-wrapper { height: auto; padding: 10px; margin-top: 20px; }
+            .chat-card { height: 80vh; border-radius: 30px; }
+        }
     </style>
 </head>
 <body>
+
+    <nav class="navbar">
+        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
+        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links-container">
+            <li><a href="index.html">Página Inicial</a></li>
+            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
+            <li><a href="melhores.html">Escolhidos Mês</a></li>
+            <li><a href="cadastro.html" class="active">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
+                <div class="dropdown-content">
+                    <a href="paises.html">Por Países</a>
+                    <a href="uvas.html">Por Uvas</a>
+                    <a href="vinicolas.html">Vinícolas</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
     <div class="bg-gradient"></div>
 
@@ -100,6 +168,27 @@
         
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
         const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"; 
+
+        // Lógica do Menu Mobile
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        
+        mobileMenuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinksContainer.classList.toggle('active');
+            const icon = mobileMenuIcon.querySelector('i');
+            icon.classList.toggle('fa-bars'); 
+            icon.classList.toggle('fa-times');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
+                navLinksContainer.classList.remove('active');
+                const icon = mobileMenuIcon.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
+        });
         
         let step = 0;
         let dataVinho = {};
@@ -122,7 +211,7 @@
         window.onload = () => {
             updateHeader('leblonzito');
             addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
-            document.getElementById('dataConsumo').valueAsDate = new Date(); // Data de hoje como padrão
+            document.getElementById('dataConsumo').valueAsDate = new Date(); 
         };
 
         function getAvatarHtml(imgUrl) {
@@ -169,9 +258,8 @@
             const input = document.getElementById('userInput');
             const rawMsg = input.value.trim();
             
-            // Lógica para pular: se estiver vazio e não for senha, vira "Não informado"
             const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
-            if(!rawMsg && fluxo[step].key === 'tokenAcesso') return; // Senha obrigatória
+            if(!rawMsg && fluxo[step].key === 'tokenAcesso') return;
 
             addMsg(rawMsg || "(pulado)", 'user');
             input.value = "";
