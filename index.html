@@ -10,7 +10,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Adega F&H">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
@@ -106,7 +108,6 @@
 
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        /* --- MELHORIAS MOBILE --- */
         @media (max-width: 992px) {
             .navbar { padding: 10px 5%; }
             .menu-toggle { display: block; }
@@ -175,22 +176,22 @@
                 <div class="exp-card">
                     <i class="fas fa-map-marker-alt"></i>
                     <h4>Terroirs Favoritos</h4>
-                    <p>De Portugal ao Uruguai, passando por Mendoza e pelas colinas de Lisboa. Cada destino deixou uma marca em nosso paladar.</p>
+                    <p>De Portugal ao Uruguai, passando por Mendoza e pelas colinas de Lisboa.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-tint"></i>
                     <h4>Castas Prediletas</h4>
-                    <p>O frescor do Chardonnay e Sauvignon Blanc, a intensidade da Syrah e a complexidade dos blends italianos e húngaros.</p>
+                    <p>O frescor do Chardonnay, a intensidade da Syrah e a complexidade dos blends italianos.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-award"></i>
                     <h4>Rótulos de Destaque</h4>
-                    <p>Experiências memoráveis com Parras Wine, Undurraga e tesouros garimpados em Romagna e Western Cape.</p>
+                    <p>Experiências memoráveis com Parras Wine, Undurraga e tesouros garimpados.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-hourglass-half"></i>
                     <h4>Cápsula do Tempo</h4>
-                    <p>Aqui, cada taça é uma lembrança pronta para ser revisitada, celebrando o legado que construímos brinde a brinde.</p>
+                    <p>Aqui, cada taça é uma lembrança pronta para ser revisitada brinde a brinde.</p>
                 </div>
             </div>
         </article>
@@ -200,12 +201,12 @@
             <div class="shiba-profile">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="shiba-img" alt="Leblonzito">
                 <h4>Leblonzito</h4>
-                <p>"Curador de brancos leves e momentos ensolarados."</p>
+                <p>"Curador de brancos leves."</p>
             </div>
             <div class="shiba-profile">
                 <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="shiba-img" alt="Ipanemita">
                 <h4>Ipanemita</h4>
-                <p>"Especialista em tintos de corpo e aromas complexos."</p>
+                <p>"Especialista em tintos de corpo."</p>
             </div>
             <a href="paises.html" class="btn-explorar">Explorar por Países</a>
         </aside>
@@ -221,8 +222,8 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker ativo!'))
-                    .catch(err => console.log('Erro no Service Worker:', err));
+                    .then(reg => console.log('PWA ativo!'))
+                    .catch(err => console.error('Erro PWA:', err));
             });
         }
 
