@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fellype & Hwlly - Nosso Legado do Vinho</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Adega F&H">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
     
@@ -103,9 +110,8 @@
         @media (max-width: 992px) {
             .navbar { padding: 10px 5%; }
             .menu-toggle { display: block; }
-            
             .nav-links {
-                display: none; /* Escondido por padrão no mobile */
+                display: none;
                 flex-direction: column;
                 position: absolute;
                 top: 70px;
@@ -116,27 +122,14 @@
                 gap: 20px;
                 border-bottom: 1px solid var(--vinho-escuro);
                 text-align: center;
+                box-sizing: border-box;
             }
-
-            .nav-links.active { display: flex; } /* Mostra quando clicado */
-
-            .dropdown-content {
-                position: static;
-                background: none;
-                box-shadow: none;
-                border: none;
-                width: 100%;
-            }
-
+            .nav-links.active { display: flex; }
+            .dropdown-content { position: static; background: none; box-shadow: none; border: none; width: 100%; }
             .main-content { grid-template-columns: 1fr; margin: 30px auto; }
             .experiencia-grid { grid-template-columns: 1fr; }
-            
             .hero { background-attachment: scroll; height: auto; padding: 80px 20px; }
-            .hero p.citacao { font-size: 1.3rem; }
-            
             .stats-bar { gap: 30px; padding: 30px 10px; }
-            .stat-item { min-width: 120px; }
-            .stat-item h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -224,6 +217,16 @@
     </footer>
 
     <script>
+        // Registro do Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker ativo!'))
+                    .catch(err => console.log('Erro no Service Worker:', err));
+            });
+        }
+
+        // Lógica do Menu Mobile
         const mobileMenuIcon = document.getElementById('mobile-menu-icon');
         const navLinksContainer = document.getElementById('nav-links-container');
         
@@ -235,7 +238,6 @@
             icon.classList.toggle('fa-times');
         });
 
-        // Fecha o menu se clicar fora dele no mobile
         document.addEventListener('click', (e) => {
             if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
                 navLinksContainer.classList.remove('active');
