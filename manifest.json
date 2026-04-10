@@ -1,21 +1,17 @@
 {
   "name": "Adega Fellype & Hwlly",
-  "short_name": "Nossa Adega",
-  "description": "Catálogo e jogos da nossa adega de vinhos.",
+  "short_name": "Adega F&H",
+  "description": "Nossa adega digital de memórias e vinhos.",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0a0a0a",
   "theme_color": "#800020",
   "icons": [
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/5821/5821090.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
