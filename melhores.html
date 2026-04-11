@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhores do Mês - Fellype & Hwlly</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
+            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
+            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
+        }
+
+        body {
+            margin: 0; font-family: 'Times New Roman', Times, serif;
+            background-color: var(--bg); color: var(--texto); line-height: 1.8;
+            font-size: 1.1rem; overflow-x: hidden;
+        }
+
+        h1, h2, h3, .nav-logo a, .nav-links a {
+            font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
+        }
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
+        .nav-links a.active { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+
+        /* --- HEADER ESPECÍFICO --- */
+        .page-header {
+            padding: 60px 20px; text-align: center;
+            background: linear-gradient(to bottom, #1a0202, var(--bg));
+        }
+        .page-header h1 { color: var(--dourado); font-size: 2.5rem; margin-bottom: 10px; }
+        .page-header p { color: var(--subtexto); font-style: italic; max-width: 600px; margin: 0 auto; }
+
+        /* --- GRID DE MELHORES --- */
+        .melhores-container {
+            max-width: 1100px; margin: 40px auto; padding: 0 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;
+        }
+
+        .vinho-destaque-card {
+            background: var(--card); border-radius: 15px; overflow: hidden;
+            border: 1px solid #222; transition: var(--transicao); position: relative;
+        }
+        .vinho-destaque-card:hover { transform: translateY(-10px); border-color: var(--vinho-vivo); }
+
+        .mes-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: var(--vinho-vivo); color: white; padding: 5px 15px;
+            border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 2;
+        }
+
+        .card-img-wrapper {
+            height: 200px; background: #111; display: flex; align-items: center; justify-content: center;
+            border-bottom: 1px solid #222; position: relative;
+        }
+        .card-img-wrapper i { font-size: 4rem; color: #333; }
+
+        .card-info { padding: 25px; text-align: center; }
+        .card-info h3 { color: var(--dourado-claro); margin: 0 0 10px 0; font-size: 1.2rem; }
+        .card-info .vinicola { color: var(--subtexto); font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; }
+        
+        .nota-selo {
+            display: inline-block; border: 1px solid var(--dourado); color: var(--dourado);
+            padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 15px;
+        }
+
+        .comentario-sommelier {
+            font-size: 0.9rem; color: #ccc; font-style: italic; border-top: 1px solid #222;
+            padding-top: 15px; margin-top: 15px; line-height: 1.5;
+        }
+
+        footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Menu simplificado para foco na lista */
+            .melhores-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Página Inicial</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="melhores.html" class="active">Melhores do Mês</a></li>
+            <li><a href="cadastro.html">Cadastrar</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1><i class="fas fa-award"></i> Galeria de Honra</h1>
+        <p>Os rótulos que definiram nossos melhores brindes, organizados por mês de degustação.</p>
+    </header>
+
+    <main class="melhores-container" id="grid-melhores">
+        
+        <div class="vinho-destaque-card">
+            <div class="mes-badge">Março 2026</div>
+            <div class="card-img-wrapper">
+                <i class="fas fa-wine-bottle"></i>
+            </div>
+            <div class="card-info">
+                <div class="nota-selo">93 Pontos</div>
+                <h3>Parras Wine - Reserva Especial</h3>
+                <div class="vinicola">Lisboa, Portugal</div>
+                <div class="comentario-sommelier">
+                    "Escolhido por sua estrutura impecável e o equilíbrio perfeito entre a fruta e a madeira. Um brinde inesquecível."
+                </div>
+            </div>
+        </div>
+
+        </main>
+
+    <footer>
+        Seleção Exclusiva Adega F&H.<br>
+        Ano 2026 • Memórias Engarrafadas 🍷
+    </footer>
+
+    <script>
+        // Registro do Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+
+        /* DICA PARA INTEGRAÇÃO:
+           Se você estiver usando a API do Google Sheets ou um CSV:
+           1. Filtre as linhas onde Coluna P (15 no índice 0) não está vazia.
+           2. Extraia o Mês/Ano da coluna de data de consumo.
+           3. Crie os elementos HTML dentro do #grid-melhores.
+        */
+    </script>
+</body>
+</html>
