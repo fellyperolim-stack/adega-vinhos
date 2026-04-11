@@ -24,7 +24,6 @@
             font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
         }
 
-        /* --- NAVBAR PADRONIZADA --- */
         .navbar {
             background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
             align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
@@ -32,72 +31,45 @@
         }
         .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
         
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; }
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
         .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
-        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
 
         .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-        /* --- SEÇÃO DE CABEÇALHO --- */
         .search-section { padding: 60px 20px 40px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
-        .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 5px; }
-        .search-section p.sub-titulo { color: var(--subtexto); font-size: 1rem; font-style: italic; opacity: 0.8; }
+        .search-section h1 { color: var(--dourado); font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
+        .search-section p.sub-titulo { color: var(--subtexto); font-size: 1.1rem; font-style: italic; opacity: 0.8; }
 
-        /* --- AGRUPAMENTO POR MÊS --- */
-        .mes-section { max-width: 1300px; margin: 0 auto 50px; padding: 0 5%; }
-        .mes-titulo {
-            font-size: 1.5rem; color: var(--dourado-claro); border-bottom: 1px solid var(--vinho-vivo);
-            padding-bottom: 10px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
-        }
-
-        /* --- GRID E CARDS --- */
-        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        .vinho-card { 
-            background: var(--card); border-radius: 12px; overflow: hidden; 
-            border: 1px solid #222; transition: var(--transicao); position: relative;
-            display: flex; flex-direction: column;
-        }
+        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px 5% 60px; max-width: 1300px; margin: 0 auto; }
+        
+        .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); display: flex; flex-direction: column; }
         .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
         
-        .campeao-badge {
-            position: absolute; top: 15px; right: 15px; background: var(--dourado); color: #000;
-            padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase;
-            z-index: 2; font-family: 'Segoe UI', sans-serif;
-        }
+        .mes-destaque { background: var(--vinho-escuro); color: var(--dourado-claro); text-align: center; padding: 10px; font-weight: bold; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--dourado); }
 
-        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; }
+        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; position: relative; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         
         .vinho-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
-        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; line-height: 1.5; flex-grow: 1; }
+        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
         
-        .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
+        .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; margin-top: auto; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; }
         .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
 
         #loading { text-align: center; padding: 100px; color: var(--dourado); }
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        /* --- AJUSTE MOBILE: LADO A LADO --- */
         @media (max-width: 992px) {
             .menu-toggle { display: block; }
-            .nav-links {
-                display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%;
-                background: rgba(10, 10, 10, 0.98); padding: 20px; gap: 20px; text-align: center; box-sizing: border-box;
-            }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #0a0a0a; padding: 20px; border-bottom: 1px solid var(--vinho-escuro); box-sizing: border-box; }
             .nav-links.active { display: flex; }
-
-            /* FORÇAR 2 COLUNAS */
             .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .vinho-img-container { height: 180px; }
-            .vinho-info { padding: 12px; }
-            .vinho-nome { font-size: 0.9rem; }
-            .vinho-detalhes { font-size: 0.75rem; }
+            .vinho-img-container { height: 160px; }
+            .vinho-nome { font-size: 0.85rem; }
             .nota-valor { font-size: 1rem; }
-            .campeao-badge { top: 10px; right: 10px; padding: 3px 8px; font-size: 0.55rem; }
         }
     </style>
 </head>
@@ -110,20 +82,20 @@
             <li><a href="index.html">Página Inicial</a></li>
             <li><a href="catalogo.html">Últimos Vinhos</a></li>
             <li><a href="melhores.html" class="active">Escolhidos Mês</a></li>
+            <li><a href="games.html">Games</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
         </ul>
     </nav>
 
     <div class="search-section">
-        <h1>Galeria de Campeões</h1>
-        <p class="sub-titulo">Nossas melhores descobertas de cada mês 🍷✨</p>
+        <h1>Melhores do Mês</h1>
+        <p class="sub-titulo">Nossa seleção de garrafas inesquecíveis 🏆</p>
     </div>
 
-    <div id="loading">Buscando os melhores... 🏆</div>
-    <div id="adega-melhores"></div>
+    <div id="loading">Preparando a mesa... 🍷</div>
+    <div class="vinho-grid" id="vinho-grid"></div>
 
     <footer>
-        Criado com ❤️ para as memórias de Fellype e Hwlly.<br>
         Ano 2026 • Guardado por Leblonzito & Ipanemita 🐾
     </footer>
 
@@ -131,78 +103,94 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        mobileMenuIcon.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+
         async function fetchMelhores() {
             try {
                 const response = await fetch(SCRIPT_URL);
-                const vinhos = await response.json();
+                const todosVinhos = await response.json();
                 
-                // Filtra apenas quem é Escolhido do Mês
-                const campeoes = vinhos.filter(v => v["Escolhido do Mês"] || v["Escolhido do mês"]);
-                
-                // Agrupa por Mês/Ano
-                const grupos = {};
-                campeoes.forEach(v => {
-                    const mes = v["Ano de Consumo"] || "Data Especial";
-                    if (!grupos[mes]) grupos[mes] = [];
-                    grupos[mes].push(v);
-                });
+                const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-                renderizar(grupos);
+                const listaMelhores = todosVinhos.filter(v => {
+                    // FILTRO DA COLUNA P (Escolhido do Mês)
+                    return String(v["Escolhido do Mês"] || "").trim().toLowerCase() === "sim";
+                }).map(v => {
+                    let mesAnoLabel = "Destaque Especial";
+                    let chaveOrdenacao = 0;
+                    
+                    // Busca data DD/MM/YYYY em qualquer coluna para gerar o título do card
+                    for (const key in v) {
+                        const valor = String(v[key] || "").trim();
+                        const match = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (match) {
+                            mesAnoLabel = `${nomesMeses[parseInt(match[2])]} de ${match[3]}`;
+                            chaveOrdenacao = parseInt(`${match[3]}${match[2]}`);
+                            v.dataFormatada = valor;
+                            break;
+                        }
+                    }
+                    v.mesExibicao = mesAnoLabel;
+                    v.chaveOrdenacao = chaveOrdenacao;
+                    return v;
+                }).sort((a, b) => b.chaveOrdenacao - a.chaveOrdenacao);
+
+                renderVinhos(listaMelhores);
                 document.getElementById('loading').style.display = 'none';
-            } catch (e) { console.error(e); }
+            } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar dados."; }
         }
 
-        function renderizar(grupos) {
-            const container = document.getElementById('adega-melhores');
-            container.innerHTML = Object.keys(grupos).map(mes => `
-                <section class="mes-section">
-                    <h2 class="mes-titulo"><i class="far fa-calendar-check"></i> ${mes}</h2>
-                    <div class="vinho-grid">
-                        ${grupos[mes].map(v => {
-                            let urlFinal = IMG_PADRAO;
-                            const fotoRaw = v["Foto"] || v["foto"];
-                            
-                            // LÓGICA DE IMAGEM APRENDIDA COM SEU CATÁLOGO (CORRIGIDA)
-                            if (fotoRaw && fotoRaw.length > 10) {
-                                if (fotoRaw.startsWith('data:image')) {
-                                    urlFinal = fotoRaw;
-                                } else if (fotoRaw.includes('drive.google.com')) {
-                                    const idMatch = fotoRaw.match(/[-\w]{25,}/);
-                                    // Corrigido: usando ${} para injetar o ID corretamente
-                                    urlFinal = idMatch ? `https://lh3.googleusercontent.com/d/$${idMatch[0]}` : fotoRaw;
-                                } else {
-                                    urlFinal = fotoRaw;
-                                }
-                            }
+        function renderVinhos(lista) {
+            const grid = document.getElementById('vinho-grid');
+            if(lista.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #aaa;">Marque "Sim" na coluna Escolhido do Mês na planilha.</p>';
+                return;
+            }
 
-                            return `
-                            <div class="vinho-card">
-                                <div class="campeao-badge">🏆 Campeão</div>
-                                <div class="vinho-img-container">
-                                    <img class="vinho-img" src="${urlFinal}" onerror="this.src='${IMG_PADRAO}'">
-                                </div>
-                                <div class="vinho-info">
-                                    <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
-                                    <div class="vinho-detalhes">
-                                        <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
-                                        <span>🌍 ${v["País"] || "N/A"}</span>
-                                    </div>
-                                    <div class="notas">
-                                        <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
-                                        <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
-                                    </div>
-                                </div>
-                            </div>`;
-                        }).join('')}
+            grid.innerHTML = lista.map(v => {
+                let urlFinal = IMG_PADRAO;
+                // Pega a foto independente da letra ser maiúscula ou minúscula
+                const fotoRaw = v["Foto"] || v["foto"] || "";
+                
+                if (fotoRaw.length > 10) {
+                    if (fotoRaw.startsWith('data:image')) {
+                        urlFinal = fotoRaw;
+                    } else if (fotoRaw.includes('drive.google.com')) {
+                        // Limpeza robusta do ID do Google Drive
+                        const regexDrive = /[-\w]{25,}/;
+                        const matchId = fotoRaw.match(regexDrive);
+                        if (matchId) {
+                            urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
+                        }
+                    } else {
+                        urlFinal = fotoRaw;
+                    }
+                }
+
+                return `
+                <div class="vinho-card">
+                    <div class="mes-destaque">${v.mesExibicao}</div>
+                    <div class="vinho-img-container">
+                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
                     </div>
-                </section>
-            `).join('');
+                    <div class="vinho-info">
+                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
+                        <div class="vinho-detalhes">
+                            <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
+                            <span>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</span>
+                        </div>
+                        <div class="notas">
+                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
+                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
         }
-
-        // Toggle Menu Mobile
-        document.getElementById('mobile-menu-icon').addEventListener('click', () => {
-            document.getElementById('nav-links-container').classList.toggle('active');
-        });
 
         fetchMelhores();
     </script>
