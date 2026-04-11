@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fellype & Hwlly - Melhores do Mês</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -45,21 +39,10 @@
 
         .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-        /* DROPDOWN */
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { 
-            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
-            border-radius: 5px; top: 30px; right: 0;
-        }
-        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
-        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
-        .dropdown:hover .dropdown-content { display: block; }
-
         /* --- SEÇÃO DE CABEÇALHO --- */
         .search-section { padding: 60px 20px 40px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
         .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 5px; }
-        .search-section p.sub-titulo { color: var(--subtexto); font-size: 1rem; font-style: italic; margin-bottom: 0; opacity: 0.8; }
+        .search-section p.sub-titulo { color: var(--subtexto); font-size: 1rem; font-style: italic; opacity: 0.8; }
 
         /* --- AGRUPAMENTO POR MÊS --- */
         .mes-section { max-width: 1300px; margin: 0 auto 50px; padding: 0 5%; }
@@ -67,60 +50,54 @@
             font-size: 1.5rem; color: var(--dourado-claro); border-bottom: 1px solid var(--vinho-vivo);
             padding-bottom: 10px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px;
         }
-        .mes-titulo i { color: var(--vinho-vivo); }
 
-        /* --- GRID E CARDS (Estilo base do catálogo com medalha) --- */
-        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        /* --- GRID E CARDS --- */
+        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         .vinho-card { 
             background: var(--card); border-radius: 12px; overflow: hidden; 
-            border: 1px solid #222; transition: var(--transicao); position: relative; 
+            border: 1px solid #222; transition: var(--transicao); position: relative;
+            display: flex; flex-direction: column;
         }
-        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); box-shadow: 0 10px 20px rgba(128,0,32,0.2); }
+        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
         
-        /* MEDALHA CAMPEÃO */
         .campeao-badge {
             position: absolute; top: 15px; right: 15px; background: var(--dourado); color: #000;
-            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.8); z-index: 2; display: flex; align-items: center; gap: 5px;
-            font-family: 'Segoe UI', sans-serif;
+            padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase;
+            z-index: 2; font-family: 'Segoe UI', sans-serif;
         }
 
-        .vinho-img-container { width: 100%; height: 300px; background: #000; overflow: hidden; border-bottom: 2px solid var(--vinho-vivo); }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.9; }
-        .vinho-card:hover .vinho-img { opacity: 1; transform: scale(1.05); }
+        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; }
         
-        .vinho-info { padding: 25px 20px; }
-        .vinho-nome { font-size: 1.3rem; color: var(--dourado-claro); margin: 0 0 5px 0; line-height: 1.2; }
-        .vinho-produtor { font-size: 0.85rem; color: var(--subtexto); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: block; }
-        
-        .vinho-detalhes { font-size: 0.9rem; color: #ccc; margin-bottom: 20px; line-height: 1.6; background: #111; padding: 15px; border-radius: 8px; }
-        .vinho-detalhes span { display: block; margin-bottom: 5px; }
-        .vinho-detalhes i { color: var(--dourado); width: 20px; text-align: center; margin-right: 5px; }
+        .vinho-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
+        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; line-height: 1.5; flex-grow: 1; }
         
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.65rem; color: var(--subtexto); text-transform: uppercase; letter-spacing: 1px; }
-        .nota-valor { color: var(--dourado); font-size: 1.3rem; font-weight: bold; }
+        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; }
+        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
 
-        #loading { text-align: center; padding: 100px; color: var(--dourado); font-family: 'Segoe UI', sans-serif; }
-        #adega-melhores { min-height: 50vh; }
+        #loading { text-align: center; padding: 100px; color: var(--dourado); }
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
 
-        /* --- MELHORIAS MOBILE --- */
+        /* --- AJUSTE MOBILE: LADO A LADO --- */
         @media (max-width: 992px) {
-            .navbar { padding: 10px 5%; }
             .menu-toggle { display: block; }
             .nav-links {
                 display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%;
-                background: rgba(10, 10, 10, 0.98); padding: 20px; gap: 20px; border-bottom: 1px solid var(--vinho-escuro);
-                text-align: center; box-sizing: border-box;
+                background: rgba(10, 10, 10, 0.98); padding: 20px; gap: 20px; text-align: center; box-sizing: border-box;
             }
             .nav-links.active { display: flex; }
-            .dropdown-content { position: static; background: none; box-shadow: none; border: none; width: 100%; }
-            .search-section { padding: 40px 15px 20px; }
-            .search-section h1 { font-size: 1.8rem; }
-            .vinho-grid { grid-template-columns: 1fr; gap: 20px; }
-            .vinho-img-container { height: 280px; }
+
+            /* FORÇAR 2 COLUNAS */
+            .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .vinho-img-container { height: 180px; }
+            .vinho-info { padding: 12px; }
+            .vinho-nome { font-size: 0.9rem; }
+            .vinho-detalhes { font-size: 0.75rem; }
+            .nota-valor { font-size: 1rem; }
+            .campeao-badge { top: 10px; right: 10px; padding: 3px 8px; font-size: 0.55rem; }
         }
     </style>
 </head>
@@ -131,28 +108,18 @@
         <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="nav-links-container">
             <li><a href="index.html">Página Inicial</a></li>
-            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
+            <li><a href="catalogo.html">Últimos Vinhos</a></li>
             <li><a href="melhores.html" class="active">Escolhidos Mês</a></li>
-            <li><a href="games.html">Games</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
-                <div class="dropdown-content">
-                    <a href="paises.html">Por Países</a>
-                    <a href="uvas.html">Por Uvas</a>
-                    <a href="vinicolas.html">Vinícolas</a>
-                </div>
-            </li>
         </ul>
     </nav>
 
     <div class="search-section">
         <h1>Galeria de Campeões</h1>
-        <p class="sub-titulo">Os rótulos inesquecíveis que marcaram nossos meses 🏆🍷</p>
+        <p class="sub-titulo">Nossas melhores descobertas de cada mês 🍷✨</p>
     </div>
 
-    <div id="loading"><i class="fas fa-spinner fa-spin"></i> Selecionando as melhores garrafas...</div>
-    
+    <div id="loading">Buscando os melhores... 🏆</div>
     <div id="adega-melhores"></div>
 
     <footer>
@@ -164,151 +131,79 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
-        // Menu Mobile (Idêntico ao seu)
-        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-        const navLinksContainer = document.getElementById('nav-links-container');
-        
-        mobileMenuIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinksContainer.classList.toggle('active');
-            const icon = mobileMenuIcon.querySelector('i');
-            icon.classList.toggle('fa-bars'); 
-            icon.classList.toggle('fa-times');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
-                navLinksContainer.classList.remove('active');
-                mobileMenuIcon.querySelector('i').classList.replace('fa-times', 'fa-bars');
-            }
-        });
-
-        // Função para converter data "DD/MM/YYYY" para objeto Date do Javascript
-        function parseDataBR(dataStr) {
-            if (!dataStr) return new Date(0); // Joga pro final se não tiver data
-            const partes = dataStr.split('/');
-            if (partes.length === 3) {
-                // Mês em JS começa no 0 (Janeiro = 0)
-                return new Date(partes[2], partes[1] - 1, partes[0]);
-            }
-            return new Date(dataStr); // Fallback caso seja outro formato
-        }
-
-        // Função para formatar o Título do Mês (Ex: "Março 2026")
-        function formatarMesAno(date) {
-            if (isNaN(date.getTime())) return "Mês Indefinido";
-            const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-            return `${meses[date.getMonth()]} de ${date.getFullYear()}`;
-        }
-
         async function fetchMelhores() {
             try {
                 const response = await fetch(SCRIPT_URL);
-                const todosVinhos = await response.json();
+                const vinhos = await response.json();
                 
-                // 1. Filtrar apenas os Escolhidos do Mês (Considera "Sim", "X", true, etc)
-                const campeoes = todosVinhos.filter(v => {
-                    const escolhido = v["Escolhido do Mês"] || v["Escolhido do mês"] || v["Campeão"];
-                    return escolhido && escolhido.toString().trim() !== "";
-                });
-
-                // 2. Ordenar do mais recente para o mais antigo
-                campeoes.sort((a, b) => parseDataBR(b["Ano de Consumo"]) - parseDataBR(a["Ano de Consumo"]));
-
-                // 3. Agrupar por Mês/Ano
+                // Filtra apenas quem é Escolhido do Mês
+                const campeoes = vinhos.filter(v => v["Escolhido do Mês"] || v["Escolhido do mês"]);
+                
+                // Agrupa por Mês/Ano
                 const grupos = {};
-                const ordemMeses = []; // Para garantir a ordem na hora de desenhar na tela
-
                 campeoes.forEach(v => {
-                    const dataObj = parseDataBR(v["Ano de Consumo"]);
-                    const mesAnoStr = formatarMesAno(dataObj);
-                    
-                    if (!grupos[mesAnoStr]) {
-                        grupos[mesAnoStr] = [];
-                        ordemMeses.push(mesAnoStr);
-                    }
-                    grupos[mesAnoStr].push(v);
+                    const mes = v["Ano de Consumo"] || "Data Especial";
+                    if (!grupos[mes]) grupos[mes] = [];
+                    grupos[mes].push(v);
                 });
 
-                renderizarMelhores(grupos, ordemMeses);
+                renderizar(grupos);
                 document.getElementById('loading').style.display = 'none';
-
-            } catch (e) { 
-                console.error(e);
-                document.getElementById('loading').innerHTML = "Erro ao carregar os campeões. Tente recarregar a página."; 
-            }
+            } catch (e) { console.error(e); }
         }
 
-        function renderizarMelhores(grupos, ordemMeses) {
+        function renderizar(grupos) {
             const container = document.getElementById('adega-melhores');
-            let htmlFinal = '';
-
-            if (ordemMeses.length === 0) {
-                htmlFinal = '<p style="text-align:center; color:#aaa;">Nenhum campeão do mês registrado ainda.</p>';
-            }
-
-            // Para cada Mês (na ordem do mais recente pro mais antigo)
-            ordemMeses.forEach(mes => {
-                const vinhosDoMes = grupos[mes];
-                
-                htmlFinal += `
+            container.innerHTML = Object.keys(grupos).map(mes => `
                 <section class="mes-section">
                     <h2 class="mes-titulo"><i class="far fa-calendar-check"></i> ${mes}</h2>
                     <div class="vinho-grid">
-                `;
+                        ${grupos[mes].map(v => {
+                            let urlFinal = IMG_PADRAO;
+                            const fotoRaw = v["Foto"] || v["foto"];
+                            
+                            // LÓGICA DE IMAGEM APRENDIDA COM SEU CATÁLOGO (CORRIGIDA)
+                            if (fotoRaw && fotoRaw.length > 10) {
+                                if (fotoRaw.startsWith('data:image')) {
+                                    urlFinal = fotoRaw;
+                                } else if (fotoRaw.includes('drive.google.com')) {
+                                    const idMatch = fotoRaw.match(/[-\w]{25,}/);
+                                    // Corrigido: usando ${} para injetar o ID corretamente
+                                    urlFinal = idMatch ? `https://lh3.googleusercontent.com/d/$${idMatch[0]}` : fotoRaw;
+                                } else {
+                                    urlFinal = fotoRaw;
+                                }
+                            }
 
-                // Renderiza os vinhos dentro daquele mês
-                vinhosDoMes.forEach(v => {
-                    let urlFinal = IMG_PADRAO;
-                    const fotoRaw = v["Foto"] || v["foto"];
-                    
-                    if (fotoRaw && fotoRaw.length > 10) {
-                        if (fotoRaw.startsWith('data:image')) {
-                            urlFinal = fotoRaw;
-                        } else if (fotoRaw.includes('drive.google.com')) {
-                            const idMatch = fotoRaw.match(/[-\w]{25,}/);
-                            urlFinal = idMatch ? `https://drive.google.com/uc?export=view&id=${idMatch[0]}` : fotoRaw;
-                        } else {
-                            urlFinal = fotoRaw;
-                        }
-                    }
-
-                    const produtor = v["Vinícola"] || v["Produtor"] || "Produtor Desconhecido";
-                    const uvas = v["Uva(s)"] || "Blend Secreto";
-                    const pais = v["País"] || "Origem Indefinida";
-
-                    htmlFinal += `
-                        <div class="vinho-card">
-                            <div class="campeao-badge"><i class="fas fa-medal"></i> Campeão</div>
-                            <div class="vinho-img-container">
-                                <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
-                            </div>
-                            <div class="vinho-info">
-                                <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
-                                <span class="vinho-produtor">${produtor}</span>
-                                
-                                <div class="vinho-detalhes">
-                                    <span><i class="fas fa-seedling"></i> ${uvas}</span>
-                                    <span><i class="fas fa-globe-americas"></i> ${pais} ${v["Safra"] ? `| Safra: ${v["Safra"]}` : ""}</span>
-                                    <span><i class="far fa-clock"></i> Consumido em: ${v["Ano de Consumo"]}</span>
+                            return `
+                            <div class="vinho-card">
+                                <div class="campeao-badge">🏆 Campeão</div>
+                                <div class="vinho-img-container">
+                                    <img class="vinho-img" src="${urlFinal}" onerror="this.src='${IMG_PADRAO}'">
                                 </div>
-                                
-                                <div class="notas">
-                                    <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
-                                    <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                                <div class="vinho-info">
+                                    <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
+                                    <div class="vinho-detalhes">
+                                        <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
+                                        <span>🌍 ${v["País"] || "N/A"}</span>
+                                    </div>
+                                    <div class="notas">
+                                        <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
+                                        <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                htmlFinal += `</div></section>`; // Fecha o grid e a section do mês
-            });
-
-            container.innerHTML = htmlFinal;
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </section>
+            `).join('');
         }
 
-        // Inicia a busca
+        // Toggle Menu Mobile
+        document.getElementById('mobile-menu-icon').addEventListener('click', () => {
+            document.getElementById('nav-links-container').classList.toggle('active');
+        });
+
         fetchMelhores();
     </script>
 </body>
