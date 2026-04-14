@@ -80,9 +80,13 @@
         #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; margin-left: auto; margin-right: auto; }
         
         .modal-label { font-size: 10px; color: var(--gold); margin-bottom: 4px; display: block; }
-        .modal-input { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--glass); color: white; margin-bottom: 10px; }
+        .modal-input { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--glass); color: white; margin-bottom: 5px; }
 
-        /* --- MELHORIAS MOBILE --- */
+        /* --- MELHORIA: CHIPS DE NOTAS --- */
+        .nota-chips { display: flex; gap: 4px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
+        .chip { background: var(--glass-border); border: 1px solid #444; color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.2s; }
+        .chip:hover { border-color: var(--gold); background: var(--wine); }
+
         @media (max-width: 992px) {
             .navbar { padding: 10px 5%; }
             .menu-toggle { display: block; }
@@ -100,6 +104,16 @@
     </style>
 </head>
 <body>
+
+    <datalist id="lista-paises">
+        <option value="Argentina"> <option value="Chile"> <option value="Itália"> <option value="França"> <option value="Portugal"> <option value="Espanha"> <option value="Brasil"> <option value="Uruguai">
+    </datalist>
+    <datalist id="lista-uvas">
+        <option value="Malbec"> <option value="Cabernet Sauvignon"> <option value="Merlot"> <option value="Chardonnay"> <option value="Primitivo"> <option value="Sangiovese"> <option value="Tempranillo"> <option value="Syrah">
+    </datalist>
+    <datalist id="lista-tipos">
+        <option value="Tinto"> <option value="Branco"> <option value="Rosé"> <option value="Espumante"> <option value="Sobremesa">
+    </datalist>
 
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
@@ -132,7 +146,7 @@
             <div id="chat-window" class="chat-window"></div>
 
             <div id="input-container" class="input-container">
-                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem...">
+                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off">
                 <button class="send-btn" onclick="sendMessage()">➤</button>
             </div>
         </div>
@@ -142,14 +156,26 @@
         <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:20px; color:var(--gold)">Avaliação Final</h2>
         <div style="display:flex; flex-direction:column; gap:8px">
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                <div><span class="modal-label">NOTA FELLYPE</span><input type="number" id="notF" step="0.5" class="modal-input"></div>
-                <div><span class="modal-label">NOTA HWLLY</span><input type="number" id="notH" step="0.5" class="modal-input"></div>
+            <span class="modal-label">NOTA FELLYPE</span>
+            <div class="nota-chips">
+                <div class="chip" onclick="setNota('notF', 8.0)">8.0</div><div class="chip" onclick="setNota('notF', 8.5)">8.5</div>
+                <div class="chip" onclick="setNota('notF', 9.0)">9.0</div><div class="chip" onclick="setNota('notF', 9.5)">9.5</div>
+                <div class="chip" onclick="setNota('notF', 10)">10</div>
             </div>
+            <input type="number" id="notF" step="0.5" class="modal-input" placeholder="0.0">
 
-            <div><span class="modal-label">VOLTARIA A COMPRAR?</span><select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
-            
-            <div><span class="modal-label">DATA DO CONSUMO</span><input type="date" id="dataConsumo" class="modal-input"></div>
+            <span class="modal-label">NOTA HWLLY</span>
+            <div class="nota-chips">
+                <div class="chip" onclick="setNota('notH', 8.0)">8.0</div><div class="chip" onclick="setNota('notH', 8.5)">8.5</div>
+                <div class="chip" onclick="setNota('notH', 9.0)">9.0</div><div class="chip" onclick="setNota('notH', 9.5)">9.5</div>
+                <div class="chip" onclick="setNota('notH', 10)">10</div>
+            </div>
+            <input type="number" id="notH" step="0.5" class="modal-input" placeholder="0.0">
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px">
+                <div><span class="modal-label">VOLTARIA A COMPRAR?</span><select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
+                <div><span class="modal-label">DATA DO CONSUMO</span><input type="date" id="dataConsumo" class="modal-input"></div>
+            </div>
 
             <div>
                 <span class="modal-label">FOTO DO BRINDE</span>
@@ -170,7 +196,6 @@
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
         const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"; 
 
-        // Lógica do Menu Mobile
         const mobileMenuIcon = document.getElementById('mobile-menu-icon');
         const navLinksContainer = document.getElementById('nav-links-container');
         
@@ -178,16 +203,14 @@
             e.stopPropagation();
             navLinksContainer.classList.toggle('active');
             const icon = mobileMenuIcon.querySelector('i');
-            icon.classList.toggle('fa-bars'); 
-            icon.classList.toggle('fa-times');
+            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
         });
 
         document.addEventListener('click', (e) => {
             if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
                 navLinksContainer.classList.remove('active');
                 const icon = mobileMenuIcon.querySelector('i');
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars'); icon.classList.remove('fa-times');
             }
         });
         
@@ -200,10 +223,10 @@
             { key: 'wineName', q: "Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
             { key: 'produtor', q: "Quem é o produtor?", bot: 'ipanemita', type: 'text' },
             { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)", bot: 'leblonzito', type: 'text' },
-            { key: 'uva', q: "Quais as uvas principais?", bot: 'ipanemita', type: 'text' },
-            { key: 'wineType', q: "Qual o tipo? (Tinto, Branco, Rosé...)", bot: 'leblonzito', type: 'text' },
-            { key: 'year', q: "Qual a safra (ano)?", bot: 'ipanemita', type: 'text' },
-            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text' },
+            { key: 'uva', q: "Quais as uvas principais?", bot: 'ipanemita', type: 'text', list: 'lista-uvas' },
+            { key: 'wineType', q: "Qual o tipo? (Tinto, Branco, Rosé...)", bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
+            { key: 'year', q: "Qual a safra (ano)?", bot: 'ipanemita', type: 'number' },
+            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text', list: 'lista-paises' },
             { key: 'regiao', q: "Qual a região?", bot: 'ipanemita', type: 'text' },
             { key: 'teor', q: "Qual o teor alcoólico?", bot: 'leblonzito', type: 'text' },
             { key: 'tokenAcesso', q: "Agora a senha de acesso para salvar:", bot: 'leblonzito', type: 'password' }
@@ -213,7 +236,16 @@
             updateHeader('leblonzito');
             addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
             document.getElementById('dataConsumo').valueAsDate = new Date(); 
+            
+            // MEMÓRIA: Tenta pré-carregar país e uva do último cadastro feito neste navegador
+            const lastPais = localStorage.getItem('last_pais');
+            const lastUva = localStorage.getItem('last_uva');
+            if(lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
         };
+
+        function setNota(id, valor) {
+            document.getElementById(id).value = valor;
+        }
 
         function getAvatarHtml(imgUrl) {
             return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face"></div>`;
@@ -257,14 +289,25 @@
         async function sendMessage() {
             if(isValidating) return;
             const input = document.getElementById('userInput');
-            const rawMsg = input.value.trim();
+            let rawMsg = input.value.trim();
             
+            // Atalho: Se for país ou uva e estiver vazio mas tiver memória, ele aceita a memória (opcional)
+            if(rawMsg === "" && step > 0){
+                const currentKey = fluxo[step].key;
+                if(currentKey === 'pais') rawMsg = localStorage.getItem('last_pais') || "";
+                if(currentKey === 'uva') rawMsg = localStorage.getItem('last_uva') || "";
+            }
+
             const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
             if(!rawMsg && fluxo[step].key === 'tokenAcesso') return;
 
             addMsg(rawMsg || "(pulado)", 'user');
             input.value = "";
             dataVinho[fluxo[step].key] = msg;
+
+            // Salva na memória local para o próximo cadastro
+            if(fluxo[step].key === 'pais' && rawMsg) localStorage.setItem('last_pais', rawMsg);
+            if(fluxo[step].key === 'uva' && rawMsg) localStorage.setItem('last_uva', rawMsg);
 
             step++;
             if(step < fluxo.length) {
@@ -273,7 +316,8 @@
                     updateHeader(nextStep.bot);
                     addMsg(nextStep.q, nextStep.bot);
                     input.type = nextStep.type;
-                    input.placeholder = "Pressione Enter para pular...";
+                    input.setAttribute('list', nextStep.list || "");
+                    input.placeholder = nextStep.placeholder || "Pressione Enter para pular...";
                 }, 600);
             } else {
                 validarSenhaFinal();
@@ -288,24 +332,16 @@
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({
-                        action: "verificarSenha",
-                        senha: dataVinho.tokenAcesso
-                    })
+                    body: JSON.stringify({ action: "verificarSenha", senha: dataVinho.tokenAcesso })
                 });
-
                 const res = await response.json();
-
                 if (res.result === "success") {
                     isValidating = false;
                     addMsg("Acesso autorizado! Hora de dar as notas.", 'final');
                     setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
-                } else {
-                    throw new Error();
-                }
+                } else { throw new Error(); }
             } catch (e) {
-                isValidating = false;
-                step--; 
+                isValidating = false; step--; 
                 addMsg("Senha incorreta. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
@@ -328,8 +364,7 @@
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Image = canvas.toDataURL('image/jpeg', 0.8);
                     const preview = document.getElementById('preview');
-                    preview.src = base64Image;
-                    preview.style.display = "block";
+                    preview.src = base64Image; preview.style.display = "block";
                 };
                 img.src = e.target.result;
             };
@@ -338,8 +373,7 @@
 
         async function finishAll() {
             const btn = document.getElementById('btnFinalizar');
-            btn.innerHTML = "Eternizando Memória... 🍷";
-            btn.disabled = true;
+            btn.innerHTML = "Eternizando Memória... 🍷"; btn.disabled = true;
 
             const payload = {
                 action: "salvarVinho",
