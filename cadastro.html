@@ -114,6 +114,9 @@
     <datalist id="lista-tipos">
         <option value="Tinto"> <option value="Branco"> <option value="Rosé"> <option value="Espumante"> <option value="Sobremesa">
     </datalist>
+    <datalist id="lista-classificacao">
+        <option value="Reserva"> <option value="Gran Reserva"> <option value="Reservado"> <option value="Blend"> <option value="Varietal"> <option value="Jovem">
+    </datalist>
 
     <nav class="navbar">
         <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
@@ -158,17 +161,17 @@
             
             <span class="modal-label">NOTA FELLYPE</span>
             <div class="nota-chips">
-                <div class="chip" onclick="setNota('notF', 8.0)">8.0</div><div class="chip" onclick="setNota('notF', 8.5)">8.5</div>
-                <div class="chip" onclick="setNota('notF', 9.0)">9.0</div><div class="chip" onclick="setNota('notF', 9.5)">9.5</div>
-                <div class="chip" onclick="setNota('notF', 10)">10</div>
+                <div class="chip" onclick="setNota('notF', '8.0')">8.0</div><div class="chip" onclick="setNota('notF', '8.5')">8.5</div>
+                <div class="chip" onclick="setNota('notF', '9.0')">9.0</div><div class="chip" onclick="setNota('notF', '9.5')">9.5</div>
+                <div class="chip" onclick="setNota('notF', '10')">10</div>
             </div>
             <input type="number" id="notF" step="0.5" class="modal-input" placeholder="0.0">
 
             <span class="modal-label">NOTA HWLLY</span>
             <div class="nota-chips">
-                <div class="chip" onclick="setNota('notH', 8.0)">8.0</div><div class="chip" onclick="setNota('notH', 8.5)">8.5</div>
-                <div class="chip" onclick="setNota('notH', 9.0)">9.0</div><div class="chip" onclick="setNota('notH', 9.5)">9.5</div>
-                <div class="chip" onclick="setNota('notH', 10)">10</div>
+                <div class="chip" onclick="setNota('notH', '8.0')">8.0</div><div class="chip" onclick="setNota('notH', '8.5')">8.5</div>
+                <div class="chip" onclick="setNota('notH', '9.0')">9.0</div><div class="chip" onclick="setNota('notH', '9.5')">9.5</div>
+                <div class="chip" onclick="setNota('notH', '10')">10</div>
             </div>
             <input type="number" id="notH" step="0.5" class="modal-input" placeholder="0.0">
 
@@ -222,7 +225,8 @@
         const fluxo = [
             { key: 'wineName', q: "Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
             { key: 'produtor', q: "Quem é o produtor?", bot: 'ipanemita', type: 'text' },
-            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)", bot: 'leblonzito', type: 'text' },
+            // AJUSTE: Adicionado o list para usar o datalist de classificações
+            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)", bot: 'leblonzito', type: 'text', list: 'lista-classificacao' },
             { key: 'uva', q: "Quais as uvas principais?", bot: 'ipanemita', type: 'text', list: 'lista-uvas' },
             { key: 'wineType', q: "Qual o tipo? (Tinto, Branco, Rosé...)", bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
             { key: 'year', q: "Qual a safra (ano)?", bot: 'ipanemita', type: 'number' },
@@ -237,7 +241,6 @@
             addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
             document.getElementById('dataConsumo').valueAsDate = new Date(); 
             
-            // MEMÓRIA: Tenta pré-carregar país e uva do último cadastro feito neste navegador
             const lastPais = localStorage.getItem('last_pais');
             const lastUva = localStorage.getItem('last_uva');
             if(lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
@@ -269,8 +272,8 @@
                 div.className = 'msg msg-user';
             }
 
-            const displayMsg = (type === 'user' && fluxo[step-1]?.type === 'password') ? '••••••••' : text;
-            div.innerHTML = (type === 'user') ? `<div class="bubble">${displayMsg}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
+            // AJUSTE: O texto que chega aqui agora já está tratado, então não precisamos mais de lógica de ocultação de senha nesta função
+            div.innerHTML = (type === 'user') ? `<div class="bubble">${text}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
         }
@@ -291,7 +294,6 @@
             const input = document.getElementById('userInput');
             let rawMsg = input.value.trim();
             
-            // Atalho: Se for país ou uva e estiver vazio mas tiver memória, ele aceita a memória (opcional)
             if(rawMsg === "" && step > 0){
                 const currentKey = fluxo[step].key;
                 if(currentKey === 'pais') rawMsg = localStorage.getItem('last_pais') || "";
@@ -301,11 +303,13 @@
             const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
             if(!rawMsg && fluxo[step].key === 'tokenAcesso') return;
 
-            addMsg(rawMsg || "(pulado)", 'user');
+            // AJUSTE: Verifica se o campo atual é o da senha para ocultar antes de renderizar a mensagem no chat
+            const displayMsg = (fluxo[step].type === 'password' && rawMsg) ? '••••••••' : (rawMsg || "(pulado)");
+            addMsg(displayMsg, 'user');
+            
             input.value = "";
             dataVinho[fluxo[step].key] = msg;
 
-            // Salva na memória local para o próximo cadastro
             if(fluxo[step].key === 'pais' && rawMsg) localStorage.setItem('last_pais', rawMsg);
             if(fluxo[step].key === 'uva' && rawMsg) localStorage.setItem('last_uva', rawMsg);
 
@@ -375,6 +379,10 @@
             const btn = document.getElementById('btnFinalizar');
             btn.innerHTML = "Eternizando Memória... 🍷"; btn.disabled = true;
 
+            // AJUSTE: Replace alterando pontos por vírgulas para a planilha ler como decimal e não como data
+            const notF_formatada = document.getElementById('notF').value.replace('.', ',');
+            const notH_formatada = document.getElementById('notH').value.replace('.', ',');
+
             const payload = {
                 action: "salvarVinho",
                 tokenAcesso: dataVinho.tokenAcesso,
@@ -387,8 +395,8 @@
                 pais: dataVinho.pais,
                 regiao: dataVinho.regiao,
                 teor: dataVinho.teor,
-                ratingFellype: document.getElementById('notF').value,
-                ratingHwlly: document.getElementById('notH').value,
+                ratingFellype: notF_formatada,
+                ratingHwlly: notH_formatada,
                 wouldBuy: document.getElementById('reCompra').value,
                 base64Photo: base64Image,
                 anoConsumo: document.getElementById('dataConsumo').value
