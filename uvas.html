@@ -3,92 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Variedades de Uvas - VinhoChat</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Por Uvas - Fellype & Hwlly</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .uvas-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
+        :root {
+            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
+            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
+            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
         }
-        .uva-card {
-            background: #1a1a1a; /* Cor escura do seu padrão */
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            transition: 0.3s;
-            cursor: pointer;
+
+        body {
+            margin: 0; font-family: 'Times New Roman', Times, serif;
+            background-color: var(--bg); color: var(--texto); line-height: 1.6;
+            overflow-x: hidden;
         }
-        .uva-card:hover { border-color: #ffcc00; }
-        .uva-nome { color: #ffcc00; font-size: 1.5rem; margin-bottom: 10px; font-family: serif; }
-        .uva-desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
-        .ia-tag { 
-            font-size: 0.7rem; 
-            background: #444; 
-            padding: 2px 8px; 
-            border-radius: 10px; 
-            color: #eee;
-            margin-bottom: 10px;
-            display: inline-block;
+
+        /* --- NAVBAR PADRONIZADA --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
+            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
         }
+        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
+        
+        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
+        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; font-family: 'Segoe UI', sans-serif; }
+        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
+        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
+
+        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { 
+            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
+            border-radius: 5px; top: 30px; right: 0;
+        }
+        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
+        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* --- HEADER --- */
+        .header-section { text-align: center; padding: 60px 15px 30px; background: linear-gradient(to bottom, #111, var(--bg)); }
+        .header-section h1 { color: var(--dourado); font-family: 'Segoe UI', sans-serif; text-transform: uppercase; letter-spacing: 2px; margin: 15px 0 5px; font-size: 2rem; }
+        .shiba-heads { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .shiba-spotlight { background: #fff; border-radius: 20px; padding: 2px; display: inline-flex; border: 1.5px solid var(--dourado); overflow: hidden; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+        .avatar-lg { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; object-position: center 20%; transform: scale(1.1); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 5% 60px; }
+
+        /* --- ACORDEÃO PARA UVAS --- */
+        .uva-group { margin-bottom: 15px; border: 1px solid #222; border-radius: 12px; overflow: hidden; transition: var(--transicao); }
+        .uva-group:hover { border-color: rgba(212, 175, 55, 0.4); }
+        .uva-header {
+            background: linear-gradient(90deg, #161616, #0a0a0a);
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+        }
+        .uva-header h2 { margin: 0; font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; color: var(--dourado-claro); display: flex; align-items: center; gap: 12px; text-transform: uppercase; font-weight: 400; }
+        .btn-ia { background: transparent; border: 1px solid var(--dourado); color: var(--dourado); padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; transition: var(--transicao); }
+        .btn-ia:hover { background: var(--dourado); color: #000; }
+
+        .chevron { transition: var(--transicao); color: var(--dourado); font-size: 1.1rem; }
+        .uva-group.active .chevron { transform: rotate(180deg); }
+        
+        .uva-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #0d0d0d; }
+        .uva-group.active .uva-content { max-height: 2000px; padding: 20px; border-top: 1px solid #222; }
+
+        /* --- INFO IA --- */
+        .ia-explanation { 
+            background: rgba(212, 175, 55, 0.05); border: 1px dashed var(--dourado); 
+            padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; 
+            color: var(--dourado-claro); display: none; font-style: italic;
+        }
+
+        /* --- GRID DE VINHOS --- */
+        .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .wine-card { background: var(--card); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid #222; transition: var(--transicao); }
+        .wine-card:hover { transform: translateX(5px); border-color: var(--vinho-vivo); }
+        .wine-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .wine-info h3 { margin: 0; font-size: 0.95rem; color: #fff; line-height: 1.3; font-family: 'Segoe UI', sans-serif; font-weight: 400; }
+        .wine-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--subtexto); }
+        .rating-badge { margin-left: auto; background: rgba(212, 175, 55, 0.1); color: var(--dourado); padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; min-width: 45px; text-align: center; border: 1px solid rgba(212, 175, 55, 0.2); }
+
+        /* --- MOBILE --- */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none; flex-direction: column; position: absolute;
+                top: 70px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98);
+                padding: 20px; gap: 20px; border-bottom: 1px solid var(--vinho-escuro);
+                text-align: center; box-sizing: border-box;
+            }
+            .nav-links.active { display: flex; }
+            .menu-toggle { display: block; }
+            .wine-grid { grid-template-columns: 1fr; }
+        }
+
+        #loader { text-align: center; color: var(--dourado); padding: 100px 20px; font-family: 'Segoe UI', sans-serif; }
+        footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Nossas Uvas 🍇</h1>
-        <button class="btn-voltar" onclick="location.href='catalogo.html'">← Voltar</button>
+    <nav class="navbar">
+        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
+        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links-container">
+            <li><a href="index.html">Página Inicial</a></li>
+            <li><a href="catalogo.html">Últimos Vinhos</a></li>
+            <li><a href="melhores.html">Escolhidos Mês</a></li>
+            <li><a href="games.html">Games</a></li>
+            <li><a href="cadastro.html">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="active">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
+                <div class="dropdown-content">
+                    <a href="paises.html">Por Países</a>
+                    <a href="uvas.html" style="color: var(--dourado);">Por Uvas</a>
+                    <a href="vinicolas.html">Vinícolas</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <header class="header-section">
+        <div class="shiba-heads">
+            <div class="shiba-spotlight"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="avatar-lg" alt="Leblonzito"></div>
+            <div class="shiba-spotlight"><img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita"></div>
+        </div>
+        <h1>Variedades de Uvas</h1>
+        <p style="color: var(--subtexto); font-size: 0.9rem; font-style: italic;">A essência de cada casta degustada 🍇</p>
     </header>
 
-    <main id="uvasLista" class="uvas-grid">
-        <p style="color: white; text-align: center;">Buscando variedades na adega...</p>
-    </main>
+    <div id="loader"><i class="fas fa-wine-glass-alt fa-spin"></i> Organizando por castas...</div>
+    <main class="container" id="main-content" style="display:none;"></main>
+
+    <footer>
+        Criado com ❤️ para as memórias de Fellype e Hwlly.<br>
+        Ano 2026 • Guardado por Leblonzito & Ipanemita 🐾
+    </footer>
 
     <script>
-        const SCRIPT_URL = "SUA_URL_DO_APP_SCRIPT_AQUI"; // COLE AQUI A URL DO SEU DEPLOY
+        // Use a sua URL base sem o parâmetro action fixo para permitir o POST posterior
+        const BASE_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        const SCRIPT_URL_GET = BASE_URL + "?action=getVinhos";
+        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop";
         const TOKEN = "hwlly2026";
 
-        async function carregarUvas() {
+        // Menu Mobile
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const navLinksContainer = document.getElementById('nav-links-container');
+        mobileMenuIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinksContainer.classList.toggle('active');
+            mobileMenuIcon.querySelector('i').classList.toggle('fa-bars');
+            mobileMenuIcon.querySelector('i').classList.toggle('fa-times');
+        });
+
+        async function loadUvas() {
             try {
-                const response = await fetch(SCRIPT_URL);
-                const vinhos = await response.json();
-
-                // Pega a coluna "Uva" (ajuste para o nome exato da sua planilha se for diferente)
-                const uvasUnicas = [...new Set(vinhos.map(v => v.Uva).filter(u => u))];
+                const response = await fetch(SCRIPT_URL_GET);
+                const data = await response.json();
                 
-                const container = document.getElementById('uvasLista');
-                container.innerHTML = "";
+                const vinhosProcessados = data.map(v => {
+                    const keys = Object.keys(v);
+                    const findValue = (matches) => {
+                        const keyMatch = keys.find(k => matches.some(p => k.toLowerCase().includes(p)));
+                        return keyMatch ? v[keyMatch] : null;
+                    };
 
-                uvasUnicas.sort().forEach(uva => {
-                    const card = document.createElement('div');
-                    card.className = 'uva-card';
-                    card.innerHTML = `
-                        <div class="ia-tag">Clique para IA explicar</div>
-                        <div class="uva-nome">${uva}</div>
-                        <div class="uva-desc" id="desc-${uva.replace(/\s+/g, '')}">
-                            Clique para conhecer as características desta uva e harmonizações.
-                        </div>
-                    `;
-                    card.onclick = () => explicarComIA(uva);
-                    container.appendChild(card);
+                    return {
+                        nome: findValue(['vinho', 'rótulo', 'B']) || "Vinho s/ Nome",
+                        uva: (findValue(['uva', 'casta', 'E']) || "Não Identificada").trim(),
+                        pais: findValue(['pais', 'país', 'D']) || "Outros",
+                        foto: findValue(['foto', 'imagem', 'K']) || "",
+                        notaF: parseFloat(findValue(['fellype', 'notaf', 'M']) || 0),
+                        notaH: parseFloat(findValue(['hwlly', 'notah', 'N']) || 0)
+                    };
                 });
 
-            } catch (e) {
-                document.getElementById('uvasLista').innerHTML = "<p style='color:red'>Erro ao conectar com a planilha.</p>";
-            }
+                // Agrupar por Uva
+                const agrupados = vinhosProcessados.reduce((acc, v) => {
+                    acc[v.uva] = acc[v.uva] || [];
+                    acc[v.uva].push(v);
+                    return acc;
+                }, {});
+
+                const sortedUvas = Object.keys(agrupados).sort();
+                render(agrupados, sortedUvas);
+            } catch (e) { document.getElementById('loader').innerText = "Erro ao carregar uvas."; }
         }
 
-        async function explicarComIA(nomeUva) {
-            const idDesc = `desc-${nomeUva.replace(/\s+/g, '')}`;
-            const campo = document.getElementById(idDesc);
+        async function perguntarIA(nomeUva, event) {
+            event.stopPropagation(); // Não fecha o acordeão ao clicar no botão
+            const infoDiv = document.getElementById(`ia-${nomeUva.replace(/\s+/g, '')}`);
+            const btn = event.target;
+
+            if (infoDiv.style.display === 'block') return;
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> IA analisando...';
             
-            if (campo.dataset.loaded === "true") return;
-
-            campo.innerHTML = "Consultando Sommelier IA... 🍷";
-
             try {
-                const res = await fetch(SCRIPT_URL, {
+                const response = await fetch(BASE_URL, {
                     method: 'POST',
                     body: JSON.stringify({
                         action: "explicarUva",
@@ -96,15 +210,57 @@
                         uva: nomeUva
                     })
                 });
-                const data = await res.json();
-                campo.innerHTML = data.descricao;
-                campo.dataset.loaded = "true";
+                const res = await response.json();
+                infoDiv.innerText = res.descricao;
+                infoDiv.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-magic"></i> Info IA';
             } catch (e) {
-                campo.innerHTML = "O sommelier está ocupado agora. Tente novamente.";
+                btn.innerHTML = 'Erro na IA';
             }
         }
 
-        carregarUvas();
+        function render(grupos, sortedUvas) {
+            const main = document.getElementById('main-content');
+            document.getElementById('loader').style.display = 'none';
+            main.style.display = 'block';
+            
+            sortedUvas.forEach(uva => {
+                const vinhos = grupos[uva];
+                const section = document.createElement('div');
+                section.className = 'uva-group';
+                const uvaId = uva.replace(/\s+/g, '');
+                
+                section.innerHTML = `
+                    <div class="uva-header" onclick="this.parentElement.classList.toggle('active')">
+                        <h2><i class="fas fa-seedling" style="color:var(--vinho-vivo); font-size:0.9rem;"></i> ${uva}</h2>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <button class="btn-ia" onclick="perguntarIA('${uva}', event)"><i class="fas fa-magic"></i> Info IA</button>
+                            <span style="font-size:0.9rem; color:var(--dourado); font-weight:bold;">${vinhos.length}</span>
+                            <i class="fas fa-chevron-down chevron"></i>
+                        </div>
+                    </div>
+                    <div class="uva-content">
+                        <div id="ia-${uvaId}" class="ia-explanation"></div>
+                        <div class="wine-grid">
+                            ${vinhos.map(v => {
+                                const media = (v.notaF > 0 && v.notaH > 0) ? ((v.notaF + v.notaH) / 2).toFixed(1) : (v.notaF || v.notaH || "-");
+                                return `
+                                <div class="wine-card">
+                                    <img src="${v.foto || PLACEHOLDER_IMG}" class="wine-img" onerror="this.src='${PLACEHOLDER_IMG}'">
+                                    <div class="wine-info">
+                                        <h3>${v.nome}</h3>
+                                        <p>🌍 ${v.pais}</p>
+                                    </div>
+                                    <div class="rating-badge">${media === "-" ? "-" : "★ " + media}</div>
+                                </div>
+                            `}).join('')}
+                        </div>
+                    </div>
+                `;
+                main.appendChild(section);
+            });
+        }
+        loadUvas();
     </script>
 </body>
 </html>
