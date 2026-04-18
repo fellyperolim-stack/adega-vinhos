@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variedades de Uvas - VinhoChat</title>
+    <link rel="stylesheet" href="style.css"> <style>
+        .uvas-container { display: flex; flex-wrap: wrap; gap: 15px; padding: 20px; justify-content: center; }
+        .uva-card { 
+            background: #fff; border-radius: 12px; padding: 20px; width: 280px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #800020;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .uva-card:hover { transform: translateY(-5px); }
+        .uva-nome { font-size: 1.4rem; color: #800020; font-weight: bold; margin-bottom: 10px; }
+        .uva-desc { font-size: 0.95rem; color: #555; line-height: 1.4; font-style: italic; }
+        .loading-ia { font-size: 0.8rem; color: #999; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nossas Uvas 🍇</h1>
+        <p>Explore as características das uvas que já degustamos.</p>
+        <button onclick="location.href='catalogo.html'">Voltar ao Catálogo</button>
+    </header>
+
+    <div id="uvasLista" class="uvas-container">
+        <p>Colhendo informações da vinha...</p>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "SUA_URL_DO_APP_SCRIPT_AQUI"; // A mesma que você usa no cadastro
+        const TOKEN = "hwlly2026";
+
+        async function carregarUvas() {
+            try {
+                // 1. Pega os dados do catálogo (que já traz a coluna 'Uva')
+                const response = await fetch(SCRIPT_URL);
+                const vinhos = await response.json();
+
+                // 2. Extrai nomes únicos de uvas e limpa espaços/vazios
+                const uvasUnicas = [...new Set(vinhos.map(v => v.Uva).filter(u => u && u.trim() !== ""))];
+                
+                const container = document.getElementById('uvasLista');
+                container.innerHTML = "";
+
+                uvasUnicas.sort().forEach(uva => {
+                    const card = document.createElement('div');
+                    card.className = 'uva-card';
+                    card.innerHTML = `
+                        <div class="uva-nome">${uva}</div>
+                        <div class="uva-desc" id="desc-${uva.replace(/\s+/g, '')}">
+                            <span class="loading-ia">Clique para descobrir sobre esta uva...</span>
+                        </div>
+                    `;
+                    card.onclick = () => explicarUvaIA(uva);
+                    container.appendChild(card);
+                });
+
+            } catch (e) {
+                document.getElementById('uvasLista').innerHTML = "Erro ao carregar uvas. Verifique a planilha.";
+            }
+        }
+
+        async function explicarUvaIA(nomeUva) {
+            const idDesc = `desc-${nomeUva.replace(/\s+/g, '')}`;
+            const campoDesc = document.getElementById(idDesc);
+            
+            if (campoDesc.dataset.loaded === "true") return; // Evita gastar API se já carregou
+
+            campoDesc.innerHTML = '<span class="loading-ia">Consultando Sommelier IA... 🍷</span>';
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "explicarUva",
+                        tokenAcesso: TOKEN,
+                        uva: nomeUva
+                    })
+                });
+                
+                const data = await response.json();
+                campoDesc.innerHTML = data.descricao;
+                campoDesc.dataset.loaded = "true";
+            } catch (e) {
+                campoDesc.innerHTML = "Não consegui falar com o sommelier agora.";
+            }
+        }
+
+        // Inicia o carregamento ao abrir a página
+        carregarUvas();
+    </script>
+</body>
+</html>
