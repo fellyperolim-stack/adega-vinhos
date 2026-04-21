@@ -1,0 +1,6 @@
+# Fellype & Hwlly - Robots.txt
+User-agent: *
+Allow: /
+
+# Caminho para o Sitemap (ajuda o Google a encontrar todas as páginas)
+Sitemap: https://fellypehwlly-vinhos.space/sitemap.xml
