@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fellype & Hwlly - Melhores do Mês</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
         :root {
             --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
@@ -20,9 +18,7 @@
             font-size: 1.1rem; overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, .nav-logo a, .nav-links a {
-            font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
-        }
+        h1, h2, h3, h4, .nav-logo a, .nav-links a { font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px; }
 
         .navbar {
             background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
@@ -35,6 +31,18 @@
         .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
         .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
 
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none; position: absolute; background-color: #111; min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; top: 25px;
+        }
+        .dropdown-content a {
+            color: #ccc; padding: 12px 16px; text-decoration: none; display: block;
+            text-transform: none; font-size: 0.8rem; border-bottom: 1px solid #222;
+        }
+        .dropdown-content a:hover { background-color: #222; color: var(--dourado); }
+        .dropdown:hover .dropdown-content { display: block; }
+
         .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
         .search-section { padding: 60px 20px 40px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
@@ -46,31 +54,37 @@
         .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); display: flex; flex-direction: column; }
         .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
         
+        /* AJUSTE PARA NÃO CORTAR O NOME DO MÊS */
         .mes-destaque { 
             background: var(--vinho-escuro); color: var(--dourado-claro); padding: 12px 15px; 
-            font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; 
+            font-weight: bold; font-size: 0.82rem; letter-spacing: 0.5px; text-transform: uppercase; 
             border-bottom: 1px solid var(--dourado); display: flex; justify-content: space-between; align-items: center;
-            gap: 10px; min-height: 55px;
+            gap: 5px; min-height: 55px;
         }
 
-        .mes-label { flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mes-label { 
+            flex: 3; 
+            white-space: nowrap; 
+            overflow: visible; /* Garante que o texto apareça */
+        }
 
-        .medalhas-toggle { display: flex; gap: 6px; flex: 1; justify-content: flex-end; }
+        .medalhas-toggle { display: flex; gap: 4px; flex: 2; justify-content: flex-end; }
         .btn-medalha {
             background: rgba(0,0,0,0.5); border: 1px solid rgba(212, 175, 55, 0.3); 
-            cursor: pointer; padding: 5px 8px; border-radius: 5px; 
-            transition: var(--transicao); display: flex; align-items: center; gap: 5px;
-            filter: grayscale(100%); opacity: 0.5; color: white; font-size: 0.85rem;
-            white-space: nowrap;
+            cursor: pointer; padding: 4px 6px; border-radius: 5px; 
+            transition: var(--transicao); display: flex; align-items: center; gap: 4px;
+            filter: grayscale(100%); opacity: 0.5; color: white;
+            font-size: 0.75rem;
         }
         .btn-medalha.active { filter: grayscale(0%); opacity: 1; border-color: var(--dourado); background: rgba(212, 175, 55, 0.25); }
+        .flag-icon-mini { width: 16px; height: auto; border-radius: 2px; }
 
         .conteudo-vinho { display: flex; flex-direction: column; flex-grow: 1; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .hidden { display: none !important; }
 
         .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; position: relative; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; }
         
         .vinho-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; min-height: 2.4em; display: flex; align-items: center; }
@@ -87,12 +101,10 @@
             .menu-toggle { display: block; }
             .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #0a0a0a; padding: 20px; border-bottom: 1px solid var(--vinho-escuro); box-sizing: border-box; }
             .nav-links.active { display: flex; }
+            .dropdown-content { position: static; box-shadow: none; border: none; padding-left: 20px; }
             .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px; }
             .vinho-img-container { height: 180px; }
-            .vinho-nome { font-size: 0.9rem; min-height: 3em; }
-            .mes-destaque { flex-direction: column; padding: 10px 5px; height: auto; }
-            .mes-label { font-size: 0.75rem; white-space: normal; text-align: center; margin-bottom: 5px; }
-            .medalhas-toggle { justify-content: center; width: 100%; }
+            .mes-destaque { flex-direction: row; padding: 10px; font-size: 0.75rem; } /* Mantém lado a lado no mobile com fonte menor */
         }
     </style>
 </head>
@@ -107,6 +119,14 @@
             <li><a href="melhores.html" class="active">Escolhidos Mês</a></li>
             <li><a href="games.html">Games</a></li>
             <li><a href="cadastro.html">Cadastrar Novo</a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
+                <div class="dropdown-content">
+                    <a href="paises.html" style="color: var(--dourado);">Por Países</a>
+                    <a href="uvas.html">Por Uvas</a>
+                    <a href="vinicolas.html">Vinícolas</a>
+                </div>
+            </li>
         </ul>
     </nav>
 
@@ -126,37 +146,26 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
-        // Mapeamento de bandeiras normalizado (tudo em minúsculo e sem espaços extras)
-        const bandeirasMapeamento = {
-            "brasil": "🇧🇷",
-            "itália": "🇮🇹", "italia": "🇮🇹",
-            "frança": "🇫🇷", "franca": "🇫🇷",
-            "espanha": "🇪🇸",
-            "portugal": "🇵🇹",
-            "argentina": "🇦🇷",
-            "chile": "🇨🇱",
-            "uruguai": "🇺🇾",
-            "eua": "🇺🇸", "estados unidos": "🇺🇸",
-            "áfrica do sul": "🇿🇦", "africa do sul": "🇿🇦",
-            "alemanha": "🇩🇪",
-            "austrália": "🇦🇺", "australia": "🇦🇺",
-            "hungria": "🇭🇺"
+        const getFlagUrl = (paisNome) => {
+            if (!paisNome) return 'https://flagcdn.com/w80/un.png';
+            const n = paisNome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+            const flags = { 
+                "argentina": "ar", "chile": "cl", "espanha": "es", "portugal": "pt", 
+                "brasil": "br", "franca": "fr", "italia": "it", "africa do sul": "za", 
+                "uruguai": "uy", "hungria": "hu", "australia": "au", "alemanha": "de"
+            };
+            return `https://flagcdn.com/w80/${flags[n] || "un"}.png`;
         };
 
         const mobileMenuIcon = document.getElementById('mobile-menu-icon');
         const navLinksContainer = document.getElementById('nav-links-container');
-        mobileMenuIcon.addEventListener('click', () => {
-            navLinksContainer.classList.toggle('active');
-        });
+        mobileMenuIcon.addEventListener('click', () => navLinksContainer.classList.toggle('active'));
 
         window.trocarVinho = function(chaveMes, posicao) {
             document.querySelectorAll(`[id^="btn-${chaveMes}-"]`).forEach(b => b.classList.remove('active'));
             document.querySelectorAll(`[id^="conteudo-${chaveMes}-"]`).forEach(c => c.classList.add('hidden'));
-
-            const btn = document.getElementById(`btn-${chaveMes}-${posicao}`);
-            const cont = document.getElementById(`conteudo-${chaveMes}-${posicao}`);
-            if(btn) btn.classList.add('active');
-            if(cont) cont.classList.remove('hidden');
+            document.getElementById(`btn-${chaveMes}-${posicao}`).classList.add('active');
+            document.getElementById(`conteudo-${chaveMes}-${posicao}`).classList.remove('hidden');
         };
 
         async function fetchMelhores() {
@@ -164,74 +173,66 @@
                 const response = await fetch(SCRIPT_URL);
                 const todosVinhos = await response.json();
                 const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-
                 const gruposMes = {};
 
                 todosVinhos.filter(v => {
                     const val = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
                     return val !== "" && val !== "não" && val !== "nao";
                 }).forEach(v => {
-                    let mesAnoLabel = "Destaque";
-                    let chaveOrdenacao = 0;
-                    
+                    let label = "Destaque";
+                    let chave = 0;
                     for (const key in v) {
-                        const valor = String(v[key] || "").trim();
-                        const match = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        const match = String(v[key]).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                         if (match) {
-                            mesAnoLabel = `${nomesMeses[parseInt(match[2])]} de ${match[3]}`;
-                            chaveOrdenacao = parseInt(`${match[3]}${match[2]}`);
+                            label = `${nomesMeses[parseInt(match[2])]} de ${match[3]}`;
+                            chave = parseInt(`${match[3]}${match[2]}`);
                             break;
                         }
                     }
-
-                    const escolha = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
-                    const posicao = (escolha === "2" || escolha.includes("2º") || escolha.includes("segundo")) ? 2 : 1;
-
-                    if (!gruposMes[chaveOrdenacao]) {
-                        gruposMes[chaveOrdenacao] = { label: mesAnoLabel, chave: chaveOrdenacao, vinho1: null, vinho2: null };
-                    }
-                    if (posicao === 1) gruposMes[chaveOrdenacao].vinho1 = v;
-                    else gruposMes[chaveOrdenacao].vinho2 = v;
+                    
+                    const esc = String(v["Escolhido do Mês"]).toLowerCase().trim();
+                    const pos = (esc === "2" || esc.includes("2º") || esc.includes("segundo")) ? 2 : 1;
+                    
+                    if (!gruposMes[chave]) gruposMes[chave] = { label, chave, v1: null, v2: null };
+                    if (pos === 1) gruposMes[chave].v1 = v; else gruposMes[chave].v2 = v;
                 });
 
-                const listaFinal = Object.values(gruposMes).sort((a, b) => b.chave - a.chave);
-                renderVinhosAgrupados(listaFinal);
-                document.getElementById('loading').style.display = 'none';
-            } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar dados."; }
+                renderizar(Object.values(gruposMes).sort((a, b) => b.chave - a.chave));
+            } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar adega."; }
         }
 
-        function getEmojiPais(nomePais) {
-            if (!nomePais) return "🍷";
-            const paisLimpo = nomePais.trim().toLowerCase();
-            return bandeirasMapeamento[paisLimpo] || "🍷";
+        function renderizar(lista) {
+            const grid = document.getElementById('vinho-grid');
+            grid.innerHTML = lista.map(g => {
+                const temV1 = g.v1 !== null;
+                const temV2 = g.v2 !== null;
+                return `
+                <div class="vinho-card">
+                    <div class="mes-destaque">
+                        <span class="mes-label">${g.label}</span>
+                        <div class="medalhas-toggle">
+                            ${temV1 ? `<button class="btn-medalha active" id="btn-${g.chave}-1" onclick="trocarVinho(${g.chave}, 1)">🥇 <img src="${getFlagUrl(g.v1["País"])}" class="flag-icon-mini"></button>` : ''}
+                            ${temV2 ? `<button class="btn-medalha ${!temV1?'active':''}" id="btn-${g.chave}-2" onclick="trocarVinho(${g.chave}, 2)">🥈 <img src="${getFlagUrl(g.v2["País"])}" class="flag-icon-mini"></button>` : ''}
+                        </div>
+                    </div>
+                    ${temV1 ? renderConteudo(g.v1, g.chave, 1, false) : ''}
+                    ${temV2 ? renderConteudo(g.v2, g.chave, 2, temV1) : ''}
+                </div>`;
+            }).join('');
+            document.getElementById('loading').style.display = 'none';
         }
 
-        function renderBotaoMedalha(chave, posicao, ativo, pais) {
-            const medalha = posicao === 1 ? '🥇' : '🥈';
-            const emoji = getEmojiPais(pais);
+        function renderConteudo(v, chave, pos, isHidden) {
+            let img = IMG_PADRAO;
+            const foto = v["Foto"] || v["foto"] || "";
+            if (foto.includes('drive.google.com')) {
+                const id = foto.match(/[-\w]{25,}/);
+                if (id) img = `https://drive.google.com/thumbnail?id=${id[0]}&sz=w800`;
+            } else if (foto.length > 10) img = foto;
+
             return `
-                <button class="btn-medalha ${ativo ? 'active' : ''}" id="btn-${chave}-${posicao}" onclick="trocarVinho(${chave}, ${posicao})">
-                    ${medalha} ${emoji}
-                </button>`;
-        }
-
-        function renderConteudoVinho(v, chave, posicao, isHidden) {
-            if (!v) return '';
-            let urlFinal = IMG_PADRAO;
-            const fotoRaw = v["Foto"] || v["foto"] || "";
-            if (fotoRaw.length > 10) {
-                if (fotoRaw.startsWith('data:image')) urlFinal = fotoRaw;
-                else if (fotoRaw.includes('drive.google.com')) {
-                    const matchId = fotoRaw.match(/[-\w]{25,}/);
-                    if (matchId) urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
-                } else urlFinal = fotoRaw;
-            }
-
-            return `
-            <div class="conteudo-vinho ${isHidden ? 'hidden' : ''}" id="conteudo-${chave}-${posicao}">
-                <div class="vinho-img-container">
-                    <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
-                </div>
+            <div class="conteudo-vinho ${isHidden ? 'hidden' : ''}" id="conteudo-${chave}-${pos}">
+                <div class="vinho-img-container"><img class="vinho-img" src="${img}" onerror="this.src='${IMG_PADRAO}'"></div>
                 <div class="vinho-info">
                     <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
                     <div class="vinho-detalhes">
@@ -244,34 +245,6 @@
                     </div>
                 </div>
             </div>`;
-        }
-
-        function renderVinhosAgrupados(listaGrupos) {
-            const grid = document.getElementById('vinho-grid');
-            if(listaGrupos.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #aaa;">Nenhum vinho selecionado na planilha.</p>';
-                return;
-            }
-
-            grid.innerHTML = listaGrupos.map(grupo => {
-                const temV1 = grupo.vinho1 !== null;
-                const temV2 = grupo.vinho2 !== null;
-                const mostrarV1 = temV1;
-                const mostrarV2 = !temV1 && temV2;
-
-                return `
-                <div class="vinho-card">
-                    <div class="mes-destaque">
-                        <span class="mes-label">${grupo.label}</span>
-                        <div class="medalhas-toggle">
-                            ${temV1 ? renderBotaoMedalha(grupo.chave, 1, mostrarV1, grupo.vinho1["País"]) : ''}
-                            ${temV2 ? renderBotaoMedalha(grupo.chave, 2, mostrarV2, grupo.vinho2["País"]) : ''}
-                        </div>
-                    </div>
-                    ${renderConteudoVinho(grupo.vinho1, grupo.chave, 1, !mostrarV1)}
-                    ${renderConteudoVinho(grupo.vinho2, grupo.chave, 2, !mostrarV2)}
-                </div>`;
-            }).join('');
         }
 
         fetchMelhores();
