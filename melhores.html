@@ -46,13 +46,34 @@
         .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); display: flex; flex-direction: column; }
         .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
         
-        .mes-destaque { background: var(--vinho-escuro); color: var(--dourado-claro); text-align: center; padding: 10px; font-weight: bold; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--dourado); }
+        .mes-destaque { 
+            background: var(--vinho-escuro); color: var(--dourado-claro); padding: 12px 15px; 
+            font-weight: bold; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; 
+            border-bottom: 1px solid var(--dourado); display: flex; justify-content: space-between; align-items: center;
+            gap: 10px; min-height: 55px;
+        }
+
+        .mes-label { flex: 2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .medalhas-toggle { display: flex; gap: 6px; flex: 1; justify-content: flex-end; }
+        .btn-medalha {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(212, 175, 55, 0.3); 
+            cursor: pointer; padding: 5px 8px; border-radius: 5px; 
+            transition: var(--transicao); display: flex; align-items: center; gap: 5px;
+            filter: grayscale(100%); opacity: 0.5; color: white; font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .btn-medalha.active { filter: grayscale(0%); opacity: 1; border-color: var(--dourado); background: rgba(212, 175, 55, 0.25); }
+
+        .conteudo-vinho { display: flex; flex-direction: column; flex-grow: 1; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hidden { display: none !important; }
 
         .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; position: relative; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         
         .vinho-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
+        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; min-height: 2.4em; display: flex; align-items: center; }
         .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
         
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; margin-top: auto; }
@@ -66,10 +87,12 @@
             .menu-toggle { display: block; }
             .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #0a0a0a; padding: 20px; border-bottom: 1px solid var(--vinho-escuro); box-sizing: border-box; }
             .nav-links.active { display: flex; }
-            .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .vinho-img-container { height: 160px; }
-            .vinho-nome { font-size: 0.85rem; }
-            .nota-valor { font-size: 1rem; }
+            .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 10px; }
+            .vinho-img-container { height: 180px; }
+            .vinho-nome { font-size: 0.9rem; min-height: 3em; }
+            .mes-destaque { flex-direction: column; padding: 10px 5px; height: auto; }
+            .mes-label { font-size: 0.75rem; white-space: normal; text-align: center; margin-bottom: 5px; }
+            .medalhas-toggle { justify-content: center; width: 100%; }
         }
     </style>
 </head>
@@ -103,110 +126,150 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
 
+        // Mapeamento de bandeiras normalizado (tudo em minúsculo e sem espaços extras)
+        const bandeirasMapeamento = {
+            "brasil": "🇧🇷",
+            "itália": "🇮🇹", "italia": "🇮🇹",
+            "frança": "🇫🇷", "franca": "🇫🇷",
+            "espanha": "🇪🇸",
+            "portugal": "🇵🇹",
+            "argentina": "🇦🇷",
+            "chile": "🇨🇱",
+            "uruguai": "🇺🇾",
+            "eua": "🇺🇸", "estados unidos": "🇺🇸",
+            "áfrica do sul": "🇿🇦", "africa do sul": "🇿🇦",
+            "alemanha": "🇩🇪",
+            "austrália": "🇦🇺", "australia": "🇦🇺",
+            "hungria": "🇭🇺"
+        };
+
         const mobileMenuIcon = document.getElementById('mobile-menu-icon');
         const navLinksContainer = document.getElementById('nav-links-container');
         mobileMenuIcon.addEventListener('click', () => {
             navLinksContainer.classList.toggle('active');
         });
 
+        window.trocarVinho = function(chaveMes, posicao) {
+            document.querySelectorAll(`[id^="btn-${chaveMes}-"]`).forEach(b => b.classList.remove('active'));
+            document.querySelectorAll(`[id^="conteudo-${chaveMes}-"]`).forEach(c => c.classList.add('hidden'));
+
+            const btn = document.getElementById(`btn-${chaveMes}-${posicao}`);
+            const cont = document.getElementById(`conteudo-${chaveMes}-${posicao}`);
+            if(btn) btn.classList.add('active');
+            if(cont) cont.classList.remove('hidden');
+        };
+
         async function fetchMelhores() {
             try {
                 const response = await fetch(SCRIPT_URL);
                 const todosVinhos = await response.json();
-                
                 const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-                const listaMelhores = todosVinhos.filter(v => {
+                const gruposMes = {};
+
+                todosVinhos.filter(v => {
                     const val = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
-                    // Aceita qualquer coisa diferente de vazio ou "não"
                     return val !== "" && val !== "não" && val !== "nao";
-                }).map(v => {
-                    let mesAnoLabel = "Destaque Especial";
+                }).forEach(v => {
+                    let mesAnoLabel = "Destaque";
                     let chaveOrdenacao = 0;
                     
-                    // Busca data DD/MM/YYYY
                     for (const key in v) {
                         const valor = String(v[key] || "").trim();
                         const match = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                         if (match) {
                             mesAnoLabel = `${nomesMeses[parseInt(match[2])]} de ${match[3]}`;
                             chaveOrdenacao = parseInt(`${match[3]}${match[2]}`);
-                            v.dataFormatada = valor;
                             break;
                         }
                     }
 
-                    // Define se é 1º ou 2º lugar baseado na coluna
                     const escolha = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
-                    let medalha = "🥇";
-                    let pesoPosicao = 1;
+                    const posicao = (escolha === "2" || escolha.includes("2º") || escolha.includes("segundo")) ? 2 : 1;
 
-                    if (escolha === "2" || escolha.includes("2º") || escolha.includes("segundo")) {
-                        medalha = "🥈";
-                        pesoPosicao = 2;
+                    if (!gruposMes[chaveOrdenacao]) {
+                        gruposMes[chaveOrdenacao] = { label: mesAnoLabel, chave: chaveOrdenacao, vinho1: null, vinho2: null };
                     }
-
-                    v.mesExibicao = `${mesAnoLabel} - ${medalha}`;
-                    v.chaveOrdenacao = chaveOrdenacao;
-                    v.pesoPosicao = pesoPosicao;
-                    
-                    return v;
-                }).sort((a, b) => {
-                    // Ordena primeiro pelo mês mais recente
-                    if (b.chaveOrdenacao !== a.chaveOrdenacao) {
-                        return b.chaveOrdenacao - a.chaveOrdenacao;
-                    }
-                    // Se for o mesmo mês, coloca o 1º lugar antes do 2º lugar
-                    return a.pesoPosicao - b.pesoPosicao;
+                    if (posicao === 1) gruposMes[chaveOrdenacao].vinho1 = v;
+                    else gruposMes[chaveOrdenacao].vinho2 = v;
                 });
 
-                renderVinhos(listaMelhores);
+                const listaFinal = Object.values(gruposMes).sort((a, b) => b.chave - a.chave);
+                renderVinhosAgrupados(listaFinal);
                 document.getElementById('loading').style.display = 'none';
             } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar dados."; }
         }
 
-        function renderVinhos(lista) {
+        function getEmojiPais(nomePais) {
+            if (!nomePais) return "🍷";
+            const paisLimpo = nomePais.trim().toLowerCase();
+            return bandeirasMapeamento[paisLimpo] || "🍷";
+        }
+
+        function renderBotaoMedalha(chave, posicao, ativo, pais) {
+            const medalha = posicao === 1 ? '🥇' : '🥈';
+            const emoji = getEmojiPais(pais);
+            return `
+                <button class="btn-medalha ${ativo ? 'active' : ''}" id="btn-${chave}-${posicao}" onclick="trocarVinho(${chave}, ${posicao})">
+                    ${medalha} ${emoji}
+                </button>`;
+        }
+
+        function renderConteudoVinho(v, chave, posicao, isHidden) {
+            if (!v) return '';
+            let urlFinal = IMG_PADRAO;
+            const fotoRaw = v["Foto"] || v["foto"] || "";
+            if (fotoRaw.length > 10) {
+                if (fotoRaw.startsWith('data:image')) urlFinal = fotoRaw;
+                else if (fotoRaw.includes('drive.google.com')) {
+                    const matchId = fotoRaw.match(/[-\w]{25,}/);
+                    if (matchId) urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
+                } else urlFinal = fotoRaw;
+            }
+
+            return `
+            <div class="conteudo-vinho ${isHidden ? 'hidden' : ''}" id="conteudo-${chave}-${posicao}">
+                <div class="vinho-img-container">
+                    <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
+                </div>
+                <div class="vinho-info">
+                    <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
+                    <div class="vinho-detalhes">
+                        <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
+                        <span>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</span>
+                    </div>
+                    <div class="notas">
+                        <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
+                        <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function renderVinhosAgrupados(listaGrupos) {
             const grid = document.getElementById('vinho-grid');
-            if(lista.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #aaa;">Marque "1" ou "2" na coluna Escolhido do Mês na planilha.</p>';
+            if(listaGrupos.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #aaa;">Nenhum vinho selecionado na planilha.</p>';
                 return;
             }
 
-            grid.innerHTML = lista.map(v => {
-                let urlFinal = IMG_PADRAO;
-                const fotoRaw = v["Foto"] || v["foto"] || "";
-                
-                if (fotoRaw.length > 10) {
-                    if (fotoRaw.startsWith('data:image')) {
-                        urlFinal = fotoRaw;
-                    } else if (fotoRaw.includes('drive.google.com')) {
-                        const regexDrive = /[-\w]{25,}/;
-                        const matchId = fotoRaw.match(regexDrive);
-                        if (matchId) {
-                            urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
-                        }
-                    } else {
-                        urlFinal = fotoRaw;
-                    }
-                }
+            grid.innerHTML = listaGrupos.map(grupo => {
+                const temV1 = grupo.vinho1 !== null;
+                const temV2 = grupo.vinho2 !== null;
+                const mostrarV1 = temV1;
+                const mostrarV2 = !temV1 && temV2;
 
                 return `
                 <div class="vinho-card">
-                    <div class="mes-destaque">${v.mesExibicao}</div>
-                    <div class="vinho-img-container">
-                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
-                    </div>
-                    <div class="vinho-info">
-                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
-                        <div class="vinho-detalhes">
-                            <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
-                            <span>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</span>
-                        </div>
-                        <div class="notas">
-                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
-                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                    <div class="mes-destaque">
+                        <span class="mes-label">${grupo.label}</span>
+                        <div class="medalhas-toggle">
+                            ${temV1 ? renderBotaoMedalha(grupo.chave, 1, mostrarV1, grupo.vinho1["País"]) : ''}
+                            ${temV2 ? renderBotaoMedalha(grupo.chave, 2, mostrarV2, grupo.vinho2["País"]) : ''}
                         </div>
                     </div>
+                    ${renderConteudoVinho(grupo.vinho1, grupo.chave, 1, !mostrarV1)}
+                    ${renderConteudoVinho(grupo.vinho2, grupo.chave, 2, !mostrarV2)}
                 </div>`;
             }).join('');
         }
