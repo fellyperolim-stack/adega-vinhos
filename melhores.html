@@ -41,35 +41,63 @@
         .search-section h1 { color: var(--dourado); font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
         .search-section p.sub-titulo { color: var(--subtexto); font-size: 1.1rem; font-style: italic; opacity: 0.8; }
 
-        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px 5% 60px; max-width: 1300px; margin: 0 auto; }
+        /* --- NOVOS ESTILOS DOS BLOCOS --- */
+        .vinho-container-main { padding: 20px 5% 60px; max-width: 1200px; margin: 0 auto; }
         
-        .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); display: flex; flex-direction: column; }
-        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
+        .mes-bloco { margin-bottom: 70px; }
         
-        .mes-destaque { background: var(--vinho-escuro); color: var(--dourado-claro); text-align: center; padding: 10px; font-weight: bold; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 1px solid var(--dourado); }
+        .mes-titulo-bloco { 
+            text-align: center; color: var(--dourado); font-size: 1.8rem; 
+            font-family: 'Segoe UI', sans-serif; letter-spacing: 3px; 
+            margin-bottom: 30px; text-transform: uppercase; border-bottom: 1px solid #222; 
+            padding-bottom: 15px; font-weight: bold;
+        }
 
-        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; position: relative; }
+        .vinho-grid-mes { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 400px)); 
+            gap: 40px; justify-content: center; 
+        }
+        
+        .vinho-card { 
+            background: var(--card); border-radius: 12px; overflow: hidden; 
+            border: 1px solid #222; transition: var(--transicao); 
+            display: flex; flex-direction: column; position: relative;
+        }
+        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+
+        .vinho-img-container { width: 100%; height: 300px; background: #000; overflow: hidden; position: relative; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         
-        .vinho-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
-        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
+        /* --- ESTILOS DAS INSÍGNIAS (1º e 2º LUGAR) --- */
+        .colocacao-badge {
+            position: absolute; top: 15px; left: 15px;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 6px 14px; border-radius: 8px;
+            font-weight: bold; font-size: 0.95rem; font-family: 'Segoe UI', sans-serif;
+            z-index: 2; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+        .colocacao-1 { border: 1px solid #ffd700; color: #ffd700; } /* Ouro */
+        .colocacao-2 { border: 1px solid #c0c0c0; color: #c0c0c0; } /* Prata */
+        
+        .vinho-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .vinho-nome { font-size: 1.2rem; color: var(--dourado-claro); margin: 0 0 10px 0; }
+        .vinho-detalhes { font-size: 0.9rem; color: #ccc; margin-bottom: 25px; line-height: 1.6; }
         
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; margin-top: auto; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
+        .nota-valor { color: var(--dourado); font-size: 1.3rem; font-weight: bold; margin-top: 5px; }
 
-        #loading { text-align: center; padding: 100px; color: var(--dourado); }
+        #loading { text-align: center; padding: 100px; color: var(--dourado); font-size: 1.2rem; }
         footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
 
         @media (max-width: 992px) {
             .menu-toggle { display: block; }
             .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #0a0a0a; padding: 20px; border-bottom: 1px solid var(--vinho-escuro); box-sizing: border-box; }
             .nav-links.active { display: flex; }
-            .vinho-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .vinho-img-container { height: 160px; }
-            .vinho-nome { font-size: 0.85rem; }
-            .nota-valor { font-size: 1rem; }
+            .vinho-grid-mes { grid-template-columns: 1fr; gap: 20px; }
+            .vinho-img-container { height: 220px; }
+            .mes-titulo-bloco { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -92,8 +120,8 @@
         <p class="sub-titulo">Nossa seleção de garrafas inesquecíveis 🏆</p>
     </div>
 
-    <div id="loading">Preparando a mesa... 🍷</div>
-    <div class="vinho-grid" id="vinho-grid"></div>
+    <div id="loading"><i class="fas fa-wine-glass fa-spin"></i> Preparando a mesa...</div>
+    <div class="vinho-container-main" id="vinho-container"></div>
 
     <footer>
         Ano 2026 • Guardado por Leblonzito & Ipanemita 🐾
@@ -116,80 +144,119 @@
                 
                 const nomesMeses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-                const listaMelhores = todosVinhos.filter(v => {
-                    // FILTRO DA COLUNA P (Escolhido do Mês)
-                    return String(v["Escolhido do Mês"] || "").trim().toLowerCase() === "sim";
-                }).map(v => {
+                // Ignora tudo que for vazio, "não" ou "nao"
+                const filtrados = todosVinhos.filter(v => {
+                    const val = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
+                    return val !== "" && val !== "não" && val !== "nao";
+                });
+
+                const listaTratada = filtrados.map(v => {
                     let mesAnoLabel = "Destaque Especial";
                     let chaveOrdenacao = 0;
                     
-                    // Busca data DD/MM/YYYY em qualquer coluna para gerar o título do card
                     for (const key in v) {
                         const valor = String(v[key] || "").trim();
                         const match = valor.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                         if (match) {
                             mesAnoLabel = `${nomesMeses[parseInt(match[2])]} de ${match[3]}`;
                             chaveOrdenacao = parseInt(`${match[3]}${match[2]}`);
-                            v.dataFormatada = valor;
                             break;
                         }
                     }
+                    
+                    // Identifica se é 1º ou 2º Lugar
+                    const escolha = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
+                    if (escolha === "2" || escolha.includes("2") || escolha.includes("segundo") || escolha === "2º") {
+                        v.colocacao = 2;
+                        v.badgeText = "🥈 2º LUGAR";
+                        v.badgeClass = "colocacao-2";
+                    } else {
+                        // Trata "1", "1º", "Sim" ou qualquer outra variação como 1º Lugar
+                        v.colocacao = 1; 
+                        v.badgeText = "🥇 1º LUGAR";
+                        v.badgeClass = "colocacao-1";
+                    }
+
                     v.mesExibicao = mesAnoLabel;
                     v.chaveOrdenacao = chaveOrdenacao;
                     return v;
-                }).sort((a, b) => b.chaveOrdenacao - a.chaveOrdenacao);
+                });
 
-                renderVinhos(listaMelhores);
+                // Agrupa os vinhos pelo mês
+                const gruposMeses = {};
+                listaTratada.forEach(v => {
+                    if(!gruposMeses[v.chaveOrdenacao]) {
+                        gruposMeses[v.chaveOrdenacao] = { label: v.mesExibicao, vinhos: [] };
+                    }
+                    gruposMeses[v.chaveOrdenacao].vinhos.push(v);
+                });
+
+                renderBlocosMeses(gruposMeses);
                 document.getElementById('loading').style.display = 'none';
             } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar dados."; }
         }
 
-        function renderVinhos(lista) {
-            const grid = document.getElementById('vinho-grid');
-            if(lista.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #aaa;">Marque "Sim" na coluna Escolhido do Mês na planilha.</p>';
+        function renderBlocosMeses(grupos) {
+            const container = document.getElementById('vinho-container');
+            const chavesOrdenadas = Object.keys(grupos).sort((a, b) => b - a);
+
+            if(chavesOrdenadas.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #aaa;">Marque "1" ou "2" na coluna Escolhido do Mês na planilha.</p>';
                 return;
             }
 
-            grid.innerHTML = lista.map(v => {
-                let urlFinal = IMG_PADRAO;
-                // Pega a foto independente da letra ser maiúscula ou minúscula
-                const fotoRaw = v["Foto"] || v["foto"] || "";
-                
-                if (fotoRaw.length > 10) {
-                    if (fotoRaw.startsWith('data:image')) {
-                        urlFinal = fotoRaw;
-                    } else if (fotoRaw.includes('drive.google.com')) {
-                        // Limpeza robusta do ID do Google Drive
-                        const regexDrive = /[-\w]{25,}/;
-                        const matchId = fotoRaw.match(regexDrive);
-                        if (matchId) {
-                            urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
-                        }
-                    } else {
-                        urlFinal = fotoRaw;
-                    }
-                }
+            let htmlFinal = "";
 
-                return `
-                <div class="vinho-card">
-                    <div class="mes-destaque">${v.mesExibicao}</div>
-                    <div class="vinho-img-container">
-                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
-                    </div>
-                    <div class="vinho-info">
-                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
-                        <div class="vinho-detalhes">
-                            <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
-                            <span>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</span>
-                        </div>
-                        <div class="notas">
-                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
-                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
-                        </div>
+            chavesOrdenadas.forEach(chave => {
+                const grupo = grupos[chave];
+                
+                // Ordena dentro do mês para que o 1º lugar apareça sempre antes do 2º
+                grupo.vinhos.sort((a, b) => a.colocacao - b.colocacao);
+
+                htmlFinal += `
+                <div class="mes-bloco">
+                    <div class="mes-titulo-bloco">${grupo.label}</div>
+                    <div class="vinho-grid-mes">
+                        ${grupo.vinhos.map(v => {
+                            let urlFinal = IMG_PADRAO;
+                            const fotoRaw = v["Foto"] || v["foto"] || "";
+                            
+                            if (fotoRaw.length > 10) {
+                                if (fotoRaw.startsWith('data:image')) {
+                                    urlFinal = fotoRaw;
+                                } else if (fotoRaw.includes('drive.google.com')) {
+                                    const regexDrive = /[-\w]{25,}/;
+                                    const matchId = fotoRaw.match(regexDrive);
+                                    if (matchId) urlFinal = `https://drive.google.com/thumbnail?id=${matchId[0]}&sz=w800`;
+                                } else {
+                                    urlFinal = fotoRaw;
+                                }
+                            }
+
+                            return `
+                            <div class="vinho-card">
+                                <div class="vinho-img-container">
+                                    <div class="colocacao-badge ${v.badgeClass}">${v.badgeText}</div>
+                                    <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'">
+                                </div>
+                                <div class="vinho-info">
+                                    <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
+                                    <div class="vinho-detalhes">
+                                        <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
+                                        <span>🌍 ${v["País"] || "N/A"} | Safra: ${v["Safra"] || "-"}</span>
+                                    </div>
+                                    <div class="notas">
+                                        <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
+                                        <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>`;
-            }).join('');
+            });
+
+            container.innerHTML = htmlFinal;
         }
 
         fetchMelhores();
