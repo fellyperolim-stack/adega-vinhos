@@ -138,11 +138,11 @@
 
                     // Define se é 1º ou 2º lugar baseado na coluna
                     const escolha = String(v["Escolhido do Mês"] || "").trim().toLowerCase();
-                    let medalha = "🥇 1º Lugar";
+                    let medalha = "🥇";
                     let pesoPosicao = 1;
 
                     if (escolha === "2" || escolha.includes("2º") || escolha.includes("segundo")) {
-                        medalha = "🥈 2º Lugar";
+                        medalha = "🥈";
                         pesoPosicao = 2;
                     }
 
