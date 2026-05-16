@@ -206,18 +206,24 @@
         dropTrigger.setAttribute('aria-expanded', isOpen);
     });
 
-    /* ---- Fechar ao clicar fora ---- */
-    document.addEventListener('click', () => {
+    /* ---- Fechar ao clicar fora (usa e.target — funciona no mobile) ---- */
+    document.addEventListener('click', (e) => {
+        // Fecha nav mobile só se o clique foi fora do menu E fora do botão hamburguer
         if (navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            mobileBtn.setAttribute('aria-expanded', 'false');
-            const icon = mobileBtn.querySelector('i');
-            icon.classList.add('fa-bars');
-            icon.classList.remove('fa-times');
+            if (!navLinks.contains(e.target) && !mobileBtn.contains(e.target)) {
+                navLinks.classList.remove('active');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+                const icon = mobileBtn.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
         }
+        // Fecha dropdown só se o clique foi fora do trigger E fora do conteúdo
         if (dropContent.classList.contains('open')) {
-            dropContent.classList.remove('open');
-            dropTrigger.setAttribute('aria-expanded', 'false');
+            if (!dropTrigger.contains(e.target) && !dropContent.contains(e.target)) {
+                dropContent.classList.remove('open');
+                dropTrigger.setAttribute('aria-expanded', 'false');
+            }
         }
     });
 

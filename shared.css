@@ -425,24 +425,36 @@ footer {
 
     .nav-links.active { display: flex; }
 
-    /* No mobile, o dropdown ignora hover e só responde ao click (via .open) */
-    .dropdown:hover .dropdown-content { display: none; }
-    .dropdown-content.open { display: block; }
+    /* No mobile o dropdown usa max-height em vez de display toggle
+       — mais confiável em iOS/Android que não propagam eventos de toque */
+    .dropdown:hover .dropdown-content { display: block; }
 
     .dropdown-content {
+        display: block !important;   /* sempre no DOM, controlado por max-height */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.35s ease, opacity 0.25s ease;
         position: static;
-        background: rgba(255,255,255,0.04);
+        background: rgba(255, 255, 255, 0.04);
         box-shadow: none;
         border: none;
-        border-radius: 0;
+        border-radius: 8px;
         min-width: unset;
         width: 100%;
-        margin-top: 5px;
+        margin-top: 4px;
+    }
+
+    .dropdown-content.open {
+        max-height: 400px;
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .dropdown-content a {
         padding: 10px 16px;
-        border-bottom: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1e1e1e;
         text-align: center !important;
     }
 
