@@ -129,8 +129,13 @@
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
         /* --- BOTÃO DESFAZER --- */
-        .undo-btn {
+        .undo-bar {
             display: none;
+            justify-content: flex-end;
+            padding: 0 20px 6px;
+        }
+        .undo-bar.visible { display: flex; }
+        .undo-btn {
             background: none;
             border: 1px solid #333;
             color: #666;
@@ -139,12 +144,9 @@
             border-radius: 10px;
             cursor: pointer;
             font-family: 'Segoe UI', sans-serif;
-            align-self: flex-end;
             transition: 0.2s;
-            margin-bottom: -10px;
         }
         .undo-btn:hover { border-color: var(--dourado); color: var(--dourado); }
-        .undo-btn.visible { display: block; }
 
         @keyframes msgPop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -261,8 +263,10 @@
                 <div id="header-content" style="display:flex; align-items:center; gap:12px; width:100%"></div>
             </div>
 
-            <div id="chat-window" class="chat-window">
-                <button id="undo-btn" class="undo-btn" onclick="desfazerUltimo()" title="Desfazer última resposta">
+            <div id="chat-window" class="chat-window"></div>
+
+            <div class="undo-bar" id="undo-bar">
+                <button id="undo-btn" class="undo-btn" onclick="desfazerUltimo()" title="Corrigir última resposta">
                     ↩ Corrigir última resposta
                 </button>
             </div>
@@ -412,9 +416,7 @@
                 ? `<div class="bubble">${displayText}</div>`
                 : `${avatarHtml}<div class="bubble">${displayText}</div>`;
 
-            // Inserir antes do botão desfazer (que fica no topo)
-            const undoBtn = document.getElementById('undo-btn');
-            win.insertBefore(div, undoBtn.nextSibling);
+            win.appendChild(div);
             win.scrollTop = win.scrollHeight;
         }
 
@@ -458,7 +460,7 @@
 
             // Mostrar botão desfazer (mas não na senha)
             if (step > 1 && step < fluxo.length) {
-                document.getElementById('undo-btn').classList.add('visible');
+                document.getElementById('undo-bar').classList.add('visible');
             }
 
             if (step < fluxo.length) {
@@ -471,7 +473,7 @@
                     input.placeholder = nextStep.placeholder || "Pressione Enter para pular...";
                 }, 600);
             } else {
-                document.getElementById('undo-btn').classList.remove('visible');
+                document.getElementById('undo-bar').classList.remove('visible');
                 validarSenhaFinal();
             }
         }
@@ -485,7 +487,7 @@
 
             // Remover as últimas duas mensagens do chat (resposta do usuário + próxima pergunta do bot)
             const win = document.getElementById('chat-window');
-            const msgs = win.querySelectorAll('.msg:not(#undo-btn)');
+            const msgs = win.querySelectorAll('.msg');
             // Remove a pergunta do step atual e a resposta do usuário
             if (msgs.length >= 2) {
                 msgs[msgs.length - 1].remove();
@@ -500,7 +502,7 @@
             input.placeholder = currentStep.placeholder || "Pressione Enter para pular...";
             updateHeader(currentStep.bot);
 
-            if (step <= 1) document.getElementById('undo-btn').classList.remove('visible');
+            if (step <= 1) document.getElementById('undo-bar').classList.remove('visible');
 
             input.focus();
         }
@@ -529,7 +531,7 @@
                 addMsg("Senha incorreta. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
-                document.getElementById('undo-btn').classList.remove('visible');
+                document.getElementById('undo-bar').classList.remove('visible');
             }
         }
 
