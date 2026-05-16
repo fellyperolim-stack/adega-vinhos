@@ -416,13 +416,15 @@
         function searchLocalWines(term) {
             if (!localWinesCache || term.length < 2) return [];
             const t = term.toLowerCase();
-            return localWinesCache.filter(w => w.wineName?.toLowerCase().includes(t)).slice(0, 4);
+            return localWinesCache
+                .filter(w => (w['Nome do Vinho'] || '').toLowerCase().includes(t))
+                .slice(0, 4);
         }
 
         async function searchOpenFoodFacts(term) {
             if (term.length < 3) return [];
             try {
-                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&json=1&page_size=4&action=process&fields=product_name,brands,origins&categories_tags=en:wines`;
+                const url = `https://world.openfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(term)}&categories_tags=en:wines&fields=product_name,brands,origins,origins_tags&page_size=5&json=1`;
                 const res = await fetch(url);
                 const data = await res.json();
                 return (data.products || []).filter(p => p.product_name?.trim()).slice(0, 3);
@@ -459,8 +461,10 @@
             localMatches.forEach(wine => {
                 const btn = document.createElement('button');
                 btn.className = 'suggestion-chip local';
-                btn.innerHTML = `<i class="fas fa-wine-bottle" style="font-size:9px"></i> ${wine.wineName}`;
-                btn.title = [wine.produtor, wine.pais].filter(Boolean).join(' · ');
+                btn.innerHTML = `<i class="fas fa-wine-bottle" style="font-size:9px"></i> ${wine['Nome do Vinho']}`;
+                const prod = wine['Produtor'] || wine['Vinícola'] || '';
+                const pais = wine['País'] || wine['Pais'] || '';
+                btn.title = [prod, pais].filter(Boolean).join(' · ');
                 btn.onclick = () => applyCatalogWine(wine);
                 bar.appendChild(btn);
             });
@@ -481,38 +485,47 @@
             if (step !== 0 || !term) { hideSuggestions(); return; }
             const local = searchLocalWines(term);
             if (local.length) { renderSuggestions(local, []); return; }
-            renderSuggestions([], []);
-            const off = await searchOpenFoodFacts(term);
-            renderSuggestions([], off);
+            if (term.length >= 3) {
+                const bar = document.getElementById('suggestions-bar');
+                bar.innerHTML = '<span style="font-size:11px;color:#555;font-family:Segoe UI,sans-serif;padding:0 4px;">🔍 Buscando online...</span>';
+                bar.style.display = 'block';
+                const off = await searchOpenFoodFacts(term);
+                renderSuggestions([], off);
+            } else {
+                hideSuggestions();
+            }
         }
 
         function applyCatalogWine(wine) {
             hideSuggestions();
             const input = document.getElementById('userInput');
-            addMsg(wine.wineName, 'user');
+            const nome      = wine['Nome do Vinho'];
+            const produtor  = wine['Produtor'] || wine['Vinícola'] || 'Não informado';
+            const pais      = wine['País'] || wine['Pais'] || 'Não informado';
+            const regiao    = wine['Região'] || wine['Regiao'] || 'Não informado';
+            const uva       = wine['Uva(s)'] || wine['Uva'] || 'Não informado';
+            const tipo      = wine['Tipo'] || 'Não informado';
+            const safra     = wine['Safra'] || 'Não informado';
+            const teor      = wine['Teor Alcoólico'] || wine['Teor'] || 'Não informado';
+            const classif   = wine['Classificação'] || wine['Classificacao'] || 'Não informado';
+
+            addMsg(nome, 'user');
             input.value = '';
 
             Object.assign(dataVinho, {
-                wineName:      wine.wineName,
-                produtor:      wine.produtor      || 'Não informado',
-                classificacao: wine.classificacao || 'Não informado',
-                uva:           wine.uva           || 'Não informado',
-                wineType:      wine.wineType      || 'Não informado',
-                year:          wine.year          || 'Não informado',
-                pais:          wine.pais          || 'Não informado',
-                regiao:        wine.regiao        || 'Não informado',
-                teor:          wine.teor          || 'Não informado',
+                wineName: nome, produtor, classificacao: classif,
+                uva, wineType: tipo, year: safra, pais, regiao, teor,
             });
 
-            historico.push({ step: 0, key: 'wineName', value: wine.wineName });
+            historico.push({ step: 0, key: 'wineName', value: nome });
             step = 9;
             document.getElementById('undo-bar').classList.remove('visible');
 
-            const emoji = { Tinto:'🍷', Branco:'🥂', Rosé:'🌸', Espumante:'🍾' }[wine.wineType] || '🍷';
+            const emoji = { Tinto:'🍷', Branco:'🥂', Rosé:'🌸', Espumante:'🍾' }[tipo] || '🍷';
             setTimeout(() => {
                 updateHeader('ipanemita');
-                const regiao = wine.regiao && wine.regiao !== 'Não informado' ? ` · ${wine.regiao}` : '';
-                addMsg(`${emoji} Esse vinho já está na adega! Preenchendo automaticamente:\n\n📍 ${wine.pais}${regiao}\n🍇 ${wine.uva}\n🏭 ${wine.produtor}\n📅 Safra ${wine.year}`, 'ipanemita');
+                const regInfo = regiao !== 'Não informado' ? ` · ${regiao}` : '';
+                addMsg(`${emoji} Esse vinho já está na adega! Preenchendo automaticamente:\n\n📍 ${pais}${regInfo}\n🍇 ${uva}\n🏭 ${produtor}\n📅 Safra ${safra}`, 'ipanemita');
                 setTimeout(() => {
                     updateHeader('leblonzito');
                     addMsg(fluxo[9].q, 'leblonzito');
@@ -536,8 +549,10 @@
                 dataVinho.produtor = product.brands.split(',')[0].trim();
                 preenchidos.push(`produtor: ${dataVinho.produtor}`);
             }
-            if (product.origins) {
-                const pais = normalizarPais(product.origins);
+            const origemBruta = product.origins
+                || (Array.isArray(product.origins_tags) ? product.origins_tags.join(' ') : null);
+            if (origemBruta) {
+                const pais = normalizarPais(origemBruta);
                 if (pais) { dataVinho.pais = pais; preenchidos.push(`país: ${pais}`); }
             }
 
