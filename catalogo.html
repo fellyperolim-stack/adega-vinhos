@@ -22,24 +22,56 @@
     <style>
         /* --- CABEÇALHO --- */
         .search-section {
-            padding: 60px 20px 10px;
+            padding: 65px 20px 15px;
             text-align: center;
-            background: linear-gradient(to bottom, #111, var(--bg));
-        }
-        .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 5px; }
-        .search-section p.sub-titulo {
-            color: var(--subtexto); font-size: 1rem; font-style: italic;
-            margin-bottom: 25px; opacity: 0.8; font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #0e0507, var(--bg));
         }
 
-        .search-container { position: relative; max-width: 600px; margin: 0 auto 20px; }
-        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
-        #search {
-            width: 100%; padding: 15px 20px 15px 55px; border-radius: 30px;
-            border: 1px solid #333; background: #111; color: white; outline: none;
-            transition: var(--transicao); font-size: 1rem; font-family: 'Segoe UI', sans-serif;
+        .search-section h1 {
+            color: var(--dourado);
+            font-size: 2rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
         }
-        #search:focus { border-color: var(--dourado); }
+
+        .search-section h1::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            margin: 12px auto 0;
+        }
+
+        .search-section p.sub-titulo {
+            color: var(--subtexto);
+            font-size: 0.88rem;
+            font-style: italic;
+            margin-bottom: 28px;
+            margin-top: 16px;
+            opacity: 0.8;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .search-container { position: relative; max-width: 580px; margin: 0 auto 20px; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); opacity: 0.7; }
+
+        #search {
+            width: 100%;
+            padding: 14px 20px 14px 54px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--texto);
+            outline: none;
+            transition: var(--transicao);
+            font-size: 0.92rem;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.3px;
+        }
+        #search::placeholder { color: #555; }
+        #search:focus { border-color: rgba(201, 162, 39, 0.4); background: rgba(255, 255, 255, 0.04); }
 
         /* --- FILTROS --- */
         .filters-bar {
@@ -53,127 +85,192 @@
         }
 
         .filter-chip {
-            background: #111;
-            border: 1px solid #333;
-            color: #aaa;
-            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #888;
+            padding: 6px 18px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             cursor: pointer;
             transition: var(--transicao);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
-        .filter-chip:hover { border-color: var(--dourado); color: var(--dourado-claro); }
-        .filter-chip.active { background: var(--vinho-vivo); border-color: var(--vinho-vivo); color: white; }
+        .filter-chip:hover { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado-claro); }
+        .filter-chip.active {
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            border-color: rgba(201, 162, 39, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
 
         .sort-bar {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             padding: 0 20px 20px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.8rem;
-            color: var(--subtexto);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            color: #555;
+            letter-spacing: 0.5px;
         }
 
         .sort-btn {
             background: none;
-            border: 1px solid #2a2a2a;
-            color: #888;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #666;
             padding: 5px 12px;
             border-radius: 6px;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             cursor: pointer;
             transition: var(--transicao);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
-        .sort-btn:hover { border-color: var(--dourado); color: var(--dourado); }
-        .sort-btn.active { border-color: var(--dourado); color: var(--dourado); background: rgba(212,175,55,0.08); }
+        .sort-btn:hover { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado); }
+        .sort-btn.active { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado); background: rgba(201, 162, 39, 0.06); }
 
         /* --- GRID E CARDS --- */
         .vinho-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 20px 5% 60px;
+            gap: 24px;
+            padding: 20px 5% 70px;
             max-width: 1300px;
             margin: 0 auto;
         }
 
         .vinho-card {
             background: var(--card);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid #222;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             transition: var(--transicao);
             cursor: pointer;
+            box-shadow: var(--sombra-card);
         }
-        .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
+        .vinho-card:hover {
+            transform: translateY(-7px);
+            border-color: rgba(201, 162, 39, 0.3);
+            box-shadow: var(--sombra-hover);
+        }
 
         .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .vinho-card:hover .vinho-img { transform: scale(1.03); }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+        .vinho-card:hover .vinho-img { transform: scale(1.04); }
 
         .vinho-info { padding: 20px; }
-        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; font-family: 'Segoe UI', sans-serif; font-weight: 400; }
-        .vinho-data { font-size: 0.75rem; color: var(--subtexto); display: block; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif; }
-        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif; }
 
-        .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
+        .vinho-nome {
+            font-size: 1rem;
+            color: var(--dourado-claro);
+            margin: 0 0 6px 0;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .vinho-data {
+            font-size: 0.72rem;
+            color: #555;
+            display: block;
+            margin-bottom: 12px;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .vinho-detalhes {
+            font-size: 0.82rem;
+            color: #888;
+            margin-bottom: 18px;
+            line-height: 1.6;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .notas {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 14px;
+        }
+
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; }
-        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; font-family: 'Segoe UI', sans-serif; }
+
+        .nota-box span {
+            display: block;
+            font-size: 0.58rem;
+            color: #555;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .nota-valor {
+            color: var(--dourado);
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+        }
 
         /* --- EMPTY STATE --- */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
             color: var(--subtexto);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             grid-column: 1 / -1;
         }
-        .empty-state i { font-size: 3rem; color: #2a2a2a; margin-bottom: 15px; display: block; }
-        .empty-state h3 { color: #555; font-size: 1.1rem; margin: 0 0 8px; font-weight: 400; }
-        .empty-state p { margin: 0; font-size: 0.9rem; }
+        .empty-state i { font-size: 2.5rem; color: #2a2a2a; margin-bottom: 18px; display: block; }
+        .empty-state h3 { color: #444; font-size: 1rem; margin: 0 0 8px; font-weight: 400; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+        .empty-state p { margin: 0; font-size: 0.85rem; color: #555; }
+
         .btn-limpar {
             display: inline-block;
-            margin-top: 15px;
-            padding: 8px 20px;
-            border: 1px solid var(--dourado);
+            margin-top: 18px;
+            padding: 8px 22px;
+            border: 1px solid rgba(201, 162, 39, 0.4);
             color: var(--dourado);
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.72rem;
             cursor: pointer;
             background: none;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             transition: 0.2s;
         }
         .btn-limpar:hover { background: var(--dourado); color: #000; }
 
         /* --- SKELETON --- */
-        .skeleton-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
+        .skeleton-card { background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
         .sk-img { height: 280px; }
         .sk-body { padding: 20px; }
-        .sk-line { height: 14px; border-radius: 4px; margin-bottom: 10px; }
+        .sk-line { height: 13px; border-radius: 4px; margin-bottom: 10px; }
         .sk-line.short { width: 40%; }
         .sk-line.med { width: 70%; }
 
         /* --- RESULTADO COUNT --- */
         .result-count {
             text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.8rem;
-            color: var(--subtexto);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            color: #555;
+            letter-spacing: 1px;
             padding-bottom: 10px;
+            text-transform: uppercase;
         }
 
         @media (max-width: 992px) {
-            .search-section { padding: 40px 15px 10px; }
-            .search-section h1 { font-size: 1.8rem; }
-            .vinho-grid { grid-template-columns: 1fr; padding: 20px 5%; gap: 20px; }
+            .search-section { padding: 45px 15px 10px; }
+            .search-section h1 { font-size: 1.7rem; }
+            .vinho-grid { grid-template-columns: 1fr; padding: 20px 5%; gap: 16px; }
             .vinho-img-container { height: 250px; }
         }
     </style>

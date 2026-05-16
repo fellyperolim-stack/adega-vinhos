@@ -22,34 +22,50 @@
 
     <style>
         /* --- HEADER AJUSTADO --- */
-        .header-section { text-align: center; padding: 60px 15px 30px; background: linear-gradient(to bottom, #111, var(--bg)); }
-        .header-section h1 { font-size: 2rem; }
+        .header-section { text-align: center; padding: 70px 15px 40px; background: linear-gradient(to bottom, #0e0507, var(--bg)); }
+        .header-section h1 { font-size: 1.85rem; }
 
         /* --- CONTEÚDO --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 5% 60px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 5% 70px; }
 
         /* --- BUSCA --- */
         .search-container {
             position: relative;
-            max-width: 500px;
-            margin: 0 auto 30px;
+            max-width: 480px;
+            margin: 0 auto 28px;
         }
-        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--dourado); opacity: 0.7; }
+
         #search-vinicola {
-            width: 100%; padding: 13px 20px 13px 48px; border-radius: 30px;
-            border: 1px solid #333; background: #111; color: white; outline: none;
-            transition: var(--transicao); font-size: 0.95rem;
-            font-family: 'Segoe UI', sans-serif;
+            width: 100%;
+            padding: 13px 20px 13px 48px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--texto);
+            outline: none;
+            transition: var(--transicao);
+            font-size: 0.9rem;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.3px;
         }
-        #search-vinicola:focus { border-color: var(--dourado); }
+        #search-vinicola::placeholder { color: #555; }
+        #search-vinicola:focus { border-color: rgba(201, 162, 39, 0.4); background: rgba(255, 255, 255, 0.04); }
 
         /* --- ACORDEÃO --- */
-        .vinicola-group { margin-bottom: 15px; border: 1px solid #222; border-radius: 12px; overflow: hidden; transition: var(--transicao); }
-        .vinicola-group:hover { border-color: rgba(212, 175, 55, 0.4); }
+        .vinicola-group {
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: var(--transicao);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+        .vinicola-group:hover { border-color: rgba(201, 162, 39, 0.25); }
 
         .vinicola-header {
-            background: linear-gradient(90deg, #161616, #0a0a0a);
-            padding: 20px;
+            background: linear-gradient(90deg, #141414, #0c0c0c);
+            padding: 18px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -59,80 +75,90 @@
 
         .vinicola-header h2 {
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 1.15rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
             color: var(--dourado-claro);
             display: flex;
             align-items: center;
             gap: 12px;
             text-transform: uppercase;
             font-weight: 400;
+            letter-spacing: 2px;
         }
 
-        .vinicola-header h2 i { color: var(--vinho-vivo); font-size: 1rem; }
+        .vinicola-header h2 i { color: var(--vinho-vivo); font-size: 0.9rem; opacity: 0.8; }
 
         .vinicola-meta { display: flex; align-items: center; gap: 12px; }
-        .vinicola-media { font-size: 0.85rem; color: var(--dourado); }
-        .vinicola-count { font-size: 0.9rem; color: var(--dourado); font-weight: bold; min-width: 20px; text-align: right; }
-        .chevron { transition: var(--transicao); color: var(--dourado); font-size: 1rem; }
-        .vinicola-group.active .chevron { transform: rotate(180deg); }
+        .vinicola-media { font-size: 0.8rem; color: var(--dourado); font-family: 'Cinzel', serif; }
+        .vinicola-count { font-size: 0.85rem; color: var(--dourado); font-weight: 600; min-width: 20px; text-align: right; font-family: 'Cinzel', serif; }
+        .chevron { transition: var(--transicao); color: var(--dourado); font-size: 0.95rem; opacity: 0.7; }
+        .vinicola-group.active .chevron { transform: rotate(180deg); opacity: 1; }
 
         .vinicola-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-out;
-            background: #0d0d0d;
+            background: #0a0a0a;
         }
 
         .vinicola-group.active .vinicola-content {
             max-height: 3000px;
-            padding: 20px;
-            border-top: 1px solid #222;
+            padding: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         /* --- GRID DE VINHOS --- */
-        .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
 
         .wine-card {
-            background: var(--card);
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 10px;
             padding: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border: 1px solid #222;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transicao);
             cursor: pointer;
         }
 
-        .wine-card:hover { transform: translateX(5px); border-color: var(--vinho-vivo); }
+        .wine-card:hover {
+            transform: translateX(4px);
+            border-color: rgba(139, 0, 32, 0.4);
+            background: rgba(255, 255, 255, 0.04);
+        }
 
-        .wine-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .wine-img { width: 56px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
         .wine-info h3 {
             margin: 0;
-            font-size: 0.95rem;
-            color: #fff;
-            line-height: 1.3;
-            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.88rem;
+            color: var(--texto);
+            line-height: 1.35;
+            font-family: 'Outfit', sans-serif;
             font-weight: 400;
         }
 
-        .wine-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--subtexto); font-family: 'Segoe UI', sans-serif; }
+        .wine-info p {
+            margin: 4px 0 0;
+            font-size: 0.76rem;
+            color: #666;
+            font-family: 'Outfit', sans-serif;
+        }
 
         .rating-badge {
             margin-left: auto;
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(201, 162, 39, 0.07);
             color: var(--dourado);
             padding: 5px 10px;
             border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            min-width: 45px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            min-width: 48px;
             text-align: center;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(201, 162, 39, 0.15);
             flex-shrink: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Cinzel', serif;
         }
 
         /* --- EMPTY STATE --- */
@@ -140,24 +166,24 @@
             text-align: center;
             padding: 60px 20px;
             color: var(--subtexto);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
-        .empty-state i { font-size: 3rem; color: #333; margin-bottom: 15px; display: block; }
-        .empty-state p { margin: 0; font-size: 1rem; }
+        .empty-state i { font-size: 2.5rem; color: #2a2a2a; margin-bottom: 18px; display: block; }
+        .empty-state p { margin: 0; font-size: 0.9rem; color: #555; }
 
         /* --- SKELETONS --- */
-        .skeleton-group { margin-bottom: 15px; border: 1px solid #1a1a1a; border-radius: 12px; overflow: hidden; }
-        .skeleton-header { padding: 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
-        .skeleton-title { height: 18px; width: 200px; border-radius: 4px; }
-        .skeleton-badge { height: 18px; width: 30px; border-radius: 4px; }
+        .skeleton-group { margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; overflow: hidden; }
+        .skeleton-header { padding: 18px 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        .skeleton-title { height: 16px; width: 200px; border-radius: 4px; }
+        .skeleton-badge { height: 16px; width: 30px; border-radius: 4px; }
 
         #loader { padding: 20px 5% 60px; max-width: 1100px; margin: 0 auto; }
 
         @media (max-width: 992px) {
             .wine-grid { grid-template-columns: 1fr; }
-            .vinicola-header { padding: 15px; }
-            .vinicola-header h2 { font-size: 1rem; }
-            .header-section { padding: 40px 15px 20px; }
+            .vinicola-header { padding: 15px 16px; }
+            .vinicola-header h2 { font-size: 0.85rem; }
+            .header-section { padding: 50px 15px 25px; }
         }
     </style>
 </head>

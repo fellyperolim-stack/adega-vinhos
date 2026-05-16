@@ -24,62 +24,106 @@
         body { font-family: 'Outfit', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
 
         /* --- HEADER & SCORE --- */
-        .header-section { padding: 40px 15px 20px; position: relative; }
-        .header-section h1 { color: var(--dourado); font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 2px; margin: 10px 0 5px; font-size: 2rem; text-align: center; }
+        .header-section {
+            padding: 50px 15px 25px;
+            position: relative;
+            background: linear-gradient(to bottom, #0e0507, var(--bg));
+        }
+
+        .header-section h1 {
+            color: var(--dourado);
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: 10px 0 5px;
+            font-size: 1.9rem;
+            text-align: center;
+        }
+
+        .header-section h1::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            margin: 12px auto 0;
+        }
 
         .score-board {
             display: inline-block;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid var(--dourado);
-            padding: 8px 20px;
+            background: rgba(201, 162, 39, 0.07);
+            border: 1px solid rgba(201, 162, 39, 0.35);
+            padding: 8px 22px;
             border-radius: 30px;
             color: var(--dourado-claro);
-            font-weight: bold;
-            font-size: 1.1rem;
+            font-weight: 600;
+            font-size: 1rem;
             margin: 0 auto;
             display: flex;
             align-items: center;
             gap: 8px;
             width: fit-content;
             transition: 0.3s;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
         }
 
-        .header-score-wrapper { display: flex; justify-content: center; margin-top: 10px; }
+        .header-score-wrapper { display: flex; justify-content: center; margin-top: 16px; }
 
         /* --- GRID DE JOGOS --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px 5% 60px; flex-grow: 1; width: 100%; box-sizing: border-box; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px 5% 70px; flex-grow: 1; width: 100%; box-sizing: border-box; }
 
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
 
         .game-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 25px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 28px 18px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: var(--transicao);
             position: relative;
             overflow: hidden;
+            box-shadow: var(--sombra-card);
         }
-        .game-card:hover { transform: translateY(-10px); border-color: var(--dourado); background: rgba(212,175,55,0.05); }
+        .game-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(201, 162, 39, 0.35);
+            background: rgba(201, 162, 39, 0.04);
+            box-shadow: var(--sombra-hover);
+        }
 
-        .game-icon { font-size: 3rem; color: var(--dourado); margin-bottom: 15px; }
-        .game-card h3 { font-family: 'Cinzel', serif; margin: 0 0 10px 0; font-size: 1.2rem; color: #fff; }
-        .game-card p { font-size: 0.85rem; color: var(--subtexto); margin: 0; }
-        .badge-bot { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; background: var(--vinho-vivo); padding: 3px 8px; border-radius: 10px; font-weight: bold; color: white; }
+        .game-icon { font-size: 2.6rem; color: var(--dourado); margin-bottom: 18px; opacity: 0.85; }
+        .game-card h3 { font-family: 'Cinzel', serif; margin: 0 0 10px 0; font-size: 1.1rem; color: var(--texto); letter-spacing: 1px; }
+        .game-card p { font-size: 0.82rem; color: #666; margin: 0; font-family: 'Outfit', sans-serif; line-height: 1.5; }
+
+        .badge-bot {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.62rem;
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.5px;
+        }
 
         /* --- TELAS DE JOGO --- */
         .game-screen {
             display: none;
-            background: rgba(20,20,20,0.8);
-            border: 1px solid var(--dourado);
+            background: rgba(14, 14, 14, 0.95);
+            border: 1px solid rgba(201, 162, 39, 0.25);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             position: relative;
             animation: fadeIn 0.4s;
             min-height: 420px;
+            box-shadow: var(--sombra-card);
         }
 
         .btn-voltar {

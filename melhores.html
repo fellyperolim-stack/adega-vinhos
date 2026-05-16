@@ -21,47 +21,68 @@
 
     <style>
         .search-section {
-            padding: 50px 20px 20px;
+            padding: 65px 20px 25px;
             text-align: center;
-            background: linear-gradient(to bottom, #111, var(--bg));
+            background: linear-gradient(to bottom, #0e0507, var(--bg));
         }
+
         .search-section h1 {
             color: var(--dourado);
-            font-size: 2rem;
+            font-size: 1.9rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
             margin: 0;
             text-transform: uppercase;
         }
+
+        .search-section h1::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            margin: 12px auto 0;
+        }
+
         .search-section p {
             color: var(--subtexto);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-style: italic;
-            margin: 8px 0 0;
-            font-family: 'Segoe UI', sans-serif;
+            margin: 16px 0 0;
+            font-family: 'Outfit', sans-serif;
+            opacity: 0.8;
         }
 
         .vinho-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 30px 5% 60px;
+            gap: 22px;
+            padding: 30px 5% 70px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
         .vinho-card {
             background: var(--card);
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid #222;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             display: flex;
             flex-direction: column;
+            box-shadow: var(--sombra-card);
+            transition: var(--transicao);
+        }
+
+        .vinho-card:hover {
+            border-color: rgba(201, 162, 39, 0.2);
+            box-shadow: var(--sombra-hover);
         }
 
         .mes-destaque {
-            background: var(--vinho-escuro);
+            background: linear-gradient(90deg, var(--vinho-escuro), #2a0110);
             color: var(--dourado-claro);
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--dourado);
+            padding: 11px 16px;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -70,20 +91,20 @@
         }
 
         .mes-label {
-            font-weight: bold;
-            font-size: 0.85rem;
+            font-weight: 600;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 2px;
             flex: 1;
             min-width: fit-content;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         .medalhas-toggle { display: flex; gap: 6px; }
 
         .btn-medalha {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(201, 162, 39, 0.2);
             cursor: pointer;
             padding: 5px 10px;
             border-radius: 6px;
@@ -91,42 +112,68 @@
             align-items: center;
             gap: 5px;
             filter: grayscale(100%);
-            opacity: 0.6;
+            opacity: 0.5;
             transition: var(--transicao);
         }
-        .btn-medalha.active { filter: grayscale(0%); opacity: 1; border-color: var(--dourado); background: rgba(212, 175, 55, 0.2); }
+        .btn-medalha.active { filter: grayscale(0%); opacity: 1; border-color: rgba(201, 162, 39, 0.5); background: rgba(201, 162, 39, 0.1); }
 
         .flag-icon-mini { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; }
 
         .vinho-img-container { width: 100%; height: 250px; background: #000; cursor: pointer; overflow: hidden; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.45s ease; }
         .vinho-img-container:hover .vinho-img { transform: scale(1.04); }
 
-        .vinho-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; cursor: pointer; }
+        .vinho-info { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; cursor: pointer; }
+
         .vinho-nome {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--dourado-claro);
             margin: 0 0 10px 0;
             min-height: 2.8em;
             display: flex;
             align-items: center;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Cinzel', serif;
             font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
         }
-        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; font-family: 'Segoe UI', sans-serif; }
 
-        .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
+        .vinho-detalhes { font-size: 0.82rem; color: #888; margin-bottom: 15px; font-family: 'Outfit', sans-serif; line-height: 1.6; }
+
+        .notas {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 14px;
+        }
+
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; }
-        .nota-valor { color: var(--dourado); font-size: 1.3rem; font-weight: bold; font-family: 'Segoe UI', sans-serif; }
+
+        .nota-box span {
+            display: block;
+            font-size: 0.58rem;
+            color: #555;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .nota-valor {
+            color: var(--dourado);
+            font-size: 1.25rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+        }
 
         .hidden { display: none !important; }
 
         /* Skeleton */
-        .skeleton-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
-        .sk-header { height: 46px; background: #1e1414; }
+        .skeleton-card { background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
+        .sk-header { height: 46px; background: rgba(58, 3, 18, 0.3); }
         .sk-img { height: 250px; }
-        .sk-body { padding: 15px; }
+        .sk-body { padding: 16px; }
         .sk-line { height: 13px; border-radius: 4px; margin-bottom: 10px; }
         .sk-line.med { width: 75%; }
         .sk-line.short { width: 45%; }
@@ -134,18 +181,18 @@
         #skeleton-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 22px;
             padding: 30px 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
 
         @media (max-width: 768px) {
-            .vinho-grid { grid-template-columns: 1fr; gap: 20px; padding: 15px; }
+            .vinho-grid { grid-template-columns: 1fr; gap: 16px; padding: 15px; }
             #skeleton-grid { grid-template-columns: 1fr; padding: 15px; }
             .vinho-img-container { height: 220px; }
             .mes-destaque { padding: 12px; }
-            .mes-label { font-size: 0.75rem; }
+            .mes-label { font-size: 0.68rem; }
         }
     </style>
 </head>
