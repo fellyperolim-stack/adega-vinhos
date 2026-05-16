@@ -414,11 +414,13 @@
         }
 
         function searchLocalWines(term) {
-            if (!localWinesCache || term.length < 2) return [];
+            if (!Array.isArray(localWinesCache) || term.length < 2) return [];
             const t = term.toLowerCase();
-            return localWinesCache
-                .filter(w => (w['Nome do Vinho'] || '').toLowerCase().includes(t))
-                .slice(0, 4);
+            try {
+                return localWinesCache
+                    .filter(w => w && typeof w['Nome do Vinho'] === 'string' && w['Nome do Vinho'].toLowerCase().includes(t))
+                    .slice(0, 4);
+            } catch (e) { return []; }
         }
 
         const GEMINI_KEY = "AIzaSyC2Ml1ddSFUYU18Kk5os56lgr7LWn6n-X8";
@@ -469,34 +471,44 @@
             if (suggestionMsgEl) { suggestionMsgEl.remove(); suggestionMsgEl = null; }
         }
 
+        function continuarFluxoNormal() {
+            const input = document.getElementById('userInput');
+            const next = fluxo[1];
+            updateHeader(next.bot);
+            addMsg(next.q, next.bot);
+            input.type = next.type;
+            input.setAttribute('list', next.list || '');
+            input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+        }
+
         // Chamada APÓS o usuário enviar o nome (step 0 já processado, step agora é 1)
         async function autocompletarVinho(nome) {
-            const input = document.getElementById('userInput');
+            try {
+                // 1. Busca instantânea no catálogo local
+                const local = searchLocalWines(nome);
+                if (local.length) {
+                    updateHeader('ipanemita');
+                    showSuggestionChipsInChat(local, '🍷 Esse vinho está na adega! Clique para preencher tudo:');
+                    return;
+                }
 
-            // 1. Busca instantânea no catálogo local
-            const local = searchLocalWines(nome);
-            if (local.length) {
+                // 2. Busca via Gemini
                 updateHeader('ipanemita');
-                showSuggestionChipsInChat(local, '🍷 Esse vinho está na adega! Clique para preencher tudo:');
-                return;
-            }
+                const loadingEl = addMsgEl('Consultando IA sobre esse vinho... ✨', 'ipanemita');
+                let gemini = null;
+                try {
+                    gemini = await searchGemini(nome);
+                } catch (e) { gemini = null; }
+                loadingEl.remove();
 
-            // 2. Busca via Gemini (Apps Script)
-            updateHeader('ipanemita');
-            const loadingEl = addMsgEl('Consultando IA sobre esse vinho... ✨', 'ipanemita');
-            const gemini = await searchGemini(nome);
-            loadingEl.remove();
-
-            if (gemini) {
-                showGeminiResult(gemini);
-            } else {
-                // Nada encontrado — continua normalmente
-                const next = fluxo[1];
-                updateHeader(next.bot);
-                addMsg(next.q, next.bot);
-                input.type = next.type;
-                input.setAttribute('list', next.list || '');
-                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                if (gemini) {
+                    showGeminiResult(gemini);
+                } else {
+                    continuarFluxoNormal();
+                }
+            } catch (e) {
+                // Garante que o fluxo sempre avança, mesmo com erro inesperado
+                continuarFluxoNormal();
             }
         }
 
@@ -731,7 +743,7 @@
 
             if (step === 1) {
                 // Acabou de enviar o nome — busca antes de perguntar o próximo campo
-                setTimeout(() => autocompletarVinho(msg), 600);
+                setTimeout(() => autocompletarVinho(msg).catch(() => continuarFluxoNormal()), 600);
             } else if (step < fluxo.length) {
                 const nextStep = fluxo[step];
                 setTimeout(() => {
