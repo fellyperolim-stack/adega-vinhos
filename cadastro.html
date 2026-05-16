@@ -423,26 +423,15 @@
             } catch (e) { return []; }
         }
 
-        const GEMINI_KEY = "AIzaSyC2Ml1ddSFUYU18Kk5os56lgr7LWn6n-X8";
-
         async function searchGemini(term) {
             if (term.length < 2) return null;
             try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
-                const prompt = `Retorne APENAS um objeto JSON (sem markdown) para o vinho: "${term}". Campos obrigatórios: nome, uva, pais, regiao, produtor, tipo (Tinto/Branco/Rosé/Espumante), teor, safra, classificacao.`;
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
+                const url = SCRIPT_URL + '?action=buscarVinho&query=' + encodeURIComponent(term);
+                const res = await fetch(url);
                 if (!res.ok) return null;
-                const data = await res.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (!text) return null;
-                const match = text.match(/\{[\s\S]*\}/);
-                if (!match) return null;
-                const wine = JSON.parse(match[0]);
-                return wine.nome ? wine : null;
+                const wine = await res.json();
+                if (Array.isArray(wine) || !wine || !wine.nome || wine.erro) return null;
+                return wine;
             } catch (e) { return null; }
         }
 
@@ -541,7 +530,7 @@
 
             items.forEach(({ text, sub, gold, onclick }) => {
                 const btn = document.createElement('button');
-                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid ${gold ? 'var(--dourado)' : 'rgba(201,162,39,0.4)'};background:${gold ? 'rgba(201,162,39,0.12)' : 'rgba(201,162,39,0.06)'};color:${gold ? 'var(--dourado)' : '#d4b85a'}`;
+                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid ${gold ? 'var(--dourado)' : 'rgba(201,162,39,0.5)'};background:${gold ? 'rgba(201,162,39,0.18)' : 'rgba(201,162,39,0.08)'};color:#fff`;
                 btn.innerHTML = `${text}${sub ? `<span style="display:block;font-size:11px;opacity:0.55;margin-top:2px">${sub}</span>` : ''}`;
                 btn.onclick = onclick;
                 bubble.appendChild(btn);
