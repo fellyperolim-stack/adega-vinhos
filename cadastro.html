@@ -590,6 +590,9 @@
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 document.getElementById('ratingModal').close();
 
+                // Invalida o cache para que o catálogo carregue com dados frescos
+                if (window.clearWineCache) window.clearWineCache();
+
                 // Feedback in-chat em vez de alert()
                 updateHeader('final');
                 addMsg("🍷 Brinde eternizado com sucesso!\n\nO vinho foi adicionado à nossa adega. Redirecionando para o catálogo...", 'success');
@@ -598,6 +601,7 @@
 
             } catch (e) {
                 document.getElementById('ratingModal').close();
+                if (window.clearWineCache) window.clearWineCache();
                 addMsg("✅ Brinde registrado! Redirecionando...", 'success');
                 setTimeout(() => { location.href = "catalogo.html"; }, 2500);
             }

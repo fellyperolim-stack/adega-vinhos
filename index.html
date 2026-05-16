@@ -340,8 +340,7 @@
 
         async function loadStats() {
             try {
-                const res  = await fetch(API);
-                const data = await res.json();
+                const data = await fetchWithCache(API);
 
                 const get = (v, ...keys) => {
                     for (const k of keys) {

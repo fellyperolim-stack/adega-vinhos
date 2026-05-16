@@ -191,8 +191,7 @@
 
         async function fetchMelhores() {
             try {
-                const res = await fetch(SCRIPT_URL);
-                const vinhos = await res.json();
+                const vinhos = await fetchWithCache(SCRIPT_URL);
                 const meses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
                 const grupos = {};
 
@@ -272,7 +271,7 @@
             return `
                 <div class="conteudo-vinho ${hidden ? 'hidden' : ''}" id="conteudo-${chave}-${pos}">
                     <div class="vinho-img-container" onclick='WineModal.open(${jsonStr})'>
-                        <img src="${img}" class="vinho-img" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || 'Foto do vinho'}">
+                        <img src="${img}" class="vinho-img" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || 'Foto do vinho'}">
                     </div>
                     <div class="vinho-info" onclick='WineModal.open(${jsonStr})'>
                         <h3 class="vinho-nome">${v["Nome do Vinho"] || "Vinho Especial"}</h3>

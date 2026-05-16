@@ -1,7 +1,76 @@
 /* =====================================================
    ADEGA FELLYPE & HWLLY — Navegação Compartilhada
-   nav.js — injeta navbar e rodapé em todas as páginas
+   nav.js — injeta navbar, rodapé, cache e preconnects
    ===================================================== */
+
+/* ── PRECONNECTS (economiza ~200ms de handshake HTTPS) ── */
+(function injectPreconnects() {
+    const hints = [
+        { rel: 'preconnect', href: 'https://script.google.com' },
+        { rel: 'preconnect', href: 'https://cdnjs.cloudflare.com' },
+        { rel: 'dns-prefetch', href: 'https://flagcdn.com' },
+        { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
+        { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
+    ];
+    hints.forEach(({ rel, href }) => {
+        if (document.querySelector(`link[href="${href}"]`)) return;
+        const l = document.createElement('link');
+        l.rel = href; l.rel = rel; l.href = href;
+        if (rel === 'preconnect') l.crossOrigin = 'anonymous';
+        document.head.prepend(l);
+    });
+})();
+
+/* ── CACHE API (stale-while-revalidate, TTL 15 min) ── */
+(function setupCache() {
+    function hashUrl(url) {
+        let h = 0;
+        for (let i = 0; i < url.length; i++) h = (Math.imul(31, h) + url.charCodeAt(i)) | 0;
+        return 'adega_cache_' + Math.abs(h).toString(36);
+    }
+
+    /**
+     * fetchWithCache(url, ttlMs?)
+     * – Retorna dados do localStorage imediatamente se existirem.
+     * – Se o cache estiver velho (> ttlMs), faz refresh silencioso em background.
+     * – Se não houver cache, faz fetch normal e armazena o resultado.
+     */
+    window.fetchWithCache = async function (url, ttlMs) {
+        ttlMs = ttlMs !== undefined ? ttlMs : 15 * 60 * 1000;
+        const key = hashUrl(url);
+
+        let cached = null;
+        try { cached = JSON.parse(localStorage.getItem(key)); } catch (e) {}
+
+        const isStale = !cached || (Date.now() - cached.ts > ttlMs);
+
+        if (cached) {
+            if (isStale) {
+                // Atualiza em background sem bloquear a renderização
+                fetch(url)
+                    .then(r => r.json())
+                    .then(data => {
+                        try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
+                    })
+                    .catch(() => {});
+            }
+            return cached.data;
+        }
+
+        // Sem cache: faz fetch normal e salva
+        const res  = await fetch(url);
+        const data = await res.json();
+        try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
+        return data;
+    };
+
+    /** Limpa todo o cache da adega (chamar após cadastrar um vinho) */
+    window.clearWineCache = function () {
+        Object.keys(localStorage)
+            .filter(k => k.startsWith('adega_cache_'))
+            .forEach(k => localStorage.removeItem(k));
+    };
+})();
 
 (function () {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';

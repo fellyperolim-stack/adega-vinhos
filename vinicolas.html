@@ -229,8 +229,7 @@
 
         async function loadVinicolas() {
             try {
-                const response = await fetch(SCRIPT_URL);
-                const data = await response.json();
+                const data = await fetchWithCache(SCRIPT_URL);
 
                 const processados = data.map(v => ({
                     nome:         findVal(v, ['vinho', 'rótulo', 'nome']) || 'Vinho s/ Nome',
@@ -323,7 +322,7 @@
                                 const vinhoData = JSON.stringify(v).replace(/"/g, '&quot;');
                                 return `
                                 <div class="wine-card" onclick='WineModal.open(${JSON.stringify(v).replace(/'/g, "\\'")} )' title="Ver detalhes de ${v.nome}">
-                                    <img src="${img}" class="wine-img" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
+                                    <img src="${img}" class="wine-img" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
                                     <div class="wine-info">
                                         <h3>${v.nome}</h3>
                                         <p>🍇 ${v.uva} · 🌍 ${v.pais}</p>

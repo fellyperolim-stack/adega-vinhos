@@ -239,8 +239,7 @@
 
         async function fetchVinhos() {
             try {
-                const response = await fetch(SCRIPT_URL);
-                vinhos = await response.json();
+                vinhos = await fetchWithCache(SCRIPT_URL);
 
                 // Verificar parâmetro de URL
                 const params = new URLSearchParams(window.location.search);
