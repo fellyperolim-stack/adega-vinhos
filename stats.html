@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas da Adega | Fellype & Hwlly</title>
+    <meta name="description" content="Estatísticas e análises da adega Fellype & Hwlly. Países, uvas, notas e evolução ao longo do tempo.">
+    <meta property="og:title" content="Estatísticas da Adega | Fellype & Hwlly">
+    <meta property="og:description" content="Números e histórias por trás de cada gole da adega Fellype & Hwlly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fellypehwlly-vinhos.space/stats.html">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+    <style>
+        /* --- HEADER --- */
+        .stats-header {
+            padding: 50px 5% 30px;
+            text-align: center;
+            background: linear-gradient(to bottom, #111, var(--bg));
+        }
+        .stats-header h1 {
+            color: var(--dourado);
+            font-size: 2rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .stats-header p {
+            color: var(--subtexto);
+            font-size: 0.9rem;
+            font-style: italic;
+            margin: 8px 0 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* --- CONTAINER --- */
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5% 60px;
+        }
+
+        /* --- SUMMARY CARDS --- */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: var(--card);
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 20px 15px;
+            text-align: center;
+            transition: var(--transicao);
+        }
+        .summary-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .summary-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+        .summary-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--dourado);
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.1;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+        .summary-label {
+            font-size: 0.68rem;
+            color: var(--subtexto);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .summary-sub {
+            font-size: 0.72rem;
+            color: #777;
+            margin-top: 4px;
+            font-family: 'Segoe UI', sans-serif;
+            font-style: italic;
+        }
+
+        /* --- CHARTS GRID --- */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .chart-card {
+            background: var(--card);
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 24px;
+            transition: var(--transicao);
+        }
+        .chart-card:hover { border-color: rgba(212, 175, 55, 0.2); }
+
+        .chart-title {
+            font-size: 0.72rem;
+            color: var(--dourado);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-wrap {
+            position: relative;
+            height: 280px;
+        }
+
+        /* --- SKELETON --- */
+        #skeleton-stats .sk-summary {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        #skeleton-stats .sk-card {
+            background: var(--card);
+            border: 1px solid #1a1a1a;
+            border-radius: 14px;
+            padding: 20px 15px;
+            height: 110px;
+        }
+        #skeleton-stats .sk-charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        #skeleton-stats .sk-chart {
+            background: var(--card);
+            border: 1px solid #1a1a1a;
+            border-radius: 14px;
+            padding: 24px;
+            height: 340px;
+        }
+
+        /* --- INSIGHT BAR (Fellype vs Hwlly tendência) --- */
+        .insight-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 14px;
+            font-size: 0.78rem;
+            color: var(--subtexto);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .insight-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        @media (max-width: 1024px) {
+            .summary-grid { grid-template-columns: repeat(3, 1fr); }
+            #skeleton-stats .sk-summary { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            #skeleton-stats .sk-charts { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: repeat(3, 1fr); }
+            #skeleton-stats .sk-summary { grid-template-columns: repeat(3, 1fr); }
+            .summary-value { font-size: 1.3rem; }
+        }
+        @media (max-width: 480px) {
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+            #skeleton-stats .sk-summary { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="stats-header">
+        <h1>Estatísticas da Adega</h1>
+        <p>Números e histórias por trás de cada gole 📊</p>
+    </div>
+
+    <!-- Skeleton -->
+    <div id="skeleton-stats" class="stats-container">
+        <div class="sk-summary">
+            <div class="sk-card skeleton"></div>
+            <div class="sk-card skeleton"></div>
+            <div class="sk-card skeleton"></div>
+            <div class="sk-card skeleton"></div>
+            <div class="sk-card skeleton"></div>
+            <div class="sk-card skeleton"></div>
+        </div>
+        <div class="sk-charts">
+            <div class="sk-chart skeleton"></div>
+            <div class="sk-chart skeleton"></div>
+            <div class="sk-chart skeleton"></div>
+            <div class="sk-chart skeleton"></div>
+        </div>
+    </div>
+
+    <!-- Conteúdo real -->
+    <div id="stats-content" class="stats-container" style="display:none;">
+
+        <div class="summary-grid" id="summary-grid"></div>
+
+        <div class="charts-grid">
+
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-globe-americas" aria-hidden="true"></i> Distribuição por País
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="chart-paises"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-seedling" aria-hidden="true"></i> Top 10 Variedades de Uva
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="chart-uvas"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> Evolução ao Longo do Tempo
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="chart-tempo"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Fellype vs Hwlly
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="chart-fvsh"></canvas>
+                </div>
+                <div class="insight-bar" id="fvsh-insight"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="nav.js"></script>
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
+
+        /* ---- Tema global dos charts ---- */
+        Chart.defaults.color = '#999';
+        Chart.defaults.borderColor = '#242424';
+        Chart.defaults.font.family = "'Segoe UI', sans-serif";
+        Chart.defaults.font.size = 12;
+
+        /* ---- Paleta quente ---- */
+        const PALETTE = [
+            '#D4AF37', '#C0392B', '#E67E22', '#8B4513',
+            '#DAA520', '#CD5C5C', '#B8860B', '#A0522D',
+            '#FF6B6B', '#FF8C00', '#BC8F8F', '#CD853F',
+            '#E8B86D', '#9B2335', '#F39C12'
+        ];
+
+        /* ---- Helper: busca campo por nome (case-insensitive) ---- */
+        function getField(obj, ...names) {
+            for (const name of names) {
+                for (const key of Object.keys(obj)) {
+                    if (key.toLowerCase() === name.toLowerCase()) {
+                        const val = String(obj[key] ?? '').trim();
+                        if (val !== '') return val;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /* ---- Parse de data: DD/MM/YYYY ou YYYY-MM-DD ---- */
+        function parseDate(raw) {
+            if (!raw) return null;
+            let m = String(raw).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            if (m) return new Date(+m[3], +m[2] - 1, +m[1]);
+            m = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+            m = String(raw).match(/^(\d{4})$/);
+            if (m) return new Date(+m[1], 0, 1);
+            return null;
+        }
+
+        /* ---- Normaliza os dados da API ---- */
+        function processWines(raw) {
+            return raw.map(v => {
+                const notaF = parseFloat((getField(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0;
+                const notaH = parseFloat((getField(v, 'Pontuação Hwlly', 'Pontuacao Hwlly') || '0').replace(',', '.')) || 0;
+                return {
+                    nome:  getField(v, 'Nome do Vinho', 'nome') || 'Sem nome',
+                    pais:  (getField(v, 'País', 'Pais', 'pais') || 'Outros').trim(),
+                    uva:   (getField(v, 'Uva(s)', 'Uva', 'uva') || 'Não identificada').trim(),
+                    tipo:  getField(v, 'Tipo', 'tipo') || '',
+                    notaF,
+                    notaH,
+                    media: (notaF > 0 && notaH > 0) ? (notaF + notaH) / 2
+                                                     : (notaF || notaH || 0),
+                    dataConsumo: parseDate(getField(v, 'Ano de Consumo', 'Data', 'anoConsumo')),
+                };
+            }).filter(w => w.nome !== 'Sem nome' || w.pais !== 'Outros');
+        }
+
+        /* ---- Contagem por chave ---- */
+        function countBy(arr, key) {
+            return arr.reduce((acc, item) => {
+                const val = item[key] || 'Outros';
+                acc[val] = (acc[val] || 0) + 1;
+                return acc;
+            }, {});
+        }
+
+        /* ===== CARDS DE RESUMO ===== */
+        function renderSummary(wines) {
+            const anoAtual = new Date().getFullYear();
+            const esteAno  = wines.filter(w => w.dataConsumo && w.dataConsumo.getFullYear() === anoAtual).length;
+
+            const comNotas = wines.filter(w => w.media > 0);
+            const mediaGeral = comNotas.length
+                ? (comNotas.reduce((s, w) => s + w.media, 0) / comNotas.length).toFixed(1)
+                : '—';
+
+            const paisTop = Object.entries(countBy(wines, 'pais')).sort((a, b) => b[1] - a[1])[0] || ['—', 0];
+            const uvaTop  = Object.entries(countBy(wines, 'uva' )).sort((a, b) => b[1] - a[1])[0] || ['—', 0];
+
+            const melhor = [...wines].filter(w => w.media > 0).sort((a, b) => b.media - a.media)[0];
+
+            const cards = [
+                { icon: '🍷', value: wines.length,         label: 'Vinhos na Adega',       sub: null },
+                { icon: '⭐', value: mediaGeral,            label: 'Média Geral',            sub: `de ${comNotas.length} avaliados` },
+                { icon: '🌍', value: paisTop[0],            label: 'País Favorito',          sub: `${paisTop[1]} rótulo${paisTop[1] !== 1 ? 's' : ''}` },
+                { icon: '🍇', value: uvaTop[0],             label: 'Uva Favorita',           sub: `${uvaTop[1]} vez${uvaTop[1] !== 1 ? 'es' : ''}` },
+                { icon: '📅', value: esteAno,               label: `Brindados em ${anoAtual}`, sub: null },
+                { icon: '🏆', value: melhor ? melhor.media.toFixed(1) : '—', label: 'Maior Nota', sub: melhor ? melhor.nome.split(' ').slice(0, 3).join(' ') : '' },
+            ];
+
+            document.getElementById('summary-grid').innerHTML = cards.map(c => `
+                <div class="summary-card">
+                    <span class="summary-icon">${c.icon}</span>
+                    <div class="summary-value">${c.value}</div>
+                    <div class="summary-label">${c.label}</div>
+                    ${c.sub ? `<div class="summary-sub">${c.sub}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        /* ===== GRÁFICO 1: DONUT POR PAÍS ===== */
+        function renderChartPaises(wines) {
+            const sorted = Object.entries(countBy(wines, 'pais')).sort((a, b) => b[1] - a[1]);
+
+            new Chart(document.getElementById('chart-paises'), {
+                type: 'doughnut',
+                data: {
+                    labels: sorted.map(e => e[0]),
+                    datasets: [{
+                        data: sorted.map(e => e[1]),
+                        backgroundColor: sorted.map((_, i) => PALETTE[i % PALETTE.length]),
+                        borderColor: '#111',
+                        borderWidth: 2,
+                        hoverOffset: 10,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#bbb', font: { size: 11 }, boxWidth: 13, padding: 10 }
+                        },
+                        tooltip: {
+                            callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} vinho${ctx.raw !== 1 ? 's' : ''}` }
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ===== GRÁFICO 2: BARRAS HORIZONTAIS — UVAS ===== */
+        function renderChartUvas(wines) {
+            const top10 = Object.entries(countBy(wines, 'uva')).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+            new Chart(document.getElementById('chart-uvas'), {
+                type: 'bar',
+                data: {
+                    labels: top10.map(e => e[0]),
+                    datasets: [{
+                        data: top10.map(e => e[1]),
+                        backgroundColor: top10.map((_, i) => `rgba(212, 175, 55, ${1 - i * 0.07})`),
+                        borderColor: 'transparent',
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: { label: ctx => ` ${ctx.raw} vinho${ctx.raw !== 1 ? 's' : ''}` }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#1e1e1e' },
+                            ticks: { color: '#888', stepSize: 1, precision: 0 }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#ccc', font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ===== GRÁFICO 3: LINHA TEMPORAL ===== */
+        function renderChartTempo(wines) {
+            const comData = wines.filter(w => w.dataConsumo);
+
+            if (comData.length === 0) {
+                document.getElementById('chart-tempo').insertAdjacentHTML('afterend',
+                    '<p style="text-align:center;color:var(--subtexto);font-size:.85rem;font-style:italic;padding:40px 0;">Sem datas de consumo registradas ainda.</p>');
+                return;
+            }
+
+            // Decide se agrupa por mês ou por ano
+            const anos = [...new Set(comData.map(w => w.dataConsumo.getFullYear()))];
+            let entries;
+
+            if (anos.length <= 2) {
+                // Agrupa por mês/ano
+                const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+                const byMonth = {};
+                comData.forEach(w => {
+                    const k = `${w.dataConsumo.getFullYear()}-${String(w.dataConsumo.getMonth()).padStart(2,'0')}`;
+                    byMonth[k] = (byMonth[k] || 0) + 1;
+                });
+                entries = Object.entries(byMonth).sort().map(([k, v]) => {
+                    const [y, m] = k.split('-');
+                    return [MESES[+m] + '/' + y.slice(2), v];
+                });
+            } else {
+                // Agrupa por ano
+                const byYear = {};
+                comData.forEach(w => {
+                    const y = String(w.dataConsumo.getFullYear());
+                    byYear[y] = (byYear[y] || 0) + 1;
+                });
+                entries = Object.entries(byYear).sort();
+            }
+
+            new Chart(document.getElementById('chart-tempo'), {
+                type: 'line',
+                data: {
+                    labels: entries.map(e => e[0]),
+                    datasets: [{
+                        label: 'Vinhos degustados',
+                        data: entries.map(e => e[1]),
+                        borderColor: '#C0392B',
+                        backgroundColor: 'rgba(192, 57, 43, 0.12)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#D4AF37',
+                        pointBorderColor: '#111',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: { label: ctx => ` ${ctx.raw} vinho${ctx.raw !== 1 ? 's' : ''}` }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#1e1e1e' }, ticks: { color: '#888' } },
+                        y: { grid: { color: '#1e1e1e' }, ticks: { color: '#888', stepSize: 1, precision: 0 }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        /* ===== GRÁFICO 4: SCATTER FELLYPE VS HWLLY ===== */
+        function renderChartFvsH(wines) {
+            const comAmbos = wines.filter(w => w.notaF > 0 && w.notaH > 0);
+
+            if (comAmbos.length === 0) {
+                document.getElementById('chart-fvsh').insertAdjacentHTML('afterend',
+                    '<p style="text-align:center;color:var(--subtexto);font-size:.85rem;font-style:italic;padding:40px 0;">Avaliações duplas ainda não registradas.</p>');
+                return;
+            }
+
+            const allVals = comAmbos.flatMap(w => [w.notaF, w.notaH]);
+            const minV = Math.max(0, Math.floor(Math.min(...allVals)) - 0.5);
+            const maxV = Math.min(10, Math.ceil(Math.max(...allVals)) + 0.5);
+
+            // Insight: quem tende a dar notas mais altas?
+            const mediaF = comAmbos.reduce((s, w) => s + w.notaF, 0) / comAmbos.length;
+            const mediaH = comAmbos.reduce((s, w) => s + w.notaH, 0) / comAmbos.length;
+            const diffAbs = Math.abs(mediaF - mediaH).toFixed(1);
+            const maisGeneroso = mediaF > mediaH ? 'Fellype' : 'Hwlly';
+            const maisRigido    = mediaF > mediaH ? 'Hwlly'   : 'Fellype';
+
+            document.getElementById('fvsh-insight').innerHTML = `
+                <span class="insight-dot" style="background:#D4AF37"></span>
+                <span><strong style="color:var(--dourado-claro)">${maisGeneroso}</strong> costuma dar <strong>+${diffAbs}</strong> pontos a mais que ${maisRigido}</span>
+            `;
+
+            new Chart(document.getElementById('chart-fvsh'), {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Vinhos',
+                            data: comAmbos.map(w => ({ x: w.notaF, y: w.notaH, nome: w.nome })),
+                            backgroundColor: 'rgba(212, 175, 55, 0.65)',
+                            borderColor: 'rgba(212, 175, 55, 0.25)',
+                            borderWidth: 1,
+                            pointRadius: 6,
+                            pointHoverRadius: 9,
+                        },
+                        {
+                            // Linha de equilíbrio: onde F == H
+                            label: 'F = H',
+                            data: [{ x: minV, y: minV }, { x: maxV, y: maxV }],
+                            type: 'line',
+                            borderColor: 'rgba(255,255,255,0.12)',
+                            borderDash: [6, 4],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#666',
+                                font: { size: 11 },
+                                filter: item => item.datasetIndex === 1
+                            }
+                        },
+                        tooltip: {
+                            filter: item => item.datasetIndex === 0,
+                            callbacks: {
+                                label(ctx) {
+                                    const p = ctx.raw;
+                                    const nome = p.nome.length > 28 ? p.nome.slice(0, 28) + '…' : p.nome;
+                                    return [` ${nome}`, ` Fellype: ${p.x}  |  Hwlly: ${p.y}`];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Nota Fellype', color: '#777', font: { size: 11 } },
+                            grid: { color: '#1e1e1e' },
+                            ticks: { color: '#888' },
+                            min: minV, max: maxV,
+                        },
+                        y: {
+                            title: { display: true, text: 'Nota Hwlly', color: '#777', font: { size: 11 } },
+                            grid: { color: '#1e1e1e' },
+                            ticks: { color: '#888' },
+                            min: minV, max: maxV,
+                        }
+                    }
+                }
+            });
+        }
+
+        /* ===== BOOTSTRAP ===== */
+        async function loadStats() {
+            try {
+                const res = await fetch(API_URL);
+                const raw = await res.json();
+                const wines = processWines(raw);
+
+                renderSummary(wines);
+                renderChartPaises(wines);
+                renderChartUvas(wines);
+                renderChartTempo(wines);
+                renderChartFvsH(wines);
+
+                document.getElementById('skeleton-stats').style.display = 'none';
+                document.getElementById('stats-content').style.display  = 'block';
+
+            } catch (e) {
+                document.getElementById('skeleton-stats').innerHTML = `
+                    <div style="text-align:center; padding:80px 20px; color:var(--subtexto); font-family:'Segoe UI',sans-serif;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#333; display:block; margin-bottom:15px;" aria-hidden="true"></i>
+                        Erro ao carregar estatísticas. Tente novamente.
+                    </div>`;
+            }
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>

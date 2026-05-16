@@ -18,6 +18,7 @@
         { href: 'paises.html',    label: 'Por Países' },
         { href: 'uvas.html',      label: 'Por Uvas' },
         { href: 'vinicolas.html', label: 'Vinícolas' },
+        { href: 'stats.html',     label: 'Estatísticas' },
     ];
 
     const isExplore = explorarLinks.some(l => l.href === currentPage);
@@ -63,6 +64,7 @@
                 <a href="uvas.html">Por Uvas</a>
                 <a href="vinicolas.html">Vinícolas</a>
                 <a href="games.html">Games</a>
+                <a href="stats.html">Estatísticas</a>
             </div>
             <hr class="footer-divider">
             Criado com ❤️ para as memórias de Fellype e Hwlly.<br>
