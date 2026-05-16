@@ -454,89 +454,115 @@
         function hideSuggestions() {
             const bar = document.getElementById('suggestions-bar');
             bar.style.display = 'none'; bar.innerHTML = '';
-            removeSuggestionMsg();
-        }
-
-        function removeSuggestionMsg() {
             if (suggestionMsgEl) { suggestionMsgEl.remove(); suggestionMsgEl = null; }
         }
 
-        function renderSuggestions(localMatches, offMatches, loading) {
-            const bar = document.getElementById('suggestions-bar');
-            bar.innerHTML = '';
+        // Chamada APÓS o usuário enviar o nome (step 0 já processado, step agora é 1)
+        async function autocompletarVinho(nome) {
+            const input = document.getElementById('userInput');
 
-            removeSuggestionMsg();
-
-            if (loading) {
-                bar.innerHTML = '<span style="font-size:11px;color:#555;font-family:Segoe UI,sans-serif;padding:0 4px;">🔍 Buscando online...</span>';
-                bar.style.display = 'block';
+            // 1. Busca instantânea no catálogo local
+            const local = searchLocalWines(nome);
+            if (local.length) {
+                updateHeader('ipanemita');
+                showSuggestionChipsInChat(local, [], '🍷 Esse vinho está na adega! Clique para preencher tudo:');
                 return;
             }
 
-            if (!localMatches.length && !offMatches.length) { bar.style.display = 'none'; return; }
+            // 2. Busca online
+            updateHeader('ipanemita');
+            const loadingEl = addMsgEl('Procurando informações sobre esse vinho... 🔍', 'ipanemita');
+            const off = await searchOpenFoodFacts(nome);
+            loadingEl.remove();
 
-            localMatches.forEach(wine => {
-                const btn = document.createElement('button');
-                btn.className = 'suggestion-chip local';
-                btn.innerHTML = `<i class="fas fa-wine-bottle" style="font-size:9px"></i> ${wine['Nome do Vinho']}`;
-                const prod = wine['Produtor'] || wine['Vinícola'] || '';
-                const pais = wine['País'] || wine['Pais'] || '';
-                btn.title = [prod, pais].filter(Boolean).join(' · ');
-                btn.onclick = () => applyCatalogWine(wine);
-                bar.appendChild(btn);
-            });
+            if (off.length) {
+                showSuggestionChipsInChat([], off, '🌐 Encontrei online! Clique para pré-preencher:');
+            } else {
+                // Nada encontrado — continua o fluxo normalmente
+                const next = fluxo[1];
+                updateHeader(next.bot);
+                addMsg(next.q, next.bot);
+                input.type = next.type;
+                input.setAttribute('list', next.list || '');
+                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+            }
+        }
 
-            offMatches.forEach(p => {
-                const btn = document.createElement('button');
-                btn.className = 'suggestion-chip online';
-                const prod = p.brands ? ` · ${p.brands.split(',')[0].trim()}` : '';
-                btn.innerHTML = `<i class="fas fa-globe" style="font-size:9px"></i> ${p.product_name}${prod}`;
-                btn.onclick = () => applyOffWine(p);
-                bar.appendChild(btn);
-            });
-
-            bar.style.display = 'block';
-
-            // Também injeta no chat para não passar despercebido
+        // Adiciona mensagem e retorna o elemento DOM
+        function addMsgEl(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
             div.className = 'msg msg-bot';
-            const label = localMatches.length ? '🍷 Achei na adega! Clique para preencher tudo:' : '🌐 Encontrei online:';
-            const chipsHtml = [...bar.children].map(b => `<button onclick="${b.getAttribute('onclick') || ''}" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:14px;font-size:12px;cursor:pointer;font-family:Segoe UI,sans-serif;white-space:nowrap;margin:2px;border:1px solid ${localMatches.length ? 'var(--dourado)' : 'rgba(255,255,255,0.25)'};background:${localMatches.length ? 'rgba(201,162,39,0.15)' : 'rgba(255,255,255,0.05)'};color:${localMatches.length ? 'var(--dourado)' : 'rgba(255,255,255,0.7)'};">${b.innerHTML}</button>`).join('');
-            div.innerHTML = `<div class="shiba-spotlight"><img src="${localMatches.length ? IMG_L : IMG_I}" class="avatar-sm zoom-face" alt="bot"></div><div class="bubble" style="background:#1a1a1a;color:#e2ddd8;border:1px solid rgba(255,255,255,0.08)"><div style="font-size:12px;margin-bottom:6px;opacity:0.7">${label}</div><div style="display:flex;flex-wrap:wrap;gap:2px">${chipsHtml}</div></div>`;
-            // Reatribui os onclick corretamente
-            const btns = div.querySelectorAll('button');
-            const allItems = [...localMatches.map(w => ({ type: 'local', data: w })), ...offMatches.map(p => ({ type: 'off', data: p }))];
-            btns.forEach((b, i) => {
-                if (allItems[i]) {
-                    b.onclick = allItems[i].type === 'local'
-                        ? () => applyCatalogWine(allItems[i].data)
-                        : () => applyOffWine(allItems[i].data);
-                }
+            const img = type === 'leblonzito' ? IMG_L : IMG_I;
+            div.innerHTML = `${getAvatarHtml(img, type)}<div class="bubble">${text}</div>`;
+            win.appendChild(div);
+            win.scrollTop = win.scrollHeight;
+            return div;
+        }
+
+        function showSuggestionChipsInChat(localMatches, offMatches, label) {
+            const input = document.getElementById('userInput');
+            const win = document.getElementById('chat-window');
+            const isLocal = localMatches.length > 0;
+            const imgSrc = isLocal ? IMG_L : IMG_I;
+
+            const div = document.createElement('div');
+            div.className = 'msg msg-bot';
+
+            const allItems = [
+                ...localMatches.map(w => ({
+                    label: w['Nome do Vinho'],
+                    sub: [w['Produtor'] || w['Vinícola'], w['País'] || w['Pais']].filter(Boolean).join(' · '),
+                    isLocal: true, data: w
+                })),
+                ...offMatches.map(p => ({
+                    label: p.product_name.trim(),
+                    sub: p.brands ? p.brands.split(',')[0].trim() : '',
+                    isLocal: false, data: p
+                }))
+            ];
+
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:200px;max-width:260px';
+
+            const lbl = document.createElement('div');
+            lbl.style.cssText = 'font-size:12px;opacity:0.75;margin-bottom:8px';
+            lbl.textContent = label;
+            bubble.appendChild(lbl);
+
+            allItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;border:1px solid ${item.isLocal ? 'var(--dourado)' : 'rgba(255,255,255,0.2)'};background:${item.isLocal ? 'rgba(201,162,39,0.1)' : 'rgba(255,255,255,0.05)'};color:${item.isLocal ? 'var(--dourado)' : '#e2ddd8'};cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px`;
+                btn.innerHTML = `${item.label}${item.sub ? `<span style="display:block;font-size:11px;opacity:0.55;margin-top:2px">${item.sub}</span>` : ''}`;
+                btn.onclick = item.isLocal ? () => applyCatalogWine(item.data) : () => applyOffWine(item.data);
+                bubble.appendChild(btn);
             });
+
+            const skipBtn = document.createElement('button');
+            skipBtn.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:1px solid #2a2a2a;background:none;color:#555;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:11px;margin-top:2px';
+            skipBtn.textContent = 'Preencher manualmente →';
+            skipBtn.onclick = () => {
+                hideSuggestions();
+                const next = fluxo[1];
+                updateHeader(next.bot);
+                addMsg(next.q, next.bot);
+                input.type = next.type;
+                input.setAttribute('list', next.list || '');
+                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+            };
+            bubble.appendChild(skipBtn);
+
+            div.innerHTML = getAvatarHtml(imgSrc, 'bot');
+            div.appendChild(bubble);
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
             suggestionMsgEl = div;
         }
 
-        async function onWineNameInput(term) {
-            if (step !== 0 || !term) { hideSuggestions(); return; }
-            const local = searchLocalWines(term);
-            if (local.length) { renderSuggestions(local, []); return; }
-            if (term.length >= 3) {
-                renderSuggestions([], [], true);
-                const off = await searchOpenFoodFacts(term);
-                if (step !== 0) return; // usuário já avançou
-                renderSuggestions([], off);
-            } else {
-                hideSuggestions();
-            }
-        }
-
         function applyCatalogWine(wine) {
             hideSuggestions();
             const input = document.getElementById('userInput');
-            const nome      = wine['Nome do Vinho'];
             const produtor  = wine['Produtor'] || wine['Vinícola'] || 'Não informado';
             const pais      = wine['País'] || wine['Pais'] || 'Não informado';
             const regiao    = wine['Região'] || wine['Regiao'] || 'Não informado';
@@ -546,40 +572,29 @@
             const teor      = wine['Teor Alcoólico'] || wine['Teor'] || 'Não informado';
             const classif   = wine['Classificação'] || wine['Classificacao'] || 'Não informado';
 
-            addMsg(nome, 'user');
-            input.value = '';
-
             Object.assign(dataVinho, {
-                wineName: nome, produtor, classificacao: classif,
+                wineName: wine['Nome do Vinho'], produtor, classificacao: classif,
                 uva, wineType: tipo, year: safra, pais, regiao, teor,
             });
 
-            historico.push({ step: 0, key: 'wineName', value: nome });
             step = 9;
             document.getElementById('undo-bar').classList.remove('visible');
 
             const emoji = { Tinto:'🍷', Branco:'🥂', Rosé:'🌸', Espumante:'🍾' }[tipo] || '🍷';
+            updateHeader('ipanemita');
+            const regInfo = regiao !== 'Não informado' ? ` · ${regiao}` : '';
+            addMsg(`${emoji} Preenchendo automaticamente:\n\n📍 ${pais}${regInfo}\n🍇 ${uva}\n🏭 ${produtor}\n📅 Safra ${safra}`, 'ipanemita');
             setTimeout(() => {
-                updateHeader('ipanemita');
-                const regInfo = regiao !== 'Não informado' ? ` · ${regiao}` : '';
-                addMsg(`${emoji} Esse vinho já está na adega! Preenchendo automaticamente:\n\n📍 ${pais}${regInfo}\n🍇 ${uva}\n🏭 ${produtor}\n📅 Safra ${safra}`, 'ipanemita');
-                setTimeout(() => {
-                    updateHeader('leblonzito');
-                    addMsg(fluxo[9].q, 'leblonzito');
-                    input.type = 'password';
-                    input.placeholder = '';
-                }, 800);
-            }, 500);
+                updateHeader('leblonzito');
+                addMsg(fluxo[9].q, 'leblonzito');
+                input.type = 'password';
+                input.placeholder = '';
+            }, 800);
         }
 
         function applyOffWine(product) {
             hideSuggestions();
             const input = document.getElementById('userInput');
-            const nome = product.product_name.trim();
-            addMsg(nome, 'user');
-            input.value = '';
-            dataVinho.wineName = nome;
-            historico.push({ step: 0, key: 'wineName', value: nome });
 
             const preenchidos = [];
             if (product.brands) {
@@ -593,34 +608,28 @@
                 if (pais) { dataVinho.pais = pais; preenchidos.push(`país: ${pais}`); }
             }
 
+            // Avança para o primeiro step ainda não preenchido
             step = 1;
             while (step < 9 && dataVinho[fluxo[step].key]) step++;
 
+            updateHeader('ipanemita');
+            addMsg(
+                preenchidos.length
+                    ? `Pré-preenchendo: ${preenchidos.join(', ')}. Continuando com o restante...`
+                    : `Vinho novo! Vamos completar os detalhes.`,
+                'ipanemita'
+            );
             setTimeout(() => {
-                updateHeader('ipanemita');
-                addMsg(
-                    preenchidos.length
-                        ? `Encontrei online! Pré-preenchendo: ${preenchidos.join(', ')}. Continuando com o restante...`
-                        : `Vinho novo na adega! Vamos registrá-lo juntos.`,
-                    'ipanemita'
-                );
-                setTimeout(() => {
-                    const next = fluxo[step];
-                    updateHeader(next.bot);
-                    addMsg(next.q, next.bot);
-                    input.type = next.type;
-                    input.setAttribute('list', next.list || '');
-                    input.placeholder = next.placeholder || 'Pressione Enter para pular...';
-                    document.getElementById('undo-bar').classList.add('visible');
-                }, 800);
-            }, 500);
+                const next = fluxo[step];
+                updateHeader(next.bot);
+                addMsg(next.q, next.bot);
+                input.type = next.type;
+                input.setAttribute('list', next.list || '');
+                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                document.getElementById('undo-bar').classList.add('visible');
+            }, 800);
         }
 
-        document.getElementById('userInput').addEventListener('input', (e) => {
-            if (step !== 0) return;
-            clearTimeout(suggestionDebounce);
-            suggestionDebounce = setTimeout(() => onWineNameInput(e.target.value.trim()), 400);
-        });
 
         function setNota(id, valor, el) {
             document.getElementById(id).value = valor;
@@ -707,7 +716,10 @@
                 document.getElementById('undo-bar').classList.add('visible');
             }
 
-            if (step < fluxo.length) {
+            if (step === 1) {
+                // Acabou de enviar o nome — busca antes de perguntar o próximo campo
+                setTimeout(() => autocompletarVinho(msg), 600);
+            } else if (step < fluxo.length) {
                 const nextStep = fluxo[step];
                 setTimeout(() => {
                     updateHeader(nextStep.bot);
