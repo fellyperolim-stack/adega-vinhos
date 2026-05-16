@@ -50,31 +50,63 @@
         /* --- STATS BAR --- */
         .stats-bar {
             background: var(--card);
-            padding: 50px 20px;
+            padding: 50px 20px 40px;
             border-top: 1px solid #222;
             border-bottom: 1px solid #222;
             display: flex;
-            justify-content: center;
-            gap: 80px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
         }
 
-        .stat-item { text-align: center; min-width: 150px; }
-        .stat-icon { font-size: 2.5rem; color: var(--vinho-vivo); margin-bottom: 15px; }
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .stat-item { text-align: center; min-width: 130px; }
+        .stat-icon { font-size: 2.2rem; color: var(--vinho-vivo); margin-bottom: 12px; }
         .stat-item h2 {
             color: var(--dourado);
-            font-size: 3rem;
+            font-size: 2.8rem;
             margin: 5px 0;
             font-weight: bold;
+            min-height: 1.2em;
         }
         .stat-item p {
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             letter-spacing: 2px;
             color: var(--subtexto);
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
         }
+
+        /* Skeleton nos stats */
+        .stat-skeleton {
+            display: inline-block;
+            width: 70px; height: 42px;
+            border-radius: 6px;
+            vertical-align: middle;
+        }
+
+        /* Link para stats completas */
+        .stats-link {
+            margin-top: 28px;
+            font-size: 0.78rem;
+            color: var(--subtexto);
+            font-family: 'Segoe UI', sans-serif;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transicao);
+            border-bottom: 1px solid transparent;
+        }
+        .stats-link:hover { color: var(--dourado); border-bottom-color: var(--dourado); }
 
         /* --- CORPO PRINCIPAL --- */
         .main-content {
@@ -175,7 +207,8 @@
             .main-content { grid-template-columns: 1fr; margin: 30px auto; }
             .experiencia-grid { grid-template-columns: 1fr; }
             .hero { background-attachment: scroll; height: auto; padding: 80px 20px; }
-            .stats-bar { gap: 30px; padding: 30px 10px; }
+            .stats-row { gap: 25px; }
+            .stats-bar { padding: 30px 10px 25px; }
             .destinos-block { position: static; }
         }
     </style>
@@ -191,21 +224,39 @@
     </header>
 
     <div class="stats-bar">
-        <div class="stat-item">
-            <div class="stat-icon"><i class="fas fa-wine-bottle" aria-hidden="true"></i></div>
-            <h2 class="count-target" data-target="95" data-suffix="+">95+</h2>
-            <p>Vinhos Degustados</p>
+        <div class="stats-row">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-wine-bottle" aria-hidden="true"></i></div>
+                <h2 id="stat-vinhos" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Vinhos Degustados</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-globe-americas" aria-hidden="true"></i></div>
+                <h2 id="stat-paises" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Países Explorados</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-seedling" aria-hidden="true"></i></div>
+                <h2 id="stat-castas" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Castas Únicas</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+                <h2 id="stat-media" data-media="0">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Nota Média</p>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-icon"><i class="fas fa-globe-americas" aria-hidden="true"></i></div>
-            <h2 class="count-target" data-target="11" data-suffix="">11</h2>
-            <p>Países Explorados</p>
-        </div>
-        <div class="stat-item">
-            <div class="stat-icon"><i class="fas fa-seedling" aria-hidden="true"></i></div>
-            <h2 class="count-target" data-target="31" data-suffix="+">31+</h2>
-            <p>Castas Únicas</p>
-        </div>
+        <a href="stats.html" class="stats-link" id="stats-link" style="opacity:0;">
+            Ver análise completa <i class="fas fa-arrow-right" style="font-size:0.7rem;" aria-hidden="true"></i>
+        </a>
     </div>
 
     <main class="main-content">
@@ -257,37 +308,111 @@
 
     <script src="nav.js"></script>
     <script>
-        // PWA
+        /* ---- PWA ---- */
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
-            });
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
         }
 
-        // Animação de contagem nos stats ao entrar na viewport
-        const counters = document.querySelectorAll('.count-target');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting || entry.target.dataset.counted) return;
-                entry.target.dataset.counted = true;
+        /* ---- Count-up animado ---- */
+        function animateCount(el, target, suffix = '', duration = 1200) {
+            if (target === 0) { el.textContent = '—'; return; }
+            el.dataset.counted = true;
+            el.classList.add('counted');
+            const step = Math.ceil(target / (duration / 16));
+            let current = 0;
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current + suffix;
+                if (current >= target) clearInterval(timer);
+            }, 16);
+        }
 
-                const target = parseInt(entry.target.dataset.target);
-                const suffix = entry.target.dataset.suffix || '';
-                const duration = 1200;
-                const step = Math.ceil(target / (duration / 16));
-                let current = 0;
+        /* ---- Fade-in da nota média (decimal) ---- */
+        function animateMedia(el, value) {
+            el.style.opacity = '0';
+            el.textContent = value;
+            el.style.transition = 'opacity 0.8s ease';
+            requestAnimationFrame(() => { el.style.opacity = '1'; });
+        }
 
-                const timer = setInterval(() => {
-                    current = Math.min(current + step, target);
-                    entry.target.textContent = current + suffix;
-                    if (current >= target) clearInterval(timer);
-                }, 16);
+        /* ---- Busca dados reais da API ---- */
+        const API = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
 
-                entry.target.classList.add('counted');
-            });
-        }, { threshold: 0.5 });
+        async function loadStats() {
+            try {
+                const res  = await fetch(API);
+                const data = await res.json();
 
-        counters.forEach(c => observer.observe(c));
+                const get = (v, ...keys) => {
+                    for (const k of keys) {
+                        const found = Object.keys(v).find(key => key.toLowerCase() === k.toLowerCase());
+                        if (found && String(v[found]).trim()) return String(v[found]).trim();
+                    }
+                    return '';
+                };
+
+                const wines = data.map(v => ({
+                    pais:  get(v, 'País', 'Pais') || 'Outros',
+                    uva:   get(v, 'Uva(s)', 'Uva') || '',
+                    notaF: parseFloat((get(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0,
+                    notaH: parseFloat((get(v, 'Pontuação Hwlly',   'Pontuacao Hwlly')   || '0').replace(',', '.')) || 0,
+                })).filter(w => w.pais !== 'Outros' || w.uva !== '');
+
+                const totalVinhos = wines.length;
+                const paises      = new Set(wines.map(w => w.pais).filter(Boolean)).size;
+                const castas      = new Set(wines.map(w => w.uva ).filter(Boolean)).size;
+
+                const comNotas = wines.filter(w => w.notaF > 0 && w.notaH > 0);
+                const media = comNotas.length
+                    ? (comNotas.reduce((s, w) => s + (w.notaF + w.notaH) / 2, 0) / comNotas.length).toFixed(1)
+                    : null;
+
+                /* Popula e anima */
+                const elVinhos = document.getElementById('stat-vinhos');
+                const elPaises = document.getElementById('stat-paises');
+                const elCastas = document.getElementById('stat-castas');
+                const elMedia  = document.getElementById('stat-media');
+
+                elVinhos.dataset.target = totalVinhos;
+                elPaises.dataset.target = paises;
+                elCastas.dataset.target = castas;
+
+                /* Usa IntersectionObserver para disparar quando o elemento entrar na tela */
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting || entry.target.dataset.counted) return;
+                        const t  = parseInt(entry.target.dataset.target);
+                        const sf = entry.target.dataset.suffix || '';
+                        animateCount(entry.target, t, sf);
+                    });
+                }, { threshold: 0.4 });
+
+                [elVinhos, elPaises, elCastas].forEach(el => {
+                    el.innerHTML = '';          // remove skeleton
+                    io.observe(el);
+                });
+
+                elMedia.innerHTML = '';
+                if (media) {
+                    animateMedia(elMedia, '★ ' + media);
+                } else {
+                    elMedia.textContent = '—';
+                }
+
+                /* Exibe o link para stats.html */
+                const link = document.getElementById('stats-link');
+                if (link) { link.style.transition = 'opacity 0.6s ease 0.8s'; link.style.opacity = '1'; }
+
+            } catch (e) {
+                /* Fallback silencioso: mostra traço */
+                ['stat-vinhos','stat-paises','stat-castas','stat-media'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '—';
+                });
+            }
+        }
+
+        loadStats();
     </script>
 </body>
 </html>
