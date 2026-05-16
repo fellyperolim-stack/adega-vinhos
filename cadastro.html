@@ -421,22 +421,16 @@
                 .slice(0, 4);
         }
 
-        async function searchOpenFoodFacts(term) {
-            if (term.length < 3) return [];
+        async function searchGemini(term) {
+            if (term.length < 2) return null;
             try {
-                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&action=process&json=1&page_size=8`;
+                const url = `${SCRIPT_URL}?action=buscarVinho&query=${encodeURIComponent(term)}`;
                 const res = await fetch(url);
-                if (!res.ok) return [];
+                if (!res.ok) return null;
                 const data = await res.json();
-                return (data.products || [])
-                    .filter(p => p.product_name?.trim())
-                    .slice(0, 3)
-                    .map(p => ({
-                        product_name: p.product_name.trim(),
-                        brands: p.brands || p.brand_owner || '',
-                        origins: p.origins || p.countries || ''
-                    }));
-            } catch (e) { return []; }
+                if (data.erro || !data.nome) return null;
+                return data;
+            } catch (e) { return null; }
         }
 
         const PAIS_MAP = {
@@ -472,20 +466,20 @@
             const local = searchLocalWines(nome);
             if (local.length) {
                 updateHeader('ipanemita');
-                showSuggestionChipsInChat(local, [], '🍷 Esse vinho está na adega! Clique para preencher tudo:');
+                showSuggestionChipsInChat(local, '🍷 Esse vinho está na adega! Clique para preencher tudo:');
                 return;
             }
 
-            // 2. Busca online
+            // 2. Busca via Gemini (Apps Script)
             updateHeader('ipanemita');
-            const loadingEl = addMsgEl('Procurando informações sobre esse vinho... 🔍', 'ipanemita');
-            const off = await searchOpenFoodFacts(nome);
+            const loadingEl = addMsgEl('Consultando IA sobre esse vinho... ✨', 'ipanemita');
+            const gemini = await searchGemini(nome);
             loadingEl.remove();
 
-            if (off.length) {
-                showSuggestionChipsInChat([], off, '🌐 Encontrei online! Clique para pré-preencher:');
+            if (gemini) {
+                showGeminiResult(gemini);
             } else {
-                // Nada encontrado — continua o fluxo normalmente
+                // Nada encontrado — continua normalmente
                 const next = fluxo[1];
                 updateHeader(next.bot);
                 addMsg(next.q, next.bot);
@@ -507,48 +501,32 @@
             return div;
         }
 
-        function showSuggestionChipsInChat(localMatches, offMatches, label) {
+        function buildSuggestionBubble(imgSrc, label, items, skipLabel) {
             const input = document.getElementById('userInput');
             const win = document.getElementById('chat-window');
-            const isLocal = localMatches.length > 0;
-            const imgSrc = isLocal ? IMG_L : IMG_I;
-
             const div = document.createElement('div');
             div.className = 'msg msg-bot';
 
-            const allItems = [
-                ...localMatches.map(w => ({
-                    label: w['Nome do Vinho'],
-                    sub: [w['Produtor'] || w['Vinícola'], w['País'] || w['Pais']].filter(Boolean).join(' · '),
-                    isLocal: true, data: w
-                })),
-                ...offMatches.map(p => ({
-                    label: p.product_name.trim(),
-                    sub: p.brands ? p.brands.split(',')[0].trim() : '',
-                    isLocal: false, data: p
-                }))
-            ];
-
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
-            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:200px;max-width:260px';
+            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:200px;max-width:270px';
 
             const lbl = document.createElement('div');
-            lbl.style.cssText = 'font-size:12px;opacity:0.75;margin-bottom:8px';
+            lbl.style.cssText = 'font-size:12px;opacity:0.7;margin-bottom:8px';
             lbl.textContent = label;
             bubble.appendChild(lbl);
 
-            allItems.forEach(item => {
+            items.forEach(({ text, sub, gold, onclick }) => {
                 const btn = document.createElement('button');
-                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;border:1px solid ${item.isLocal ? 'var(--dourado)' : 'rgba(255,255,255,0.2)'};background:${item.isLocal ? 'rgba(201,162,39,0.1)' : 'rgba(255,255,255,0.05)'};color:${item.isLocal ? 'var(--dourado)' : '#e2ddd8'};cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px`;
-                btn.innerHTML = `${item.label}${item.sub ? `<span style="display:block;font-size:11px;opacity:0.55;margin-top:2px">${item.sub}</span>` : ''}`;
-                btn.onclick = item.isLocal ? () => applyCatalogWine(item.data) : () => applyOffWine(item.data);
+                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid ${gold ? 'var(--dourado)' : 'rgba(201,162,39,0.4)'};background:${gold ? 'rgba(201,162,39,0.12)' : 'rgba(201,162,39,0.06)'};color:${gold ? 'var(--dourado)' : '#d4b85a'}`;
+                btn.innerHTML = `${text}${sub ? `<span style="display:block;font-size:11px;opacity:0.55;margin-top:2px">${sub}</span>` : ''}`;
+                btn.onclick = onclick;
                 bubble.appendChild(btn);
             });
 
             const skipBtn = document.createElement('button');
             skipBtn.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:1px solid #2a2a2a;background:none;color:#555;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:11px;margin-top:2px';
-            skipBtn.textContent = 'Preencher manualmente →';
+            skipBtn.textContent = skipLabel || 'Preencher manualmente →';
             skipBtn.onclick = () => {
                 hideSuggestions();
                 const next = fluxo[1];
@@ -565,6 +543,60 @@
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
             suggestionMsgEl = div;
+        }
+
+        function showSuggestionChipsInChat(localMatches, label) {
+            buildSuggestionBubble(IMG_L, label,
+                localMatches.map(w => ({
+                    text: w['Nome do Vinho'],
+                    sub: [w['Produtor'] || w['Vinícola'], w['País'] || w['Pais']].filter(Boolean).join(' · '),
+                    gold: true,
+                    onclick: () => applyCatalogWine(w)
+                }))
+            );
+        }
+
+        function showGeminiResult(wine) {
+            const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
+            buildSuggestionBubble(IMG_I, '✨ Encontrei via IA! Clique para preencher tudo:',
+                [{
+                    text: `${emoji} ${wine.nome || dataVinho.wineName}`,
+                    sub: [wine.produtor, wine.pais, wine.safra ? `Safra ${wine.safra}` : ''].filter(Boolean).join(' · '),
+                    gold: false,
+                    onclick: () => applyGeminiWine(wine)
+                }]
+            );
+        }
+
+        function applyGeminiWine(wine) {
+            hideSuggestions();
+            const input = document.getElementById('userInput');
+
+            Object.assign(dataVinho, {
+                wineName:      wine.nome          || dataVinho.wineName,
+                produtor:      wine.produtor      || 'Não informado',
+                classificacao: wine.classificacao || 'Não informado',
+                uva:           wine.uva           || 'Não informado',
+                wineType:      wine.tipo          || 'Não informado',
+                year:          wine.safra ? String(wine.safra) : 'Não informado',
+                pais:          wine.pais          || 'Não informado',
+                regiao:        wine.regiao        || 'Não informado',
+                teor:          wine.teor ? String(wine.teor) : 'Não informado',
+            });
+
+            step = 9;
+            document.getElementById('undo-bar').classList.remove('visible');
+
+            const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
+            updateHeader('ipanemita');
+            const regInfo = wine.regiao ? ` · ${wine.regiao}` : '';
+            addMsg(`${emoji} Preenchido pela IA:\n\n📍 ${wine.pais}${regInfo}\n🍇 ${wine.uva}\n🏭 ${wine.produtor}\n📅 Safra ${wine.safra || 'N/A'}`, 'ipanemita');
+            setTimeout(() => {
+                updateHeader('leblonzito');
+                addMsg(fluxo[9].q, 'leblonzito');
+                input.type = 'password';
+                input.placeholder = '';
+            }, 800);
         }
 
         function applyCatalogWine(wine) {
@@ -599,43 +631,6 @@
             }, 800);
         }
 
-        function applyOffWine(product) {
-            hideSuggestions();
-            const input = document.getElementById('userInput');
-
-            const preenchidos = [];
-            if (product.brands) {
-                dataVinho.produtor = product.brands.split(',')[0].trim();
-                preenchidos.push(`produtor: ${dataVinho.produtor}`);
-            }
-            const origemBruta = product.origins
-                || (Array.isArray(product.origins_tags) ? product.origins_tags.join(' ') : null);
-            if (origemBruta) {
-                const pais = normalizarPais(origemBruta);
-                if (pais) { dataVinho.pais = pais; preenchidos.push(`país: ${pais}`); }
-            }
-
-            // Avança para o primeiro step ainda não preenchido
-            step = 1;
-            while (step < 9 && dataVinho[fluxo[step].key]) step++;
-
-            updateHeader('ipanemita');
-            addMsg(
-                preenchidos.length
-                    ? `Pré-preenchendo: ${preenchidos.join(', ')}. Continuando com o restante...`
-                    : `Vinho novo! Vamos completar os detalhes.`,
-                'ipanemita'
-            );
-            setTimeout(() => {
-                const next = fluxo[step];
-                updateHeader(next.bot);
-                addMsg(next.q, next.bot);
-                input.type = next.type;
-                input.setAttribute('list', next.list || '');
-                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
-                document.getElementById('undo-bar').classList.add('visible');
-            }, 800);
-        }
 
 
         function setNota(id, valor, el) {
