@@ -424,11 +424,18 @@
         async function searchOpenFoodFacts(term) {
             if (term.length < 3) return [];
             try {
-                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&search_simple=1&action=process&json=1&page_size=5&fields=product_name,brands,origins`;
+                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&action=process&json=1&page_size=8`;
                 const res = await fetch(url);
                 if (!res.ok) return [];
                 const data = await res.json();
-                return (data.products || []).filter(p => p.product_name?.trim()).slice(0, 3);
+                return (data.products || [])
+                    .filter(p => p.product_name?.trim())
+                    .slice(0, 3)
+                    .map(p => ({
+                        product_name: p.product_name.trim(),
+                        brands: p.brands || p.brand_owner || '',
+                        origins: p.origins || p.countries || ''
+                    }));
             } catch (e) { return []; }
         }
 
