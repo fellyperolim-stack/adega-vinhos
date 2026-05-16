@@ -421,15 +421,26 @@
                 .slice(0, 4);
         }
 
+        const GEMINI_KEY = "AIzaSyC2Ml1ddSFUYU18Kk5os56lgr7LWn6n-X8";
+
         async function searchGemini(term) {
             if (term.length < 2) return null;
             try {
-                const url = `${SCRIPT_URL}?action=buscarVinho&query=${encodeURIComponent(term)}`;
-                const res = await fetch(url);
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+                const prompt = `Retorne APENAS um objeto JSON (sem markdown) para o vinho: "${term}". Campos obrigatórios: nome, uva, pais, regiao, produtor, tipo (Tinto/Branco/Rosé/Espumante), teor, safra, classificacao.`;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
                 if (!res.ok) return null;
                 const data = await res.json();
-                if (data.erro || !data.nome) return null;
-                return data;
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!text) return null;
+                const match = text.match(/\{[\s\S]*\}/);
+                if (!match) return null;
+                const wine = JSON.parse(match[0]);
+                return wine.nome ? wine : null;
             } catch (e) { return null; }
         }
 
