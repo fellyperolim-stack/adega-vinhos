@@ -1,0 +1,451 @@
+/* =====================================================
+   ADEGA FELLYPE & HWLLY — Estilos Compartilhados
+   shared.css — importado por todas as páginas
+   ===================================================== */
+
+:root {
+    --vinho-escuro: #4a0404;
+    --vinho-vivo: #800020;
+    --dourado: #d4af37;
+    --dourado-claro: #f1d592;
+    --bg: #0a0a0a;
+    --card: #161616;
+    --texto: #e0e0e0;
+    --subtexto: #aaa;
+    --transicao: all 0.3s ease;
+}
+
+/* --- BASE --- */
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: var(--bg);
+    color: var(--texto);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    background: rgba(10, 10, 10, 0.98);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    backdrop-filter: blur(10px);
+    height: 70px;
+    box-sizing: border-box;
+}
+
+.nav-logo a {
+    color: var(--dourado);
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    transition: var(--transicao);
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ccc;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: var(--transicao);
+    position: relative;
+    padding-bottom: 5px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--dourado-claro); }
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--dourado);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 100%; }
+
+/* --- DROPDOWN --- */
+.dropdown { position: relative; display: inline-block; }
+
+.dropbtn { cursor: pointer; }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1a1a1a;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 10;
+    border: 1px solid #333;
+    border-radius: 5px;
+    top: 30px;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: white !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    text-transform: none !important;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #222;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.dropdown-content a:last-child { border-bottom: none; }
+.dropdown-content a:hover { background-color: var(--vinho-vivo); }
+.dropdown-content a::after { display: none !important; }
+
+/* Abrir dropdown via hover (desktop) OU via classe .open (mobile/JS) */
+.dropdown:hover .dropdown-content,
+.dropdown-content.open { display: block; }
+
+/* --- MENU TOGGLE (mobile) --- */
+.menu-toggle {
+    display: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    padding: 50px 20px 40px;
+    color: #555;
+    font-size: 0.85rem;
+    border-top: 1px solid #222;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--dourado); }
+
+.footer-divider {
+    border: none;
+    border-top: 1px solid #1e1e1e;
+    margin: 0 auto 20px;
+    max-width: 300px;
+}
+
+/* --- BACK TO TOP --- */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--vinho-vivo);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s, background 0.2s;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-to-top.visible { opacity: 1; transform: translateY(0); }
+.back-to-top:hover { background: var(--vinho-escuro); }
+
+/* --- SKELETON LOADING --- */
+@keyframes shimmer {
+    0% { background-position: -700px 0; }
+    100% { background-position: 700px 0; }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 700px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 6px;
+}
+
+/* --- HEADER SECTION (padrão de páginas internas) --- */
+.header-section {
+    text-align: center;
+    padding: 60px 15px 30px;
+    background: linear-gradient(to bottom, #111, var(--bg));
+}
+
+.header-section h1 {
+    color: var(--dourado);
+    font-family: 'Segoe UI', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 15px 0 5px;
+    font-size: 2rem;
+}
+
+.shiba-heads {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.shiba-spotlight {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2px;
+    display: inline-flex;
+    border: 1.5px solid var(--dourado);
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.avatar-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: center 20%;
+    transform: scale(1.1);
+}
+
+/* --- MODAL DE DETALHE DO VINHO --- */
+.wine-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.wine-modal-backdrop.open { display: flex; }
+
+.wine-modal {
+    background: #111;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 20px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: none;
+    animation: modalIn 0.25s ease-out;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.wine-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #333;
+    color: #aaa;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.wine-modal-close:hover { background: var(--vinho-vivo); color: white; border-color: var(--vinho-vivo); }
+
+.wine-modal-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 19px 19px 0 0;
+    display: block;
+}
+
+.wine-modal-body { padding: 25px; }
+
+.wine-modal-name {
+    font-size: 1.4rem;
+    color: var(--dourado-claro);
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 400;
+    margin: 0 0 5px;
+}
+
+.wine-modal-produtor {
+    font-size: 0.9rem;
+    color: var(--subtexto);
+    font-style: italic;
+    margin: 0 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.wine-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.wine-modal-field {
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.wine-modal-field-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--subtexto);
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 3px;
+}
+
+.wine-modal-field-value {
+    font-size: 0.95rem;
+    color: var(--texto);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.wine-modal-notas {
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #222;
+    padding-top: 20px;
+}
+
+.wine-modal-nota-box {
+    flex: 1;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+}
+
+.wine-modal-nota-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--subtexto);
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 5px;
+}
+
+.wine-modal-nota-valor {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--dourado);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 992px) {
+    .navbar { padding: 10px 5%; }
+    .menu-toggle { display: flex; }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.98);
+        padding: 20px;
+        gap: 20px;
+        border-bottom: 1px solid var(--vinho-escuro);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .nav-links.active { display: flex; }
+
+    /* No mobile, o dropdown ignora hover e só responde ao click (via .open) */
+    .dropdown:hover .dropdown-content { display: none; }
+    .dropdown-content.open { display: block; }
+
+    .dropdown-content {
+        position: static;
+        background: rgba(255,255,255,0.04);
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        min-width: unset;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .dropdown-content a {
+        padding: 10px 16px;
+        border-bottom: 1px solid #1a1a1a;
+        text-align: center !important;
+    }
+
+    .wine-modal-grid { grid-template-columns: 1fr; }
+    .back-to-top { bottom: 20px; right: 20px; }
+}

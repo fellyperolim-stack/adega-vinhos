@@ -4,211 +4,327 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Completo de Vinhos - Fellype & Hwlly</title>
-<meta name="description" content="Explore nossa lista completa com mais de 95 vinhos degustados. Filtre por país, uva ou vinícola.">
-<meta property="og:title" content="Nossa Adega Digital - Catálogo Completo">
+    <meta name="description" content="Explore nossa lista completa com mais de 95 vinhos degustados. Filtre por país, uva ou vinícola.">
+    <meta property="og:title" content="Nossa Adega Digital - Catálogo Completo">
+    <meta property="og:description" content="Explore nossa lista completa com mais de 95 vinhos degustados.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fellypehwlly-vinhos.space/catalogo.html">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="shared.css">
+
     <style>
-        :root {
-            --vinho-escuro: #4a0404; --vinho-vivo: #800020; --dourado: #d4af37;
-            --dourado-claro: #f1d592; --bg: #0a0a0a; --card: #161616;
-            --texto: #e0e0e0; --subtexto: #aaa; --transicao: all 0.3s ease;
+        /* --- CABEÇALHO --- */
+        .search-section {
+            padding: 60px 20px 10px;
+            text-align: center;
+            background: linear-gradient(to bottom, #111, var(--bg));
         }
-
-        body {
-            margin: 0; font-family: 'Times New Roman', Times, serif;
-            background-color: var(--bg); color: var(--texto); line-height: 1.8;
-            font-size: 1.1rem; overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, .nav-logo a, .nav-links a, #search {
-            font-family: 'Segoe UI', sans-serif; font-weight: 300; letter-spacing: 1px;
-        }
-
-        /* --- NAVBAR PADRONIZADA --- */
-        .navbar {
-            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
-            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
-        }
-        .nav-logo a { color: var(--dourado); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; }
-        
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
-        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; }
-        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
-        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--dourado); }
-
-        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
-
-        /* DROPDOWN */
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { 
-            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
-            border-radius: 5px; top: 30px; right: 0;
-        }
-        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
-        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
-        .dropdown:hover .dropdown-content { display: block; }
-
-        /* --- SEÇÃO DE CABEÇALHO --- */
-        .search-section { padding: 60px 20px 20px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
         .search-section h1 { color: var(--dourado); font-size: 2.2rem; margin-bottom: 5px; }
-        .search-section p.sub-titulo { color: var(--subtexto); font-size: 1rem; font-style: italic; margin-bottom: 30px; opacity: 0.8; }
-        
-        .search-container { position: relative; max-width: 600px; margin: 0 auto 30px; }
-        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
-        #search { 
-            width: 100%; padding: 15px 20px 15px 55px; border-radius: 30px; 
-            border: 1px solid #333; background: #111; color: white; outline: none;
-            transition: var(--transicao); font-size: 1rem;
+        .search-section p.sub-titulo {
+            color: var(--subtexto); font-size: 1rem; font-style: italic;
+            margin-bottom: 25px; opacity: 0.8; font-family: 'Segoe UI', sans-serif;
         }
+
+        .search-container { position: relative; max-width: 600px; margin: 0 auto 20px; }
+        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
+        #search {
+            width: 100%; padding: 15px 20px 15px 55px; border-radius: 30px;
+            border: 1px solid #333; background: #111; color: white; outline: none;
+            transition: var(--transicao); font-size: 1rem; font-family: 'Segoe UI', sans-serif;
+        }
+        #search:focus { border-color: var(--dourado); }
+
+        /* --- FILTROS --- */
+        .filters-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 20px 25px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .filter-chip {
+            background: #111;
+            border: 1px solid #333;
+            color: #aaa;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transicao);
+            font-family: 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-chip:hover { border-color: var(--dourado); color: var(--dourado-claro); }
+        .filter-chip.active { background: var(--vinho-vivo); border-color: var(--vinho-vivo); color: white; }
+
+        .sort-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px 20px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            color: var(--subtexto);
+        }
+
+        .sort-btn {
+            background: none;
+            border: 1px solid #2a2a2a;
+            color: #888;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: var(--transicao);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .sort-btn:hover { border-color: var(--dourado); color: var(--dourado); }
+        .sort-btn.active { border-color: var(--dourado); color: var(--dourado); background: rgba(212,175,55,0.08); }
 
         /* --- GRID E CARDS --- */
-        .vinho-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 40px 5%; max-width: 1300px; margin: 0 auto; }
-        .vinho-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #222; transition: var(--transicao); }
+        .vinho-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px 5% 60px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .vinho-card {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: var(--transicao);
+            cursor: pointer;
+        }
         .vinho-card:hover { transform: translateY(-8px); border-color: var(--dourado); }
-        
+
         .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        
+        .vinho-card:hover .vinho-img { transform: scale(1.03); }
+
         .vinho-info { padding: 20px; }
-        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; }
-        .vinho-data { font-size: 0.75rem; color: var(--subtexto); display: block; margin-bottom: 12px; }
-        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; }
-        
+        .vinho-nome { font-size: 1.1rem; color: var(--dourado-claro); margin: 0 0 5px 0; font-family: 'Segoe UI', sans-serif; font-weight: 400; }
+        .vinho-data { font-size: 0.75rem; color: var(--subtexto); display: block; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif; }
+        .vinho-detalhes { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.5; font-family: 'Segoe UI', sans-serif; }
+
         .notas { display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 15px; }
         .nota-box { text-align: center; flex: 1; }
-        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; }
-        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; }
+        .nota-box span { display: block; font-size: 0.6rem; color: var(--subtexto); text-transform: uppercase; font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; }
+        .nota-valor { color: var(--dourado); font-size: 1.2rem; font-weight: bold; font-family: 'Segoe UI', sans-serif; }
 
-        #loading { text-align: center; padding: 100px; color: var(--dourado); }
-        footer { text-align: center; padding: 60px 20px; color: #555; font-size: 0.85rem; border-top: 1px solid #222; }
+        /* --- EMPTY STATE --- */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--subtexto);
+            font-family: 'Segoe UI', sans-serif;
+            grid-column: 1 / -1;
+        }
+        .empty-state i { font-size: 3rem; color: #2a2a2a; margin-bottom: 15px; display: block; }
+        .empty-state h3 { color: #555; font-size: 1.1rem; margin: 0 0 8px; font-weight: 400; }
+        .empty-state p { margin: 0; font-size: 0.9rem; }
+        .btn-limpar {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            border: 1px solid var(--dourado);
+            color: var(--dourado);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: none;
+            font-family: 'Segoe UI', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-limpar:hover { background: var(--dourado); color: #000; }
 
-        /* --- MELHORIAS MOBILE --- */
+        /* --- SKELETON --- */
+        .skeleton-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid #1a1a1a; }
+        .sk-img { height: 280px; }
+        .sk-body { padding: 20px; }
+        .sk-line { height: 14px; border-radius: 4px; margin-bottom: 10px; }
+        .sk-line.short { width: 40%; }
+        .sk-line.med { width: 70%; }
+
+        /* --- RESULTADO COUNT --- */
+        .result-count {
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            color: var(--subtexto);
+            padding-bottom: 10px;
+        }
+
         @media (max-width: 992px) {
-            .navbar { padding: 10px 5%; }
-            .menu-toggle { display: block; }
-            
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: rgba(10, 10, 10, 0.98);
-                padding: 20px;
-                gap: 20px;
-                border-bottom: 1px solid var(--vinho-escuro);
-                text-align: center;
-                box-sizing: border-box;
-            }
-
-            .nav-links.active { display: flex; }
-
-            .dropdown-content {
-                position: static;
-                background: none;
-                box-shadow: none;
-                border: none;
-                width: 100%;
-            }
-
             .search-section { padding: 40px 15px 10px; }
             .search-section h1 { font-size: 1.8rem; }
-            .search-section p.sub-titulo { font-size: 0.9rem; margin-bottom: 20px; }
-
-            .vinho-grid { 
-                grid-template-columns: 1fr; /* Um card por linha no celular */
-                padding: 20px 5%;
-                gap: 20px;
-            }
-
+            .vinho-grid { grid-template-columns: 1fr; padding: 20px 5%; gap: 20px; }
             .vinho-img-container { height: 250px; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
-        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
-        <ul class="nav-links" id="nav-links-container">
-            <li><a href="index.html">Página Inicial</a></li>
-            <li><a href="catalogo.html?filtro=ultimos" class="active">Últimos Vinhos</a></li>
-            <li><a href="melhores.html">Escolhidos Mês</a></li>
-            <li><a href="games.html">Games</a></li>
-            <li><a href="cadastro.html">Cadastrar Novo</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
-                <div class="dropdown-content">
-                    <a href="paises.html">Por Países</a>
-                    <a href="uvas.html">Por Uvas</a>
-                    <a href="vinicolas.html">Vinícolas</a>
-                </div>
-            </li>
-        </ul>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
     <div class="search-section">
         <h1>Nossa Adega</h1>
         <p class="sub-titulo">Um catálogo vivo de nossas melhores experiências e descobertas 🍷✨</p>
         <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Pesquisar vinho, uva ou país...">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="text" id="search" placeholder="Pesquisar vinho, uva ou país..." aria-label="Pesquisar vinho">
         </div>
     </div>
 
-    <div id="loading">Abrindo as garrafas... 🍷</div>
-    <div class="vinho-grid" id="vinho-grid"></div>
+    <div class="filters-bar" id="filters-bar">
+        <button class="filter-chip active" data-filter="todos">Todos</button>
+        <button class="filter-chip" data-filter="Tinto">🍷 Tintos</button>
+        <button class="filter-chip" data-filter="Branco">🥂 Brancos</button>
+        <button class="filter-chip" data-filter="Rosé">🌸 Rosés</button>
+        <button class="filter-chip" data-filter="Espumante">✨ Espumantes</button>
+    </div>
 
-    <footer>
-        Criado com ❤️ para as memórias de Fellype e Hwlly.<br>
-        Ano 2026 • Guardado por Leblonzito & Ipanemita 🐾
-    </footer>
+    <div class="sort-bar">
+        <span>Ordenar:</span>
+        <button class="sort-btn active" data-sort="recentes">Mais Recentes</button>
+        <button class="sort-btn" data-sort="nota-desc">Maior Nota</button>
+        <button class="sort-btn" data-sort="nota-asc">Menor Nota</button>
+        <button class="sort-btn" data-sort="az">A–Z</button>
+    </div>
 
+    <div class="result-count" id="result-count"></div>
+
+    <!-- Skeleton loading -->
+    <div class="vinho-grid" id="skeleton-grid">
+        ${Array(6).fill(0).map(() => `
+        <div class="skeleton-card">
+            <div class="sk-img skeleton"></div>
+            <div class="sk-body">
+                <div class="sk-line skeleton med"></div>
+                <div class="sk-line skeleton short"></div>
+                <div class="sk-line skeleton med"></div>
+            </div>
+        </div>`).join('')}
+    </div>
+
+    <div class="vinho-grid" id="vinho-grid" style="display:none;"></div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
         let vinhos = [];
+        let filtroAtual = 'todos';
+        let ordenacaoAtual = 'recentes';
+        let buscaAtual = '';
 
-        // Lógica do Menu Mobile
-        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-        const navLinksContainer = document.getElementById('nav-links-container');
-        
-        mobileMenuIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinksContainer.classList.toggle('active');
-            const icon = mobileMenuIcon.querySelector('i');
-            icon.classList.toggle('fa-bars'); 
-            icon.classList.toggle('fa-times');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
-                navLinksContainer.classList.remove('active');
-                const icon = mobileMenuIcon.querySelector('i');
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
-            }
-        });
+        function parseFloat2(val) {
+            if (!val) return 0;
+            return parseFloat(String(val).replace(',', '.')) || 0;
+        }
 
         async function fetchVinhos() {
             try {
                 const response = await fetch(SCRIPT_URL);
                 vinhos = await response.json();
-                renderVinhos(vinhos);
-                document.getElementById('loading').style.display = 'none';
-            } catch (e) { document.getElementById('loading').innerText = "Erro ao carregar adega."; }
+
+                // Verificar parâmetro de URL
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('filtro') === 'ultimos') {
+                    ordenacaoAtual = 'recentes';
+                    document.querySelector('[data-sort="recentes"]').classList.add('active');
+                }
+
+                document.getElementById('skeleton-grid').style.display = 'none';
+                document.getElementById('vinho-grid').style.display = 'grid';
+                aplicarFiltros();
+            } catch (e) {
+                document.getElementById('skeleton-grid').innerHTML = `
+                    <div class="empty-state" style="grid-column:1/-1">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Erro ao carregar a adega</h3>
+                        <p>Tente recarregar a página.</p>
+                    </div>`;
+            }
+        }
+
+        function aplicarFiltros() {
+            let lista = [...vinhos];
+
+            // Filtro por tipo
+            if (filtroAtual !== 'todos') {
+                lista = lista.filter(v => {
+                    const tipo = (v['Tipo'] || v['tipo'] || '').toLowerCase();
+                    return tipo.includes(filtroAtual.toLowerCase());
+                });
+            }
+
+            // Busca textual
+            if (buscaAtual) {
+                lista = lista.filter(v =>
+                    Object.values(v).some(val => val && val.toString().toLowerCase().includes(buscaAtual))
+                );
+            }
+
+            // Ordenação
+            if (ordenacaoAtual === 'nota-desc') {
+                lista.sort((a, b) => {
+                    const ma = (parseFloat2(a['Pontuação Fellype']) + parseFloat2(a['Pontuação Hwlly'])) / 2;
+                    const mb = (parseFloat2(b['Pontuação Fellype']) + parseFloat2(b['Pontuação Hwlly'])) / 2;
+                    return mb - ma;
+                });
+            } else if (ordenacaoAtual === 'nota-asc') {
+                lista.sort((a, b) => {
+                    const ma = (parseFloat2(a['Pontuação Fellype']) + parseFloat2(a['Pontuação Hwlly'])) / 2;
+                    const mb = (parseFloat2(b['Pontuação Fellype']) + parseFloat2(b['Pontuação Hwlly'])) / 2;
+                    return ma - mb;
+                });
+            } else if (ordenacaoAtual === 'az') {
+                lista.sort((a, b) => (a['Nome do Vinho'] || '').localeCompare(b['Nome do Vinho'] || ''));
+            }
+            // 'recentes' = ordem padrão da API
+
+            renderVinhos(lista);
         }
 
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
+            const count = document.getElementById('result-count');
+
+            if (lista.length === 0) {
+                count.textContent = '';
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-wine-glass"></i>
+                        <h3>Nenhum vinho encontrado</h3>
+                        <p>Tente outros termos ou limpe os filtros.</p>
+                        <button class="btn-limpar" onclick="limparFiltros()">Limpar filtros</button>
+                    </div>`;
+                return;
+            }
+
+            count.textContent = lista.length + ' vinho' + (lista.length !== 1 ? 's' : '');
+
             grid.innerHTML = lista.map(v => {
                 let urlFinal = IMG_PADRAO;
-                const fotoRaw = v["Foto"] || v["foto"];
-                
+                const fotoRaw = v['Foto'] || v['foto'];
                 if (fotoRaw && fotoRaw.length > 10) {
                     if (fotoRaw.startsWith('data:image')) {
                         urlFinal = fotoRaw;
@@ -220,31 +336,91 @@
                     }
                 }
 
+                const notaF = parseFloat2(v['Pontuação Fellype']);
+                const notaH = parseFloat2(v['Pontuação Hwlly']);
+
+                const vinhoObj = {
+                    nome: v['Nome do Vinho'],
+                    produtor: v['Produtor'] || v['Vinícola'] || '',
+                    pais: v['País'] || v['Pais'],
+                    regiao: v['Região'] || v['Regiao'],
+                    uva: v['Uva(s)'] || v['Uva'],
+                    tipo: v['Tipo'],
+                    safra: v['Safra'],
+                    teor: v['Teor Alcoólico'] || v['Teor'],
+                    classificacao: v['Classificação'] || v['Classificacao'],
+                    data: v['Ano de Consumo'] || v['Data'],
+                    notaF: notaF || null,
+                    notaH: notaH || null,
+                    foto: urlFinal,
+                };
+
                 return `
-                <div class="vinho-card">
-                    <div class="vinho-img-container"><img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'"></div>
+                <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="Ver detalhes de ${v['Nome do Vinho'] || 'Rótulo Especial'}">
+                    <div class="vinho-img-container">
+                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || 'Foto do vinho'}">
+                    </div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Rótulo Especial"}</h3>
-                        <span class="vinho-data"><i class="far fa-calendar-alt"></i> ${v["Ano de Consumo"] || "N/A"}</span>
+                        <h3 class="vinho-nome">${v['Nome do Vinho'] || 'Rótulo Especial'}</h3>
+                        <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
                         <div class="vinho-detalhes">
-                            <span>🍇 ${v["Uva(s)"] || "N/A"}</span><br>
-                            <span>🌍 ${v["País"] || "N/A"} | ${v["Safra"] || "-"}</span>
+                            <span>🍇 ${v['Uva(s)'] || 'N/A'}</span><br>
+                            <span>🌍 ${v['País'] || 'N/A'} ${v['Safra'] ? '| ' + v['Safra'] : ''}</span>
                         </div>
                         <div class="notas">
-                            <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "-"}</div></div>
-                            <div class="nota-box"><span>Hwlly</span><div class="nota-valor">${v["Pontuação Hwlly"] || "-"}</div></div>
+                            <div class="nota-box">
+                                <span>Fellype</span>
+                                <div class="nota-valor">${notaF || '—'}</div>
+                            </div>
+                            <div class="nota-box">
+                                <span>Hwlly</span>
+                                <div class="nota-valor">${notaH || '—'}</div>
+                            </div>
                         </div>
                     </div>
                 </div>`;
             }).join('');
+
+            // Tecla Enter nos cards (acessibilidade)
+            grid.querySelectorAll('[role="button"]').forEach(card => {
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') card.click();
+                });
+            });
         }
 
+        function limparFiltros() {
+            buscaAtual = '';
+            filtroAtual = 'todos';
+            document.getElementById('search').value = '';
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'todos'));
+            aplicarFiltros();
+        }
+
+        // Busca
         document.getElementById('search').addEventListener('input', (e) => {
-            const termo = e.target.value.toLowerCase();
-            const filtrados = vinhos.filter(v => 
-                Object.values(v).some(val => val && val.toString().toLowerCase().includes(termo))
-            );
-            renderVinhos(filtrados);
+            buscaAtual = e.target.value.toLowerCase();
+            aplicarFiltros();
+        });
+
+        // Filtros por tipo
+        document.getElementById('filters-bar').addEventListener('click', (e) => {
+            const chip = e.target.closest('.filter-chip');
+            if (!chip) return;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            filtroAtual = chip.dataset.filter;
+            aplicarFiltros();
+        });
+
+        // Ordenação
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                ordenacaoAtual = btn.dataset.sort;
+                aplicarFiltros();
+            });
         });
 
         fetchVinhos();

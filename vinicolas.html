@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinícolas - Fellype & Hwlly</title>
+    <meta name="description" content="Explore todos os produtores e vinícolas da nossa adega. Descubra quais rótulos provamos de cada vinícola.">
+    <meta property="og:title" content="Vinícolas da Adega | Fellype & Hwlly">
+    <meta property="og:description" content="Explore todos os produtores e vinícolas da nossa adega digital.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fellypehwlly-vinhos.space/vinicolas.html">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        /* --- HEADER AJUSTADO --- */
+        .header-section { text-align: center; padding: 60px 15px 30px; background: linear-gradient(to bottom, #111, var(--bg)); }
+        .header-section h1 { font-size: 2rem; }
+
+        /* --- CONTEÚDO --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 5% 60px; }
+
+        /* --- BUSCA --- */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        .search-container i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--dourado); }
+        #search-vinicola {
+            width: 100%; padding: 13px 20px 13px 48px; border-radius: 30px;
+            border: 1px solid #333; background: #111; color: white; outline: none;
+            transition: var(--transicao); font-size: 0.95rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        #search-vinicola:focus { border-color: var(--dourado); }
+
+        /* --- ACORDEÃO --- */
+        .vinicola-group { margin-bottom: 15px; border: 1px solid #222; border-radius: 12px; overflow: hidden; transition: var(--transicao); }
+        .vinicola-group:hover { border-color: rgba(212, 175, 55, 0.4); }
+
+        .vinicola-header {
+            background: linear-gradient(90deg, #161616, #0a0a0a);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .vinicola-header h2 {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.15rem;
+            color: var(--dourado-claro);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .vinicola-header h2 i { color: var(--vinho-vivo); font-size: 1rem; }
+
+        .vinicola-meta { display: flex; align-items: center; gap: 12px; }
+        .vinicola-media { font-size: 0.85rem; color: var(--dourado); }
+        .vinicola-count { font-size: 0.9rem; color: var(--dourado); font-weight: bold; min-width: 20px; text-align: right; }
+        .chevron { transition: var(--transicao); color: var(--dourado); font-size: 1rem; }
+        .vinicola-group.active .chevron { transform: rotate(180deg); }
+
+        .vinicola-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #0d0d0d;
+        }
+
+        .vinicola-group.active .vinicola-content {
+            max-height: 3000px;
+            padding: 20px;
+            border-top: 1px solid #222;
+        }
+
+        /* --- GRID DE VINHOS --- */
+        .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+
+        .wine-card {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #222;
+            transition: var(--transicao);
+            cursor: pointer;
+        }
+
+        .wine-card:hover { transform: translateX(5px); border-color: var(--vinho-vivo); }
+
+        .wine-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+
+        .wine-info h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #fff;
+            line-height: 1.3;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 400;
+        }
+
+        .wine-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--subtexto); font-family: 'Segoe UI', sans-serif; }
+
+        .rating-badge {
+            margin-left: auto;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--dourado);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            min-width: 45px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            flex-shrink: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* --- EMPTY STATE --- */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--subtexto);
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .empty-state i { font-size: 3rem; color: #333; margin-bottom: 15px; display: block; }
+        .empty-state p { margin: 0; font-size: 1rem; }
+
+        /* --- SKELETONS --- */
+        .skeleton-group { margin-bottom: 15px; border: 1px solid #1a1a1a; border-radius: 12px; overflow: hidden; }
+        .skeleton-header { padding: 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        .skeleton-title { height: 18px; width: 200px; border-radius: 4px; }
+        .skeleton-badge { height: 18px; width: 30px; border-radius: 4px; }
+
+        #loader { padding: 20px 5% 60px; max-width: 1100px; margin: 0 auto; }
+
+        @media (max-width: 992px) {
+            .wine-grid { grid-template-columns: 1fr; }
+            .vinicola-header { padding: 15px; }
+            .vinicola-header h2 { font-size: 1rem; }
+            .header-section { padding: 40px 15px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="header-section">
+        <div class="shiba-heads">
+            <div class="shiba-spotlight">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="avatar-lg" alt="Leblonzito">
+            </div>
+            <div class="shiba-spotlight">
+                <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita">
+            </div>
+        </div>
+        <h1>Vinícolas & Produtores</h1>
+        <p style="color: var(--subtexto); font-size: 0.9rem; font-style: italic;">
+            Cada garrafa tem uma assinatura por trás 🍷
+        </p>
+    </header>
+
+    <div class="container" style="padding-top: 10px;">
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-vinicola" placeholder="Buscar vinícola ou produtor...">
+        </div>
+    </div>
+
+    <div id="loader">
+        <div class="skeleton-group">
+            <div class="skeleton-header">
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+        </div>
+        <div class="skeleton-group">
+            <div class="skeleton-header">
+                <div class="skeleton skeleton-title" style="width:160px"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+        </div>
+        <div class="skeleton-group">
+            <div class="skeleton-header">
+                <div class="skeleton skeleton-title" style="width:240px"></div>
+                <div class="skeleton skeleton-badge"></div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container" id="main-content" style="display:none; padding-top:0;"></main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" defer></script>
+    <script src="nav.js"></script>
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
+        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop";
+
+        let allGroups = {};
+        let sortedVinicolas = [];
+
+        function findVal(v, matches) {
+            const keys = Object.keys(v);
+            const k = keys.find(key => matches.some(m => key.toLowerCase().includes(m)));
+            return k ? v[k] : null;
+        }
+
+        async function loadVinicolas() {
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+
+                const processados = data.map(v => ({
+                    nome:         findVal(v, ['vinho', 'rótulo', 'nome']) || 'Vinho s/ Nome',
+                    produtor:     findVal(v, ['produtor', 'produtor']) || findVal(v, ['vinicola', 'vinícola', 'winery']) || 'Produtor Desconhecido',
+                    pais:         findVal(v, ['pais', 'país', 'origem']) || 'Outros',
+                    uva:          findVal(v, ['uva', 'casta']) || 'N/A',
+                    safra:        findVal(v, ['safra', 'ano', 'vintage']) || '-',
+                    tipo:         findVal(v, ['tipo', 'type']) || '-',
+                    regiao:       findVal(v, ['regiao', 'região', 'region']) || '-',
+                    teor:         findVal(v, ['teor', 'alcool', 'álcool']) || '-',
+                    classificacao:findVal(v, ['classificacao', 'class']) || '-',
+                    foto:         findVal(v, ['foto', 'imagem', 'link']) || '',
+                    data:         findVal(v, ['data', 'consumo', 'dia']) || '-',
+                    notaF:        parseFloat(findVal(v, ['fellype', 'notaf']) || 0),
+                    notaH:        parseFloat(findVal(v, ['hwlly', 'notah']) || 0),
+                }));
+
+                allGroups = processados.reduce((acc, v) => {
+                    const key = v.produtor.trim() || 'Produtor Desconhecido';
+                    acc[key] = acc[key] || [];
+                    acc[key].push(v);
+                    return acc;
+                }, {});
+
+                sortedVinicolas = Object.keys(allGroups).sort((a, b) => allGroups[b].length - allGroups[a].length);
+
+                render(sortedVinicolas);
+            } catch (e) {
+                document.getElementById('loader').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Não foi possível carregar as vinícolas.<br>Tente novamente mais tarde.</p>
+                    </div>`;
+            }
+        }
+
+        function render(keys) {
+            const main = document.getElementById('main-content');
+            document.getElementById('loader').style.display = 'none';
+            main.style.display = 'block';
+            main.innerHTML = '';
+
+            if (keys.length === 0) {
+                main.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-wine-bottle"></i>
+                        <p>Nenhuma vinícola encontrada para essa busca.</p>
+                    </div>`;
+                return;
+            }
+
+            keys.forEach(vinicola => {
+                const vinhos = allGroups[vinicola];
+                const notas = vinhos.filter(v => v.notaF > 0 || v.notaH > 0);
+                let mediaLabel = '';
+                if (notas.length > 0) {
+                    const soma = notas.reduce((acc, v) => {
+                        const m = (v.notaF > 0 && v.notaH > 0)
+                            ? (v.notaF + v.notaH) / 2
+                            : (v.notaF || v.notaH);
+                        return acc + m;
+                    }, 0);
+                    mediaLabel = `★ ${(soma / notas.length).toFixed(1)}`;
+                }
+
+                const section = document.createElement('div');
+                section.className = 'vinicola-group';
+                section.dataset.vinicola = vinicola.toLowerCase();
+
+                section.innerHTML = `
+                    <div class="vinicola-header" onclick="this.parentElement.classList.toggle('active')">
+                        <h2><i class="fas fa-industry"></i> ${vinicola}</h2>
+                        <div class="vinicola-meta">
+                            ${mediaLabel ? `<span class="vinicola-media">${mediaLabel}</span>` : ''}
+                            <span class="vinicola-count">${vinhos.length}</span>
+                            <i class="fas fa-chevron-down chevron"></i>
+                        </div>
+                    </div>
+                    <div class="vinicola-content">
+                        <div class="wine-grid">
+                            ${vinhos.map(v => {
+                                let img = v.foto || PLACEHOLDER_IMG;
+                                if (img.includes('drive.google.com')) {
+                                    const id = img.match(/[-\w]{25,}/);
+                                    if (id) img = `https://lh3.googleusercontent.com/d/${id[0]}`;
+                                }
+                                const media = (v.notaF > 0 && v.notaH > 0)
+                                    ? ((v.notaF + v.notaH) / 2).toFixed(1)
+                                    : (v.notaF || v.notaH || '-');
+                                const vinhoData = JSON.stringify(v).replace(/"/g, '&quot;');
+                                return `
+                                <div class="wine-card" onclick='WineModal.open(${JSON.stringify(v).replace(/'/g, "\\'")} )' title="Ver detalhes de ${v.nome}">
+                                    <img src="${img}" class="wine-img" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
+                                    <div class="wine-info">
+                                        <h3>${v.nome}</h3>
+                                        <p>🍇 ${v.uva} · 🌍 ${v.pais}</p>
+                                    </div>
+                                    <div class="rating-badge">${media === '-' ? '—' : '★ ' + media}</div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </div>`;
+                main.appendChild(section);
+            });
+        }
+
+        // Busca por vinícola
+        document.getElementById('search-vinicola').addEventListener('input', (e) => {
+            const termo = e.target.value.toLowerCase().trim();
+            const filtrados = termo
+                ? sortedVinicolas.filter(v => v.toLowerCase().includes(termo))
+                : sortedVinicolas;
+            render(filtrados);
+        });
+
+        loadVinicolas();
+    </script>
+</body>
+</html>

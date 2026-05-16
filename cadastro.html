@@ -3,102 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VinhoChat | Fellype & Hwlly 🍷</title>
+    <title>Cadastrar Vinho | Fellype & Hwlly 🍷</title>
+    <meta name="description" content="Registre um novo vinho na adega de Fellype & Hwlly.">
+    <meta property="og:title" content="Cadastrar Vinho | Adega Fellype & Hwlly">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#800020">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="shared.css">
+
     <style>
-        :root {
-            --gold: #d4af37; --wine: #4a0e0e; --vinho-vivo: #800020;
-            --black: #050505; --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
-            --transicao: all 0.3s ease; --dourado-claro: #f1d592;
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            margin: 0; min-height: 100%; font-family: 'Outfit', sans-serif; 
-            background: var(--black); color: #fff; overflow-x: hidden; 
-        }
-        
-        /* --- NAVBAR PADRONIZADA --- */
-        .navbar {
-            background: rgba(10, 10, 10, 0.98); display: flex; justify-content: space-between;
-            align-items: center; padding: 15px 5%; position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); height: 70px; box-sizing: border-box;
-        }
-        .nav-logo a { color: var(--gold); font-weight: bold; font-size: 1.3rem; text-decoration: none; letter-spacing: 2px; text-transform: uppercase; font-family: 'Segoe UI', sans-serif; }
-        
-        .nav-links { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center; transition: var(--transicao); }
-        .nav-links a { text-decoration: none; color: #ccc; font-size: 0.85rem; text-transform: uppercase; transition: var(--transicao); position: relative; padding-bottom: 5px; font-family: 'Segoe UI', sans-serif; }
-        .nav-links a:hover, .nav-links a.active { color: var(--dourado-claro); }
-        .nav-links a.active::after { content: ''; position: absolute; width: 100%; height: 1px; bottom: 0; left: 0; background-color: var(--gold); }
+        body { font-family: 'Segoe UI', sans-serif; }
 
-        .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
-
-        /* DROPDOWN */
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content { 
-            display: none; position: absolute; background-color: #1a1a1a; min-width: 180px; 
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 1; border: 1px solid #333; 
-            border-radius: 5px; top: 30px; right: 0;
+        /* --- CHAT LAYOUT --- */
+        .bg-gradient {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%);
+            z-index: -1;
         }
-        .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; text-align: left; text-transform: none; font-size: 0.9rem; border-bottom: 1px solid #222; }
-        .dropdown-content a:hover { background-color: var(--vinho-vivo); }
-        .dropdown:hover .dropdown-content { display: block; }
 
-        /* --- LAYOUT DO CHAT --- */
-        .bg-gradient { position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); z-index: -1; }
-        .main-wrapper { display: flex; justify-content: center; align-items: center; height: calc(100vh - 70px); padding: 20px; }
-        
-        .chat-card { width: 100%; max-width: 480px; height: 85vh; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 40px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); position: relative; }
+        .main-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 70px);
+            padding: 20px;
+        }
 
-        .shiba-spotlight { background: #fff; border-radius: 20px; padding: 2px; display: inline-flex; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); border: 1.5px solid var(--gold); overflow: hidden; justify-content: center; align-items: center; }
+        .chat-card {
+            width: 100%;
+            max-width: 480px;
+            height: 85vh;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        /* --- MENSAGENS --- */
+        .shiba-spotlight {
+            background: #fff; border-radius: 20px; padding: 2px;
+            display: inline-flex; box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            border: 1.5px solid var(--dourado); overflow: hidden;
+            justify-content: center; align-items: center;
+        }
         .avatar-sm { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
         .zoom-face { transform: scale(1.8); transform-origin: center 20%; }
 
-        .chat-header { padding: 15px 25px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); }
-        .chat-window { flex-grow: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scrollbar-width: none; }
+        .chat-header {
+            padding: 15px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; gap: 15px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .chat-window {
+            flex-grow: 1; padding: 25px;
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 18px;
+            scrollbar-width: none;
+        }
+
         .msg { max-width: 85%; animation: msgPop 0.3s ease-out; display: flex; align-items: flex-end; gap: 10px; }
         .msg-bot { align-self: flex-start; }
         .msg-user { align-self: flex-end; flex-direction: row-reverse; }
-        .bubble { padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
-        .msg-bot .bubble { background: #fff; color: var(--black); border-bottom-left-radius: 4px; }
-        .msg-user .bubble { background: var(--wine); color: #fff; border-bottom-right-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .input-container { padding: 20px; background: rgba(0,0,0,0.5); display: flex; gap: 10px; }
-        .msg-input { flex-grow: 1; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 12px 20px; color: white; outline: none; }
-        .send-btn { background: var(--gold); width: 45px; height: 45px; border-radius: 50%; border: none; cursor: pointer; color: #000; font-size: 20px; }
-        
+
+        .bubble {
+            padding: 12px 16px; border-radius: 18px;
+            font-size: 15px; line-height: 1.5;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .msg-bot .bubble { background: #fff; color: #050505; border-bottom-left-radius: 4px; }
+        .msg-user .bubble { background: var(--vinho-escuro); color: #fff; border-bottom-right-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+
+        .msg-success .bubble {
+            background: linear-gradient(135deg, #1a4a1a, #1e5e1e);
+            color: #90ee90;
+            border: 1px solid rgba(144,238,144,0.3);
+        }
+
+        /* --- INPUT --- */
+        .input-container {
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            display: flex; gap: 10px;
+        }
+
+        .msg-input {
+            flex-grow: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 12px 20px;
+            color: white;
+            outline: none;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 15px;
+        }
+
+        .msg-input:focus { border-color: var(--dourado); }
+
+        .send-btn {
+            background: var(--dourado);
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            color: #000;
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .send-btn:hover { background: var(--dourado-claro); transform: scale(1.05); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* --- BOTÃO DESFAZER --- */
+        .undo-btn {
+            display: none;
+            background: none;
+            border: 1px solid #333;
+            color: #666;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            align-self: flex-end;
+            transition: 0.2s;
+            margin-bottom: -10px;
+        }
+        .undo-btn:hover { border-color: var(--dourado); color: var(--dourado); }
+        .undo-btn.visible { display: block; }
+
         @keyframes msgPop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        dialog { border: none; background: var(--black); border: 1px solid var(--gold); border-radius: 30px; padding: 25px; width: 95%; max-width: 380px; color: #fff; }
-        dialog::backdrop { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
-        .btn-gold { width: 100%; padding: 14px; background: var(--gold); border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
-        
-        input[type="file"] { display: none; }
-        .custom-file-upload { display: block; width: 100%; padding: 12px; background: var(--glass); border: 1px dashed var(--gold); border-radius: 10px; text-align: center; cursor: pointer; color: var(--gold); font-size: 13px; }
-        #preview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; margin-left: auto; margin-right: auto; }
-        
-        .modal-label { font-size: 10px; color: var(--gold); margin-bottom: 4px; display: block; }
-        .modal-input { width: 100%; padding: 10px; border-radius: 10px; border: none; background: var(--glass); color: white; margin-bottom: 5px; }
+        /* --- MODAL DE AVALIAÇÃO --- */
+        dialog {
+            border: none;
+            background: #0d0d0d;
+            border: 1px solid var(--dourado);
+            border-radius: 30px;
+            padding: 25px;
+            width: 95%;
+            max-width: 380px;
+            color: #fff;
+        }
+        dialog::backdrop { background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
 
-        /* --- MELHORIA: CHIPS DE NOTAS --- */
-        .nota-chips { display: flex; gap: 4px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .chip { background: var(--glass-border); border: 1px solid #444; color: #fff; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: 0.2s; }
-        .chip:hover { border-color: var(--gold); background: var(--wine); }
+        .btn-gold {
+            width: 100%;
+            padding: 14px;
+            background: var(--dourado);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .btn-gold:hover { background: var(--dourado-claro); }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        input[type="file"] { display: none; }
+        .custom-file-upload {
+            display: block; width: 100%; padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed var(--dourado);
+            border-radius: 10px; text-align: center;
+            cursor: pointer; color: var(--dourado);
+            font-size: 13px; font-family: 'Segoe UI', sans-serif;
+            transition: 0.2s;
+        }
+        .custom-file-upload:hover { background: rgba(212,175,55,0.1); }
+
+        #preview {
+            width: 100%; height: 100px; object-fit: cover;
+            border-radius: 10px; margin-top: 10px;
+            display: none;
+        }
+
+        .modal-label {
+            font-size: 10px; color: var(--dourado);
+            margin-bottom: 4px; display: block;
+            font-family: 'Segoe UI', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .modal-input {
+            width: 100%; padding: 10px; border-radius: 10px;
+            border: 1px solid #333; background: #1a1a1a;
+            color: white; margin-bottom: 5px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-input:focus { outline: none; border-color: var(--dourado); }
+
+        /* --- CHIPS DE NOTA EXPANDIDOS --- */
+        .nota-chips {
+            display: flex; gap: 4px; margin-bottom: 10px;
+            overflow-x: auto; padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+        .chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #444;
+            color: #fff; padding: 4px 9px;
+            border-radius: 6px; font-size: 11px;
+            cursor: pointer; transition: 0.2s;
+            white-space: nowrap;
+            font-family: 'Segoe UI', sans-serif;
+            flex-shrink: 0;
+        }
+        .chip:hover { border-color: var(--dourado); background: var(--vinho-escuro); }
+        .chip.selected { background: var(--dourado); color: #000; border-color: var(--dourado); }
 
         @media (max-width: 992px) {
-            .navbar { padding: 10px 5%; }
-            .menu-toggle { display: block; }
-            .nav-links {
-                display: none; flex-direction: column; position: absolute;
-                top: 70px; left: 0; width: 100%; background: rgba(10, 10, 10, 0.98);
-                padding: 20px; gap: 20px; border-bottom: 1px solid var(--wine);
-                text-align: center; box-sizing: border-box;
-            }
-            .nav-links.active { display: flex; }
-            .dropdown-content { position: static; background: none; box-shadow: none; border: none; width: 100%; }
-            .main-wrapper { height: auto; padding: 10px; margin-top: 20px; }
+            .main-wrapper { padding: 10px; margin-top: 15px; min-height: calc(100vh - 70px); }
             .chat-card { height: 80vh; border-radius: 30px; }
         }
     </style>
@@ -106,37 +239,19 @@
 <body>
 
     <datalist id="lista-paises">
-        <option value="Argentina"> <option value="Chile"> <option value="Itália"> <option value="França"> <option value="Portugal"> <option value="Espanha"> <option value="Brasil"> <option value="Uruguai">
+        <option value="Argentina"><option value="Chile"><option value="Itália"><option value="França"><option value="Portugal"><option value="Espanha"><option value="Brasil"><option value="Uruguai"><option value="África do Sul"><option value="Austrália"><option value="Alemanha">
     </datalist>
     <datalist id="lista-uvas">
-        <option value="Malbec"> <option value="Cabernet Sauvignon"> <option value="Merlot"> <option value="Chardonnay"> <option value="Primitivo"> <option value="Sangiovese"> <option value="Tempranillo"> <option value="Syrah">
+        <option value="Malbec"><option value="Cabernet Sauvignon"><option value="Merlot"><option value="Chardonnay"><option value="Primitivo"><option value="Sangiovese"><option value="Tempranillo"><option value="Syrah"><option value="Tannat"><option value="Carménère"><option value="Pinot Noir">
     </datalist>
     <datalist id="lista-tipos">
-        <option value="Tinto"> <option value="Branco"> <option value="Rosé"> <option value="Espumante"> <option value="Sobremesa">
+        <option value="Tinto"><option value="Branco"><option value="Rosé"><option value="Espumante"><option value="Sobremesa">
     </datalist>
     <datalist id="lista-classificacao">
-        <option value="Seco"> <option value="Meio Seco"> <option value="Frisante"> <option value="Blend"> <option value="Doce"> <option value="Espumante">
+        <option value="Seco"><option value="Meio Seco"><option value="Frisante"><option value="Blend"><option value="Doce"><option value="Espumante"><option value="Reserva"><option value="Gran Reserva">
     </datalist>
 
-    <nav class="navbar">
-        <div class="nav-logo"><a href="index.html">Fellype & Hwlly</a></div>
-        <div class="menu-toggle" id="mobile-menu-icon"><i class="fas fa-bars"></i></div>
-        <ul class="nav-links" id="nav-links-container">
-            <li><a href="index.html">Página Inicial</a></li>
-            <li><a href="catalogo.html?filtro=ultimos">Últimos Vinhos</a></li>
-            <li><a href="melhores.html">Escolhidos Mês</a></li>
-            <li><a href="games.html">Games</a></li>
-            <li><a href="cadastro.html" class="active">Cadastrar Novo</a></li>
-            <li class="dropdown">
-                <a href="javascript:void(0)">Explorar <i class="fa fa-caret-down" style="font-size: 0.7rem;"></i></a>
-                <div class="dropdown-content">
-                    <a href="paises.html">Por Países</a>
-                    <a href="uvas.html">Por Uvas</a>
-                    <a href="vinicolas.html">Vinícolas</a>
-                </div>
-            </li>
-        </ul>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
     <div class="bg-gradient"></div>
 
@@ -146,175 +261,207 @@
                 <div id="header-content" style="display:flex; align-items:center; gap:12px; width:100%"></div>
             </div>
 
-            <div id="chat-window" class="chat-window"></div>
+            <div id="chat-window" class="chat-window">
+                <button id="undo-btn" class="undo-btn" onclick="desfazerUltimo()" title="Desfazer última resposta">
+                    ↩ Corrigir última resposta
+                </button>
+            </div>
 
             <div id="input-container" class="input-container">
-                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off">
-                <button class="send-btn" onclick="sendMessage()">➤</button>
+                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off" aria-label="Sua resposta">
+                <button class="send-btn" onclick="sendMessage()" aria-label="Enviar">
+                    <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
     </div>
 
-    <dialog id="ratingModal">
-        <h2 style="font-family:'Cinzel'; text-align:center; margin-bottom:20px; color:var(--gold)">Avaliação Final</h2>
+    <dialog id="ratingModal" aria-labelledby="modal-title">
+        <h2 id="modal-title" style="font-family:'Cinzel',serif; text-align:center; margin-bottom:20px; color:var(--dourado)">Avaliação Final</h2>
         <div style="display:flex; flex-direction:column; gap:8px">
-            
-            <span class="modal-label">NOTA FELLYPE</span>
-            <div class="nota-chips">
-                <div class="chip" onclick="setNota('notF', '8.0')">8.0</div><div class="chip" onclick="setNota('notF', '8.5')">8.5</div>
-                <div class="chip" onclick="setNota('notF', '9.0')">9.0</div><div class="chip" onclick="setNota('notF', '9.5')">9.5</div>
-                <div class="chip" onclick="setNota('notF', '10')">10</div>
-            </div>
-            <input type="number" id="notF" step="0.5" class="modal-input" placeholder="0.0">
 
-            <span class="modal-label">NOTA HWLLY</span>
-            <div class="nota-chips">
-                <div class="chip" onclick="setNota('notH', '8.0')">8.0</div><div class="chip" onclick="setNota('notH', '8.5')">8.5</div>
-                <div class="chip" onclick="setNota('notH', '9.0')">9.0</div><div class="chip" onclick="setNota('notH', '9.5')">9.5</div>
-                <div class="chip" onclick="setNota('notH', '10')">10</div>
+            <span class="modal-label">Nota Fellype</span>
+            <div class="nota-chips" id="chips-fellype">
+                <div class="chip" onclick="setNota('notF', '5.0', this)">5.0</div>
+                <div class="chip" onclick="setNota('notF', '5.5', this)">5.5</div>
+                <div class="chip" onclick="setNota('notF', '6.0', this)">6.0</div>
+                <div class="chip" onclick="setNota('notF', '6.5', this)">6.5</div>
+                <div class="chip" onclick="setNota('notF', '7.0', this)">7.0</div>
+                <div class="chip" onclick="setNota('notF', '7.5', this)">7.5</div>
+                <div class="chip" onclick="setNota('notF', '8.0', this)">8.0</div>
+                <div class="chip" onclick="setNota('notF', '8.5', this)">8.5</div>
+                <div class="chip" onclick="setNota('notF', '9.0', this)">9.0</div>
+                <div class="chip" onclick="setNota('notF', '9.5', this)">9.5</div>
+                <div class="chip" onclick="setNota('notF', '10', this)">10</div>
             </div>
-            <input type="number" id="notH" step="0.5" class="modal-input" placeholder="0.0">
+            <input type="number" id="notF" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Fellype">
+
+            <span class="modal-label">Nota Hwlly</span>
+            <div class="nota-chips" id="chips-hwlly">
+                <div class="chip" onclick="setNota('notH', '5.0', this)">5.0</div>
+                <div class="chip" onclick="setNota('notH', '5.5', this)">5.5</div>
+                <div class="chip" onclick="setNota('notH', '6.0', this)">6.0</div>
+                <div class="chip" onclick="setNota('notH', '6.5', this)">6.5</div>
+                <div class="chip" onclick="setNota('notH', '7.0', this)">7.0</div>
+                <div class="chip" onclick="setNota('notH', '7.5', this)">7.5</div>
+                <div class="chip" onclick="setNota('notH', '8.0', this)">8.0</div>
+                <div class="chip" onclick="setNota('notH', '8.5', this)">8.5</div>
+                <div class="chip" onclick="setNota('notH', '9.0', this)">9.0</div>
+                <div class="chip" onclick="setNota('notH', '9.5', this)">9.5</div>
+                <div class="chip" onclick="setNota('notH', '10', this)">10</div>
+            </div>
+            <input type="number" id="notH" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Hwlly">
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px">
-                <div><span class="modal-label">VOLTARIA A COMPRAR?</span><select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select></div>
-                <div><span class="modal-label">DATA DO CONSUMO</span><input type="date" id="dataConsumo" class="modal-input"></div>
+                <div>
+                    <span class="modal-label">Voltaria a comprar?</span>
+                    <select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select>
+                </div>
+                <div>
+                    <span class="modal-label">Data do Consumo</span>
+                    <input type="date" id="dataConsumo" class="modal-input">
+                </div>
             </div>
 
             <div>
-                <span class="modal-label">FOTO DO BRINDE</span>
+                <span class="modal-label">Foto do Brinde</span>
                 <label class="custom-file-upload">
                     <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
-                    Selecionar ou Tirar Foto
+                    <i class="fas fa-camera" aria-hidden="true"></i> Selecionar ou Tirar Foto
                 </label>
-                <img id="preview">
+                <img id="preview" alt="Pré-visualização da foto">
             </div>
 
-            <button id="btnFinalizar" class="btn-gold" onclick="finishAll()">Finalizar Brinde 🍷</button>
+            <button id="btnFinalizar" class="btn-gold" onclick="finishAll()">
+                Finalizar Brinde 🍷
+            </button>
         </div>
     </dialog>
 
+    <div id="footer-placeholder"></div>
+
+    <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-        
-        const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10"; 
-        const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"; 
+        const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10";
+        const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
 
-        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-        const navLinksContainer = document.getElementById('nav-links-container');
-        
-        mobileMenuIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navLinksContainer.classList.toggle('active');
-            const icon = mobileMenuIcon.querySelector('i');
-            icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (navLinksContainer.classList.contains('active') && !navLinksContainer.contains(e.target)) {
-                navLinksContainer.classList.remove('active');
-                const icon = mobileMenuIcon.querySelector('i');
-                icon.classList.add('fa-bars'); icon.classList.remove('fa-times');
-            }
-        });
-        
         let step = 0;
         let dataVinho = {};
         let isValidating = false;
         let base64Image = "";
+        let historico = []; // Para o desfazer
 
         const fluxo = [
-            { key: 'wineName', q: "Qual o nome do rótulo?", bot: 'leblonzito', type: 'text' },
-            { key: 'produtor', q: "Quem é o produtor?", bot: 'ipanemita', type: 'text' },
-            // AJUSTE: Adicionado o list para usar o datalist de classificações
-            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)", bot: 'leblonzito', type: 'text', list: 'lista-classificacao' },
-            { key: 'uva', q: "Quais as uvas principais?", bot: 'ipanemita', type: 'text', list: 'lista-uvas' },
-            { key: 'wineType', q: "Qual o tipo? (Tinto, Branco, Rosé...)", bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
-            { key: 'year', q: "Qual a safra (ano)?", bot: 'ipanemita', type: 'number' },
-            { key: 'pais', q: "De qual país ele é?", bot: 'leblonzito', type: 'text', list: 'lista-paises' },
-            { key: 'regiao', q: "Qual a região?", bot: 'ipanemita', type: 'text' },
-            { key: 'teor', q: "Qual o teor alcoólico?", bot: 'leblonzito', type: 'text' },
-            { key: 'tokenAcesso', q: "Agora a senha de acesso para salvar:", bot: 'leblonzito', type: 'password' }
+            { key: 'wineName',      q: "Qual o nome do rótulo?",                          bot: 'leblonzito', type: 'text' },
+            { key: 'produtor',      q: "Quem é o produtor ou vinícola?",                  bot: 'ipanemita',  type: 'text' },
+            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)",   bot: 'leblonzito', type: 'text', list: 'lista-classificacao' },
+            { key: 'uva',           q: "Quais as uvas principais?",                       bot: 'ipanemita',  type: 'text', list: 'lista-uvas' },
+            { key: 'wineType',      q: "Qual o tipo? (Tinto, Branco, Rosé...)",           bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
+            { key: 'year',          q: "Qual a safra (ano)?",                             bot: 'ipanemita',  type: 'number' },
+            { key: 'pais',          q: "De qual país ele é?",                             bot: 'leblonzito', type: 'text', list: 'lista-paises' },
+            { key: 'regiao',        q: "Qual a região?",                                  bot: 'ipanemita',  type: 'text' },
+            { key: 'teor',          q: "Qual o teor alcoólico?",                          bot: 'leblonzito', type: 'text' },
+            { key: 'tokenAcesso',   q: "Agora a senha de acesso para salvar:",            bot: 'leblonzito', type: 'password' }
         ];
 
         window.onload = () => {
             updateHeader('leblonzito');
             addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
-            document.getElementById('dataConsumo').valueAsDate = new Date(); 
-            
+            document.getElementById('dataConsumo').valueAsDate = new Date();
+
             const lastPais = localStorage.getItem('last_pais');
-            const lastUva = localStorage.getItem('last_uva');
-            if(lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
+            if (lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
         };
 
-        function setNota(id, valor) {
+        function setNota(id, valor, el) {
             document.getElementById(id).value = valor;
+            // Highlight chip selecionado
+            const grupo = el.closest('.nota-chips');
+            grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
         }
 
-        function getAvatarHtml(imgUrl) {
-            return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face"></div>`;
+        function getAvatarHtml(imgUrl, nome) {
+            return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face" alt="${nome}"></div>`;
         }
 
         function addMsg(text, type) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
             let avatarHtml = '';
-            
+
             if (type === 'leblonzito' || type === 'ipanemita') {
-                avatarHtml = getAvatarHtml(type === 'leblonzito' ? IMG_L : IMG_I);
+                const nome = type === 'leblonzito' ? 'Leblonzito' : 'Ipanemita';
+                avatarHtml = getAvatarHtml(type === 'leblonzito' ? IMG_L : IMG_I, nome);
                 div.className = 'msg msg-bot';
             } else if (type === 'final') {
                 avatarHtml = `<div style="display:flex;">
-                                <div class="shiba-spotlight" style="z-index:2; margin-right:-15px"><img src="${IMG_L}" class="avatar-sm zoom-face"></div>
-                                <div class="shiba-spotlight" style="z-index:1"><img src="${IMG_I}" class="avatar-sm zoom-face"></div>
-                              </div>`;
+                    <div class="shiba-spotlight" style="z-index:2; margin-right:-15px">${getAvatarHtml(IMG_L, 'Leblonzito').replace('class="shiba-spotlight"','')}</div>
+                    <div class="shiba-spotlight" style="z-index:1">${getAvatarHtml(IMG_I, 'Ipanemita').replace('class="shiba-spotlight"','')}</div>
+                  </div>`;
                 div.className = 'msg msg-bot';
+            } else if (type === 'success') {
+                div.className = 'msg msg-bot msg-success';
             } else {
                 div.className = 'msg msg-user';
             }
 
-            // AJUSTE: O texto que chega aqui agora já está tratado, então não precisamos mais de lógica de ocultação de senha nesta função
-            div.innerHTML = (type === 'user') ? `<div class="bubble">${text}</div>` : `${avatarHtml}<div class="bubble">${text}</div>`;
-            win.appendChild(div);
+            const displayText = text.replace(/\n/g, '<br>');
+            div.innerHTML = (type === 'user')
+                ? `<div class="bubble">${displayText}</div>`
+                : `${avatarHtml}<div class="bubble">${displayText}</div>`;
+
+            // Inserir antes do botão desfazer (que fica no topo)
+            const undoBtn = document.getElementById('undo-btn');
+            win.insertBefore(div, undoBtn.nextSibling);
             win.scrollTop = win.scrollHeight;
         }
 
         function updateHeader(bot) {
             const head = document.getElementById('header-content');
-            if(bot === 'leblonzito') {
-                head.innerHTML = `${getAvatarHtml(IMG_L)} <div><div style="font-weight:600; color:var(--gold)">Leblonzito</div><div style="font-size:10px; opacity:0.6">Sommelier Online</div></div>`;
-            } else if(bot === 'ipanemita') {
-                head.innerHTML = `${getAvatarHtml(IMG_I)} <div><div style="font-weight:600; color:#aaa">Ipanemita</div><div style="font-size:10px; opacity:0.6">Curadoria Inteligente</div></div>`;
+            if (bot === 'leblonzito') {
+                head.innerHTML = `${getAvatarHtml(IMG_L, 'Leblonzito')} <div><div style="font-weight:600; color:var(--dourado); font-family:'Segoe UI',sans-serif;">Leblonzito</div><div style="font-size:10px; opacity:0.6; font-family:'Segoe UI',sans-serif;">Sommelier Online</div></div>`;
+            } else if (bot === 'ipanemita') {
+                head.innerHTML = `${getAvatarHtml(IMG_I, 'Ipanemita')} <div><div style="font-weight:600; color:#aaa; font-family:'Segoe UI',sans-serif;">Ipanemita</div><div style="font-size:10px; opacity:0.6; font-family:'Segoe UI',sans-serif;">Curadoria Inteligente</div></div>`;
             } else {
-                head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px">${getAvatarHtml(IMG_L)}${getAvatarHtml(IMG_I)}</div>`;
+                head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px;">${getAvatarHtml(IMG_L, 'Leblonzito')}${getAvatarHtml(IMG_I, 'Ipanemita')}</div>`;
             }
         }
 
         async function sendMessage() {
-            if(isValidating) return;
+            if (isValidating) return;
             const input = document.getElementById('userInput');
             let rawMsg = input.value.trim();
-            
-            if(rawMsg === "" && step > 0){
+
+            if (rawMsg === "" && step > 0) {
                 const currentKey = fluxo[step].key;
-                if(currentKey === 'pais') rawMsg = localStorage.getItem('last_pais') || "";
-                if(currentKey === 'uva') rawMsg = localStorage.getItem('last_uva') || "";
+                if (currentKey === 'pais') rawMsg = localStorage.getItem('last_pais') || "";
+                if (currentKey === 'uva') rawMsg = localStorage.getItem('last_uva') || "";
             }
 
             const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
-            if(!rawMsg && fluxo[step].key === 'tokenAcesso') return;
+            if (!rawMsg && fluxo[step].key === 'tokenAcesso') return;
 
-            // AJUSTE: Verifica se o campo atual é o da senha para ocultar antes de renderizar a mensagem no chat
             const displayMsg = (fluxo[step].type === 'password' && rawMsg) ? '••••••••' : (rawMsg || "(pulado)");
             addMsg(displayMsg, 'user');
-            
             input.value = "";
+
+            // Salvar no histórico para desfazer
+            historico.push({ step, key: fluxo[step].key, value: msg });
             dataVinho[fluxo[step].key] = msg;
 
-            if(fluxo[step].key === 'pais' && rawMsg) localStorage.setItem('last_pais', rawMsg);
-            if(fluxo[step].key === 'uva' && rawMsg) localStorage.setItem('last_uva', rawMsg);
+            if (fluxo[step].key === 'pais' && rawMsg) localStorage.setItem('last_pais', rawMsg);
+            if (fluxo[step].key === 'uva' && rawMsg) localStorage.setItem('last_uva', rawMsg);
 
             step++;
-            if(step < fluxo.length) {
+
+            // Mostrar botão desfazer (mas não na senha)
+            if (step > 1 && step < fluxo.length) {
+                document.getElementById('undo-btn').classList.add('visible');
+            }
+
+            if (step < fluxo.length) {
                 const nextStep = fluxo[step];
                 setTimeout(() => {
                     updateHeader(nextStep.bot);
@@ -324,15 +471,45 @@
                     input.placeholder = nextStep.placeholder || "Pressione Enter para pular...";
                 }, 600);
             } else {
+                document.getElementById('undo-btn').classList.remove('visible');
                 validarSenhaFinal();
             }
+        }
+
+        function desfazerUltimo() {
+            if (historico.length <= 1) return;
+
+            const ultimo = historico.pop();
+            delete dataVinho[ultimo.key];
+            step = ultimo.step;
+
+            // Remover as últimas duas mensagens do chat (resposta do usuário + próxima pergunta do bot)
+            const win = document.getElementById('chat-window');
+            const msgs = win.querySelectorAll('.msg:not(#undo-btn)');
+            // Remove a pergunta do step atual e a resposta do usuário
+            if (msgs.length >= 2) {
+                msgs[msgs.length - 1].remove();
+                msgs[msgs.length - 2].remove();
+            }
+
+            // Restaurar estado do input
+            const currentStep = fluxo[step];
+            const input = document.getElementById('userInput');
+            input.type = currentStep.type;
+            input.setAttribute('list', currentStep.list || "");
+            input.placeholder = currentStep.placeholder || "Pressione Enter para pular...";
+            updateHeader(currentStep.bot);
+
+            if (step <= 1) document.getElementById('undo-btn').classList.remove('visible');
+
+            input.focus();
         }
 
         async function validarSenhaFinal() {
             isValidating = true;
             updateHeader('final');
             addMsg("Validando acesso...", 'final');
-            
+
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -341,14 +518,18 @@
                 const res = await response.json();
                 if (res.result === "success") {
                     isValidating = false;
-                    addMsg("Acesso autorizado! Hora de dar as notas.", 'final');
+                    addMsg("Acesso autorizado! Hora de dar as notas e finalizar o brinde. 🍷", 'final');
                     setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
-                } else { throw new Error(); }
+                } else {
+                    throw new Error();
+                }
             } catch (e) {
-                isValidating = false; step--; 
+                isValidating = false;
+                step--;
                 addMsg("Senha incorreta. Tente novamente:", 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
+                document.getElementById('undo-btn').classList.remove('visible');
             }
         }
 
@@ -360,7 +541,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600;
+                    const MAX_WIDTH = 800;
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -368,7 +549,8 @@
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     base64Image = canvas.toDataURL('image/jpeg', 0.8);
                     const preview = document.getElementById('preview');
-                    preview.src = base64Image; preview.style.display = "block";
+                    preview.src = base64Image;
+                    preview.style.display = "block";
                 };
                 img.src = e.target.result;
             };
@@ -377,9 +559,9 @@
 
         async function finishAll() {
             const btn = document.getElementById('btnFinalizar');
-            btn.innerHTML = "Eternizando Memória... 🍷"; btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eternizando Memória...';
+            btn.disabled = true;
 
-            // AJUSTE: Replace alterando pontos por vírgulas para a planilha ler como decimal e não como data
             const notF_formatada = document.getElementById('notF').value.replace('.', ',');
             const notH_formatada = document.getElementById('notH').value.replace('.', ',');
 
@@ -404,15 +586,24 @@
 
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-                alert("Vinho salvo com sucesso! 🍷");
-                location.href = "catalogo.html";
+                document.getElementById('ratingModal').close();
+
+                // Feedback in-chat em vez de alert()
+                updateHeader('final');
+                addMsg("🍷 Brinde eternizado com sucesso!\n\nO vinho foi adicionado à nossa adega. Redirecionando para o catálogo...", 'success');
+
+                setTimeout(() => { location.href = "catalogo.html"; }, 2500);
+
             } catch (e) {
-                alert("Brinde salvo na planilha!");
-                location.href = "catalogo.html";
+                document.getElementById('ratingModal').close();
+                addMsg("✅ Brinde registrado! Redirecionando...", 'success');
+                setTimeout(() => { location.href = "catalogo.html"; }, 2500);
             }
         }
 
-        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
     </script>
 </body>
 </html>
