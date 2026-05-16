@@ -3,16 +3,22 @@
    shared.css — importado por todas as páginas
    ===================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap');
+
 :root {
-    --vinho-escuro: #4a0404;
-    --vinho-vivo: #800020;
-    --dourado: #d4af37;
-    --dourado-claro: #f1d592;
-    --bg: #0a0a0a;
-    --card: #161616;
-    --texto: #e0e0e0;
-    --subtexto: #aaa;
-    --transicao: all 0.3s ease;
+    --vinho-escuro: #3a0312;
+    --vinho-vivo: #8b0020;
+    --dourado: #c9a227;
+    --dourado-claro: #e8c96a;
+    --bg: #080808;
+    --card: #111111;
+    --texto: #e2ddd8;
+    --subtexto: #888;
+    --borda: rgba(255, 255, 255, 0.06);
+    --borda-dourada: rgba(201, 162, 39, 0.18);
+    --sombra-card: 0 4px 24px rgba(0, 0, 0, 0.45);
+    --sombra-hover: 0 14px 44px rgba(0, 0, 0, 0.7), 0 0 24px rgba(139, 0, 32, 0.12);
+    --transicao: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- BASE --- */
@@ -20,23 +26,23 @@
 
 body {
     margin: 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
     background-color: var(--bg);
     color: var(--texto);
-    line-height: 1.8;
-    font-size: 1.1rem;
+    line-height: 1.75;
+    font-size: 1rem;
     overflow-x: hidden;
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Segoe UI', sans-serif;
-    font-weight: 300;
-    letter-spacing: 1px;
+    font-family: 'Cinzel', 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 2px;
 }
 
 /* --- NAVBAR --- */
 .navbar {
-    background: rgba(10, 10, 10, 0.98);
+    background: rgba(8, 8, 8, 0.97);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -44,20 +50,21 @@ h1, h2, h3, h4 {
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201, 162, 39, 0.14);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     height: 70px;
     box-sizing: border-box;
 }
 
 .nav-logo a {
     color: var(--dourado);
-    font-weight: bold;
-    font-size: 1.3rem;
+    font-weight: 600;
+    font-size: 1.1rem;
     text-decoration: none;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cinzel', serif;
 }
 
 .nav-links {
@@ -72,13 +79,15 @@ h1, h2, h3, h4 {
 
 .nav-links a {
     text-decoration: none;
-    color: #ccc;
-    font-size: 0.85rem;
+    color: #999;
+    font-size: 0.75rem;
     text-transform: uppercase;
+    letter-spacing: 1.8px;
     transition: var(--transicao);
     position: relative;
     padding-bottom: 5px;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
 }
 
 .nav-links a:hover,
@@ -91,7 +100,7 @@ h1, h2, h3, h4 {
     height: 1px;
     bottom: 0;
     left: 0;
-    background-color: var(--dourado);
+    background: linear-gradient(90deg, transparent, var(--dourado), transparent);
     transition: width 0.3s ease;
 }
 
@@ -106,30 +115,36 @@ h1, h2, h3, h4 {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #1a1a1a;
-    min-width: 180px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    min-width: 185px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(201, 162, 39, 0.1);
     z-index: 10;
-    border: 1px solid #333;
-    border-radius: 5px;
+    border: 1px solid rgba(201, 162, 39, 0.1);
+    border-radius: 8px;
     top: 30px;
     right: 0;
+    overflow: hidden;
 }
 
 .dropdown-content a {
-    color: white !important;
-    padding: 12px 16px;
+    color: #aaa !important;
+    padding: 12px 18px;
     text-decoration: none;
     display: block;
     text-align: left;
     text-transform: none !important;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #222;
-    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    transition: background 0.2s, color 0.2s;
 }
 
 .dropdown-content a:last-child { border-bottom: none; }
-.dropdown-content a:hover { background-color: var(--vinho-vivo); }
+.dropdown-content a:hover { background: rgba(139, 0, 32, 0.25); color: var(--dourado-claro) !important; }
 .dropdown-content a::after { display: none !important; }
 
 /* Abrir dropdown via hover (desktop) OU via classe .open (mobile/JS) */
@@ -139,48 +154,55 @@ h1, h2, h3, h4 {
 /* --- MENU TOGGLE (mobile) --- */
 .menu-toggle {
     display: none;
-    color: white;
-    font-size: 1.5rem;
+    color: #888;
+    font-size: 1.3rem;
     cursor: pointer;
     background: none;
     border: none;
     padding: 5px;
+    transition: color 0.2s;
 }
+.menu-toggle:hover { color: var(--dourado); }
 
 /* --- FOOTER --- */
 footer {
     text-align: center;
-    padding: 50px 20px 40px;
-    color: #555;
-    font-size: 0.85rem;
-    border-top: 1px solid #222;
-    font-family: 'Segoe UI', sans-serif;
+    padding: 55px 20px 45px;
+    color: #4a4a4a;
+    font-size: 0.8rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(to top, rgba(58, 3, 18, 0.1), transparent);
+    letter-spacing: 0.3px;
+    line-height: 2;
 }
 
 .footer-links {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px 20px;
-    margin-bottom: 20px;
+    gap: 8px 22px;
+    margin-bottom: 22px;
 }
 
 .footer-links a {
-    color: #666;
+    color: #4a4a4a;
     text-decoration: none;
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.8px;
     transition: color 0.2s;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
 }
 
 .footer-links a:hover { color: var(--dourado); }
 
 .footer-divider {
     border: none;
-    border-top: 1px solid #1e1e1e;
-    margin: 0 auto 20px;
-    max-width: 300px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 0 auto 22px;
+    max-width: 280px;
 }
 
 /* --- BACK TO TOP --- */
@@ -188,25 +210,26 @@ footer {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background: var(--vinho-vivo);
-    color: white;
-    border: none;
+    background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+    color: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(201, 162, 39, 0.2);
     border-radius: 50%;
     width: 44px;
     height: 44px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s, transform 0.3s, background 0.2s;
+    transition: opacity 0.3s, transform 0.3s, box-shadow 0.2s;
     z-index: 999;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
 }
 
 .back-to-top.visible { opacity: 1; transform: translateY(0); }
-.back-to-top:hover { background: var(--vinho-escuro); }
+.back-to-top:hover { box-shadow: 0 6px 28px rgba(139, 0, 32, 0.45); }
 
 /* --- SKELETON LOADING --- */
 @keyframes shimmer {
@@ -215,43 +238,53 @@ footer {
 }
 
 .skeleton {
-    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background: linear-gradient(90deg, #161616 25%, #1e1e1e 50%, #161616 75%);
     background-size: 700px 100%;
-    animation: shimmer 1.4s infinite linear;
+    animation: shimmer 1.6s infinite linear;
     border-radius: 6px;
 }
 
 /* --- HEADER SECTION (padrão de páginas internas) --- */
 .header-section {
     text-align: center;
-    padding: 60px 15px 30px;
-    background: linear-gradient(to bottom, #111, var(--bg));
+    padding: 70px 15px 40px;
+    background: linear-gradient(to bottom, #0e0507, var(--bg));
+    position: relative;
 }
 
 .header-section h1 {
     color: var(--dourado);
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cinzel', serif;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 15px 0 5px;
-    font-size: 2rem;
+    letter-spacing: 4px;
+    margin: 15px 0 8px;
+    font-size: 1.85rem;
+}
+
+.header-section h1::after {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+    margin: 14px auto 0;
 }
 
 .shiba-heads {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .shiba-spotlight {
-    background: #fff;
+    background: linear-gradient(135deg, #1c1c1c, #252525);
     border-radius: 20px;
     padding: 2px;
     display: inline-flex;
-    border: 1.5px solid var(--dourado);
+    border: 1.5px solid rgba(201, 162, 39, 0.35);
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
 }
 
 .avatar-lg {
@@ -268,9 +301,10 @@ footer {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.88);
     z-index: 2000;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     justify-content: center;
     align-items: center;
     padding: 20px;
@@ -279,8 +313,8 @@ footer {
 .wine-modal-backdrop.open { display: flex; }
 
 .wine-modal {
-    background: #111;
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    background: #0d0d0d;
+    border: 1px solid rgba(201, 162, 39, 0.2);
     border-radius: 20px;
     max-width: 520px;
     width: 100%;
@@ -288,11 +322,12 @@ footer {
     overflow-y: auto;
     position: relative;
     scrollbar-width: none;
-    animation: modalIn 0.25s ease-out;
+    animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(201, 162, 39, 0.07);
 }
 
 @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    from { opacity: 0; transform: scale(0.93) translateY(14px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
@@ -300,14 +335,14 @@ footer {
     position: absolute;
     top: 15px;
     right: 15px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid #333;
-    color: #aaa;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #555;
     width: 34px;
     height: 34px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -328,79 +363,84 @@ footer {
 .wine-modal-body { padding: 25px; }
 
 .wine-modal-name {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--dourado-claro);
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cinzel', serif;
     font-weight: 400;
+    letter-spacing: 1.5px;
     margin: 0 0 5px;
 }
 
 .wine-modal-produtor {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--subtexto);
     font-style: italic;
     margin: 0 0 20px;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 .wine-modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
 }
 
 .wine-modal-field {
-    background: #1a1a1a;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 10px 14px;
 }
 
 .wine-modal-field-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--subtexto);
-    font-family: 'Segoe UI', sans-serif;
+    letter-spacing: 1.5px;
+    color: var(--dourado);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
     margin-bottom: 3px;
+    opacity: 0.8;
 }
 
 .wine-modal-field-value {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     color: var(--texto);
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 .wine-modal-notas {
     display: flex;
     gap: 10px;
-    border-top: 1px solid #222;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     padding-top: 20px;
 }
 
 .wine-modal-nota-box {
     flex: 1;
-    background: rgba(212, 175, 55, 0.08);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(201, 162, 39, 0.06);
+    border: 1px solid rgba(201, 162, 39, 0.14);
     border-radius: 10px;
     padding: 14px;
     text-align: center;
 }
 
 .wine-modal-nota-label {
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     color: var(--subtexto);
-    font-family: 'Segoe UI', sans-serif;
-    margin-bottom: 5px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
 .wine-modal-nota-valor {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--dourado);
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Cinzel', serif;
 }
 
 /* --- MOBILE --- */
@@ -415,10 +455,12 @@ footer {
         top: 70px;
         left: 0;
         width: 100%;
-        background: rgba(10, 10, 10, 0.98);
+        background: rgba(8, 8, 8, 0.99);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
         padding: 20px;
         gap: 20px;
-        border-bottom: 1px solid var(--vinho-escuro);
+        border-bottom: 1px solid rgba(201, 162, 39, 0.1);
         text-align: center;
         box-sizing: border-box;
     }
@@ -437,7 +479,7 @@ footer {
         pointer-events: none;
         transition: max-height 0.35s ease, opacity 0.25s ease;
         position: static;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.03);
         box-shadow: none;
         border: none;
         border-radius: 8px;
@@ -454,7 +496,7 @@ footer {
 
     .dropdown-content a {
         padding: 10px 16px;
-        border-bottom: 1px solid #1e1e1e;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         text-align: center !important;
     }
 

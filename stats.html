@@ -23,75 +23,95 @@
     <style>
         /* --- HEADER --- */
         .stats-header {
-            padding: 50px 5% 30px;
+            padding: 65px 5% 35px;
             text-align: center;
-            background: linear-gradient(to bottom, #111, var(--bg));
+            background: linear-gradient(to bottom, #0e0507, var(--bg));
         }
+
         .stats-header h1 {
             color: var(--dourado);
-            font-size: 2rem;
+            font-size: 1.9rem;
             margin: 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
+            font-family: 'Cinzel', serif;
         }
+
+        .stats-header h1::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            margin: 12px auto 0;
+        }
+
         .stats-header p {
             color: var(--subtexto);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-style: italic;
-            margin: 8px 0 0;
-            font-family: 'Segoe UI', sans-serif;
+            margin: 16px 0 0;
+            font-family: 'Outfit', sans-serif;
+            opacity: 0.8;
         }
 
         /* --- CONTAINER --- */
         .stats-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 5% 60px;
+            padding: 0 5% 70px;
         }
 
         /* --- SUMMARY CARDS --- */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
+            gap: 14px;
             margin-bottom: 40px;
         }
 
         .summary-card {
             background: var(--card);
-            border: 1px solid #222;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 14px;
-            padding: 20px 15px;
+            padding: 20px 14px;
             text-align: center;
             transition: var(--transicao);
+            box-shadow: var(--sombra-card);
         }
         .summary-card:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            transform: translateY(-2px);
+            border-color: rgba(201, 162, 39, 0.25);
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-hover);
         }
 
-        .summary-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+        .summary-icon { font-size: 1.4rem; margin-bottom: 10px; display: block; opacity: 0.85; }
+
         .summary-value {
-            font-size: 1.6rem;
-            font-weight: bold;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: var(--dourado);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Cinzel', serif;
             line-height: 1.1;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             word-break: break-word;
+            letter-spacing: 0.5px;
         }
+
         .summary-label {
-            font-size: 0.68rem;
-            color: var(--subtexto);
+            font-size: 0.62rem;
+            color: #666;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 1.5px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
         }
+
         .summary-sub {
-            font-size: 0.72rem;
-            color: #777;
-            margin-top: 4px;
-            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.68rem;
+            color: #555;
+            margin-top: 5px;
+            font-family: 'Outfit', sans-serif;
             font-style: italic;
         }
 
@@ -99,28 +119,31 @@
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 20px;
         }
 
         .chart-card {
             background: var(--card);
-            border: 1px solid #222;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 14px;
             padding: 24px;
             transition: var(--transicao);
+            box-shadow: var(--sombra-card);
         }
-        .chart-card:hover { border-color: rgba(212, 175, 55, 0.2); }
+        .chart-card:hover { border-color: rgba(201, 162, 39, 0.18); }
 
         .chart-title {
-            font-size: 0.72rem;
+            font-size: 0.66rem;
             color: var(--dourado);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 2px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
             margin: 0 0 20px 0;
             display: flex;
             align-items: center;
             gap: 8px;
+            opacity: 0.9;
         }
 
         .chart-wrap {
@@ -132,24 +155,24 @@
         #skeleton-stats .sk-summary {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
+            gap: 14px;
             margin-bottom: 40px;
         }
         #skeleton-stats .sk-card {
             background: var(--card);
-            border: 1px solid #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.04);
             border-radius: 14px;
-            padding: 20px 15px;
+            padding: 20px 14px;
             height: 110px;
         }
         #skeleton-stats .sk-charts {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            gap: 20px;
         }
         #skeleton-stats .sk-chart {
             background: var(--card);
-            border: 1px solid #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.04);
             border-radius: 14px;
             padding: 24px;
             height: 340px;
@@ -162,12 +185,13 @@
             justify-content: center;
             gap: 10px;
             margin-top: 14px;
-            font-size: 0.78rem;
-            color: var(--subtexto);
-            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            color: #666;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.3px;
         }
         .insight-dot {
-            width: 8px; height: 8px;
+            width: 7px; height: 7px;
             border-radius: 50%;
             display: inline-block;
         }
