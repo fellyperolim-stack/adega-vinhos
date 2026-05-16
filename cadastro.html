@@ -424,8 +424,9 @@
         async function searchOpenFoodFacts(term) {
             if (term.length < 3) return [];
             try {
-                const url = `https://world.openfoodfacts.org/api/v2/search?search_terms=${encodeURIComponent(term)}&categories_tags=en:wines&fields=product_name,brands,origins,origins_tags&page_size=5&json=1`;
+                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&search_simple=1&action=process&json=1&page_size=5&fields=product_name,brands,origins`;
                 const res = await fetch(url);
+                if (!res.ok) return [];
                 const data = await res.json();
                 return (data.products || []).filter(p => p.product_name?.trim()).slice(0, 3);
             } catch (e) { return []; }
@@ -448,14 +449,30 @@
             return null;
         }
 
+        let suggestionMsgEl = null;
+
         function hideSuggestions() {
             const bar = document.getElementById('suggestions-bar');
             bar.style.display = 'none'; bar.innerHTML = '';
+            removeSuggestionMsg();
         }
 
-        function renderSuggestions(localMatches, offMatches) {
+        function removeSuggestionMsg() {
+            if (suggestionMsgEl) { suggestionMsgEl.remove(); suggestionMsgEl = null; }
+        }
+
+        function renderSuggestions(localMatches, offMatches, loading) {
             const bar = document.getElementById('suggestions-bar');
             bar.innerHTML = '';
+
+            removeSuggestionMsg();
+
+            if (loading) {
+                bar.innerHTML = '<span style="font-size:11px;color:#555;font-family:Segoe UI,sans-serif;padding:0 4px;">🔍 Buscando online...</span>';
+                bar.style.display = 'block';
+                return;
+            }
+
             if (!localMatches.length && !offMatches.length) { bar.style.display = 'none'; return; }
 
             localMatches.forEach(wine => {
@@ -479,6 +496,27 @@
             });
 
             bar.style.display = 'block';
+
+            // Também injeta no chat para não passar despercebido
+            const win = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = 'msg msg-bot';
+            const label = localMatches.length ? '🍷 Achei na adega! Clique para preencher tudo:' : '🌐 Encontrei online:';
+            const chipsHtml = [...bar.children].map(b => `<button onclick="${b.getAttribute('onclick') || ''}" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:14px;font-size:12px;cursor:pointer;font-family:Segoe UI,sans-serif;white-space:nowrap;margin:2px;border:1px solid ${localMatches.length ? 'var(--dourado)' : 'rgba(255,255,255,0.25)'};background:${localMatches.length ? 'rgba(201,162,39,0.15)' : 'rgba(255,255,255,0.05)'};color:${localMatches.length ? 'var(--dourado)' : 'rgba(255,255,255,0.7)'};">${b.innerHTML}</button>`).join('');
+            div.innerHTML = `<div class="shiba-spotlight"><img src="${localMatches.length ? IMG_L : IMG_I}" class="avatar-sm zoom-face" alt="bot"></div><div class="bubble" style="background:#1a1a1a;color:#e2ddd8;border:1px solid rgba(255,255,255,0.08)"><div style="font-size:12px;margin-bottom:6px;opacity:0.7">${label}</div><div style="display:flex;flex-wrap:wrap;gap:2px">${chipsHtml}</div></div>`;
+            // Reatribui os onclick corretamente
+            const btns = div.querySelectorAll('button');
+            const allItems = [...localMatches.map(w => ({ type: 'local', data: w })), ...offMatches.map(p => ({ type: 'off', data: p }))];
+            btns.forEach((b, i) => {
+                if (allItems[i]) {
+                    b.onclick = allItems[i].type === 'local'
+                        ? () => applyCatalogWine(allItems[i].data)
+                        : () => applyOffWine(allItems[i].data);
+                }
+            });
+            win.appendChild(div);
+            win.scrollTop = win.scrollHeight;
+            suggestionMsgEl = div;
         }
 
         async function onWineNameInput(term) {
@@ -486,10 +524,9 @@
             const local = searchLocalWines(term);
             if (local.length) { renderSuggestions(local, []); return; }
             if (term.length >= 3) {
-                const bar = document.getElementById('suggestions-bar');
-                bar.innerHTML = '<span style="font-size:11px;color:#555;font-family:Segoe UI,sans-serif;padding:0 4px;">🔍 Buscando online...</span>';
-                bar.style.display = 'block';
+                renderSuggestions([], [], true);
                 const off = await searchOpenFoodFacts(term);
+                if (step !== 0) return; // usuário já avançou
                 renderSuggestions([], off);
             } else {
                 hideSuggestions();
