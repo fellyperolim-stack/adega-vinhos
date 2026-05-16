@@ -237,6 +237,25 @@
             .main-wrapper { padding: 10px; margin-top: 15px; min-height: calc(100vh - 70px); }
             .chat-card { height: 80vh; border-radius: 30px; }
         }
+
+        /* --- AUTOCOMPLETE CHIPS --- */
+        #suggestions-bar { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        #suggestions-bar::-webkit-scrollbar { display: none; }
+        .suggestion-chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 12px; border-radius: 16px;
+            font-size: 12px; cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            white-space: nowrap; margin-right: 6px;
+            transition: transform 0.15s, background 0.15s;
+            border: 1px solid; background: none;
+            animation: msgPop 0.2s ease-out;
+        }
+        .suggestion-chip.local { border-color: var(--dourado); color: var(--dourado); background: rgba(201,162,39,0.1); }
+        .suggestion-chip.online { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.65); }
+        .suggestion-chip:hover { transform: translateY(-1px); }
+        .suggestion-chip.local:hover { background: rgba(201,162,39,0.25); }
+        .suggestion-chip.online:hover { background: rgba(255,255,255,0.08); }
     </style>
 </head>
 <body>
@@ -271,6 +290,8 @@
                     ↩ Corrigir última resposta
                 </button>
             </div>
+
+            <div id="suggestions-bar" style="display:none; padding:0 20px 8px; overflow-x:auto; white-space:nowrap;"></div>
 
             <div id="input-container" class="input-container">
                 <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off" aria-label="Sua resposta">
@@ -377,7 +398,177 @@
 
             const lastPais = localStorage.getItem('last_pais');
             if (lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
+
+            preloadLocalWines();
         };
+
+        // ── AUTOCOMPLETE INTELIGENTE ──────────────────────────────────
+        let localWinesCache = null;
+        let suggestionDebounce = null;
+
+        async function preloadLocalWines() {
+            try {
+                const data = await window.fetchWithCache(SCRIPT_URL);
+                localWinesCache = Array.isArray(data) ? data : (data.data || data.wines || []);
+            } catch (e) { localWinesCache = []; }
+        }
+
+        function searchLocalWines(term) {
+            if (!localWinesCache || term.length < 2) return [];
+            const t = term.toLowerCase();
+            return localWinesCache.filter(w => w.wineName?.toLowerCase().includes(t)).slice(0, 4);
+        }
+
+        async function searchOpenFoodFacts(term) {
+            if (term.length < 3) return [];
+            try {
+                const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(term)}&json=1&page_size=4&action=process&fields=product_name,brands,origins&categories_tags=en:wines`;
+                const res = await fetch(url);
+                const data = await res.json();
+                return (data.products || []).filter(p => p.product_name?.trim()).slice(0, 3);
+            } catch (e) { return []; }
+        }
+
+        const PAIS_MAP = {
+            'france':'França','italy':'Itália','spain':'Espanha','portugal':'Portugal',
+            'argentina':'Argentina','chile':'Chile','brazil':'Brasil','uruguay':'Uruguai',
+            'australia':'Austrália','south africa':'África do Sul','germany':'Alemanha',
+            'fr':'França','it':'Itália','es':'Espanha','pt':'Portugal','ar':'Argentina',
+            'cl':'Chile','br':'Brasil','uy':'Uruguai','au':'Austrália','de':'Alemanha'
+        };
+
+        function normalizarPais(origem) {
+            if (!origem) return null;
+            const low = origem.toLowerCase();
+            for (const [k, v] of Object.entries(PAIS_MAP)) {
+                if (low.includes(k)) return v;
+            }
+            return null;
+        }
+
+        function hideSuggestions() {
+            const bar = document.getElementById('suggestions-bar');
+            bar.style.display = 'none'; bar.innerHTML = '';
+        }
+
+        function renderSuggestions(localMatches, offMatches) {
+            const bar = document.getElementById('suggestions-bar');
+            bar.innerHTML = '';
+            if (!localMatches.length && !offMatches.length) { bar.style.display = 'none'; return; }
+
+            localMatches.forEach(wine => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-chip local';
+                btn.innerHTML = `<i class="fas fa-wine-bottle" style="font-size:9px"></i> ${wine.wineName}`;
+                btn.title = [wine.produtor, wine.pais].filter(Boolean).join(' · ');
+                btn.onclick = () => applyCatalogWine(wine);
+                bar.appendChild(btn);
+            });
+
+            offMatches.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-chip online';
+                const prod = p.brands ? ` · ${p.brands.split(',')[0].trim()}` : '';
+                btn.innerHTML = `<i class="fas fa-globe" style="font-size:9px"></i> ${p.product_name}${prod}`;
+                btn.onclick = () => applyOffWine(p);
+                bar.appendChild(btn);
+            });
+
+            bar.style.display = 'block';
+        }
+
+        async function onWineNameInput(term) {
+            if (step !== 0 || !term) { hideSuggestions(); return; }
+            const local = searchLocalWines(term);
+            if (local.length) { renderSuggestions(local, []); return; }
+            renderSuggestions([], []);
+            const off = await searchOpenFoodFacts(term);
+            renderSuggestions([], off);
+        }
+
+        function applyCatalogWine(wine) {
+            hideSuggestions();
+            const input = document.getElementById('userInput');
+            addMsg(wine.wineName, 'user');
+            input.value = '';
+
+            Object.assign(dataVinho, {
+                wineName:      wine.wineName,
+                produtor:      wine.produtor      || 'Não informado',
+                classificacao: wine.classificacao || 'Não informado',
+                uva:           wine.uva           || 'Não informado',
+                wineType:      wine.wineType      || 'Não informado',
+                year:          wine.year          || 'Não informado',
+                pais:          wine.pais          || 'Não informado',
+                regiao:        wine.regiao        || 'Não informado',
+                teor:          wine.teor          || 'Não informado',
+            });
+
+            historico.push({ step: 0, key: 'wineName', value: wine.wineName });
+            step = 9;
+            document.getElementById('undo-bar').classList.remove('visible');
+
+            const emoji = { Tinto:'🍷', Branco:'🥂', Rosé:'🌸', Espumante:'🍾' }[wine.wineType] || '🍷';
+            setTimeout(() => {
+                updateHeader('ipanemita');
+                const regiao = wine.regiao && wine.regiao !== 'Não informado' ? ` · ${wine.regiao}` : '';
+                addMsg(`${emoji} Esse vinho já está na adega! Preenchendo automaticamente:\n\n📍 ${wine.pais}${regiao}\n🍇 ${wine.uva}\n🏭 ${wine.produtor}\n📅 Safra ${wine.year}`, 'ipanemita');
+                setTimeout(() => {
+                    updateHeader('leblonzito');
+                    addMsg(fluxo[9].q, 'leblonzito');
+                    input.type = 'password';
+                    input.placeholder = '';
+                }, 800);
+            }, 500);
+        }
+
+        function applyOffWine(product) {
+            hideSuggestions();
+            const input = document.getElementById('userInput');
+            const nome = product.product_name.trim();
+            addMsg(nome, 'user');
+            input.value = '';
+            dataVinho.wineName = nome;
+            historico.push({ step: 0, key: 'wineName', value: nome });
+
+            const preenchidos = [];
+            if (product.brands) {
+                dataVinho.produtor = product.brands.split(',')[0].trim();
+                preenchidos.push(`produtor: ${dataVinho.produtor}`);
+            }
+            if (product.origins) {
+                const pais = normalizarPais(product.origins);
+                if (pais) { dataVinho.pais = pais; preenchidos.push(`país: ${pais}`); }
+            }
+
+            step = 1;
+            while (step < 9 && dataVinho[fluxo[step].key]) step++;
+
+            setTimeout(() => {
+                updateHeader('ipanemita');
+                addMsg(
+                    preenchidos.length
+                        ? `Encontrei online! Pré-preenchendo: ${preenchidos.join(', ')}. Continuando com o restante...`
+                        : `Vinho novo na adega! Vamos registrá-lo juntos.`,
+                    'ipanemita'
+                );
+                setTimeout(() => {
+                    const next = fluxo[step];
+                    updateHeader(next.bot);
+                    addMsg(next.q, next.bot);
+                    input.type = next.type;
+                    input.setAttribute('list', next.list || '');
+                    input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                    document.getElementById('undo-bar').classList.add('visible');
+                }, 800);
+            }, 500);
+        }
+
+        document.getElementById('userInput').addEventListener('input', (e) => {
+            if (step !== 0) return;
+            clearTimeout(suggestionDebounce);
+            suggestionDebounce = setTimeout(() => onWineNameInput(e.target.value.trim()), 400);
+        });
 
         function setNota(id, valor, el) {
             document.getElementById(id).value = valor;
