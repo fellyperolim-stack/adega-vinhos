@@ -1,20 +1,48 @@
-const CACHE_NAME = 'adega-v1';
+const CACHE_NAME = 'adega-v2';
+const CACHE_URLS = [
+  '/',
+  '/index.html',
+  '/catalogo.html',
+  '/cadastro.html',
+  '/melhores.html',
+  '/paises.html',
+  '/uvas.html',
+  '/vinicolas.html',
+  '/stats.html',
+  '/games.html',
+  '/shared.css',
+  '/nav.js',
+  '/manifest.json'
+];
 
-// Instalação do Service Worker
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            // Aqui você pode colocar arquivos iniciais para cachear se quiser no futuro
-            return cache.addAll(['/']); 
-        })
-    );
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHE_URLS))
+  );
+  self.skipWaiting();
 });
 
-// Interceptando as requisições (necessário para ser PWA)
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
-    );
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        return response;
+      }).catch(() => caches.match('/index.html'));
+    })
+  );
 });
