@@ -584,30 +584,42 @@
             hideSuggestions();
             const input = document.getElementById('userInput');
 
-            Object.assign(dataVinho, {
-                wineName:      wine.nome          || dataVinho.wineName,
-                produtor:      wine.produtor      || 'Não informado',
-                classificacao: wine.classificacao || 'Não informado',
-                uva:           wine.uva           || 'Não informado',
-                wineType:      wine.tipo          || 'Não informado',
-                year:          wine.safra ? String(wine.safra) : 'Não informado',
-                pais:          wine.pais          || 'Não informado',
-                regiao:        wine.regiao        || 'Não informado',
-                teor:          wine.teor ? String(wine.teor) : 'Não informado',
-            });
+            if (wine.nome)          dataVinho.wineName      = wine.nome;
+            if (wine.produtor)      dataVinho.produtor      = wine.produtor;
+            if (wine.classificacao) dataVinho.classificacao = wine.classificacao;
+            if (wine.uva)           dataVinho.uva           = wine.uva;
+            if (wine.tipo)          dataVinho.wineType      = wine.tipo;
+            if (wine.safra)         dataVinho.year          = String(wine.safra);
+            if (wine.pais)          dataVinho.pais          = wine.pais;
+            if (wine.regiao)        dataVinho.regiao        = wine.regiao;
+            if (wine.teor)          dataVinho.teor          = String(wine.teor);
 
-            step = 9;
             document.getElementById('undo-bar').classList.remove('visible');
 
             const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
             updateHeader('ipanemita');
             const regInfo = wine.regiao ? ` · ${wine.regiao}` : '';
-            addMsg(`${emoji} Preenchido pela IA:\n\n📍 ${wine.pais}${regInfo}\n🍇 ${wine.uva}\n🏭 ${wine.produtor}\n📅 Safra ${wine.safra || 'N/A'}`, 'ipanemita');
+            addMsg(`${emoji} Preenchido pela IA:\n\n📍 ${wine.pais || '?'}${regInfo}\n🍇 ${wine.uva || '?'}\n🏭 ${wine.produtor || '?'}\n📅 Safra ${wine.safra || 'N/A'}`, 'ipanemita');
+
+            // Encontra o primeiro campo em falta (steps 1 a 8)
+            const missingStep = fluxo.findIndex((f, i) => i >= 1 && i <= 8 && !dataVinho[f.key]);
+
             setTimeout(() => {
-                updateHeader('leblonzito');
-                addMsg(fluxo[9].q, 'leblonzito');
-                input.type = 'password';
-                input.placeholder = '';
+                if (missingStep !== -1) {
+                    step = missingStep;
+                    const next = fluxo[missingStep];
+                    updateHeader(next.bot);
+                    addMsg(`Faltaram alguns dados. ${next.q}`, next.bot);
+                    input.type = next.type || 'text';
+                    input.setAttribute('list', next.list || '');
+                    input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                } else {
+                    step = 9;
+                    updateHeader('leblonzito');
+                    addMsg(fluxo[9].q, 'leblonzito');
+                    input.type = 'password';
+                    input.placeholder = '';
+                }
             }, 800);
         }
 
@@ -724,6 +736,9 @@
             if (fluxo[step].key === 'uva' && rawMsg) localStorage.setItem('last_uva', rawMsg);
 
             step++;
+
+            // Pula campos já preenchidos pela IA
+            while (step >= 1 && step <= 8 && dataVinho[fluxo[step].key]) step++;
 
             // Mostrar botão desfazer (mas não na senha)
             if (step > 1 && step < fluxo.length) {
