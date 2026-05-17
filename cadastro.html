@@ -369,6 +369,7 @@
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        const GROQ_KEY = ""; // Cole sua chave gratuita de console.groq.com aqui (gsk_...)
         const IMG_L = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10";
         const IMG_I = "https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
 
@@ -423,14 +424,28 @@
             } catch (e) { return []; }
         }
 
-        async function searchGemini(term) {
-            if (term.length < 2) return null;
+        async function searchGroq(term) {
+            if (term.length < 2 || !GROQ_KEY) return null;
             try {
-                const url = SCRIPT_URL + '?action=buscarVinho&query=' + encodeURIComponent(term);
-                const res = await fetch(url);
+                const prompt = `Você é um especialista em vinhos. Dado o nome do vinho abaixo, retorne um JSON com os campos: nome, produtor, pais, regiao, uva, tipo (exatamente um de: Tinto, Branco, Rosé, Espumante), safra (apenas o ano, ex: 2019), teor (apenas número, ex: 13.5), classificacao. Se não souber, use null no campo. Se o vinho for completamente desconhecido, retorne {"erro": true}.\n\nVinho: ${term}`;
+                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${GROQ_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.3-70b-versatile',
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.2,
+                        max_tokens: 300,
+                        response_format: { type: 'json_object' }
+                    })
+                });
                 if (!res.ok) return null;
-                const wine = await res.json();
-                if (Array.isArray(wine) || !wine || !wine.nome || wine.erro) return null;
+                const data = await res.json();
+                const wine = JSON.parse(data.choices[0].message.content);
+                if (!wine || wine.erro || !wine.nome) return null;
                 return wine;
             } catch (e) { return null; }
         }
@@ -481,17 +496,17 @@
                     return;
                 }
 
-                // 2. Busca via Gemini
+                // 2. Busca via Groq (Llama 3.3)
                 updateHeader('ipanemita');
                 const loadingEl = addMsgEl('Consultando IA sobre esse vinho... ✨', 'ipanemita');
-                let gemini = null;
+                let groq = null;
                 try {
-                    gemini = await searchGemini(nome);
-                } catch (e) { gemini = null; }
+                    groq = await searchGroq(nome);
+                } catch (e) { groq = null; }
                 loadingEl.remove();
 
-                if (gemini) {
-                    showGeminiResult(gemini);
+                if (groq) {
+                    showGeminiResult(groq);
                 } else {
                     continuarFluxoNormal();
                 }
