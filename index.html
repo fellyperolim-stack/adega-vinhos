@@ -284,12 +284,29 @@
         .stat-item h2.counted { animation: countUp 0.5s ease-out; }
 
         @media (max-width: 992px) {
-            .main-content { grid-template-columns: 1fr; margin: 40px auto; }
+            .main-content { grid-template-columns: 1fr; margin: 40px auto; gap: 30px; }
             .experiencia-grid { grid-template-columns: 1fr; }
             .hero { background-attachment: scroll; height: auto; padding: 90px 20px; }
             .stats-row { gap: 30px; }
             .stats-bar { padding: 35px 10px 30px; }
             .destinos-block { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 70px 16px; }
+            .citacao { font-size: 1rem; }
+            .introducao { font-size: 0.9rem; }
+            .stats-row { gap: 20px; flex-wrap: wrap; justify-content: center; }
+            .stat-item { min-width: 120px; }
+            .main-content { margin: 24px auto; gap: 20px; padding: 0 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { padding: 55px 14px; }
+            .citacao { font-size: 0.9rem; letter-spacing: 0.3px; }
+            .stats-row { gap: 14px; }
+            .stat-item h2 { font-size: 1.8rem; }
+            .stats-bar { padding: 25px 10px 22px; }
         }
     </style>
 </head>

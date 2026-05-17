@@ -155,6 +155,26 @@
             .uva-header { padding: 15px 16px; }
             .uva-header h2 { font-size: 0.9rem; }
         }
+
+        @media (max-width: 768px) {
+            .content-area { padding: 16px 4%; }
+            .uva-header { min-height: 52px; }
+            .btn-ia { padding: 8px 14px; font-size: 0.8rem; min-height: 36px; }
+            .wine-item { padding: 12px 14px; min-height: 60px; }
+            .wine-item-img { width: 48px; height: 48px; }
+        }
+
+        @media (max-width: 480px) {
+            .uva-header h2 { font-size: 0.88rem; }
+            .wine-item-name { font-size: 0.85rem; }
+            .wine-item-sub { font-size: 0.72rem; }
+            .btn-ia { font-size: 0.78rem; padding: 8px 10px; }
+        }
+
+        @media (hover: none) {
+            .uva-header:active { background: rgba(201,162,39,0.08); }
+            .btn-ia:active { background: rgba(201,162,39,0.2); color: var(--dourado); }
+        }
     </style>
 </head>
 <body>

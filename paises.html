@@ -127,6 +127,24 @@
             .country-header { padding: 15px 16px; }
             .country-header h2 { font-size: 0.9rem; }
         }
+
+        @media (max-width: 768px) {
+            .content-area { padding: 16px 4%; }
+            .country-header { min-height: 52px; }
+            .wine-item { padding: 12px 14px; min-height: 60px; }
+            .wine-item-img { width: 48px; height: 48px; }
+        }
+
+        @media (max-width: 480px) {
+            .country-header h2 { font-size: 0.88rem; }
+            .wine-item-name { font-size: 0.85rem; }
+            .wine-item-sub { font-size: 0.72rem; }
+        }
+
+        @media (hover: none) {
+            .country-header:active { background: rgba(201,162,39,0.08); }
+            .wine-item:active { background: rgba(255,255,255,0.04); }
+        }
     </style>
 </head>
 <body>

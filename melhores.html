@@ -187,12 +187,29 @@
             margin: 0 auto;
         }
 
+        @media (max-width: 992px) {
+            .vinho-grid { grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 4%; }
+        }
+
         @media (max-width: 768px) {
             .vinho-grid { grid-template-columns: 1fr; gap: 16px; padding: 15px; }
             #skeleton-grid { grid-template-columns: 1fr; padding: 15px; }
             .vinho-img-container { height: 220px; }
             .mes-destaque { padding: 12px; }
-            .mes-label { font-size: 0.68rem; }
+            .mes-label { font-size: 0.75rem; min-height: 36px; padding: 8px 14px; }
+            .toggle-btn { min-height: 44px; padding: 10px 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .vinho-grid { padding: 12px; gap: 12px; }
+            .vinho-img-container { height: 190px; }
+            .mes-label { font-size: 0.78rem; }
+            .search-section h1 { font-size: 1.3rem; }
+        }
+
+        @media (hover: none) {
+            .mes-label:active { border-color: var(--dourado); color: var(--dourado); }
+            .toggle-btn:active { opacity: 0.8; }
         }
     </style>
 </head>

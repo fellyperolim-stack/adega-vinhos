@@ -183,7 +183,28 @@
             .wine-grid { grid-template-columns: 1fr; }
             .vinicola-header { padding: 15px 16px; }
             .vinicola-header h2 { font-size: 0.85rem; }
-            .header-section { padding: 50px 15px 25px; }
+        }
+
+        @media (max-width: 768px) {
+            .content-area { padding: 16px 4%; }
+            .vinicola-group { margin-bottom: 12px; }
+            .vinicola-header { min-height: 52px; }
+            .vinicola-header h2 { font-size: 0.9rem; }
+            .wine-item { padding: 12px 14px; gap: 10px; min-height: 60px; }
+            .wine-item-img { width: 48px; height: 48px; }
+            .search-vinicola-wrapper input { font-size: 16px; } /* previne zoom iOS */
+        }
+
+        @media (max-width: 480px) {
+            .wine-grid { gap: 8px; }
+            .wine-item-name { font-size: 0.85rem; }
+            .wine-item-sub { font-size: 0.72rem; }
+            .vinicola-header { padding: 14px 14px; }
+        }
+
+        @media (hover: none) {
+            .vinicola-header:active { background: rgba(201,162,39,0.08); }
+            .wine-item:active { background: rgba(255,255,255,0.04); }
         }
     </style>
 </head>
