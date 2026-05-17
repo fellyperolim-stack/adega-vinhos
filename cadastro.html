@@ -596,20 +596,34 @@
 
             document.getElementById('undo-bar').classList.remove('visible');
 
+            // Monta resumo apenas com o que a IA encontrou
             const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
-            updateHeader('ipanemita');
-            const regInfo = wine.regiao ? ` · ${wine.regiao}` : '';
-            addMsg(`${emoji} Preenchido pela IA:\n\n📍 ${wine.pais || '?'}${regInfo}\n🍇 ${wine.uva || '?'}\n🏭 ${wine.produtor || '?'}\n📅 Safra ${wine.safra || 'N/A'}`, 'ipanemita');
+            const encontrados = [
+                wine.pais    && `📍 ${wine.pais}${wine.regiao ? ' · ' + wine.regiao : ''}`,
+                wine.uva     && `🍇 ${wine.uva}`,
+                wine.produtor && `🏭 ${wine.produtor}`,
+                wine.safra   && `📅 Safra ${wine.safra}`,
+                wine.tipo    && `🍾 ${wine.tipo}`,
+                wine.teor    && `💧 ${wine.teor}% vol`,
+            ].filter(Boolean).join('\n');
 
             // Encontra o primeiro campo em falta (steps 1 a 8)
             const missingStep = fluxo.findIndex((f, i) => i >= 1 && i <= 8 && !dataVinho[f.key]);
+            const temFaltantes = missingStep !== -1;
+
+            updateHeader('ipanemita');
+            if (temFaltantes) {
+                addMsg(`${emoji} Encontrei alguns dados sobre esse vinho!\n\n${encontrados}\n\nVamos preencher o que faltou?`, 'ipanemita');
+            } else {
+                addMsg(`${emoji} Tudo preenchido pela IA!\n\n${encontrados}`, 'ipanemita');
+            }
 
             setTimeout(() => {
-                if (missingStep !== -1) {
+                if (temFaltantes) {
                     step = missingStep;
                     const next = fluxo[missingStep];
                     updateHeader(next.bot);
-                    addMsg(`Faltaram alguns dados. ${next.q}`, next.bot);
+                    addMsg(next.q, next.bot);
                     input.type = next.type || 'text';
                     input.setAttribute('list', next.list || '');
                     input.placeholder = next.placeholder || 'Digite e pressione Enter...';
