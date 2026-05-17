@@ -467,7 +467,7 @@
             addMsg(next.q, next.bot);
             input.type = next.type;
             input.setAttribute('list', next.list || '');
-            input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+            input.placeholder = next.placeholder || 'Digite e pressione Enter...';
         }
 
         // Chamada APÓS o usuário enviar o nome (step 0 já processado, step agora é 1)
@@ -546,7 +546,7 @@
                 addMsg(next.q, next.bot);
                 input.type = next.type;
                 input.setAttribute('list', next.list || '');
-                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                input.placeholder = next.placeholder || 'Digite e pressione Enter...';
             };
             bubble.appendChild(skipBtn);
 
@@ -612,7 +612,7 @@
                     addMsg(`Faltaram alguns dados. ${next.q}`, next.bot);
                     input.type = next.type || 'text';
                     input.setAttribute('list', next.list || '');
-                    input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                    input.placeholder = next.placeholder || 'Digite e pressione Enter...';
                 } else {
                     step = 9;
                     updateHeader('leblonzito');
@@ -721,10 +721,10 @@
                 if (currentKey === 'uva') rawMsg = localStorage.getItem('last_uva') || "";
             }
 
-            const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
-            if (!rawMsg && fluxo[step].key === 'tokenAcesso') return;
+            if (!rawMsg) return;
 
-            const displayMsg = (fluxo[step].type === 'password' && rawMsg) ? '••••••••' : (rawMsg || "(pulado)");
+            const msg = rawMsg;
+            const displayMsg = fluxo[step].type === 'password' ? '••••••••' : rawMsg;
             addMsg(displayMsg, 'user');
             input.value = "";
 
@@ -755,7 +755,7 @@
                     addMsg(nextStep.q, nextStep.bot);
                     input.type = nextStep.type;
                     input.setAttribute('list', nextStep.list || "");
-                    input.placeholder = nextStep.placeholder || "Pressione Enter para pular...";
+                    input.placeholder = nextStep.placeholder || "Digite e pressione Enter...";
                 }, 600);
             } else {
                 document.getElementById('undo-bar').classList.remove('visible');
@@ -784,7 +784,7 @@
             const input = document.getElementById('userInput');
             input.type = currentStep.type;
             input.setAttribute('list', currentStep.list || "");
-            input.placeholder = currentStep.placeholder || "Pressione Enter para pular...";
+            input.placeholder = currentStep.placeholder || "Digite e pressione Enter...";
             updateHeader(currentStep.bot);
 
             if (step <= 1) document.getElementById('undo-bar').classList.remove('visible');
