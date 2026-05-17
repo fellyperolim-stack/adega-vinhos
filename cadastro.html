@@ -570,14 +570,54 @@
 
         function showGeminiResult(wine) {
             const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
-            buildSuggestionBubble(IMG_I, '✨ Encontrei via IA! Clique para preencher tudo:',
-                [{
-                    text: `${emoji} ${wine.nome || dataVinho.wineName}`,
-                    sub: [wine.produtor, wine.pais, wine.safra ? `Safra ${wine.safra}` : ''].filter(Boolean).join(' · '),
-                    gold: false,
-                    onclick: () => applyGeminiWine(wine)
-                }]
-            );
+            const campos = [
+                { label: 'Produtor',      value: wine.produtor },
+                { label: 'País',          value: wine.pais },
+                { label: 'Região',        value: wine.regiao },
+                { label: 'Uva',           value: wine.uva },
+                { label: 'Tipo',          value: wine.tipo },
+                { label: 'Safra',         value: wine.safra },
+                { label: 'Teor',          value: wine.teor ? wine.teor + '% vol' : null },
+                { label: 'Classificação', value: wine.classificacao },
+            ].filter(c => c.value);
+
+            const win = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = 'msg msg-bot';
+
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:240px;max-width:290px;color:#fff;padding:14px';
+
+            const titulo = document.createElement('div');
+            titulo.style.cssText = 'font-size:12px;opacity:0.7;margin-bottom:10px';
+            titulo.textContent = `${emoji} ${wine.nome || dataVinho.wineName}`;
+            bubble.appendChild(titulo);
+
+            campos.forEach(({ label, value }) => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px;gap:10px';
+                row.innerHTML = `<span style="opacity:0.45;white-space:nowrap">✓ ${label}</span><span style="text-align:right;color:#d4b87a">${value}</span>`;
+                bubble.appendChild(row);
+            });
+
+            const btnConfirmar = document.createElement('button');
+            btnConfirmar.style.cssText = 'display:block;width:100%;text-align:center;padding:9px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid var(--dourado);background:rgba(201,162,39,0.18);color:#fff;margin-top:12px;font-weight:600';
+            btnConfirmar.textContent = '✓ Confirmar dados';
+            btnConfirmar.onclick = () => { hideSuggestions(); applyGeminiWine(wine); };
+            bubble.appendChild(btnConfirmar);
+
+            const btnManual = document.createElement('button');
+            btnManual.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:none;background:none;color:#555;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:11px;margin-top:4px';
+            btnManual.textContent = 'Preencher manualmente →';
+            btnManual.onclick = () => { hideSuggestions(); continuarFluxoNormal(); };
+            bubble.appendChild(btnManual);
+
+            div.innerHTML = getAvatarHtml(IMG_I, 'bot');
+            div.appendChild(bubble);
+            win.appendChild(div);
+            win.scrollTop = win.scrollHeight;
+            suggestionMsgEl = div;
         }
 
         function applyGeminiWine(wine) {
