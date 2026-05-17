@@ -417,9 +417,15 @@
             if (!Array.isArray(localWinesCache) || term.length < 2) return [];
             const t = term.toLowerCase();
             try {
-                return localWinesCache
-                    .filter(w => w && typeof w['Nome do Vinho'] === 'string' && w['Nome do Vinho'].toLowerCase().includes(t))
-                    .slice(0, 4);
+                const matches = localWinesCache
+                    .filter(w => w && typeof w['Nome do Vinho'] === 'string' && w['Nome do Vinho'].toLowerCase().includes(t));
+                if (!matches.length) return [];
+                // Retorna apenas o mais completo (mais campos preenchidos)
+                matches.sort((a, b) =>
+                    Object.values(b).filter(v => v && String(v).trim()).length -
+                    Object.values(a).filter(v => v && String(v).trim()).length
+                );
+                return matches.slice(0, 1);
             } catch (e) { return []; }
         }
 
@@ -477,7 +483,7 @@
                 const local = searchLocalWines(nome);
                 if (local.length) {
                     updateHeader('ipanemita');
-                    showSuggestionChipsInChat(local, '🍷 Esse vinho está na adega! Clique para preencher tudo:');
+                    showSuggestionChipsInChat(local);
                     return;
                 }
 
@@ -557,15 +563,24 @@
             suggestionMsgEl = div;
         }
 
-        function showSuggestionChipsInChat(localMatches, label) {
-            buildSuggestionBubble(IMG_L, label,
-                localMatches.map(w => ({
-                    text: w['Nome do Vinho'],
-                    sub: [w['Produtor'] || w['Vinícola'], w['País'] || w['Pais']].filter(Boolean).join(' · '),
-                    gold: true,
-                    onclick: () => applyCatalogWine(w)
-                }))
-            );
+        function showSuggestionChipsInChat(localMatches) {
+            if (!localMatches.length) return;
+            const w = localMatches[0];
+            const naoInfo = v => (!v || v === 'Não informado') ? null : v;
+            const limparTeor = v => v ? String(v).replace(/[^0-9.]/g, '') || null : null;
+            // Normaliza para o mesmo formato do resultado da IA
+            const wine = {
+                nome:          w['Nome do Vinho'] || dataVinho.wineName,
+                produtor:      naoInfo(w['Produtor'] || w['Vinícola']),
+                pais:          naoInfo(w['País'] || w['Pais']),
+                regiao:        naoInfo(w['Região'] || w['Regiao']),
+                uva:           naoInfo(w['Uva(s)'] || w['Uva']),
+                tipo:          naoInfo(w['Tipo']),
+                safra:         naoInfo(w['Safra']),
+                teor:          limparTeor(w['Teor Alcoólico'] || w['Teor']),
+                classificacao: naoInfo(w['Classificação'] || w['Classificacao']),
+            };
+            showGeminiResult(wine);
         }
 
         function showGeminiResult(wine) {
