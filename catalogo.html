@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Completo de Vinhos - Fellype & Hwlly</title>
-    <meta name="description" content="Explore nossa lista completa com mais de 95 vinhos degustados. Filtre por país, uva ou vinícola.">
+    <meta name="description" content="Explore nossa lista completa com mais de 130 vinhos degustados. Filtre por país, uva ou vinícola.">
     <meta property="og:title" content="Nossa Adega Digital - Catálogo Completo">
     <meta property="og:description" content="Explore nossa lista completa com mais de 95 vinhos degustados.">
     <meta property="og:type" content="website">
@@ -200,6 +200,7 @@
             gap: 5px;
         }
         .vinho-detalhes i { color: var(--dourado); width: 14px; opacity: 0.85; }
+        .vinho-flag-icon { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
 
         .notas {
             display: flex;
@@ -354,22 +355,20 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "assets/wine-placeholder.svg";
-        const BANDEIRAS = {
-    'frança': '🇫🇷', 'italia': '🇮🇹', 'itália': '🇮🇹', 'espanha': '🇪🇸', 'portugal': '🇵🇹',
-    'chile': '🇨🇱', 'argentina': '🇦🇷', 'estados unidos': '🇺🇸', 'eua': '🇺🇸', 'brasil': '🇧🇷',
-    'alemanha': '🇩🇪', 'austria': '🇦🇹', 'áustria': '🇦🇹', 'australia': '🇦🇺', 'austrália': '🇦🇺',
-    'nova zelandia': '🇳🇿', 'nova zelândia': '🇳🇿', 'africa do sul': '🇿🇦', 'áfrica do sul': '🇿🇦',
-    'uruguai': '🇺🇾', 'hungria': '🇭🇺', 'grecia': '🇬🇷', 'grécia': '🇬🇷', 'georgia': '🇬🇪', 'geórgia': '🇬🇪',
-    'suica': '🇨🇭', 'suíça': '🇨🇭', 'israel': '🇮🇱', 'libano': '🇱🇧', 'líbano': '🇱🇧',
-    'romenia': '🇷🇴', 'romênia': '🇷🇴', 'bulgaria': '🇧🇬', 'bulgária': '🇧🇬', 'croacia': '🇭🇷', 'croácia': '🇭🇷',
-    'eslovenia': '🇸🇮', 'eslovênia': '🇸🇮', 'moldavia': '🇲🇩', 'moldávia': '🇲🇩', 'canada': '🇨🇦', 'canadá': '🇨🇦',
-    'inglaterra': '🇬🇧', 'reino unido': '🇬🇧', 'japao': '🇯🇵', 'japão': '🇯🇵', 'china': '🇨🇳',
+const getFlagUrl = (pais) => {
+    if (!pais) return 'https://flagcdn.com/w80/un.png';
+    const n = pais.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+    const flags = {
+        "franca": "fr", "italia": "it", "espanha": "es", "portugal": "pt", "chile": "cl",
+        "argentina": "ar", "estados unidos": "us", "eua": "us", "brasil": "br", "alemanha": "de",
+        "austria": "at", "australia": "au", "nova zelandia": "nz", "africa do sul": "za",
+        "uruguai": "uy", "hungria": "hu", "grecia": "gr", "georgia": "ge", "suica": "ch",
+        "israel": "il", "libano": "lb", "romenia": "ro", "bulgaria": "bg", "croacia": "hr",
+        "eslovenia": "si", "moldavia": "md", "canada": "ca", "inglaterra": "gb", "reino unido": "gb",
+        "japao": "jp", "china": "cn"
+    };
+    return `https://flagcdn.com/w80/${flags[n] || "un"}.png`;
 };
-function getBandeira(pais) {
-    if (!pais) return '';
-    const key = pais.toString().toLowerCase().trim();
-    return BANDEIRAS[key] || '';
-}
         let vinhos = [];
         let filtroAtual = 'todos';
         let ordenacaoAtual = 'recentes';
@@ -504,7 +503,7 @@ function getBandeira(pais) {
                         <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
                         <div class="vinho-detalhes">
                             <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || 'Uva não informada'}</span>
-                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${getBandeira(v['País'] || v['Pais']) ? getBandeira(v['País'] || v['Pais']) + ' ' : ''}${v['País'] || 'Origem não informada'}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
+                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> <img src="${getFlagUrl(v['País'] || v['Pais'])}" class="vinho-flag-icon" alt="">${v['País'] || 'Origem não informada'}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box">
