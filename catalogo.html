@@ -9,12 +9,16 @@
     <meta property="og:description" content="Explore nossa lista completa com mais de 95 vinhos degustados.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fellypehwlly-adega.space/catalogo.html">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="shared.css">
@@ -24,7 +28,7 @@
         .search-section {
             padding: 65px 20px 15px;
             text-align: center;
-            background: linear-gradient(to bottom, #0e0507, var(--bg));
+            background: linear-gradient(to bottom, #1c1413, var(--bg));
         }
 
         .search-section h1 {
@@ -70,8 +74,8 @@
             font-family: 'Outfit', sans-serif;
             letter-spacing: 0.3px;
         }
-        #search::placeholder { color: #555; }
-        #search:focus { border-color: rgba(201, 162, 39, 0.4); background: rgba(255, 255, 255, 0.04); }
+        #search::placeholder { color: #7b6e68; }
+        #search:focus { border-color: rgba(198, 161, 91, 0.4); background: rgba(255, 255, 255, 0.04); }
 
         /* --- FILTROS --- */
         .filters-bar {
@@ -87,7 +91,7 @@
         .filter-chip {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #888;
+            color: #a0938c;
             padding: 6px 18px;
             border-radius: 20px;
             font-size: 0.72rem;
@@ -97,11 +101,12 @@
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
-        .filter-chip:hover { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado-claro); }
+        .filter-chip:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado-claro); }
         .filter-chip.active {
             background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
-            border-color: rgba(201, 162, 39, 0.2);
+            border-color: rgba(198, 161, 91, 0.2);
             color: rgba(255, 255, 255, 0.9);
         }
 
@@ -113,14 +118,14 @@
             padding: 0 20px 20px;
             font-family: 'Outfit', sans-serif;
             font-size: 0.72rem;
-            color: #555;
+            color: #7b6e68;
             letter-spacing: 0.5px;
         }
 
         .sort-btn {
             background: none;
             border: 1px solid rgba(255, 255, 255, 0.07);
-            color: #666;
+            color: #8a7d76;
             padding: 5px 12px;
             border-radius: 6px;
             font-size: 0.72rem;
@@ -129,9 +134,10 @@
             font-family: 'Outfit', sans-serif;
             font-weight: 500;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
-        .sort-btn:hover { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado); }
-        .sort-btn.active { border-color: rgba(201, 162, 39, 0.4); color: var(--dourado); background: rgba(201, 162, 39, 0.06); }
+        .sort-btn:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado); }
+        .sort-btn.active { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado); background: rgba(198, 161, 91, 0.06); }
 
         /* --- GRID E CARDS --- */
         .vinho-grid {
@@ -154,11 +160,11 @@
         }
         .vinho-card:hover {
             transform: translateY(-7px);
-            border-color: rgba(201, 162, 39, 0.3);
+            border-color: rgba(198, 161, 91, 0.3);
             box-shadow: var(--sombra-hover);
         }
 
-        .vinho-img-container { width: 100%; height: 280px; background: #000; overflow: hidden; }
+        .vinho-img-container { width: 100%; aspect-ratio: 4 / 5; background: var(--card-alt); overflow: hidden; }
         .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
         .vinho-card:hover .vinho-img { transform: scale(1.04); }
 
@@ -176,7 +182,7 @@
 
         .vinho-data {
             font-size: 0.72rem;
-            color: #555;
+            color: #7b6e68;
             display: block;
             margin-bottom: 12px;
             font-family: 'Outfit', sans-serif;
@@ -185,11 +191,15 @@
 
         .vinho-detalhes {
             font-size: 0.82rem;
-            color: #888;
+            color: var(--subtexto);
             margin-bottom: 18px;
             line-height: 1.6;
             font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
+        .vinho-detalhes i { color: var(--dourado); width: 14px; opacity: 0.85; }
 
         .notas {
             display: flex;
@@ -203,7 +213,7 @@
         .nota-box span {
             display: block;
             font-size: 0.58rem;
-            color: #555;
+            color: #7b6e68;
             text-transform: uppercase;
             font-family: 'Outfit', sans-serif;
             letter-spacing: 1.5px;
@@ -226,15 +236,15 @@
             font-family: 'Outfit', sans-serif;
             grid-column: 1 / -1;
         }
-        .empty-state i { font-size: 2.5rem; color: #2a2a2a; margin-bottom: 18px; display: block; }
-        .empty-state h3 { color: #444; font-size: 1rem; margin: 0 0 8px; font-weight: 400; font-family: 'Cinzel', serif; letter-spacing: 1px; }
-        .empty-state p { margin: 0; font-size: 0.85rem; color: #555; }
+        .empty-state i { font-size: 2.5rem; color: #372e2b; margin-bottom: 18px; display: block; }
+        .empty-state h3 { color: #6a5d57; font-size: 1rem; margin: 0 0 8px; font-weight: 400; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+        .empty-state p { margin: 0; font-size: 0.85rem; color: #7b6e68; }
 
         .btn-limpar {
             display: inline-block;
             margin-top: 18px;
             padding: 8px 22px;
-            border: 1px solid rgba(201, 162, 39, 0.4);
+            border: 1px solid rgba(198, 161, 91, 0.4);
             color: var(--dourado);
             border-radius: 20px;
             font-size: 0.72rem;
@@ -250,7 +260,7 @@
 
         /* --- SKELETON --- */
         .skeleton-card { background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
-        .sk-img { height: 280px; }
+        .sk-img { aspect-ratio: 4 / 5; }
         .sk-body { padding: 20px; }
         .sk-line { height: 13px; border-radius: 4px; margin-bottom: 10px; }
         .sk-line.short { width: 40%; }
@@ -261,7 +271,7 @@
             text-align: center;
             font-family: 'Outfit', sans-serif;
             font-size: 0.72rem;
-            color: #555;
+            color: #7b6e68;
             letter-spacing: 1px;
             padding-bottom: 10px;
             text-transform: uppercase;
@@ -271,7 +281,7 @@
             .search-section { padding: 45px 15px 10px; }
             .search-section h1 { font-size: 1.7rem; }
             .vinho-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); padding: 20px 4%; gap: 16px; }
-            .vinho-img-container { height: 250px; }
+            .vinho-img-container { aspect-ratio: 4 / 5; }
         }
 
         @media (max-width: 768px) {
@@ -291,7 +301,7 @@
             .filters-bar { gap: 6px; padding: 10px 12px; }
             .search-section h1 { font-size: 1.2rem; }
             .search-section p.sub-titulo { font-size: 0.85rem; }
-            .vinho-img-container { height: 200px; }
+            .vinho-img-container { aspect-ratio: 1 / 1; }
         }
     </style>
 </head>
@@ -301,7 +311,7 @@
 
     <div class="search-section">
         <h1>Nossa Adega</h1>
-        <p class="sub-titulo">Um catálogo vivo de nossas melhores experiências e descobertas 🍷✨</p>
+        <p class="sub-titulo">Todos os rótulos que já dividimos, com a nota de cada um de nós.</p>
         <div class="search-container">
             <i class="fas fa-search" aria-hidden="true"></i>
             <input type="text" id="search" placeholder="Pesquisar vinho, uva ou país..." aria-label="Pesquisar vinho">
@@ -310,10 +320,10 @@
 
     <div class="filters-bar" id="filters-bar">
         <button class="filter-chip active" data-filter="todos">Todos</button>
-        <button class="filter-chip" data-filter="Tinto">🍷 Tintos</button>
-        <button class="filter-chip" data-filter="Branco">🥂 Brancos</button>
-        <button class="filter-chip" data-filter="Rosé">🌸 Rosés</button>
-        <button class="filter-chip" data-filter="Espumante">✨ Espumantes</button>
+        <button class="filter-chip" data-filter="Tinto">Tintos</button>
+        <button class="filter-chip" data-filter="Branco">Brancos</button>
+        <button class="filter-chip" data-filter="Rosé">Rosés</button>
+        <button class="filter-chip" data-filter="Espumante">Espumantes</button>
     </div>
 
     <div class="sort-bar">
@@ -343,7 +353,7 @@
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
-        const IMG_PADRAO = "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop";
+        const IMG_PADRAO = "assets/wine-placeholder.svg";
         let vinhos = [];
         let filtroAtual = 'todos';
         let ordenacaoAtual = 'recentes';
@@ -477,8 +487,8 @@
                         <h3 class="vinho-nome">${v['Nome do Vinho'] || 'Rótulo Especial'}</h3>
                         <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
                         <div class="vinho-detalhes">
-                            <span>🍇 ${v['Uva(s)'] || 'N/A'}</span><br>
-                            <span>🌍 ${v['País'] || 'N/A'} ${v['Safra'] ? '| ' + v['Safra'] : ''}</span>
+                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || 'Uva não informada'}</span>
+                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${v['País'] || 'Origem não informada'}${v['Safra'] ? ' · ' + v['Safra'] : ''}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box">

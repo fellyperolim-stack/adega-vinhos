@@ -2,46 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fellypehwlly-adega.space/index.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>1.00</priority>
   </url>
-
   <url>
     <loc>https://fellypehwlly-adega.space/melhores.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.90</priority>
   </url>
-
   <url>
     <loc>https://fellypehwlly-adega.space/catalogo.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.85</priority>
   </url>
-
+  <url>
+    <loc>https://fellypehwlly-adega.space/stats.html</loc>
+    <lastmod>2026-08-15</lastmod>
+    <priority>0.75</priority>
+  </url>
   <url>
     <loc>https://fellypehwlly-adega.space/paises.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://fellypehwlly-adega.space/uvas.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://fellypehwlly-adega.space/vinicolas.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.70</priority>
   </url>
-
   <url>
     <loc>https://fellypehwlly-adega.space/games.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.50</priority>
   </url>
   <url>
     <loc>https://fellypehwlly-adega.space/cadastro.html</loc>
-    <lastmod>2026-04-21</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <priority>0.30</priority>
   </url>
 </urlset>

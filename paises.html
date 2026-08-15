@@ -10,12 +10,16 @@
     <meta property="og:description" content="Explore nossa adega por terroir: vinhos de 11 países diferentes.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fellypehwlly-adega.space/paises.html">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="shared.css">
@@ -31,10 +35,10 @@
             transition: var(--transicao);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
-        .country-group:hover { border-color: rgba(201, 162, 39, 0.25); }
+        .country-group:hover { border-color: rgba(198, 161, 91, 0.25); }
 
         .country-header {
-            background: linear-gradient(90deg, #141414, #0c0c0c);
+            background: linear-gradient(90deg, #221b1a, #1a1413);
             padding: 18px 20px;
             cursor: pointer;
             display: flex;
@@ -60,7 +64,7 @@
         .chevron { transition: var(--transicao); color: var(--dourado); font-size: 0.95rem; opacity: 0.7; }
         .country-group.active .chevron { transform: rotate(180deg); opacity: 1; }
 
-        .country-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #0a0a0a; }
+        .country-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #181211; }
         .country-group.active .country-content { max-height: 3000px; padding: 18px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
 
         .wine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
@@ -78,7 +82,7 @@
         }
         .wine-card:hover {
             transform: translateX(4px);
-            border-color: rgba(139, 0, 32, 0.4);
+            border-color: rgba(138, 34, 51, 0.4);
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -96,13 +100,14 @@
         .wine-info p {
             margin: 4px 0 0;
             font-size: 0.76rem;
-            color: #666;
+            color: var(--texto-fraco);
             font-family: 'Outfit', sans-serif;
         }
+        .wine-info p i { color: var(--dourado); opacity: 0.8; margin-right: 3px; }
 
         .rating-badge {
             margin-left: auto;
-            background: rgba(201, 162, 39, 0.07);
+            background: rgba(198, 161, 91, 0.07);
             color: var(--dourado);
             padding: 5px 10px;
             border-radius: 6px;
@@ -110,14 +115,14 @@
             font-size: 0.82rem;
             min-width: 48px;
             text-align: center;
-            border: 1px solid rgba(201, 162, 39, 0.15);
+            border: 1px solid rgba(198, 161, 91, 0.15);
             flex-shrink: 0;
             font-family: 'Cinzel', serif;
         }
 
         /* Skeleton */
         .sk-group { margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; overflow: hidden; }
-        .sk-header { padding: 18px 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        .sk-header { padding: 18px 20px; background: #1d1716; display: flex; justify-content: space-between; align-items: center; }
         .sk-title { height: 16px; border-radius: 4px; }
         .sk-badge { height: 16px; width: 30px; border-radius: 4px; }
         #loader { padding: 20px 5%; max-width: 1100px; margin: 0 auto; }
@@ -142,7 +147,7 @@
         }
 
         @media (hover: none) {
-            .country-header:active { background: rgba(201,162,39,0.08); }
+            .country-header:active { background: rgba(198, 161, 91,0.08); }
             .wine-item:active { background: rgba(255,255,255,0.04); }
         }
     </style>
@@ -161,7 +166,7 @@
             </div>
         </div>
         <h1>Mapa da Adega</h1>
-        <p style="color: var(--subtexto); font-size: 0.9rem; font-style: italic;">Exploração por Origem e Terroir 🌍</p>
+        <p class="subtitulo">Nossa coleção organizada por origem e terroir.</p>
     </header>
 
     <div id="loader">
@@ -177,7 +182,7 @@
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
-        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop";
+        const PLACEHOLDER_IMG = "assets/wine-placeholder.svg";
 
         const getFlag = (paisNome) => {
             if (!paisNome) return 'https://flagcdn.com/w80/un.png';
@@ -232,8 +237,8 @@
                 render(agrupados, sortedPaises);
             } catch (e) {
                 document.getElementById('loader').innerHTML = `
-                    <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Segoe UI',sans-serif;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#333;"></i>
+                    <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#3a302d;"></i>
                         Erro ao carregar o mapa. Tente novamente.
                     </div>`;
             }
@@ -271,7 +276,7 @@
                                     <img src="${img || PLACEHOLDER_IMG}" class="wine-img" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
                                     <div class="wine-info">
                                         <h3>${v.nome}</h3>
-                                        <p>🍇 ${v.uva}</p>
+                                        <p><i class="fas fa-seedling" aria-hidden="true"></i> ${v.uva}</p>
                                     </div>
                                     <div class="rating-badge">${v.media === "-" ? "—" : "★ " + v.media}</div>
                                 </div>`;

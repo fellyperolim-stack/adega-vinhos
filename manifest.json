@@ -2,33 +2,24 @@
   "id": "/",
   "name": "Adega Fellype & Hwlly",
   "short_name": "Adega F&H",
-  "description": "Nossa adega digital de memórias e vinhos.",
-  "start_url": "/",
+  "description": "Nossa adega digital: rótulos, notas de degustação e memórias de cada brinde.",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0a0a0a",
-  "theme_color": "#800020",
+  "background_color": "#15100F",
+  "theme_color": "#15100F",
   "lang": "pt-BR",
+  "dir": "ltr",
   "categories": ["lifestyle", "food"],
   "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/5821/5821090.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/5821/5821090.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/5821/5821090.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Catálogo", "url": "/catalogo.html" },
+    { "name": "Registrar vinho", "url": "/cadastro.html" },
+    { "name": "Estatísticas", "url": "/stats.html" }
   ]
 }

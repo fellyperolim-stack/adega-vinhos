@@ -9,12 +9,16 @@
     <meta property="og:description" content="Teste seus conhecimentos sobre vinhos com jogos baseados na nossa adega real.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fellypehwlly-adega.space/games.html">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -27,7 +31,7 @@
         .header-section {
             padding: 50px 15px 25px;
             position: relative;
-            background: linear-gradient(to bottom, #0e0507, var(--bg));
+            background: linear-gradient(to bottom, #1c1413, var(--bg));
         }
 
         .header-section h1 {
@@ -51,8 +55,8 @@
 
         .score-board {
             display: inline-block;
-            background: rgba(201, 162, 39, 0.07);
-            border: 1px solid rgba(201, 162, 39, 0.35);
+            background: rgba(198, 161, 91, 0.07);
+            border: 1px solid rgba(198, 161, 91, 0.35);
             padding: 8px 22px;
             border-radius: 30px;
             color: var(--dourado-claro);
@@ -89,14 +93,14 @@
         }
         .game-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(201, 162, 39, 0.35);
-            background: rgba(201, 162, 39, 0.04);
+            border-color: rgba(198, 161, 91, 0.35);
+            background: rgba(198, 161, 91, 0.04);
             box-shadow: var(--sombra-hover);
         }
 
         .game-icon { font-size: 2.6rem; color: var(--dourado); margin-bottom: 18px; opacity: 0.85; }
         .game-card h3 { font-family: 'Cinzel', serif; margin: 0 0 10px 0; font-size: 1.1rem; color: var(--texto); letter-spacing: 1px; }
-        .game-card p { font-size: 0.82rem; color: #666; margin: 0; font-family: 'Outfit', sans-serif; line-height: 1.5; }
+        .game-card p { font-size: 0.82rem; color: #8a7d76; margin: 0; font-family: 'Outfit', sans-serif; line-height: 1.5; }
 
         .badge-bot {
             position: absolute;
@@ -116,7 +120,7 @@
         .game-screen {
             display: none;
             background: rgba(14, 14, 14, 0.95);
-            border: 1px solid rgba(201, 162, 39, 0.25);
+            border: 1px solid rgba(198, 161, 91, 0.25);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
@@ -128,11 +132,11 @@
 
         .btn-voltar {
             position: absolute; top: 15px; left: 15px;
-            background: none; border: 1px solid #555; color: #aaa;
+            background: none; border: 1px solid #7b6e68; color: #b8ada6;
             padding: 8px 15px; border-radius: 8px; cursor: pointer;
             transition: 0.3s; font-family: 'Outfit', sans-serif;
         }
-        .btn-voltar:hover { background: #333; color: #fff; border-color: var(--dourado); }
+        .btn-voltar:hover { background: #3a302d; color: #fff; border-color: var(--dourado); }
 
         .game-title { font-family: 'Cinzel', serif; color: var(--dourado); margin-bottom: 15px; font-size: 1.8rem; }
 
@@ -165,12 +169,12 @@
         .word-display { font-size: 2rem; letter-spacing: 5px; margin: 10px 0 15px; font-family: monospace; color: var(--dourado-claro); word-wrap: break-word; }
         .keyboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; max-width: 500px; margin: 0 auto; }
         .key-btn {
-            background: #333; border: 1px solid #555; color: white;
+            background: #3a302d; border: 1px solid #7b6e68; color: white;
             width: 35px; height: 35px; border-radius: 5px;
             cursor: pointer; font-weight: bold; transition: 0.2s;
             font-family: 'Outfit', sans-serif;
         }
-        .key-btn:hover { background: #555; }
+        .key-btn:hover { background: #7b6e68; }
         .key-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .loading-data { color: var(--dourado); font-size: 1.2rem; padding: 50px; display: none; text-align: center; }
@@ -211,9 +215,9 @@
 
     <div id="navbar-placeholder"></div>
 
-    <header class="header-section" style="text-align:center; background: linear-gradient(to bottom, #111, var(--bg));">
+    <header class="header-section" style="text-align:center; background: linear-gradient(to bottom, #1d1716, var(--bg));">
         <h1>Lounge de Jogos</h1>
-        <p style="color: var(--subtexto); font-size: 0.9rem; font-family:'Segoe UI',sans-serif; margin:5px 0 10px;">Desafios e memórias baseadas na adega real.</p>
+        <p class="subtitulo">Desafios criados a partir dos vinhos que já registramos.</p>
         <div class="header-score-wrapper">
             <div class="score-board">
                 <i class="fas fa-wine-glass-alt" aria-hidden="true"></i>
@@ -257,7 +261,7 @@
         <div id="game-dynamic" class="game-screen">
             <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar</button>
             <h2 class="game-title" id="dyn-title">Título</h2>
-            <img src="" id="dyn-img" class="game-wine-img" alt="Foto do vinho" onerror="this.src='https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150'">
+            <img src="" id="dyn-img" class="game-wine-img" alt="Foto do vinho" onerror="this.src='assets/wine-placeholder.svg'">
             <div class="game-wine-name" id="dyn-name">Nome do Vinho</div>
             <div class="game-wine-date" id="dyn-date"><i class="far fa-calendar-alt" aria-hidden="true"></i> Consumido em: <span></span></div>
             <div class="quiz-question" id="dyn-question">Pergunta?</div>
@@ -274,21 +278,21 @@
             <div class="forca-visual">
                 <svg id="hang-svg" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <!-- Estrutura (estática) -->
-                    <line x1="10" y1="125" x2="110" y2="125" stroke="#555" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="30" y1="125" x2="30" y2="5"  stroke="#555" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="30" y1="5"   x2="75" y2="5"  stroke="#555" stroke-width="3" stroke-linecap="round"/>
-                    <line x1="75" y1="5"   x2="75" y2="20" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="10" y1="125" x2="110" y2="125" stroke="#7b6e68" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="30" y1="125" x2="30" y2="5"  stroke="#7b6e68" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="30" y1="5"   x2="75" y2="5"  stroke="#7b6e68" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="75" y1="5"   x2="75" y2="20" stroke="#7b6e68" stroke-width="3" stroke-linecap="round"/>
                     <!-- Peças do boneco (ocultas por padrão) -->
-                    <circle id="h-head" cx="75" cy="30" r="10" stroke="#d4af37" stroke-width="2" fill="none" style="display:none"/>
-                    <line   id="h-body" x1="75" y1="40" x2="75" y2="75" stroke="#d4af37" stroke-width="2" stroke-linecap="round" style="display:none"/>
-                    <line   id="h-arm-l" x1="75" y1="50" x2="58" y2="65" stroke="#d4af37" stroke-width="2" stroke-linecap="round" style="display:none"/>
-                    <line   id="h-arm-r" x1="75" y1="50" x2="92" y2="65" stroke="#d4af37" stroke-width="2" stroke-linecap="round" style="display:none"/>
-                    <line   id="h-leg-l" x1="75" y1="75" x2="60" y2="95" stroke="#d4af37" stroke-width="2" stroke-linecap="round" style="display:none"/>
-                    <line   id="h-leg-r" x1="75" y1="75" x2="90" y2="95" stroke="#d4af37" stroke-width="2" stroke-linecap="round" style="display:none"/>
+                    <circle id="h-head" cx="75" cy="30" r="10" stroke="#c6a15b" stroke-width="2" fill="none" style="display:none"/>
+                    <line   id="h-body" x1="75" y1="40" x2="75" y2="75" stroke="#c6a15b" stroke-width="2" stroke-linecap="round" style="display:none"/>
+                    <line   id="h-arm-l" x1="75" y1="50" x2="58" y2="65" stroke="#c6a15b" stroke-width="2" stroke-linecap="round" style="display:none"/>
+                    <line   id="h-arm-r" x1="75" y1="50" x2="92" y2="65" stroke="#c6a15b" stroke-width="2" stroke-linecap="round" style="display:none"/>
+                    <line   id="h-leg-l" x1="75" y1="75" x2="60" y2="95" stroke="#c6a15b" stroke-width="2" stroke-linecap="round" style="display:none"/>
+                    <line   id="h-leg-r" x1="75" y1="75" x2="90" y2="95" stroke="#c6a15b" stroke-width="2" stroke-linecap="round" style="display:none"/>
                 </svg>
             </div>
 
-            <p>Erros: <span id="hang-errors" style="color:#e05050; font-weight:bold;">0</span> / 6</p>
+            <p>Erros: <span id="hang-errors" style="color:#d2685f; font-weight:bold;">0</span> / 6</p>
             <div class="word-display" id="hang-word" aria-live="polite">_ _ _ _ _</div>
             <p class="feedback-msg" id="hang-msg" aria-live="assertive"></p>
             <div class="keyboard" id="hang-keyboard"></div>
@@ -396,7 +400,7 @@
             }
 
             const wine = validWines[Math.floor(Math.random() * validWines.length)];
-            document.getElementById('dyn-img').src = wine.foto || 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150';
+            document.getElementById('dyn-img').src = wine.foto || 'assets/wine-placeholder.svg';
 
             document.getElementById('dyn-name').innerText = wine.nome;
 
@@ -421,18 +425,18 @@
                 Array.from(document.getElementById('dyn-options').children).forEach(b => b.disabled = true);
                 const fb = document.getElementById('dyn-feedback');
                 if (isCorrect) {
-                    btn.style.background = '#1e6b1e';
-                    btn.style.borderColor = '#2a9a2a';
-                    fb.style.color = '#90ee90';
+                    btn.style.background = '#2f6b3a';
+                    btn.style.borderColor = '#48925a';
+                    fb.style.color = '#a8d5a2';
                     fb.innerText = msgSuccess;
                     addCoins(10);
                 } else {
-                    btn.style.background = '#6b1e1e';
-                    btn.style.borderColor = '#9a2a2a';
-                    fb.style.color = '#ff8080';
+                    btn.style.background = '#6b2429';
+                    btn.style.borderColor = '#a24048';
+                    fb.style.color = '#e08b84';
                     fb.innerText = msgError;
                     Array.from(document.getElementById('dyn-options').children).forEach(b => {
-                        if (b.dataset.correct === "true") { b.style.background = '#1e6b1e'; b.style.borderColor = '#2a9a2a'; }
+                        if (b.dataset.correct === "true") { b.style.background = '#2f6b3a'; b.style.borderColor = '#48925a'; }
                     });
                 }
                 document.getElementById('btn-next-dyn').style.display = 'block';
@@ -514,12 +518,12 @@
 
             if (!display.includes('_')) {
                 document.getElementById('hang-msg').innerText = "Você salvou o vinho! +20 Taças 🍷";
-                document.getElementById('hang-msg').style.color = "#90ee90";
+                document.getElementById('hang-msg').style.color = "#a8d5a2";
                 addCoins(20);
                 endForca();
             } else if (hangErrors >= 6) {
                 document.getElementById('hang-msg').innerText = `A garrafa quebrou! A palavra era ${currentWord}.`;
-                document.getElementById('hang-msg').style.color = "#ff8080";
+                document.getElementById('hang-msg').style.color = "#e08b84";
                 endForca();
             }
         }
@@ -536,11 +540,11 @@
                     btn.disabled = true;
                     guessedLetters.push(letter);
                     if (currentWord.includes(letter)) {
-                        btn.style.background = '#1e6b1e';
-                        btn.style.borderColor = '#2a9a2a';
+                        btn.style.background = '#2f6b3a';
+                        btn.style.borderColor = '#48925a';
                     } else {
-                        btn.style.background = '#6b1e1e';
-                        btn.style.borderColor = '#9a2a2a';
+                        btn.style.background = '#6b2429';
+                        btn.style.borderColor = '#a24048';
                         hangErrors++;
                     }
                     updateForcaDisplay();

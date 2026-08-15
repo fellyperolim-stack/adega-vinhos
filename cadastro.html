@@ -7,12 +7,16 @@
     <meta name="description" content="Registre um novo vinho na adega de Fellype & Hwlly.">
     <meta property="og:title" content="Cadastrar Vinho | Adega Fellype & Hwlly">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -24,7 +28,7 @@
         /* --- CHAT LAYOUT --- */
         .bg-gradient {
             position: fixed; inset: 0;
-            background: radial-gradient(circle at 50% 50%, #140306 0%, #050505 100%);
+            background: radial-gradient(circle at 50% 50%, #241318 0%, #15100f 100%);
             z-index: -1;
         }
 
@@ -32,7 +36,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: calc(100vh - 70px);
+            min-height: calc(100vh - var(--nav-h));
             padding: 20px;
         }
 
@@ -48,13 +52,13 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(201, 162, 39, 0.06);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(198, 161, 91, 0.06);
             position: relative;
         }
 
         /* --- MENSAGENS --- */
         .shiba-spotlight {
-            background: #fff; border-radius: 20px; padding: 2px;
+            background: var(--card-alt); border-radius: 20px; padding: 2px;
             display: inline-flex; box-shadow: 0 0 15px rgba(255,255,255,0.1);
             border: 1.5px solid var(--dourado); overflow: hidden;
             justify-content: center; align-items: center;
@@ -83,15 +87,15 @@
         .bubble {
             padding: 12px 16px; border-radius: 18px;
             font-size: 15px; line-height: 1.5;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
-        .msg-bot .bubble { background: #fff; color: #050505; border-bottom-left-radius: 4px; }
+        .msg-bot .bubble { background: #F5EFE8; color: #241318; border-bottom-left-radius: 4px; }
         .msg-user .bubble { background: var(--vinho-escuro); color: #fff; border-bottom-right-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
 
         .msg-success .bubble {
-            background: linear-gradient(135deg, #1a4a1a, #1e5e1e);
-            color: #90ee90;
-            border: 1px solid rgba(144,238,144,0.3);
+            background: linear-gradient(135deg, #243d28, #2c5a34);
+            color: #a8d5a2;
+            border: 1px solid rgba(168, 213, 162,0.3);
         }
 
         /* --- INPUT --- */
@@ -109,7 +113,7 @@
             padding: 12px 20px;
             color: white;
             outline: none;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 15px;
         }
 
@@ -138,13 +142,13 @@
         .undo-bar.visible { display: flex; }
         .undo-btn {
             background: none;
-            border: 1px solid #333;
-            color: #666;
+            border: 1px solid #3a302d;
+            color: #8a7d76;
             font-size: 0.7rem;
             padding: 4px 10px;
             border-radius: 10px;
             cursor: pointer;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             transition: 0.2s;
         }
         .undo-btn:hover { border-color: var(--dourado); color: var(--dourado); }
@@ -185,7 +189,7 @@
             display: inline-block;
             width: 7px; height: 7px;
             border-radius: 50%;
-            background: #555;
+            background: #7b6e68;
             animation: dotPulse 1.2s infinite ease-in-out;
         }
         .typing-dot:nth-child(2) { animation-delay: 0.2s; }
@@ -205,7 +209,7 @@
         /* --- MODAL DE AVALIAÇÃO --- */
         dialog {
             border: none;
-            background: #0d0d0d;
+            background: #1d1716;
             border: 1px solid var(--dourado);
             border-radius: 30px;
             padding: 25px;
@@ -225,7 +229,7 @@
             cursor: pointer;
             margin-top: 15px;
             text-transform: uppercase;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 0.9rem;
             transition: 0.2s;
         }
@@ -239,10 +243,10 @@
             border: 1px dashed var(--dourado);
             border-radius: 10px; text-align: center;
             cursor: pointer; color: var(--dourado);
-            font-size: 13px; font-family: 'Segoe UI', sans-serif;
+            font-size: 13px; font-family: 'Outfit', sans-serif;
             transition: 0.2s;
         }
-        .custom-file-upload:hover { background: rgba(212,175,55,0.1); }
+        .custom-file-upload:hover { background: rgba(198, 161, 91,0.1); }
 
         #preview {
             width: 100%; height: 100px; object-fit: cover;
@@ -253,15 +257,15 @@
         .modal-label {
             font-size: 10px; color: var(--dourado);
             margin-bottom: 4px; display: block;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             text-transform: uppercase; letter-spacing: 1px;
         }
 
         .modal-input {
             width: 100%; padding: 10px; border-radius: 10px;
-            border: 1px solid #333; background: #1a1a1a;
+            border: 1px solid #3a302d; background: #241d1b;
             color: white; margin-bottom: 5px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
         .modal-input:focus { outline: none; border-color: var(--dourado); }
 
@@ -273,25 +277,25 @@
         }
         .chip {
             background: rgba(255,255,255,0.05);
-            border: 1px solid #444;
+            border: 1px solid #6a5d57;
             color: #fff; padding: 4px 9px;
             border-radius: 6px; font-size: 11px;
             cursor: pointer; transition: 0.2s;
             white-space: nowrap;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             flex-shrink: 0;
         }
         .chip:hover { border-color: var(--dourado); background: var(--vinho-escuro); }
         .chip.selected { background: var(--dourado); color: #000; border-color: var(--dourado); }
 
         @media (max-width: 992px) {
-            .main-wrapper { padding: 10px; margin-top: 15px; min-height: calc(100vh - 70px); }
+            .main-wrapper { padding: 10px; margin-top: 15px; min-height: calc(100vh - var(--nav-h)); }
             .chat-card { height: 80vh; border-radius: 30px; }
         }
 
         @media (max-width: 768px) {
             .main-wrapper { padding: 6px; margin-top: 8px; }
-            .chat-card { height: calc(100dvh - 90px); border-radius: 20px; max-width: 100%; }
+            .chat-card { height: calc(100dvh - var(--nav-h) - 22px); border-radius: 20px; max-width: 100%; }
             .chat-header { padding: 12px 16px; }
             .msg-input { font-size: 16px; padding: 10px 16px; } /* 16px previne zoom no iOS */
             .send-btn { width: 42px; height: 42px; }
@@ -299,7 +303,7 @@
         }
 
         @media (max-width: 480px) {
-            .chat-card { height: calc(100dvh - 80px); border-radius: 16px; }
+            .chat-card { height: calc(100dvh - var(--nav-h) - 12px); border-radius: 16px; }
             .bubble { font-size: 14px; padding: 10px 14px; }
             .chat-window { padding: 16px; gap: 14px; }
             .nota-chips { gap: 6px; }
@@ -317,16 +321,16 @@
             display: inline-flex; align-items: center; gap: 5px;
             padding: 5px 12px; border-radius: 16px;
             font-size: 12px; cursor: pointer;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Outfit', sans-serif;
             white-space: nowrap; margin-right: 6px;
             transition: transform 0.15s, background 0.15s;
             border: 1px solid; background: none;
             animation: msgPop 0.2s ease-out;
         }
-        .suggestion-chip.local { border-color: var(--dourado); color: var(--dourado); background: rgba(201,162,39,0.1); }
+        .suggestion-chip.local { border-color: var(--dourado); color: var(--dourado); background: rgba(198, 161, 91,0.1); }
         .suggestion-chip.online { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.65); }
         .suggestion-chip:hover { transform: translateY(-1px); }
-        .suggestion-chip.local:hover { background: rgba(201,162,39,0.25); }
+        .suggestion-chip.local:hover { background: rgba(198, 161, 91,0.25); }
         .suggestion-chip.online:hover { background: rgba(255,255,255,0.08); }
     </style>
 </head>
@@ -597,7 +601,7 @@
             const div = document.createElement('div');
             div.className = 'msg msg-bot';
             const img = type === 'leblonzito' ? IMG_L : IMG_I;
-            div.innerHTML = `${getAvatarHtml(img, type)}<div class="bubble" style="padding:14px 18px;background:#fff">
+            div.innerHTML = `${getAvatarHtml(img, type)}<div class="bubble" style="padding:14px 18px;background:#F5EFE8">
                 <span class="typing-dot"></span>
                 <span class="typing-dot"></span>
                 <span class="typing-dot"></span>
@@ -618,7 +622,7 @@
         }
 
         function lançarConfete() {
-            const colors = ['#c9a227','#fff','#7b1c2e','#d4b87a','#ff6b6b','#74c0fc'];
+            const colors = ['#c6a15b','#fff','#8a2233','#e4cb94','#c9736e','#b8ada6'];
             for (let i = 0; i < 60; i++) {
                 const el = document.createElement('div');
                 el.className = 'confetti-piece';
@@ -645,7 +649,7 @@
 
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
-            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:200px;max-width:270px;color:#fff';
+            bubble.style.cssText = 'background:#241d1b;border:1px solid rgba(255,255,255,0.08);min-width:200px;max-width:270px;color:#fff';
 
             const lbl = document.createElement('div');
             lbl.style.cssText = 'font-size:12px;opacity:0.85;margin-bottom:8px;color:#fff';
@@ -654,14 +658,14 @@
 
             items.forEach(({ text, sub, gold, onclick }) => {
                 const btn = document.createElement('button');
-                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid ${gold ? 'var(--dourado)' : 'rgba(201,162,39,0.5)'};background:${gold ? 'rgba(201,162,39,0.18)' : 'rgba(201,162,39,0.08)'};color:#fff`;
+                btn.style.cssText = `display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:5px;border-radius:10px;cursor:pointer;font-family:Outfit,sans-serif;font-size:13px;border:1px solid ${gold ? 'var(--dourado)' : 'rgba(198, 161, 91,0.5)'};background:${gold ? 'rgba(198, 161, 91,0.18)' : 'rgba(198, 161, 91,0.08)'};color:#fff`;
                 btn.innerHTML = `${text}${sub ? `<span style="display:block;font-size:11px;opacity:0.55;margin-top:2px">${sub}</span>` : ''}`;
                 btn.onclick = onclick;
                 bubble.appendChild(btn);
             });
 
             const skipBtn = document.createElement('button');
-            skipBtn.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:1px solid #2a2a2a;background:none;color:#555;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:11px;margin-top:2px';
+            skipBtn.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:1px solid #372e2b;background:none;color:#7b6e68;cursor:pointer;font-family:Outfit,sans-serif;font-size:11px;margin-top:2px';
             skipBtn.textContent = skipLabel || 'Preencher manualmente →';
             skipBtn.onclick = () => {
                 hideSuggestions();
@@ -720,7 +724,7 @@
 
             const bubble = document.createElement('div');
             bubble.className = 'bubble';
-            bubble.style.cssText = 'background:#1a1a1a;border:1px solid rgba(255,255,255,0.08);min-width:240px;max-width:290px;color:#fff;padding:14px';
+            bubble.style.cssText = 'background:#241d1b;border:1px solid rgba(255,255,255,0.08);min-width:240px;max-width:290px;color:#fff;padding:14px';
 
             const titulo = document.createElement('div');
             titulo.style.cssText = 'font-size:12px;opacity:0.7;margin-bottom:4px';
@@ -746,7 +750,7 @@
 
                 const info = document.createElement('div');
                 info.style.cssText = 'display:flex;justify-content:space-between;flex:1;gap:8px';
-                info.innerHTML = `<span style="opacity:0.45;white-space:nowrap">${label}</span><span style="color:#d4b87a;text-align:right">${value}</span>`;
+                info.innerHTML = `<span style="opacity:0.45;white-space:nowrap">${label}</span><span style="color:#e4cb94;text-align:right">${value}</span>`;
 
                 row.appendChild(cb);
                 row.appendChild(info);
@@ -754,7 +758,7 @@
             });
 
             const btnConfirmar = document.createElement('button');
-            btnConfirmar.style.cssText = 'display:block;width:100%;text-align:center;padding:9px;border-radius:10px;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:13px;border:1px solid var(--dourado);background:rgba(201,162,39,0.18);color:#fff;margin-top:12px;font-weight:600';
+            btnConfirmar.style.cssText = 'display:block;width:100%;text-align:center;padding:9px;border-radius:10px;cursor:pointer;font-family:Outfit,sans-serif;font-size:13px;border:1px solid var(--dourado);background:rgba(198, 161, 91,0.18);color:#fff;margin-top:12px;font-weight:600';
             btnConfirmar.textContent = '✓ Confirmar selecionados';
             btnConfirmar.onclick = () => {
                 // Monta wine filtrado apenas com campos selecionados
@@ -770,7 +774,7 @@
             bubble.appendChild(btnConfirmar);
 
             const btnManual = document.createElement('button');
-            btnManual.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:none;background:none;color:#555;cursor:pointer;font-family:Segoe UI,sans-serif;font-size:11px;margin-top:4px';
+            btnManual.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:none;background:none;color:#7b6e68;cursor:pointer;font-family:Outfit,sans-serif;font-size:11px;margin-top:4px';
             btnManual.textContent = 'Preencher manualmente →';
             btnManual.onclick = () => { hideSuggestions(); continuarFluxoNormal(); };
             bubble.appendChild(btnManual);
@@ -882,7 +886,7 @@
         }
 
         function getAvatarHtml(imgUrl, nome) {
-            return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face" alt="${nome}"></div>`;
+            return `<div class="shiba-spotlight"><img src="${imgUrl}" class="avatar-sm zoom-face" data-fallback="assets/avatar-fallback.svg" alt="${nome}"></div>`;
         }
 
         function addMsg(text, type) {
@@ -921,9 +925,9 @@
         function updateHeader(bot) {
             const head = document.getElementById('header-content');
             if (bot === 'leblonzito') {
-                head.innerHTML = `${getAvatarHtml(IMG_L, 'Leblonzito')} <div><div style="font-weight:600; color:var(--dourado); font-family:'Segoe UI',sans-serif;">Leblonzito</div><div style="font-size:10px; opacity:0.6; font-family:'Segoe UI',sans-serif;">Sommelier Online</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_L, 'Leblonzito')} <div><div style="font-weight:600; color:var(--dourado); font-family:'Outfit', sans-serif;">Leblonzito</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">Sommelier Online</div></div>`;
             } else if (bot === 'ipanemita') {
-                head.innerHTML = `${getAvatarHtml(IMG_I, 'Ipanemita')} <div><div style="font-weight:600; color:#aaa; font-family:'Segoe UI',sans-serif;">Ipanemita</div><div style="font-size:10px; opacity:0.6; font-family:'Segoe UI',sans-serif;">Curadoria Inteligente</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_I, 'Ipanemita')} <div><div style="font-weight:600; color:#b8ada6; font-family:'Outfit', sans-serif;">Ipanemita</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">Curadoria Inteligente</div></div>`;
             } else {
                 head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px;">${getAvatarHtml(IMG_L, 'Leblonzito')}${getAvatarHtml(IMG_I, 'Ipanemita')}</div>`;
             }

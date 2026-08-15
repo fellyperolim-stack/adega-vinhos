@@ -9,12 +9,16 @@
     <meta property="og:description" content="A essência de cada casta degustada por Fellype & Hwlly.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fellypehwlly-adega.space/uvas.html">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="shared.css">
@@ -30,10 +34,10 @@
             transition: var(--transicao);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
-        .uva-group:hover { border-color: rgba(201, 162, 39, 0.25); }
+        .uva-group:hover { border-color: rgba(198, 161, 91, 0.25); }
 
         .uva-header {
-            background: linear-gradient(90deg, #141414, #0c0c0c);
+            background: linear-gradient(90deg, #221b1a, #1a1413);
             padding: 18px 20px;
             cursor: pointer;
             display: flex;
@@ -57,7 +61,7 @@
 
         .btn-ia {
             background: transparent;
-            border: 1px solid rgba(201, 162, 39, 0.3);
+            border: 1px solid rgba(198, 161, 91, 0.3);
             color: var(--dourado);
             padding: 5px 12px;
             border-radius: 20px;
@@ -68,17 +72,17 @@
             font-weight: 500;
             letter-spacing: 0.5px;
         }
-        .btn-ia:hover { background: rgba(201, 162, 39, 0.1); border-color: var(--dourado); }
+        .btn-ia:hover { background: rgba(198, 161, 91, 0.1); border-color: var(--dourado); }
 
         .chevron { transition: var(--transicao); color: var(--dourado); font-size: 0.95rem; opacity: 0.7; }
         .uva-group.active .chevron { transform: rotate(180deg); opacity: 1; }
 
-        .uva-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #0a0a0a; }
+        .uva-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background: #181211; }
         .uva-group.active .uva-content { max-height: 3000px; padding: 18px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
 
         .ia-explanation {
-            background: rgba(201, 162, 39, 0.04);
-            border: 1px dashed rgba(201, 162, 39, 0.3);
+            background: rgba(198, 161, 91, 0.04);
+            border: 1px dashed rgba(198, 161, 91, 0.3);
             padding: 16px;
             border-radius: 10px;
             margin-bottom: 18px;
@@ -106,7 +110,7 @@
         }
         .wine-card:hover {
             transform: translateX(4px);
-            border-color: rgba(139, 0, 32, 0.4);
+            border-color: rgba(138, 34, 51, 0.4);
             background: rgba(255, 255, 255, 0.04);
         }
 
@@ -124,13 +128,14 @@
         .wine-info p {
             margin: 4px 0 0;
             font-size: 0.76rem;
-            color: #666;
+            color: var(--texto-fraco);
             font-family: 'Outfit', sans-serif;
         }
+        .wine-info p i { color: var(--dourado); opacity: 0.8; margin-right: 3px; }
 
         .rating-badge {
             margin-left: auto;
-            background: rgba(201, 162, 39, 0.07);
+            background: rgba(198, 161, 91, 0.07);
             color: var(--dourado);
             padding: 5px 10px;
             border-radius: 6px;
@@ -138,14 +143,14 @@
             font-size: 0.82rem;
             min-width: 48px;
             text-align: center;
-            border: 1px solid rgba(201, 162, 39, 0.15);
+            border: 1px solid rgba(198, 161, 91, 0.15);
             flex-shrink: 0;
             font-family: 'Cinzel', serif;
         }
 
         /* Skeleton */
         .sk-group { margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; overflow: hidden; }
-        .sk-header { padding: 18px 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+        .sk-header { padding: 18px 20px; background: #1d1716; display: flex; justify-content: space-between; align-items: center; }
         .sk-title { height: 16px; border-radius: 4px; }
         .sk-badge { height: 16px; width: 30px; border-radius: 4px; }
         #loader { padding: 20px 5%; max-width: 1100px; margin: 0 auto; }
@@ -172,8 +177,8 @@
         }
 
         @media (hover: none) {
-            .uva-header:active { background: rgba(201,162,39,0.08); }
-            .btn-ia:active { background: rgba(201,162,39,0.2); color: var(--dourado); }
+            .uva-header:active { background: rgba(198, 161, 91,0.08); }
+            .btn-ia:active { background: rgba(198, 161, 91,0.2); color: var(--dourado); }
         }
     </style>
 </head>
@@ -191,7 +196,7 @@
             </div>
         </div>
         <h1>Variedades de Uvas</h1>
-        <p style="color: var(--subtexto); font-size: 0.9rem; font-style: italic;">A essência de cada casta degustada 🍇</p>
+        <p class="subtitulo">A essência de cada casta que já passou pela nossa mesa.</p>
     </header>
 
     <div id="loader">
@@ -208,7 +213,7 @@
     <script>
         const BASE_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const SCRIPT_URL_GET = BASE_URL + "?action=getVinhos";
-        const PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=150&auto=format&fit=crop";
+        const PLACEHOLDER_IMG = "assets/wine-placeholder.svg";
 
         // Token dividido para não ficar legível como string literal
         const _t = ['hwlly', '2026'].join('');
@@ -245,8 +250,8 @@
                 render(agrupados, Object.keys(agrupados).sort());
             } catch (e) {
                 document.getElementById('loader').innerHTML = `
-                    <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Segoe UI',sans-serif;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#333;"></i>
+                    <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#3a302d;"></i>
                         Erro ao carregar uvas. Tente novamente.
                     </div>`;
             }
@@ -269,10 +274,10 @@
                 const res = await response.json();
                 infoDiv.innerText = res.descricao || 'Informação não disponível.';
                 infoDiv.style.display = 'block';
-                btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Info IA';
+                btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva';
             } catch (e) {
                 btn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i> Erro';
-                setTimeout(() => { btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Info IA'; }, 2000);
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva'; }, 2000);
             }
         }
 
@@ -292,7 +297,7 @@
                         <h2><i class="fas fa-seedling" style="color:var(--vinho-vivo); font-size:0.9rem;" aria-hidden="true"></i> ${uva}</h2>
                         <div style="display:flex; align-items:center; gap:15px;">
                             <button class="btn-ia" onclick="perguntarIA('${uva.replace(/'/g,"\\'")}', event)" title="Ver descrição da uva">
-                                <i class="fas fa-magic" aria-hidden="true"></i> Info IA
+                                <i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva
                             </button>
                             <span style="font-size:0.9rem; color:var(--dourado); font-weight:bold;">${vinhos.length}</span>
                             <i class="fas fa-chevron-down chevron" aria-hidden="true"></i>
@@ -316,7 +321,7 @@
                                     <img src="${img}" class="wine-img" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
                                     <div class="wine-info">
                                         <h3>${v.nome}</h3>
-                                        <p>🌍 ${v.pais}</p>
+                                        <p><i class="fas fa-globe-americas" aria-hidden="true"></i> ${v.pais}</p>
                                     </div>
                                     <div class="rating-badge">${media === "-" ? "—" : "★ " + media}</div>
                                 </div>`;

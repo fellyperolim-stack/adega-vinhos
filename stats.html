@@ -9,12 +9,16 @@
     <meta property="og:description" content="Números e histórias por trás de cada gole da adega Fellype & Hwlly.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https:///fellypehwlly-adega.space/stats.html">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
     <meta property="og:locale" content="pt_BR">
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#800020">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/5821/5821090.png">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="shared.css">
@@ -25,7 +29,7 @@
         .stats-header {
             padding: 65px 5% 35px;
             text-align: center;
-            background: linear-gradient(to bottom, #0e0507, var(--bg));
+            background: linear-gradient(to bottom, #1c1413, var(--bg));
         }
 
         .stats-header h1 {
@@ -80,12 +84,12 @@
             box-shadow: var(--sombra-card);
         }
         .summary-card:hover {
-            border-color: rgba(201, 162, 39, 0.25);
+            border-color: rgba(198, 161, 91, 0.25);
             transform: translateY(-3px);
             box-shadow: var(--sombra-hover);
         }
 
-        .summary-icon { font-size: 1.4rem; margin-bottom: 10px; display: block; opacity: 0.85; }
+        .summary-icon { font-size: 1.15rem; margin-bottom: 12px; display: block; color: var(--dourado); opacity: 0.9; }
 
         .summary-value {
             font-size: 1.5rem;
@@ -100,7 +104,7 @@
 
         .summary-label {
             font-size: 0.62rem;
-            color: #666;
+            color: #8a7d76;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-family: 'Outfit', sans-serif;
@@ -109,7 +113,7 @@
 
         .summary-sub {
             font-size: 0.68rem;
-            color: #555;
+            color: #7b6e68;
             margin-top: 5px;
             font-family: 'Outfit', sans-serif;
             font-style: italic;
@@ -130,7 +134,7 @@
             transition: var(--transicao);
             box-shadow: var(--sombra-card);
         }
-        .chart-card:hover { border-color: rgba(201, 162, 39, 0.18); }
+        .chart-card:hover { border-color: rgba(198, 161, 91, 0.18); }
 
         .chart-title {
             font-size: 0.66rem;
@@ -186,7 +190,7 @@
             gap: 10px;
             margin-top: 14px;
             font-size: 0.75rem;
-            color: #666;
+            color: #8a7d76;
             font-family: 'Outfit', sans-serif;
             letter-spacing: 0.3px;
         }
@@ -219,7 +223,7 @@
 
     <div class="stats-header">
         <h1>Estatísticas da Adega</h1>
-        <p>Números e histórias por trás de cada gole 📊</p>
+        <p>Os números por trás de cada gole que registramos.</p>
     </div>
 
     <!-- Skeleton -->
@@ -294,17 +298,17 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
 
         /* ---- Tema global dos charts ---- */
-        Chart.defaults.color = '#999';
-        Chart.defaults.borderColor = '#242424';
-        Chart.defaults.font.family = "'Segoe UI', sans-serif";
+        Chart.defaults.color = '#a89c95';
+        Chart.defaults.borderColor = '#302726';
+        Chart.defaults.font.family = "'Outfit', sans-serif";
         Chart.defaults.font.size = 12;
 
         /* ---- Paleta quente ---- */
         const PALETTE = [
-            '#D4AF37', '#C0392B', '#E67E22', '#8B4513',
-            '#DAA520', '#CD5C5C', '#B8860B', '#A0522D',
-            '#FF6B6B', '#FF8C00', '#BC8F8F', '#CD853F',
-            '#E8B86D', '#9B2335', '#F39C12'
+            '#c6a15b', '#8a2233', '#c8763c', '#6d3b22',
+            '#c6a15b', '#a95a5a', '#9c7c3a', '#8a4a30',
+            '#c9736e', '#d08a3a', '#b09189', '#b5814a',
+            '#e4cb94', '#6e1c2a', '#d3a24a'
         ];
 
         /* ---- Helper: busca campo por nome (case-insensitive) ---- */
@@ -376,17 +380,17 @@
             const melhor = [...wines].filter(w => w.media > 0).sort((a, b) => b.media - a.media)[0];
 
             const cards = [
-                { icon: '🍷', value: wines.length,         label: 'Vinhos na Adega',       sub: null },
-                { icon: '⭐', value: mediaGeral,            label: 'Média Geral',            sub: `de ${comNotas.length} avaliados` },
-                { icon: '🌍', value: paisTop[0],            label: 'País Favorito',          sub: `${paisTop[1]} rótulo${paisTop[1] !== 1 ? 's' : ''}` },
-                { icon: '🍇', value: uvaTop[0],             label: 'Uva Favorita',           sub: `${uvaTop[1]} vez${uvaTop[1] !== 1 ? 'es' : ''}` },
-                { icon: '📅', value: esteAno,               label: `Brindados em ${anoAtual}`, sub: null },
-                { icon: '🏆', value: melhor ? melhor.media.toFixed(1) : '—', label: 'Maior Nota', sub: melhor ? melhor.nome.split(' ').slice(0, 3).join(' ') : '' },
+                { icon: 'fa-wine-bottle',     value: wines.length,         label: 'Vinhos na adega',        sub: null },
+                { icon: 'fa-star',            value: mediaGeral,            label: 'Média geral',            sub: `de ${comNotas.length} avaliados` },
+                { icon: 'fa-globe-americas',  value: paisTop[0],            label: 'País favorito',          sub: `${paisTop[1]} rótulo${paisTop[1] !== 1 ? 's' : ''}` },
+                { icon: 'fa-seedling',        value: uvaTop[0],             label: 'Uva favorita',           sub: `${uvaTop[1]} vez${uvaTop[1] !== 1 ? 'es' : ''}` },
+                { icon: 'fa-calendar-check',  value: esteAno,               label: `Brindados em ${anoAtual}`, sub: null },
+                { icon: 'fa-award',           value: melhor ? melhor.media.toFixed(1) : '—', label: 'Maior nota', sub: melhor ? melhor.nome.split(' ').slice(0, 3).join(' ') : '' },
             ];
 
             document.getElementById('summary-grid').innerHTML = cards.map(c => `
                 <div class="summary-card">
-                    <span class="summary-icon">${c.icon}</span>
+                    <span class="summary-icon"><i class="fas ${c.icon}" aria-hidden="true"></i></span>
                     <div class="summary-value">${c.value}</div>
                     <div class="summary-label">${c.label}</div>
                     ${c.sub ? `<div class="summary-sub">${c.sub}</div>` : ''}
@@ -405,7 +409,7 @@
                     datasets: [{
                         data: sorted.map(e => e[1]),
                         backgroundColor: sorted.map((_, i) => PALETTE[i % PALETTE.length]),
-                        borderColor: '#111',
+                        borderColor: '#1d1716',
                         borderWidth: 2,
                         hoverOffset: 10,
                     }]
@@ -417,7 +421,7 @@
                     plugins: {
                         legend: {
                             position: 'right',
-                            labels: { color: '#bbb', font: { size: 11 }, boxWidth: 13, padding: 10 }
+                            labels: { color: '#c4b9b2', font: { size: 11 }, boxWidth: 13, padding: 10 }
                         },
                         tooltip: {
                             callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} vinho${ctx.raw !== 1 ? 's' : ''}` }
@@ -437,7 +441,7 @@
                     labels: top10.map(e => e[0]),
                     datasets: [{
                         data: top10.map(e => e[1]),
-                        backgroundColor: top10.map((_, i) => `rgba(212, 175, 55, ${1 - i * 0.07})`),
+                        backgroundColor: top10.map((_, i) => `rgba(198, 161, 91, ${1 - i * 0.07})`),
                         borderColor: 'transparent',
                         borderRadius: 4,
                     }]
@@ -454,12 +458,12 @@
                     },
                     scales: {
                         x: {
-                            grid: { color: '#1e1e1e' },
-                            ticks: { color: '#888', stepSize: 1, precision: 0 }
+                            grid: { color: '#2a2220' },
+                            ticks: { color: '#a0938c', stepSize: 1, precision: 0 }
                         },
                         y: {
                             grid: { display: false },
-                            ticks: { color: '#ccc', font: { size: 11 } }
+                            ticks: { color: '#d2c8c1', font: { size: 11 } }
                         }
                     }
                 }
@@ -509,12 +513,12 @@
                     datasets: [{
                         label: 'Vinhos degustados',
                         data: entries.map(e => e[1]),
-                        borderColor: '#C0392B',
-                        backgroundColor: 'rgba(192, 57, 43, 0.12)',
+                        borderColor: '#8a2233',
+                        backgroundColor: 'rgba(138, 34, 51, 0.12)',
                         fill: true,
                         tension: 0.4,
-                        pointBackgroundColor: '#D4AF37',
-                        pointBorderColor: '#111',
+                        pointBackgroundColor: '#c6a15b',
+                        pointBorderColor: '#1d1716',
                         pointRadius: 5,
                         pointHoverRadius: 7,
                     }]
@@ -529,8 +533,8 @@
                         }
                     },
                     scales: {
-                        x: { grid: { color: '#1e1e1e' }, ticks: { color: '#888' } },
-                        y: { grid: { color: '#1e1e1e' }, ticks: { color: '#888', stepSize: 1, precision: 0 }, beginAtZero: true }
+                        x: { grid: { color: '#2a2220' }, ticks: { color: '#a0938c' } },
+                        y: { grid: { color: '#2a2220' }, ticks: { color: '#a0938c', stepSize: 1, precision: 0 }, beginAtZero: true }
                     }
                 }
             });
@@ -558,7 +562,7 @@
             const maisRigido    = mediaF > mediaH ? 'Hwlly'   : 'Fellype';
 
             document.getElementById('fvsh-insight').innerHTML = `
-                <span class="insight-dot" style="background:#D4AF37"></span>
+                <span class="insight-dot" style="background:#c6a15b"></span>
                 <span><strong style="color:var(--dourado-claro)">${maisGeneroso}</strong> costuma dar <strong>+${diffAbs}</strong> pontos a mais que ${maisRigido}</span>
             `;
 
@@ -569,8 +573,8 @@
                         {
                             label: 'Vinhos',
                             data: comAmbos.map(w => ({ x: w.notaF, y: w.notaH, nome: w.nome })),
-                            backgroundColor: 'rgba(212, 175, 55, 0.65)',
-                            borderColor: 'rgba(212, 175, 55, 0.25)',
+                            backgroundColor: 'rgba(198, 161, 91, 0.65)',
+                            borderColor: 'rgba(198, 161, 91, 0.25)',
                             borderWidth: 1,
                             pointRadius: 6,
                             pointHoverRadius: 9,
@@ -594,7 +598,7 @@
                     plugins: {
                         legend: {
                             labels: {
-                                color: '#666',
+                                color: '#8a7d76',
                                 font: { size: 11 },
                                 filter: item => item.datasetIndex === 1
                             }
@@ -612,15 +616,15 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Nota Fellype', color: '#777', font: { size: 11 } },
-                            grid: { color: '#1e1e1e' },
-                            ticks: { color: '#888' },
+                            title: { display: true, text: 'Nota Fellype', color: '#94867f', font: { size: 11 } },
+                            grid: { color: '#2a2220' },
+                            ticks: { color: '#a0938c' },
                             min: minV, max: maxV,
                         },
                         y: {
-                            title: { display: true, text: 'Nota Hwlly', color: '#777', font: { size: 11 } },
-                            grid: { color: '#1e1e1e' },
-                            ticks: { color: '#888' },
+                            title: { display: true, text: 'Nota Hwlly', color: '#94867f', font: { size: 11 } },
+                            grid: { color: '#2a2220' },
+                            ticks: { color: '#a0938c' },
                             min: minV, max: maxV,
                         }
                     }
@@ -645,8 +649,8 @@
 
             } catch (e) {
                 document.getElementById('skeleton-stats').innerHTML = `
-                    <div style="text-align:center; padding:80px 20px; color:var(--subtexto); font-family:'Segoe UI',sans-serif;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#333; display:block; margin-bottom:15px;" aria-hidden="true"></i>
+                    <div style="text-align:center; padding:80px 20px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#3a302d; display:block; margin-bottom:15px;" aria-hidden="true"></i>
                         Erro ao carregar estatísticas. Tente novamente.
                     </div>`;
             }
