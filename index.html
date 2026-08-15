@@ -94,8 +94,10 @@
 
         /* --- STATS BAR --- */
         .stats-bar {
-            background: linear-gradient(to bottom, #1c1413, var(--card));
-            padding: 55px 20px 45px;
+            background:
+                radial-gradient(110% 100% at 50% 0%, rgba(90, 23, 40, 0.32), transparent 62%),
+                linear-gradient(to bottom, #1c1413, var(--card));
+            padding: 62px 20px 58px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
@@ -103,6 +105,135 @@
             align-items: center;
             gap: 0;
         }
+
+        .stats-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin: 0 0 8px;
+        }
+
+        .stats-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.15rem, 3vw, 1.6rem);
+            color: var(--dourado-claro);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            margin: 0 0 8px;
+            text-align: center;
+        }
+
+        .stats-sub {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            color: var(--subtexto);
+            margin: 0 0 42px;
+            text-align: center;
+            max-width: 48ch;
+        }
+
+        /* Painéis de leitura rápida */
+        .stats-panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 42px;
+        }
+
+        .stats-panel {
+            background: linear-gradient(150deg, var(--card-alt), var(--card));
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 24px 24px 20px;
+            box-shadow: var(--sombra-card);
+            transition: var(--transicao);
+        }
+        .stats-panel:hover { border-color: var(--borda-dourada); }
+
+        .stats-panel h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin: 0 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* Barras de origem (CSS puro) */
+        .origem-lista { display: flex; flex-direction: column; gap: 13px; }
+
+        .origem-item { font-family: 'Outfit', sans-serif; }
+
+        .origem-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--texto-suave);
+            margin-bottom: 6px;
+        }
+        .origem-topo b { color: var(--dourado); font-weight: 600; font-size: 0.76rem; }
+
+        .origem-trilha {
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        .origem-barra {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--vinho-vivo), var(--dourado));
+            width: 0;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Destaque do rótulo campeão */
+        .destaque-rotulo {
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .destaque-nota {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--dourado-claro);
+            line-height: 1;
+        }
+
+        .destaque-nome {
+            color: var(--texto);
+            font-size: 0.98rem;
+            font-weight: 500;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .destaque-meta { color: var(--texto-fraco); font-size: 0.76rem; }
+
+        .destaque-linha {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--borda);
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+        .destaque-linha .n { font-family: 'Cinzel', serif; color: var(--dourado); font-size: 1.15rem; font-weight: 600; line-height: 1.2; }
+        .destaque-linha .l { font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--texto-fraco); font-weight: 600; }
 
         .stats-row {
             display: flex;
@@ -149,23 +280,32 @@
             vertical-align: middle;
         }
 
-        /* Link para stats completas */
-        .stats-link {
-            margin-top: 32px;
-            font-size: 0.72rem;
-            color: #7b6e68;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
+        /* CTA para as estatísticas completas */
+        .stats-cta {
+            margin-top: 34px;
+            display: inline-flex;
             align-items: center;
-            gap: 7px;
-            transition: var(--transicao);
-            letter-spacing: 1.5px;
+            gap: 10px;
+            padding: 15px 28px;
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid var(--borda-dourada);
+            border-radius: var(--raio-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            border-bottom: 1px solid transparent;
+            transition: var(--transicao);
+            min-height: 48px;
         }
-        .stats-link:hover { color: var(--dourado); border-bottom-color: rgba(198, 161, 91, 0.3); }
+        .stats-cta:hover {
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px rgba(138, 34, 51, 0.42);
+            border-color: rgba(198, 161, 91, 0.42);
+        }
 
         /* --- CORPO PRINCIPAL --- */
         .main-content {
@@ -308,7 +448,8 @@
             .experiencia-grid { grid-template-columns: 1fr; }
             .hero { background-attachment: scroll; height: auto; padding: 90px 20px; }
             .stats-row { gap: 30px; }
-            .stats-bar { padding: 35px 10px 30px; }
+            .stats-bar { padding: 42px 16px 40px; }
+            .stats-panels { grid-template-columns: 1fr; margin-top: 32px; }
             .destinos-block { position: static; }
         }
 
@@ -326,7 +467,10 @@
             .citacao { font-size: 0.9rem; letter-spacing: 0.3px; }
             .stats-row { gap: 14px; }
             .stat-item h2 { font-size: 1.8rem; }
-            .stats-bar { padding: 25px 10px 22px; }
+            .stats-bar { padding: 34px 14px 32px; }
+            .stats-sub { margin-bottom: 30px; font-size: 0.8rem; }
+            .stats-panel { padding: 20px 18px 18px; }
+            .destaque-nota { font-size: 2rem; }
         }
     </style>
 </head>
@@ -344,7 +488,10 @@
         </div>
     </header>
 
-    <div class="stats-bar">
+    <section class="stats-bar" aria-labelledby="stats-titulo">
+        <p class="stats-eyebrow">Nossa adega em números</p>
+        <h2 class="stats-titulo" id="stats-titulo">O retrato de tudo que brindamos</h2>
+        <p class="stats-sub">Cada rótulo registrado virou dado: origens, castas, notas e a evolução mês a mês.</p>
         <div class="stats-row">
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-wine-bottle" aria-hidden="true"></i></div>
@@ -375,10 +522,28 @@
                 <p>Nota Média</p>
             </div>
         </div>
-        <a href="stats.html" class="stats-link" id="stats-link" style="opacity:0;">
-            Ver análise completa <i class="fas fa-arrow-right" style="font-size:0.7rem;" aria-hidden="true"></i>
+        <div class="stats-panels">
+            <div class="stats-panel">
+                <h3><i class="fas fa-globe-americas" aria-hidden="true"></i> Origens mais visitadas</h3>
+                <div class="origem-lista" id="origem-lista">
+                    <div class="skeleton" style="height:14px"></div>
+                    <div class="skeleton" style="height:14px"></div>
+                    <div class="skeleton" style="height:14px"></div>
+                </div>
+            </div>
+            <div class="stats-panel">
+                <h3><i class="fas fa-award" aria-hidden="true"></i> Rótulo mais bem avaliado</h3>
+                <div class="destaque-rotulo" id="destaque-rotulo">
+                    <div class="skeleton" style="height:44px; width:90px"></div>
+                    <div class="skeleton" style="height:14px; margin-top:10px"></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="stats.html" class="stats-cta" id="stats-link" style="opacity:0;">
+            <i class="fas fa-chart-pie" aria-hidden="true"></i> Ver análise completa da adega
         </a>
-    </div>
+    </section>
 
     <main class="main-content">
         <article class="text-block">
@@ -471,12 +636,22 @@
                     return '';
                 };
 
-                const wines = data.map(v => ({
-                    pais:  get(v, 'País', 'Pais') || 'Outros',
-                    uva:   get(v, 'Uva(s)', 'Uva') || '',
-                    notaF: parseFloat((get(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0,
-                    notaH: parseFloat((get(v, 'Pontuação Hwlly',   'Pontuacao Hwlly')   || '0').replace(',', '.')) || 0,
-                })).filter(w => w.pais !== 'Outros' || w.uva !== '');
+                const esc = (s) => String(s ?? '')
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                const wines = data.map(v => {
+                    const notaF = parseFloat((get(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0;
+                    const notaH = parseFloat((get(v, 'Pontuação Hwlly',   'Pontuacao Hwlly')   || '0').replace(',', '.')) || 0;
+                    return {
+                        nome:  get(v, 'Nome do Vinho', 'nome') || 'Rótulo especial',
+                        pais:  get(v, 'País', 'Pais') || 'Outros',
+                        uva:   get(v, 'Uva(s)', 'Uva') || '',
+                        safra: get(v, 'Safra') || '',
+                        notaF, notaH,
+                        media: (notaF > 0 && notaH > 0) ? (notaF + notaH) / 2 : (notaF || notaH || 0),
+                    };
+                }).filter(w => w.pais !== 'Outros' || w.uva !== '');
 
                 const totalVinhos = wines.length;
                 const paises      = new Set(wines.map(w => w.pais).filter(Boolean)).size;
@@ -519,6 +694,55 @@
                     elMedia.textContent = '—';
                 }
 
+                /* ---- Painel: origens mais visitadas ---- */
+                const contPaises = wines.reduce((acc, w) => {
+                    if (w.pais) acc[w.pais] = (acc[w.pais] || 0) + 1;
+                    return acc;
+                }, {});
+                const topPaises = Object.entries(contPaises).sort((a, b) => b[1] - a[1]).slice(0, 4);
+                const maxPais = topPaises.length ? topPaises[0][1] : 1;
+                const listaOrigem = document.getElementById('origem-lista');
+
+                if (topPaises.length) {
+                    listaOrigem.innerHTML = topPaises.map(([nome, qtd]) => `
+                        <div class="origem-item">
+                            <div class="origem-topo"><span>${esc(nome)}</span><b>${qtd}</b></div>
+                            <div class="origem-trilha"><div class="origem-barra" data-pct="${Math.round((qtd / maxPais) * 100)}"></div></div>
+                        </div>`).join('');
+
+                    const ioBarras = new IntersectionObserver((entries, obs) => {
+                        entries.forEach(entry => {
+                            if (!entry.isIntersecting) return;
+                            listaOrigem.querySelectorAll('.origem-barra').forEach((b, i) => {
+                                setTimeout(() => { b.style.width = b.dataset.pct + '%'; }, i * 120);
+                            });
+                            obs.disconnect();
+                        });
+                    }, { threshold: 0.3 });
+                    ioBarras.observe(listaOrigem);
+                } else {
+                    listaOrigem.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Nenhuma origem registrada ainda.</p>';
+                }
+
+                /* ---- Painel: rótulo mais bem avaliado ---- */
+                const melhor = wines.filter(w => w.media > 0).sort((a, b) => b.media - a.media)[0];
+                const boxDestaque = document.getElementById('destaque-rotulo');
+                const anoAtual = new Date().getFullYear();
+
+                if (melhor) {
+                    boxDestaque.innerHTML = `
+                        <div class="destaque-nota">${melhor.media.toFixed(1)}</div>
+                        <div class="destaque-nome">${esc(melhor.nome)}</div>
+                        <div class="destaque-meta">${esc(melhor.pais)}${melhor.uva ? ' · ' + esc(melhor.uva) : ''}${melhor.safra ? ' · ' + esc(melhor.safra) : ''}</div>
+                        <div class="destaque-linha">
+                            <div><div class="n">${melhor.notaF || '—'}</div><div class="l">Fellype</div></div>
+                            <div><div class="n">${melhor.notaH || '—'}</div><div class="l">Hwlly</div></div>
+                            <div><div class="n">${comNotas.length}</div><div class="l">Avaliados</div></div>
+                        </div>`;
+                } else {
+                    boxDestaque.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Sem avaliações registradas ainda.</p>';
+                }
+
                 /* Exibe o link para stats.html */
                 const link = document.getElementById('stats-link');
                 if (link) { link.style.transition = 'opacity 0.6s ease 0.8s'; link.style.opacity = '1'; }
@@ -529,6 +753,13 @@
                     const el = document.getElementById(id);
                     if (el) el.textContent = '—';
                 });
+                const vazio = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Dados indisponíveis agora.</p>';
+                const lo = document.getElementById('origem-lista');
+                const dr = document.getElementById('destaque-rotulo');
+                if (lo) lo.innerHTML = vazio;
+                if (dr) dr.innerHTML = vazio;
+                const link = document.getElementById('stats-link');
+                if (link) link.style.opacity = '1';
             }
         }
 
