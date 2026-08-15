@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fellype & Hwlly - Nosso Legado do Vinho</title>
+
+    <meta name="description" content="Catálogo exclusivo de vinhos de Fellype & Hwlly. Explore nossas avaliações mensais, notas técnicas e os melhores rótulos selecionados para nossa adega pessoal.">
+    <meta name="keywords" content="vinhos, adega, avaliações de vinho, enologia, Fellype e Hwlly, melhores do mês">
+    <meta property="og:title" content="Fellype & Hwlly - Nosso Legado do Vinho">
+    <meta property="og:description" content="Confira nossa seleção de garrafas inesquecíveis e notas técnicas de enologia.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fellypehwlly-adega.space">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Adega F&H">
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        /* --- HERO --- */
+        .hero {
+            height: 78vh;
+            background-image:
+                linear-gradient(180deg, rgba(21, 16, 15, 0.72) 0%, rgba(21, 16, 15, 0.9) 58%, var(--bg) 100%),
+                radial-gradient(90% 70% at 50% 20%, rgba(90, 23, 40, 0.5), transparent 70%),
+                url('https://images.unsplash.com/photo-1506377295352-e3154d43602c?q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.32em;
+            color: var(--dourado);
+            margin: 0 0 26px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            width: 34px;
+            height: 1px;
+            background: rgba(198, 161, 91, 0.45);
+        }
+
+        .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
+
+        .hero p.citacao {
+            font-size: clamp(1.05rem, 2.6vw, 1.5rem);
+            font-style: italic;
+            color: var(--dourado-claro);
+            max-width: 760px;
+            margin: 0 auto 24px;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .hero p.introducao {
+            font-size: 0.95rem;
+            color: #b8ada6;
+            max-width: 580px;
+            margin: 0 auto;
+            letter-spacing: 0.3px;
+        }
+
+        /* --- STATS BAR --- */
+        .stats-bar {
+            background:
+                radial-gradient(110% 100% at 50% 0%, rgba(90, 23, 40, 0.32), transparent 62%),
+                linear-gradient(to bottom, #1c1413, var(--card));
+            padding: 62px 20px 58px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .stats-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin: 0 0 8px;
+        }
+
+        .stats-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.15rem, 3vw, 1.6rem);
+            color: var(--dourado-claro);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            margin: 0 0 8px;
+            text-align: center;
+        }
+
+        .stats-sub {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            color: var(--subtexto);
+            margin: 0 0 42px;
+            text-align: center;
+            max-width: 48ch;
+        }
+
+        /* Painéis de leitura rápida */
+        .stats-panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 42px;
+        }
+
+        .stats-panel {
+            background: linear-gradient(150deg, var(--card-alt), var(--card));
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 24px 24px 20px;
+            box-shadow: var(--sombra-card);
+            transition: var(--transicao);
+        }
+        .stats-panel:hover { border-color: var(--borda-dourada); }
+
+        .stats-panel h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin: 0 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* Barras de origem (CSS puro) */
+        .origem-lista { display: flex; flex-direction: column; gap: 13px; }
+
+        .origem-item { font-family: 'Outfit', sans-serif; }
+
+        .origem-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--texto-suave);
+            margin-bottom: 6px;
+        }
+        .origem-topo b { color: var(--dourado); font-weight: 600; font-size: 0.76rem; }
+
+        .origem-trilha {
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        .origem-barra {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--vinho-vivo), var(--dourado));
+            width: 0;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Destaque do rótulo campeão */
+        .destaque-rotulo {
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .destaque-nota {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--dourado-claro);
+            line-height: 1;
+        }
+
+        .destaque-nome {
+            color: var(--texto);
+            font-size: 0.98rem;
+            font-weight: 500;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .destaque-meta { color: var(--texto-fraco); font-size: 0.76rem; }
+
+        .destaque-linha {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--borda);
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+        .destaque-linha .n { font-family: 'Cinzel', serif; color: var(--dourado); font-size: 1.15rem; font-weight: 600; line-height: 1.2; }
+        .destaque-linha .l { font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--texto-fraco); font-weight: 600; }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .stat-item { text-align: center; min-width: 130px; }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: var(--dourado);
+            margin-bottom: 14px;
+            opacity: 0.7;
+        }
+
+        .stat-item h2 {
+            color: var(--dourado);
+            font-size: 2.6rem;
+            margin: 5px 0;
+            font-weight: 600;
+            min-height: 1.2em;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+
+        .stat-item p {
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 2.5px;
+            color: var(--subtexto);
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+        }
+
+        /* Skeleton nos stats */
+        .stat-skeleton {
+            display: inline-block;
+            width: 70px; height: 42px;
+            border-radius: 6px;
+            vertical-align: middle;
+        }
+
+        /* CTA para as estatísticas completas */
+        .stats-cta {
+            margin-top: 34px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 28px;
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid var(--borda-dourada);
+            border-radius: var(--raio-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            transition: var(--transicao);
+            min-height: 48px;
+        }
+        .stats-cta:hover {
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 30px rgba(138, 34, 51, 0.42);
+            border-color: rgba(198, 161, 91, 0.42);
+        }
+
+        /* --- CORPO PRINCIPAL --- */
+        .main-content {
+            max-width: 1100px;
+            margin: 70px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1.2fr;
+            gap: 60px;
+        }
+
+        .text-block h2 {
+            color: var(--dourado);
+            font-size: 2rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 3px;
+            border-bottom: 1px solid rgba(198, 161, 91, 0.15);
+            padding-bottom: 18px;
+            margin-bottom: 30px;
+        }
+
+        .text-block h2::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 1px;
+            background: var(--dourado);
+            margin-top: 12px;
+        }
+
+        .experiencia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+
+        .exp-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-left: 2px solid var(--vinho-vivo);
+            transition: var(--transicao);
+            cursor: default;
+        }
+
+        .exp-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.04);
+            border-left-color: var(--dourado);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .exp-card i { color: var(--dourado); margin-bottom: 12px; font-size: 1.1rem; opacity: 0.8; }
+        .exp-card h4 {
+            color: var(--dourado-claro);
+            margin: 0 0 10px 0;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+        .exp-card p { font-size: 0.9rem; color: #b8ada6; margin: 0; line-height: 1.6; text-align: left; }
+
+        /* --- LATERAL --- */
+        .destinos-block {
+            background: linear-gradient(145deg, #221b1a, #1d1716);
+            padding: 30px 22px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+            position: sticky;
+            top: 100px;
+            box-shadow: var(--sombra-card);
+        }
+
+        .destinos-block h3 {
+            color: var(--dourado);
+            text-transform: uppercase;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+
+        .shiba-profile { margin-bottom: 28px; }
+
+        .shiba-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(198, 161, 91, 0.4);
+            object-fit: cover;
+            object-position: center 20%;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .shiba-profile h4 {
+            color: var(--dourado-claro);
+            margin: 0;
+            font-size: 1rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        .shiba-profile p { color: var(--subtexto); font-size: 0.82rem; margin: 5px 0; font-style: italic; line-height: 1.5; }
+
+        .btn-explorar {
+            display: block;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 10px;
+            border: 1px solid rgba(198, 161, 91, 0.15);
+        }
+
+        .btn-explorar:hover {
+            box-shadow: 0 6px 24px rgba(138, 34, 51, 0.45);
+            transform: translateY(-1px);
+        }
+
+        /* --- CONTAGEM ANIMADA --- */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stat-item h2.counted { animation: countUp 0.5s ease-out; }
+
+        @media (max-width: 992px) {
+            .main-content { grid-template-columns: 1fr; margin: 40px auto; gap: 30px; }
+            .experiencia-grid { grid-template-columns: 1fr; }
+            .hero { background-attachment: scroll; height: auto; padding: 90px 20px; }
+            .stats-row { gap: 30px; }
+            .stats-bar { padding: 42px 16px 40px; }
+            .stats-panels { grid-template-columns: 1fr; margin-top: 32px; }
+            .destinos-block { position: static; }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 70px 16px; }
+            .citacao { font-size: 1rem; }
+            .introducao { font-size: 0.9rem; }
+            .stats-row { gap: 20px; flex-wrap: wrap; justify-content: center; }
+            .stat-item { min-width: 120px; }
+            .main-content { margin: 24px auto; gap: 20px; padding: 0 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { padding: 55px 14px; }
+            .citacao { font-size: 0.9rem; letter-spacing: 0.3px; }
+            .stats-row { gap: 14px; }
+            .stat-item h2 { font-size: 1.8rem; }
+            .stats-bar { padding: 34px 14px 32px; }
+            .stats-sub { margin-bottom: 30px; font-size: 0.8rem; }
+            .stats-panel { padding: 20px 18px 18px; }
+            .destaque-nota { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero">
+        <p class="hero-eyebrow">Adega pessoal</p>
+        <p class="citacao">"Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."</p>
+        <p class="introducao">Desde o primeiro brinde, guardamos aqui cada rótulo, cada nota e cada memória — organizados por país, uva e vinícola.</p>
+        <div class="hero-cta">
+            <a href="catalogo.html" class="btn-primario">Explorar o catálogo</a>
+            <a href="melhores.html" class="btn-secundario">Melhores do mês</a>
+        </div>
+    </header>
+
+    <section class="stats-bar" aria-labelledby="stats-titulo">
+        <p class="stats-eyebrow">Nossa adega em números</p>
+        <h2 class="stats-titulo" id="stats-titulo">O retrato de tudo que brindamos</h2>
+        <p class="stats-sub">Cada rótulo registrado virou dado: origens, castas, notas e a evolução mês a mês.</p>
+        <div class="stats-row">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-wine-bottle" aria-hidden="true"></i></div>
+                <h2 id="stat-vinhos" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Vinhos Degustados</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-globe-americas" aria-hidden="true"></i></div>
+                <h2 id="stat-paises" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Países Explorados</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-seedling" aria-hidden="true"></i></div>
+                <h2 id="stat-castas" class="count-target" data-target="0" data-suffix="">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Castas Únicas</p>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
+                <h2 id="stat-media" data-media="0">
+                    <span class="stat-skeleton skeleton"></span>
+                </h2>
+                <p>Nota Média</p>
+            </div>
+        </div>
+        <div class="stats-panels">
+            <div class="stats-panel">
+                <h3><i class="fas fa-globe-americas" aria-hidden="true"></i> Origens mais visitadas</h3>
+                <div class="origem-lista" id="origem-lista">
+                    <div class="skeleton" style="height:14px"></div>
+                    <div class="skeleton" style="height:14px"></div>
+                    <div class="skeleton" style="height:14px"></div>
+                </div>
+            </div>
+            <div class="stats-panel">
+                <h3><i class="fas fa-award" aria-hidden="true"></i> Rótulo mais bem avaliado</h3>
+                <div class="destaque-rotulo" id="destaque-rotulo">
+                    <div class="skeleton" style="height:44px; width:90px"></div>
+                    <div class="skeleton" style="height:14px; margin-top:10px"></div>
+                </div>
+            </div>
+        </div>
+
+        <a href="stats.html" class="stats-cta" id="stats-link" style="opacity:0;">
+            <i class="fas fa-chart-pie" aria-hidden="true"></i> Ver análise completa da adega
+        </a>
+    </section>
+
+    <main class="main-content">
+        <article class="text-block">
+            <h2>Nossa Jornada Sensorial</h2>
+            <p style="margin-bottom: 30px; color: var(--texto-suave);">Cada garrafa aberta é uma nova página escrita. De vinícolas históricas a pequenos produtores, nossa adega digital reflete nossa evolução e paixão compartilhada.</p>
+
+            <div class="experiencia-grid">
+                <div class="exp-card">
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                    <h4>Terroirs Favoritos</h4>
+                    <p>De Portugal ao Uruguai, passando por Mendoza e pelas colinas de Lisboa.</p>
+                </div>
+                <div class="exp-card">
+                    <i class="fas fa-tint" aria-hidden="true"></i>
+                    <h4>Castas Prediletas</h4>
+                    <p>O frescor do Chardonnay, a intensidade da Syrah e a complexidade dos blends italianos.</p>
+                </div>
+                <div class="exp-card">
+                    <i class="fas fa-award" aria-hidden="true"></i>
+                    <h4>Rótulos de Destaque</h4>
+                    <p>Experiências memoráveis com Parras Wine, Undurraga e tesouros garimpados.</p>
+                </div>
+                <div class="exp-card">
+                    <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+                    <h4>Cápsula do Tempo</h4>
+                    <p>Aqui, cada taça é uma lembrança pronta para ser revisitada brinde a brinde.</p>
+                </div>
+            </div>
+        </article>
+
+        <aside class="destinos-block">
+            <h3>Sommeliers da Casa</h3>
+            <div class="shiba-profile">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="shiba-img" data-fallback="assets/avatar-fallback.svg" loading="lazy" alt="Leblonzito, sommelier de brancos">
+                <h4>Leblonzito</h4>
+                <p>"Curador de brancos leves."</p>
+            </div>
+            <div class="shiba-profile">
+                <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="shiba-img" data-fallback="assets/avatar-fallback.svg" loading="lazy" alt="Ipanemita, especialista em tintos">
+                <h4>Ipanemita</h4>
+                <p>"Especialista em tintos de corpo."</p>
+            </div>
+            <a href="paises.html" class="btn-explorar">Explorar por países</a>
+        </aside>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="nav.js"></script>
+    <script>
+        /* ---- PWA ---- */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+        }
+
+        /* ---- Count-up animado ---- */
+        function animateCount(el, target, suffix = '', duration = 1200) {
+            if (target === 0) { el.textContent = '—'; return; }
+            el.dataset.counted = true;
+            el.classList.add('counted');
+            const step = Math.ceil(target / (duration / 16));
+            let current = 0;
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current + suffix;
+                if (current >= target) clearInterval(timer);
+            }, 16);
+        }
+
+        /* ---- Fade-in da nota média (decimal) ---- */
+        function animateMedia(el, value) {
+            el.style.opacity = '0';
+            el.textContent = value;
+            el.style.transition = 'opacity 0.8s ease';
+            requestAnimationFrame(() => { el.style.opacity = '1'; });
+        }
+
+        /* ---- Busca dados reais da API ---- */
+        const API = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
+
+        async function loadStats() {
+            try {
+                const data = await fetchWithCache(API);
+
+                const get = (v, ...keys) => {
+                    for (const k of keys) {
+                        const found = Object.keys(v).find(key => key.toLowerCase() === k.toLowerCase());
+                        if (found && String(v[found]).trim()) return String(v[found]).trim();
+                    }
+                    return '';
+                };
+
+                const esc = (s) => String(s ?? '')
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                const wines = data.map(v => {
+                    const notaF = parseFloat((get(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0;
+                    const notaH = parseFloat((get(v, 'Pontuação Hwlly',   'Pontuacao Hwlly')   || '0').replace(',', '.')) || 0;
+                    return {
+                        nome:  get(v, 'Nome do Vinho', 'nome') || 'Rótulo especial',
+                        pais:  get(v, 'País', 'Pais') || 'Outros',
+                        uva:   get(v, 'Uva(s)', 'Uva') || '',
+                        safra: get(v, 'Safra') || '',
+                        notaF, notaH,
+                        media: (notaF > 0 && notaH > 0) ? (notaF + notaH) / 2 : (notaF || notaH || 0),
+                    };
+                }).filter(w => w.pais !== 'Outros' || w.uva !== '');
+
+                const totalVinhos = wines.length;
+                const paises      = new Set(wines.map(w => w.pais).filter(Boolean)).size;
+                const castas      = new Set(wines.map(w => w.uva ).filter(Boolean)).size;
+
+                const comNotas = wines.filter(w => w.notaF > 0 && w.notaH > 0);
+                const media = comNotas.length
+                    ? (comNotas.reduce((s, w) => s + (w.notaF + w.notaH) / 2, 0) / comNotas.length).toFixed(1)
+                    : null;
+
+                /* Popula e anima */
+                const elVinhos = document.getElementById('stat-vinhos');
+                const elPaises = document.getElementById('stat-paises');
+                const elCastas = document.getElementById('stat-castas');
+                const elMedia  = document.getElementById('stat-media');
+
+                elVinhos.dataset.target = totalVinhos;
+                elPaises.dataset.target = paises;
+                elCastas.dataset.target = castas;
+
+                /* Usa IntersectionObserver para disparar quando o elemento entrar na tela */
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting || entry.target.dataset.counted) return;
+                        const t  = parseInt(entry.target.dataset.target);
+                        const sf = entry.target.dataset.suffix || '';
+                        animateCount(entry.target, t, sf);
+                    });
+                }, { threshold: 0.4 });
+
+                [elVinhos, elPaises, elCastas].forEach(el => {
+                    el.innerHTML = '';          // remove skeleton
+                    io.observe(el);
+                });
+
+                elMedia.innerHTML = '';
+                if (media) {
+                    animateMedia(elMedia, '★ ' + media);
+                } else {
+                    elMedia.textContent = '—';
+                }
+
+                /* ---- Painel: origens mais visitadas ---- */
+                const contPaises = wines.reduce((acc, w) => {
+                    if (w.pais) acc[w.pais] = (acc[w.pais] || 0) + 1;
+                    return acc;
+                }, {});
+                const topPaises = Object.entries(contPaises).sort((a, b) => b[1] - a[1]).slice(0, 4);
+                const maxPais = topPaises.length ? topPaises[0][1] : 1;
+                const listaOrigem = document.getElementById('origem-lista');
+
+                if (topPaises.length) {
+                    listaOrigem.innerHTML = topPaises.map(([nome, qtd]) => `
+                        <div class="origem-item">
+                            <div class="origem-topo"><span>${esc(nome)}</span><b>${qtd}</b></div>
+                            <div class="origem-trilha"><div class="origem-barra" data-pct="${Math.round((qtd / maxPais) * 100)}"></div></div>
+                        </div>`).join('');
+
+                    const ioBarras = new IntersectionObserver((entries, obs) => {
+                        entries.forEach(entry => {
+                            if (!entry.isIntersecting) return;
+                            listaOrigem.querySelectorAll('.origem-barra').forEach((b, i) => {
+                                setTimeout(() => { b.style.width = b.dataset.pct + '%'; }, i * 120);
+                            });
+                            obs.disconnect();
+                        });
+                    }, { threshold: 0.3 });
+                    ioBarras.observe(listaOrigem);
+                } else {
+                    listaOrigem.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Nenhuma origem registrada ainda.</p>';
+                }
+
+                /* ---- Painel: rótulo mais bem avaliado ---- */
+                const melhor = wines.filter(w => w.media > 0).sort((a, b) => b.media - a.media)[0];
+                const boxDestaque = document.getElementById('destaque-rotulo');
+                const anoAtual = new Date().getFullYear();
+
+                if (melhor) {
+                    boxDestaque.innerHTML = `
+                        <div class="destaque-nota">${melhor.media.toFixed(1)}</div>
+                        <div class="destaque-nome">${esc(melhor.nome)}</div>
+                        <div class="destaque-meta">${esc(melhor.pais)}${melhor.uva ? ' · ' + esc(melhor.uva) : ''}${melhor.safra ? ' · ' + esc(melhor.safra) : ''}</div>
+                        <div class="destaque-linha">
+                            <div><div class="n">${melhor.notaF || '—'}</div><div class="l">Fellype</div></div>
+                            <div><div class="n">${melhor.notaH || '—'}</div><div class="l">Hwlly</div></div>
+                            <div><div class="n">${comNotas.length}</div><div class="l">Avaliados</div></div>
+                        </div>`;
+                } else {
+                    boxDestaque.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Sem avaliações registradas ainda.</p>';
+                }
+
+                /* Exibe o link para stats.html */
+                const link = document.getElementById('stats-link');
+                if (link) { link.style.transition = 'opacity 0.6s ease 0.8s'; link.style.opacity = '1'; }
+
+            } catch (e) {
+                /* Fallback silencioso: mostra traço */
+                ['stat-vinhos','stat-paises','stat-castas','stat-media'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '—';
+                });
+                const vazio = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Dados indisponíveis agora.</p>';
+                const lo = document.getElementById('origem-lista');
+                const dr = document.getElementById('destaque-rotulo');
+                if (lo) lo.innerHTML = vazio;
+                if (dr) dr.innerHTML = vazio;
+                const link = document.getElementById('stats-link');
+                if (link) link.style.opacity = '1';
+            }
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>
