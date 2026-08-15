@@ -354,6 +354,22 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
         const IMG_PADRAO = "assets/wine-placeholder.svg";
+        const BANDEIRAS = {
+    'frança': '🇫🇷', 'italia': '🇮🇹', 'itália': '🇮🇹', 'espanha': '🇪🇸', 'portugal': '🇵🇹',
+    'chile': '🇨🇱', 'argentina': '🇦🇷', 'estados unidos': '🇺🇸', 'eua': '🇺🇸', 'brasil': '🇧🇷',
+    'alemanha': '🇩🇪', 'austria': '🇦🇹', 'áustria': '🇦🇹', 'australia': '🇦🇺', 'austrália': '🇦🇺',
+    'nova zelandia': '🇳🇿', 'nova zelândia': '🇳🇿', 'africa do sul': '🇿🇦', 'áfrica do sul': '🇿🇦',
+    'uruguai': '🇺🇾', 'hungria': '🇭🇺', 'grecia': '🇬🇷', 'grécia': '🇬🇷', 'georgia': '🇬🇪', 'geórgia': '🇬🇪',
+    'suica': '🇨🇭', 'suíça': '🇨🇭', 'israel': '🇮🇱', 'libano': '🇱🇧', 'líbano': '🇱🇧',
+    'romenia': '🇷🇴', 'romênia': '🇷🇴', 'bulgaria': '🇧🇬', 'bulgária': '🇧🇬', 'croacia': '🇭🇷', 'croácia': '🇭🇷',
+    'eslovenia': '🇸🇮', 'eslovênia': '🇸🇮', 'moldavia': '🇲🇩', 'moldávia': '🇲🇩', 'canada': '🇨🇦', 'canadá': '🇨🇦',
+    'inglaterra': '🇬🇧', 'reino unido': '🇬🇧', 'japao': '🇯🇵', 'japão': '🇯🇵', 'china': '🇨🇳',
+};
+function getBandeira(pais) {
+    if (!pais) return '';
+    const key = pais.toString().toLowerCase().trim();
+    return BANDEIRAS[key] || '';
+}
         let vinhos = [];
         let filtroAtual = 'todos';
         let ordenacaoAtual = 'recentes';
@@ -488,7 +504,7 @@
                         <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
                         <div class="vinho-detalhes">
                             <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || 'Uva não informada'}</span>
-                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${v['País'] || 'Origem não informada'}${v['Safra'] ? ' · ' + v['Safra'] : ''}</span>
+                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${getBandeira(v['País'] || v['Pais']) ? getBandeira(v['País'] || v['Pais']) + ' ' : ''}${v['País'] || 'Origem não informada'}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box">
