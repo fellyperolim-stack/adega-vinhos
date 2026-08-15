@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" role="img" aria-label="Sem foto do rótulo">
+  <rect width="240" height="300" fill="#1D1716"></rect>
+  <rect x="0.5" y="0.5" width="239" height="299" fill="none" stroke="#C6A15B" stroke-opacity="0.14"></rect>
+  <g fill="none" stroke="#C6A15B" stroke-opacity="0.5" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M96 96h48l-6 40a18 18 0 0 1-36 0z"></path>
+    <path d="M120 136v50"></path>
+    <path d="M102 190h36"></path>
+  </g>
+  <text x="120" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="13" letter-spacing="2" fill="#8A7D76">SEM FOTO</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Fellype &amp; Hwlly">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5A1728"></stop>
+      <stop offset="1" stop-color="#3B0E1A"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#g)"></rect>
+  <rect x="6.5" y="6.5" width="51" height="51" rx="9" fill="none" stroke="#C6A15B" stroke-opacity="0.55" stroke-width="1"></rect>
+  <text x="32" y="36" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="21" font-weight="700" letter-spacing="1.5" fill="#C6A15B">FH</text>
+  <rect x="25" y="42" width="14" height="1.2" fill="#C6A15B" fill-opacity="0.75"></rect>
+</svg>
