@@ -10,10 +10,19 @@
     var SUPPORTED = ['pt', 'en', 'es', 'it', 'fr'];
     var DEFAULT_LANG = 'pt';
 
-    var FLAGS = { pt: '🇧🇷', en: '🇬🇧', es: '🇪🇸', it: '🇮🇹', fr: '🇫🇷' };
+    /* Emoji de bandeira (🇧🇷 etc.) não renderiza como imagem em vários navegadores/SOs
+       Windows — aparece como o código de duas letras dentro de uma caixa. O resto do
+       site (catálogo, países, melhores do mês) já usa imagens da flagcdn.com para as
+       bandeiras, então o seletor de idioma segue o mesmo padrão para funcionar em
+       qualquer plataforma. */
+    var FLAG_CODES = { pt: 'br', en: 'gb', es: 'es', it: 'it', fr: 'fr' };
     var LANG_NAMES = {
         pt: 'Português', en: 'English', es: 'Español', it: 'Italiano', fr: 'Français'
     };
+
+    function flagUrl(lang) {
+        return 'https://flagcdn.com/w40/' + (FLAG_CODES[lang] || 'un') + '.png';
+    }
 
     /* ============================================================
        DICIONÁRIO DE INTERFACE (textos fixos)
@@ -1093,13 +1102,13 @@
     function buildSwitcherHTML() {
         var options = SUPPORTED.map(function (l) {
             return '<button type="button" class="lang-option' + (l === currentLang ? ' active' : '') + '" data-lang="' + l + '" role="menuitemradio" aria-checked="' + (l === currentLang) + '">' +
-                '<span class="lang-flag" aria-hidden="true">' + FLAGS[l] + '</span> <span class="lang-name">' + LANG_NAMES[l] + '</span></button>';
+                '<img class="lang-flag" src="' + flagUrl(l) + '" alt="" aria-hidden="true" loading="lazy"> <span class="lang-name">' + LANG_NAMES[l] + '</span></button>';
         }).join('');
 
         return '' +
             '<li class="lang-switcher" id="lang-switcher">' +
                 '<button class="lang-trigger" id="lang-trigger" aria-haspopup="true" aria-expanded="false" aria-label="' + t('switcher.label') + '">' +
-                    '<span class="lang-flag" aria-hidden="true">' + FLAGS[currentLang] + '</span>' +
+                    '<img class="lang-flag" src="' + flagUrl(currentLang) + '" alt="" aria-hidden="true">' +
                     '<span class="lang-code">' + currentLang.toUpperCase() + '</span>' +
                     '<i class="fa fa-caret-down" aria-hidden="true" style="font-size:0.7rem;"></i>' +
                 '</button>' +
@@ -1148,7 +1157,7 @@
         var trigger = document.getElementById('lang-trigger');
         if (trigger) {
             trigger.querySelector('.lang-code').textContent = currentLang.toUpperCase();
-            trigger.querySelector('.lang-flag').textContent = FLAGS[currentLang];
+            trigger.querySelector('.lang-flag').src = flagUrl(currentLang);
             trigger.setAttribute('aria-label', t('switcher.label'));
         }
         var dropdown = document.getElementById('lang-dropdown');

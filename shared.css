@@ -265,7 +265,15 @@ img { max-width: 100%; }
 }
 .lang-trigger:hover { color: var(--dourado-claro); border-color: var(--borda-dourada); background: var(--superficie); }
 
-.lang-flag { font-size: 0.95rem; line-height: 1; }
+.lang-flag {
+    width: 18px; height: 13px;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
 .lang-code { text-transform: uppercase; }
 
 .lang-dropdown {
@@ -306,7 +314,7 @@ img { max-width: 100%; }
 }
 .lang-option:hover { background: rgba(138, 34, 51, 0.28); color: var(--dourado-claro); }
 .lang-option.active { color: var(--dourado); background: var(--dourado-suave); }
-.lang-option .lang-flag { font-size: 1.05rem; }
+.lang-option .lang-flag { width: 20px; height: 15px; }
 
 /* --- MENU TOGGLE (mobile) --- */
 .menu-toggle {
