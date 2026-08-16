@@ -195,8 +195,8 @@
                 <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita">
             </div>
         </div>
-        <h1>Variedades de Uvas</h1>
-        <p class="subtitulo">A essência de cada casta que já passou pela nossa mesa.</p>
+        <h1 data-i18n="uvas.title">Variedades de Uvas</h1>
+        <p class="subtitulo" data-i18n="uvas.subtitle">A essência de cada casta que já passou pela nossa mesa.</p>
     </header>
 
     <div id="loader">
@@ -209,6 +209,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const BASE_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
@@ -229,8 +230,8 @@
                 const data = await fetchWithCache(SCRIPT_URL_GET);
 
                 const vinhosProcessados = data.map(v => ({
-                    nome:    findVal(v, ['vinho', 'rótulo', 'nome']) || "Vinho s/ Nome",
-                    uva:     (findVal(v, ['uva', 'casta']) || "Não Identificada").trim(),
+                    nome:    findVal(v, ['vinho', 'rótulo', 'nome']) || I18N.t('common.wine_no_name'),
+                    uva:     (findVal(v, ['uva', 'casta']) || I18N.t('common.grape_unidentified')).trim(),
                     pais:    findVal(v, ['pais', 'país']) || "Outros",
                     foto:    findVal(v, ['foto', 'imagem']) || "",
                     regiao:  findVal(v, ['regiao', 'região']) || '-',
@@ -252,7 +253,7 @@
                 document.getElementById('loader').innerHTML = `
                     <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
                         <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#3a302d;"></i>
-                        Erro ao carregar uvas. Tente novamente.
+                        ${I18N.t('uvas.error')}
                     </div>`;
             }
         }
@@ -264,7 +265,7 @@
             const btn = event.target.closest('.btn-ia');
             if (infoDiv.style.display === 'block') return;
 
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Consultando...';
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> ${I18N.t('uvas.consulting')}`;
 
             try {
                 const response = await fetch(BASE_URL, {
@@ -272,12 +273,12 @@
                     body: JSON.stringify({ action: "explicarUva", tokenAcesso: _t, uva: nomeUva })
                 });
                 const res = await response.json();
-                infoDiv.innerText = res.descricao || 'Informação não disponível.';
+                infoDiv.innerText = res.descricao || I18N.t('uvas.no_description');
                 infoDiv.style.display = 'block';
-                btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva';
+                btn.innerHTML = `<i class="fas fa-magic" aria-hidden="true"></i> ${I18N.t('uvas.btn_about')}`;
             } catch (e) {
-                btn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i> Erro';
-                setTimeout(() => { btn.innerHTML = '<i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva'; }, 2000);
+                btn.innerHTML = `<i class="fas fa-times" aria-hidden="true"></i> ${I18N.t('uvas.error_short')}`;
+                setTimeout(() => { btn.innerHTML = `<i class="fas fa-magic" aria-hidden="true"></i> ${I18N.t('uvas.btn_about')}`; }, 2000);
             }
         }
 
@@ -285,6 +286,7 @@
             const main = document.getElementById('main-content');
             document.getElementById('loader').style.display = 'none';
             main.style.display = 'block';
+            main.innerHTML = '';
 
             sortedUvas.forEach(uva => {
                 const vinhos = grupos[uva];
@@ -296,8 +298,8 @@
                     <div class="uva-header" onclick="this.parentElement.classList.toggle('active')">
                         <h2><i class="fas fa-seedling" style="color:var(--vinho-vivo); font-size:0.9rem;" aria-hidden="true"></i> ${uva}</h2>
                         <div style="display:flex; align-items:center; gap:15px;">
-                            <button class="btn-ia" onclick="perguntarIA('${uva.replace(/'/g,"\\'")}', event)" title="Ver descrição da uva">
-                                <i class="fas fa-magic" aria-hidden="true"></i> Sobre a uva
+                            <button class="btn-ia" onclick="perguntarIA('${uva.replace(/'/g,"\\'")}', event)" title="${I18N.t('uvas.btn_about')}">
+                                <i class="fas fa-magic" aria-hidden="true"></i> <span data-i18n="uvas.btn_about">${I18N.t('uvas.btn_about')}</span>
                             </button>
                             <span style="font-size:0.9rem; color:var(--dourado); font-weight:bold;">${vinhos.length}</span>
                             <i class="fas fa-chevron-down chevron" aria-hidden="true"></i>
@@ -321,7 +323,7 @@
                                     <img src="${img}" class="wine-img" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
                                     <div class="wine-info">
                                         <h3>${v.nome}</h3>
-                                        <p><i class="fas fa-globe-americas" aria-hidden="true"></i> ${v.pais}</p>
+                                        <p><i class="fas fa-globe-americas" aria-hidden="true"></i> ${I18N.translateCountry(v.pais)}</p>
                                     </div>
                                     <div class="rating-badge">${media === "-" ? "—" : "★ " + media}</div>
                                 </div>`;
@@ -333,6 +335,7 @@
         }
 
         loadUvas();
+        window.addEventListener('i18n:change', loadUvas);
     </script>
 </body>
 </html>

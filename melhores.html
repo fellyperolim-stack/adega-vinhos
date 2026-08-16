@@ -223,8 +223,8 @@
     <div id="navbar-placeholder"></div>
 
     <div class="search-section">
-        <h1>Melhores do Mês</h1>
-        <p>Os rótulos que mais marcaram cada período da nossa adega.</p>
+        <h1 data-i18n="melhores.title">Melhores do Mês</h1>
+        <p data-i18n="melhores.subtitle">Os rótulos que mais marcaram cada período da nossa adega.</p>
     </div>
 
     <!-- Skeleton -->
@@ -239,6 +239,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
@@ -261,17 +262,16 @@
         async function fetchMelhores() {
             try {
                 const vinhos = await fetchWithCache(SCRIPT_URL);
-                const meses = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
                 const grupos = {};
 
                 vinhos.filter(v => {
                     const e = String(v["Escolhido do Mês"] || "").toLowerCase();
                     return e !== "" && e !== "não";
                 }).forEach(v => {
-                    let label = "Destaque", chave = 0;
+                    let label = I18N.t('melhores.default_label'), chave = 0;
                     for (let k in v) {
                         let m = String(v[k]).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-                        if (m) { label = `${meses[parseInt(m[2])]} de ${m[3]}`; chave = `${m[3]}${m[2]}`; break; }
+                        if (m) { label = `${I18N.translateMonth(parseInt(m[2]))} ${m[3]}`; chave = `${m[3]}${m[2]}`; break; }
                     }
                     const pos = String(v["Escolhido do Mês"]).includes("2") ? 2 : 1;
                     if (!grupos[chave]) grupos[chave] = { label, chave, v1: null, v2: null };
@@ -283,14 +283,14 @@
                 document.getElementById('skeleton-grid').innerHTML = `
                     <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
                         <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#3a302d; display:block; margin-bottom:15px;"></i>
-                        Erro ao carregar. Tente novamente.
+                        ${I18N.t('melhores.error')}
                     </div>`;
             }
         }
 
         function buildVinhoObj(v, imgUrl) {
             return {
-                nome: v["Nome do Vinho"] || "Vinho Especial",
+                nome: v["Nome do Vinho"] || I18N.t('melhores.special_wine'),
                 produtor: v["Produtor"] || v["Vinícola"] || '',
                 pais: v["País"],
                 uva: v["Uva(s)"] || v["Uva"],
@@ -313,8 +313,8 @@
                     <div class="mes-destaque">
                         <span class="mes-label">${g.label}</span>
                         <div class="medalhas-toggle">
-                            ${g.v1 ? `<button class="btn-medalha active" id="btn-${g.chave}-1" onclick="trocarVinho('${g.chave}', 1)" aria-label="Ver 1º escolhido">🥇 <img src="${getFlagUrl(g.v1['País'])}" class="flag-icon-mini" alt="${g.v1['País'] || ''}"></button>` : ''}
-                            ${g.v2 ? `<button class="btn-medalha ${!g.v1 ? 'active' : ''}" id="btn-${g.chave}-2" onclick="trocarVinho('${g.chave}', 2)" aria-label="Ver 2º escolhido">🥈 <img src="${getFlagUrl(g.v2['País'])}" class="flag-icon-mini" alt="${g.v2['País'] || ''}"></button>` : ''}
+                            ${g.v1 ? `<button class="btn-medalha active" id="btn-${g.chave}-1" onclick="trocarVinho('${g.chave}', 1)" aria-label="${I18N.t('melhores.see_first')}">🥇 <img src="${getFlagUrl(g.v1['País'])}" class="flag-icon-mini" alt="${g.v1['País'] || ''}"></button>` : ''}
+                            ${g.v2 ? `<button class="btn-medalha ${!g.v1 ? 'active' : ''}" id="btn-${g.chave}-2" onclick="trocarVinho('${g.chave}', 2)" aria-label="${I18N.t('melhores.see_second')}">🥈 <img src="${getFlagUrl(g.v2['País'])}" class="flag-icon-mini" alt="${g.v2['País'] || ''}"></button>` : ''}
                         </div>
                     </div>
                     ${g.v1 ? renderVinho(g.v1, g.chave, 1, false) : ''}
@@ -340,13 +340,13 @@
             return `
                 <div class="conteudo-vinho ${hidden ? 'hidden' : ''}" id="conteudo-${chave}-${pos}">
                     <div class="vinho-img-container" onclick='WineModal.open(${jsonStr})'>
-                        <img src="${img}" class="vinho-img" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || 'Foto do vinho'}">
+                        <img src="${img}" class="vinho-img" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || I18N.t('modal.wine_photo')}">
                     </div>
                     <div class="vinho-info" onclick='WineModal.open(${jsonStr})'>
-                        <h3 class="vinho-nome">${v["Nome do Vinho"] || "Vinho Especial"}</h3>
+                        <h3 class="vinho-nome">${v["Nome do Vinho"] || I18N.t('melhores.special_wine')}</h3>
                         <div class="vinho-detalhes">
-                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v["Uva(s)"] || "Uva não informada"}</span>
-                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${v["País"] || "Origem não informada"}${v["Safra"] ? ' · ' + v["Safra"] : ''}</span>
+                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v["Uva(s)"] || I18N.t('melhores.grape_not_informed')}</span>
+                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> ${I18N.translateCountry(v["País"]) || I18N.t('melhores.origin_not_informed')}${v["Safra"] ? ' · ' + v["Safra"] : ''}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box"><span>Fellype</span><div class="nota-valor">${v["Pontuação Fellype"] || "—"}</div></div>
@@ -357,6 +357,7 @@
         }
 
         fetchMelhores();
+        window.addEventListener('i18n:change', fetchMelhores);
     </script>
 </body>
 </html>

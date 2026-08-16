@@ -165,8 +165,8 @@
                 <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita">
             </div>
         </div>
-        <h1>Mapa da Adega</h1>
-        <p class="subtitulo">Nossa coleção organizada por origem e terroir.</p>
+        <h1 data-i18n="paises.title">Mapa da Adega</h1>
+        <p class="subtitulo" data-i18n="paises.subtitle">Nossa coleção organizada por origem e terroir.</p>
     </header>
 
     <div id="loader">
@@ -179,6 +179,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
@@ -206,8 +207,8 @@
                 const data = await fetchWithCache(SCRIPT_URL);
 
                 const vinhosProcessados = data.map(v => {
-                    const nome = findVal(v, ['vinho', 'rótulo', 'nome']) || "Vinho s/ Nome";
-                    const uva = findVal(v, ['uva', 'casta']) || "Uva s/ info";
+                    const nome = findVal(v, ['vinho', 'rótulo', 'nome']) || I18N.t('common.wine_no_name');
+                    const uva = findVal(v, ['uva', 'casta']) || I18N.t('common.grape_no_info');
                     const pais = findVal(v, ['pais', 'país', 'origem']) || "Outros";
                     const foto = findVal(v, ['foto', 'imagem', 'link']) || "";
                     const notaF = parseFloat(findVal(v, ['fellype', 'notaf']) || 0);
@@ -239,7 +240,7 @@
                 document.getElementById('loader').innerHTML = `
                     <div style="text-align:center; padding:60px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
                         <i class="fas fa-exclamation-triangle" style="font-size:2rem; display:block; margin-bottom:15px; color:#3a302d;"></i>
-                        Erro ao carregar o mapa. Tente novamente.
+                        ${I18N.t('paises.error')}
                     </div>`;
             }
         }
@@ -248,6 +249,7 @@
             const main = document.getElementById('main-content');
             document.getElementById('loader').style.display = 'none';
             main.style.display = 'block';
+            main.innerHTML = '';
 
             sortedPaises.forEach(pais => {
                 const vinhos = grupos[pais];
@@ -256,7 +258,7 @@
 
                 section.innerHTML = `
                     <div class="country-header" onclick="this.parentElement.classList.toggle('active')">
-                        <h2><img src="${getFlag(pais)}" alt="Bandeira de ${pais}"> ${pais}</h2>
+                        <h2><img src="${getFlag(pais)}" alt="${I18N.t('common.flag_of', { pais: I18N.translateCountry(pais) })}"> ${I18N.translateCountry(pais)}</h2>
                         <div style="display:flex; align-items:center; gap:10px;">
                             <span style="font-size:0.9rem; color:var(--dourado); font-weight:bold;">${vinhos.length}</span>
                             <i class="fas fa-chevron-down chevron" aria-hidden="true"></i>
@@ -288,6 +290,7 @@
         }
 
         loadWines();
+        window.addEventListener('i18n:change', loadWines);
     </script>
 </body>
 </html>

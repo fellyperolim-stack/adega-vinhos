@@ -311,28 +311,28 @@
     <div id="navbar-placeholder"></div>
 
     <div class="search-section">
-        <h1>Nossa Adega</h1>
-        <p class="sub-titulo">Todos os rótulos que já dividimos, com a nota de cada um de nós.</p>
+        <h1 data-i18n="catalogo.title">Nossa Adega</h1>
+        <p class="sub-titulo" data-i18n="catalogo.subtitle">Todos os rótulos que já dividimos, com a nota de cada um de nós.</p>
         <div class="search-container">
             <i class="fas fa-search" aria-hidden="true"></i>
-            <input type="text" id="search" placeholder="Pesquisar vinho, uva ou país..." aria-label="Pesquisar vinho">
+            <input type="text" id="search" data-i18n-placeholder="catalogo.search_placeholder" placeholder="Pesquisar vinho, uva ou país..." data-i18n-aria-label="catalogo.search_placeholder" aria-label="Pesquisar vinho">
         </div>
     </div>
 
     <div class="filters-bar" id="filters-bar">
-        <button class="filter-chip active" data-filter="todos">Todos</button>
-        <button class="filter-chip" data-filter="Tinto">Tintos</button>
-        <button class="filter-chip" data-filter="Branco">Brancos</button>
-        <button class="filter-chip" data-filter="Rosé">Rosés</button>
-        <button class="filter-chip" data-filter="Espumante">Espumantes</button>
+        <button class="filter-chip active" data-filter="todos" data-i18n="catalogo.filter_all">Todos</button>
+        <button class="filter-chip" data-filter="Tinto" data-i18n="catalogo.filter_red">Tintos</button>
+        <button class="filter-chip" data-filter="Branco" data-i18n="catalogo.filter_white">Brancos</button>
+        <button class="filter-chip" data-filter="Rosé" data-i18n="catalogo.filter_rose">Rosés</button>
+        <button class="filter-chip" data-filter="Espumante" data-i18n="catalogo.filter_sparkling">Espumantes</button>
     </div>
 
     <div class="sort-bar">
-        <span>Ordenar:</span>
-        <button class="sort-btn active" data-sort="recentes">Mais Recentes</button>
-        <button class="sort-btn" data-sort="nota-desc">Maior Nota</button>
-        <button class="sort-btn" data-sort="nota-asc">Menor Nota</button>
-        <button class="sort-btn" data-sort="az">A–Z</button>
+        <span data-i18n="catalogo.sort_label">Ordenar:</span>
+        <button class="sort-btn active" data-sort="recentes" data-i18n="catalogo.sort_recent">Mais Recentes</button>
+        <button class="sort-btn" data-sort="nota-desc" data-i18n="catalogo.sort_rating_desc">Maior Nota</button>
+        <button class="sort-btn" data-sort="nota-asc" data-i18n="catalogo.sort_rating_asc">Menor Nota</button>
+        <button class="sort-btn" data-sort="az" data-i18n="catalogo.sort_az">A–Z</button>
     </div>
 
     <div class="result-count" id="result-count"></div>
@@ -351,6 +351,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
@@ -397,8 +398,8 @@ const getFlagUrl = (pais) => {
                 document.getElementById('skeleton-grid').innerHTML = `
                     <div class="empty-state" style="grid-column:1/-1">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Erro ao carregar a adega</h3>
-                        <p>Tente recarregar a página.</p>
+                        <h3>${I18N.t('catalogo.error_title')}</h3>
+                        <p>${I18N.t('catalogo.error_text')}</p>
                     </div>`;
             }
         }
@@ -451,14 +452,14 @@ const getFlagUrl = (pais) => {
                 grid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-wine-glass"></i>
-                        <h3>Nenhum vinho encontrado</h3>
-                        <p>Tente outros termos ou limpe os filtros.</p>
-                        <button class="btn-limpar" onclick="limparFiltros()">Limpar filtros</button>
+                        <h3>${I18N.t('catalogo.empty_title')}</h3>
+                        <p>${I18N.t('catalogo.empty_text')}</p>
+                        <button class="btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
                     </div>`;
                 return;
             }
 
-            count.textContent = lista.length + ' vinho' + (lista.length !== 1 ? 's' : '');
+            count.textContent = lista.length + ' ' + (lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular'));
 
             grid.innerHTML = lista.map(v => {
                 let urlFinal = IMG_PADRAO;
@@ -494,16 +495,16 @@ const getFlagUrl = (pais) => {
                 };
 
                 return `
-                <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="Ver detalhes de ${v['Nome do Vinho'] || 'Rótulo Especial'}">
+                <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
                     <div class="vinho-img-container">
-                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || 'Foto do vinho'}">
+                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || I18N.t('modal.wine_photo')}">
                     </div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${v['Nome do Vinho'] || 'Rótulo Especial'}</h3>
+                        <h3 class="vinho-nome">${v['Nome do Vinho'] || I18N.t('catalogo.special_label')}</h3>
                         <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
                         <div class="vinho-detalhes">
-                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || 'Uva não informada'}</span>
-                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> <img src="${getFlagUrl(v['País'] || v['Pais'])}" class="vinho-flag-icon" alt="">${v['País'] || 'Origem não informada'}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
+                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || I18N.t('catalogo.grape_not_informed')}</span>
+                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> <img src="${getFlagUrl(v['País'] || v['Pais'])}" class="vinho-flag-icon" alt="">${I18N.translateCountry(v['País']) || I18N.t('catalogo.origin_not_informed')}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
                         </div>
                         <div class="notas">
                             <div class="nota-box">
@@ -562,6 +563,7 @@ const getFlagUrl = (pais) => {
         });
 
         fetchVinhos();
+        window.addEventListener('i18n:change', () => { if (vinhos.length) aplicarFiltros(); });
     </script>
 </body>
 </html>

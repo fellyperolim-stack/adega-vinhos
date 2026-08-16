@@ -479,52 +479,52 @@
     <div id="navbar-placeholder"></div>
 
     <header class="hero">
-        <p class="hero-eyebrow">Adega pessoal</p>
-        <p class="citacao">"Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."</p>
-        <p class="introducao">Desde o primeiro brinde, guardamos aqui cada rótulo, cada nota e cada memória — organizados por país, uva e vinícola.</p>
+        <p class="hero-eyebrow" data-i18n="index.hero_eyebrow">Adega pessoal</p>
+        <p class="citacao" data-i18n="index.hero_quote">"Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."</p>
+        <p class="introducao" data-i18n="index.hero_intro">Desde o primeiro brinde, guardamos aqui cada rótulo, cada nota e cada memória — organizados por país, uva e vinícola.</p>
         <div class="hero-cta">
-            <a href="catalogo.html" class="btn-primario">Explorar o catálogo</a>
-            <a href="melhores.html" class="btn-secundario">Melhores do mês</a>
+            <a href="catalogo.html" class="btn-primario" data-i18n="index.btn_explore_catalog">Explorar o catálogo</a>
+            <a href="melhores.html" class="btn-secundario" data-i18n="index.btn_best_of_month">Melhores do mês</a>
         </div>
     </header>
 
     <section class="stats-bar" aria-labelledby="stats-titulo">
-        <p class="stats-eyebrow">Nossa adega em números</p>
-        <h2 class="stats-titulo" id="stats-titulo">O retrato de tudo que brindamos</h2>
-        <p class="stats-sub">Cada rótulo registrado virou dado: origens, castas, notas e a evolução mês a mês.</p>
+        <p class="stats-eyebrow" data-i18n="index.stats_eyebrow">Nossa adega em números</p>
+        <h2 class="stats-titulo" id="stats-titulo" data-i18n="index.stats_title">O retrato de tudo que brindamos</h2>
+        <p class="stats-sub" data-i18n="index.stats_sub">Cada rótulo registrado virou dado: origens, castas, notas e a evolução mês a mês.</p>
         <div class="stats-row">
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-wine-bottle" aria-hidden="true"></i></div>
                 <h2 id="stat-vinhos" class="count-target" data-target="0" data-suffix="">
                     <span class="stat-skeleton skeleton"></span>
                 </h2>
-                <p>Vinhos Degustados</p>
+                <p data-i18n="index.stat_wines">Vinhos Degustados</p>
             </div>
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-globe-americas" aria-hidden="true"></i></div>
                 <h2 id="stat-paises" class="count-target" data-target="0" data-suffix="">
                     <span class="stat-skeleton skeleton"></span>
                 </h2>
-                <p>Países Explorados</p>
+                <p data-i18n="index.stat_countries">Países Explorados</p>
             </div>
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-seedling" aria-hidden="true"></i></div>
                 <h2 id="stat-castas" class="count-target" data-target="0" data-suffix="">
                     <span class="stat-skeleton skeleton"></span>
                 </h2>
-                <p>Castas Únicas</p>
+                <p data-i18n="index.stat_grapes">Castas Únicas</p>
             </div>
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-star" aria-hidden="true"></i></div>
                 <h2 id="stat-media" data-media="0">
                     <span class="stat-skeleton skeleton"></span>
                 </h2>
-                <p>Nota Média</p>
+                <p data-i18n="index.stat_avg">Nota Média</p>
             </div>
         </div>
         <div class="stats-panels">
             <div class="stats-panel">
-                <h3><i class="fas fa-globe-americas" aria-hidden="true"></i> Origens mais visitadas</h3>
+                <h3><i class="fas fa-globe-americas" aria-hidden="true"></i> <span data-i18n="index.panel_top_origins">Origens mais visitadas</span></h3>
                 <div class="origem-lista" id="origem-lista">
                     <div class="skeleton" style="height:14px"></div>
                     <div class="skeleton" style="height:14px"></div>
@@ -532,7 +532,7 @@
                 </div>
             </div>
             <div class="stats-panel">
-                <h3><i class="fas fa-award" aria-hidden="true"></i> Rótulo mais bem avaliado</h3>
+                <h3><i class="fas fa-award" aria-hidden="true"></i> <span data-i18n="index.panel_top_wine">Rótulo mais bem avaliado</span></h3>
                 <div class="destaque-rotulo" id="destaque-rotulo">
                     <div class="skeleton" style="height:44px; width:90px"></div>
                     <div class="skeleton" style="height:14px; margin-top:10px"></div>
@@ -541,57 +541,58 @@
         </div>
 
         <a href="stats.html" class="stats-cta" id="stats-link" style="opacity:0;">
-            <i class="fas fa-chart-pie" aria-hidden="true"></i> Ver análise completa da adega
+            <i class="fas fa-chart-pie" aria-hidden="true"></i> <span data-i18n="index.cta_full_stats">Ver análise completa da adega</span>
         </a>
     </section>
 
     <main class="main-content">
         <article class="text-block">
-            <h2>Nossa Jornada Sensorial</h2>
-            <p style="margin-bottom: 30px; color: var(--texto-suave);">Cada garrafa aberta é uma nova página escrita. De vinícolas históricas a pequenos produtores, nossa adega digital reflete nossa evolução e paixão compartilhada.</p>
+            <h2 data-i18n="index.journey_title">Nossa Jornada Sensorial</h2>
+            <p style="margin-bottom: 30px; color: var(--texto-suave);" data-i18n="index.journey_intro">Cada garrafa aberta é uma nova página escrita. De vinícolas históricas a pequenos produtores, nossa adega digital reflete nossa evolução e paixão compartilhada.</p>
 
             <div class="experiencia-grid">
                 <div class="exp-card">
                     <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                    <h4>Terroirs Favoritos</h4>
-                    <p>De Portugal ao Uruguai, passando por Mendoza e pelas colinas de Lisboa.</p>
+                    <h4 data-i18n="index.exp_terroir_title">Terroirs Favoritos</h4>
+                    <p data-i18n="index.exp_terroir_text">De Portugal ao Uruguai, passando por Mendoza e pelas colinas de Lisboa.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-tint" aria-hidden="true"></i>
-                    <h4>Castas Prediletas</h4>
-                    <p>O frescor do Chardonnay, a intensidade da Syrah e a complexidade dos blends italianos.</p>
+                    <h4 data-i18n="index.exp_grapes_title">Castas Prediletas</h4>
+                    <p data-i18n="index.exp_grapes_text">O frescor do Chardonnay, a intensidade da Syrah e a complexidade dos blends italianos.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-award" aria-hidden="true"></i>
-                    <h4>Rótulos de Destaque</h4>
-                    <p>Experiências memoráveis com Parras Wine, Undurraga e tesouros garimpados.</p>
+                    <h4 data-i18n="index.exp_labels_title">Rótulos de Destaque</h4>
+                    <p data-i18n="index.exp_labels_text">Experiências memoráveis com Parras Wine, Undurraga e tesouros garimpados.</p>
                 </div>
                 <div class="exp-card">
                     <i class="fas fa-hourglass-half" aria-hidden="true"></i>
-                    <h4>Cápsula do Tempo</h4>
-                    <p>Aqui, cada taça é uma lembrança pronta para ser revisitada brinde a brinde.</p>
+                    <h4 data-i18n="index.exp_time_title">Cápsula do Tempo</h4>
+                    <p data-i18n="index.exp_time_text">Aqui, cada taça é uma lembrança pronta para ser revisitada brinde a brinde.</p>
                 </div>
             </div>
         </article>
 
         <aside class="destinos-block">
-            <h3>Sommeliers da Casa</h3>
+            <h3 data-i18n="index.sommeliers_title">Sommeliers da Casa</h3>
             <div class="shiba-profile">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-TifEdyk31bue7ksGITNEiUrtAvl4H7_1V_UFojtvIA&s=10" class="shiba-img" data-fallback="assets/avatar-fallback.svg" loading="lazy" alt="Leblonzito, sommelier de brancos">
-                <h4>Leblonzito</h4>
-                <p>"Curador de brancos leves."</p>
+                <h4 data-i18n="index.leblonzito_name">Leblonzito</h4>
+                <p data-i18n="index.leblonzito_quote">"Curador de brancos leves."</p>
             </div>
             <div class="shiba-profile">
                 <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="shiba-img" data-fallback="assets/avatar-fallback.svg" loading="lazy" alt="Ipanemita, especialista em tintos">
-                <h4>Ipanemita</h4>
-                <p>"Especialista em tintos de corpo."</p>
+                <h4 data-i18n="index.ipanemita_name">Ipanemita</h4>
+                <p data-i18n="index.ipanemita_quote">"Especialista em tintos de corpo."</p>
             </div>
-            <a href="paises.html" class="btn-explorar">Explorar por países</a>
+            <a href="paises.html" class="btn-explorar" data-i18n="index.btn_explore_countries">Explorar por países</a>
         </aside>
     </main>
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         /* ---- PWA ---- */
@@ -644,7 +645,7 @@
                     const notaF = parseFloat((get(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0;
                     const notaH = parseFloat((get(v, 'Pontuação Hwlly',   'Pontuacao Hwlly')   || '0').replace(',', '.')) || 0;
                     return {
-                        nome:  get(v, 'Nome do Vinho', 'nome') || 'Rótulo especial',
+                        nome:  get(v, 'Nome do Vinho', 'nome') || I18N.t('modal.special_label'),
                         pais:  get(v, 'País', 'Pais') || 'Outros',
                         uva:   get(v, 'Uva(s)', 'Uva') || '',
                         safra: get(v, 'Safra') || '',
@@ -706,7 +707,7 @@
                 if (topPaises.length) {
                     listaOrigem.innerHTML = topPaises.map(([nome, qtd]) => `
                         <div class="origem-item">
-                            <div class="origem-topo"><span>${esc(nome)}</span><b>${qtd}</b></div>
+                            <div class="origem-topo"><span>${esc(I18N.translateCountry(nome))}</span><b>${qtd}</b></div>
                             <div class="origem-trilha"><div class="origem-barra" data-pct="${Math.round((qtd / maxPais) * 100)}"></div></div>
                         </div>`).join('');
 
@@ -721,7 +722,7 @@
                     }, { threshold: 0.3 });
                     ioBarras.observe(listaOrigem);
                 } else {
-                    listaOrigem.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Nenhuma origem registrada ainda.</p>';
+                    listaOrigem.innerHTML = `<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">${I18N.t('index.no_origin')}</p>`;
                 }
 
                 /* ---- Painel: rótulo mais bem avaliado ---- */
@@ -733,14 +734,14 @@
                     boxDestaque.innerHTML = `
                         <div class="destaque-nota">${melhor.media.toFixed(1)}</div>
                         <div class="destaque-nome">${esc(melhor.nome)}</div>
-                        <div class="destaque-meta">${esc(melhor.pais)}${melhor.uva ? ' · ' + esc(melhor.uva) : ''}${melhor.safra ? ' · ' + esc(melhor.safra) : ''}</div>
+                        <div class="destaque-meta">${esc(I18N.translateCountry(melhor.pais))}${melhor.uva ? ' · ' + esc(melhor.uva) : ''}${melhor.safra ? ' · ' + esc(melhor.safra) : ''}</div>
                         <div class="destaque-linha">
                             <div><div class="n">${melhor.notaF || '—'}</div><div class="l">Fellype</div></div>
                             <div><div class="n">${melhor.notaH || '—'}</div><div class="l">Hwlly</div></div>
-                            <div><div class="n">${comNotas.length}</div><div class="l">Avaliados</div></div>
+                            <div><div class="n">${comNotas.length}</div><div class="l">${I18N.t('stats.mini_rated')}</div></div>
                         </div>`;
                 } else {
-                    boxDestaque.innerHTML = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Sem avaliações registradas ainda.</p>';
+                    boxDestaque.innerHTML = `<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">${I18N.t('index.no_ratings')}</p>`;
                 }
 
                 /* Exibe o link para stats.html */
@@ -753,7 +754,7 @@
                     const el = document.getElementById(id);
                     if (el) el.textContent = '—';
                 });
-                const vazio = '<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">Dados indisponíveis agora.</p>';
+                const vazio = `<p style="color:var(--texto-fraco);font-size:.8rem;margin:0;">${I18N.t('index.error_loading')}</p>`;
                 const lo = document.getElementById('origem-lista');
                 const dr = document.getElementById('destaque-rotulo');
                 if (lo) lo.innerHTML = vazio;
@@ -764,6 +765,7 @@
         }
 
         loadStats();
+        window.addEventListener('i18n:change', loadStats);
     </script>
 </body>
 </html>

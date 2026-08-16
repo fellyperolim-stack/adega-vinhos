@@ -225,14 +225,14 @@
                 <img src="https://ih1.redbubble.net/image.4410098886.0898/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" class="avatar-lg" alt="Ipanemita">
             </div>
         </div>
-        <h1>Vinícolas & Produtores</h1>
-        <p class="subtitulo">Cada garrafa tem uma assinatura por trás.</p>
+        <h1 data-i18n="vinicolas.title">Vinícolas & Produtores</h1>
+        <p class="subtitulo" data-i18n="vinicolas.subtitle">Cada garrafa tem uma assinatura por trás.</p>
     </header>
 
     <div class="container" style="padding-top: 10px;">
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="search-vinicola" placeholder="Buscar vinícola ou produtor...">
+            <input type="text" id="search-vinicola" data-i18n-placeholder="vinicolas.search_placeholder" placeholder="Buscar vinícola ou produtor...">
         </div>
     </div>
 
@@ -262,6 +262,7 @@
     <div id="footer-placeholder"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" defer></script>
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
@@ -281,8 +282,8 @@
                 const data = await fetchWithCache(SCRIPT_URL);
 
                 const processados = data.map(v => ({
-                    nome:         findVal(v, ['vinho', 'rótulo', 'nome']) || 'Vinho s/ Nome',
-                    produtor:     findVal(v, ['produtor', 'produtor']) || findVal(v, ['vinicola', 'vinícola', 'winery']) || 'Produtor Desconhecido',
+                    nome:         findVal(v, ['vinho', 'rótulo', 'nome']) || I18N.t('common.wine_no_name'),
+                    produtor:     findVal(v, ['produtor', 'produtor']) || findVal(v, ['vinicola', 'vinícola', 'winery']) || I18N.t('vinicolas.unknown_producer'),
                     pais:         findVal(v, ['pais', 'país', 'origem']) || 'Outros',
                     uva:          findVal(v, ['uva', 'casta']) || 'N/A',
                     safra:        findVal(v, ['safra', 'ano', 'vintage']) || '-',
@@ -297,7 +298,7 @@
                 }));
 
                 allGroups = processados.reduce((acc, v) => {
-                    const key = v.produtor.trim() || 'Produtor Desconhecido';
+                    const key = v.produtor.trim() || I18N.t('vinicolas.unknown_producer');
                     acc[key] = acc[key] || [];
                     acc[key].push(v);
                     return acc;
@@ -310,7 +311,7 @@
                 document.getElementById('loader').innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <p>Não foi possível carregar as vinícolas.<br>Tente novamente mais tarde.</p>
+                        <p>${I18N.t('vinicolas.error').replace('\n', '<br>')}</p>
                     </div>`;
             }
         }
@@ -325,7 +326,7 @@
                 main.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-wine-bottle"></i>
-                        <p>Nenhuma vinícola encontrada para essa busca.</p>
+                        <p>${I18N.t('vinicolas.empty')}</p>
                     </div>`;
                 return;
             }
@@ -370,11 +371,11 @@
                                     : (v.notaF || v.notaH || '-');
                                 const vinhoData = JSON.stringify(v).replace(/"/g, '&quot;');
                                 return `
-                                <div class="wine-card" onclick='WineModal.open(${JSON.stringify(v).replace(/'/g, "\\'")} )' title="Ver detalhes de ${v.nome}">
+                                <div class="wine-card" onclick='WineModal.open(${JSON.stringify(v).replace(/'/g, "\\'")} )' title="${I18N.t('common.view_details', { nome: v.nome })}">
                                     <img src="${img}" class="wine-img" loading="lazy" onerror="this.src='${PLACEHOLDER_IMG}'" alt="${v.nome}">
                                     <div class="wine-info">
                                         <h3>${v.nome}</h3>
-                                        <p><i class="fas fa-seedling" aria-hidden="true"></i> ${v.uva} <span style="opacity:.4">·</span> <i class="fas fa-globe-americas" aria-hidden="true"></i> ${v.pais}</p>
+                                        <p><i class="fas fa-seedling" aria-hidden="true"></i> ${v.uva} <span style="opacity:.4">·</span> <i class="fas fa-globe-americas" aria-hidden="true"></i> ${I18N.translateCountry(v.pais)}</p>
                                     </div>
                                     <div class="rating-badge">${media === '-' ? '—' : '★ ' + media}</div>
                                 </div>`;
@@ -395,6 +396,7 @@
         });
 
         loadVinicolas();
+        window.addEventListener('i18n:change', loadVinicolas);
     </script>
 </body>
 </html>

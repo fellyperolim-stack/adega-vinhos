@@ -445,8 +445,8 @@
     <div id="navbar-placeholder"></div>
 
     <div class="stats-header">
-        <h1>Estatísticas da Adega</h1>
-        <p>Os números por trás de cada gole que registramos.</p>
+        <h1 data-i18n="stats.title">Estatísticas da Adega</h1>
+        <p data-i18n="stats.subtitle">Os números por trás de cada gole que registramos.</p>
     </div>
 
     <!-- Skeleton -->
@@ -474,7 +474,7 @@
     <!-- Conteúdo real -->
     <div id="stats-content" class="stats-container" style="display:none;">
 
-        <div class="year-filter" id="year-filter" role="group" aria-label="Filtrar por período"></div>
+        <div class="year-filter" id="year-filter" role="group" data-i18n-aria-label="stats.filter_period_aria" aria-label="Filtrar por período"></div>
 
         <section class="hero-stats">
             <div class="hero-panel">
@@ -489,7 +489,7 @@
 
             <div class="podio-card">
                 <div class="chart-title">
-                    <i class="fas fa-trophy" aria-hidden="true"></i> Pódio dos rótulos
+                    <i class="fas fa-trophy" aria-hidden="true"></i> <span data-i18n="stats.podium_title">Pódio dos rótulos</span>
                 </div>
                 <div class="podio-lista" id="podio-lista"></div>
             </div>
@@ -501,7 +501,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-globe-americas" aria-hidden="true"></i> Distribuição por país
+                    <i class="fas fa-globe-americas" aria-hidden="true"></i> <span data-i18n="stats.chart_countries">Distribuição por país</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-paises"></canvas>
@@ -511,7 +511,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-seedling" aria-hidden="true"></i> Top 10 variedades de uva
+                    <i class="fas fa-seedling" aria-hidden="true"></i> <span data-i18n="stats.chart_grapes">Top 10 variedades de uva</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-uvas"></canvas>
@@ -520,7 +520,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i> Evolução ao longo do tempo
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> <span data-i18n="stats.chart_time">Evolução ao longo do tempo</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-tempo"></canvas>
@@ -530,7 +530,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-wine-glass-alt" aria-hidden="true"></i> Estilos na taça
+                    <i class="fas fa-wine-glass-alt" aria-hidden="true"></i> <span data-i18n="stats.chart_types">Estilos na taça</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-tipos"></canvas>
@@ -540,7 +540,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-star-half-alt" aria-hidden="true"></i> Como avaliamos
+                    <i class="fas fa-star-half-alt" aria-hidden="true"></i> <span data-i18n="stats.chart_ratings">Como avaliamos</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-notas"></canvas>
@@ -550,7 +550,7 @@
 
             <div class="chart-card">
                 <div class="chart-title">
-                    <i class="fas fa-balance-scale" aria-hidden="true"></i> Fellype vs Hwlly
+                    <i class="fas fa-balance-scale" aria-hidden="true"></i> <span data-i18n="stats.chart_duel">Fellype vs Hwlly</span>
                 </div>
                 <div class="chart-wrap">
                     <canvas id="chart-fvsh"></canvas>
@@ -563,6 +563,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec?action=getVinhos";
@@ -659,12 +660,14 @@
 
         /* ---- Normaliza os dados da API ---- */
         function processWines(raw) {
+            const noNameLabel = I18N.t('stats.no_name');
+            const unidentifiedGrapeLabel = I18N.t('stats.grape_unidentified');
             return raw.map(v => {
                 const notaF = parseFloat((getField(v, 'Pontuação Fellype', 'Pontuacao Fellype') || '0').replace(',', '.')) || 0;
                 const notaH = parseFloat((getField(v, 'Pontuação Hwlly', 'Pontuacao Hwlly') || '0').replace(',', '.')) || 0;
-                const nome  = getField(v, 'Nome do Vinho', 'nome') || 'Sem nome';
+                const nome  = getField(v, 'Nome do Vinho', 'nome') || noNameLabel;
                 const pais  = (getField(v, 'País', 'Pais', 'pais') || 'Outros').trim();
-                const uva   = (getField(v, 'Uva(s)', 'Uva', 'uva') || 'Não identificada').trim();
+                const uva   = (getField(v, 'Uva(s)', 'Uva', 'uva') || unidentifiedGrapeLabel).trim();
                 const tipoRaw = getField(v, 'Tipo', 'tipo') || '';
 
                 return {
@@ -689,7 +692,7 @@
                         notaF, notaH
                     }
                 };
-            }).filter(w => w.nome !== 'Sem nome' || w.pais !== 'Outros');
+            }).filter(w => w.nome !== noNameLabel || w.pais !== 'Outros');
         }
 
         /* ---- Contagem por chave ---- */
@@ -701,7 +704,11 @@
             }, {});
         }
 
-        const plural = (n, s, p) => `${n} ${n === 1 ? s : p}`;
+        const PT_TO_WORDID = { 'país': 'pais', 'casta': 'casta', 'rótulo': 'rotulo', 'vez': 'vez', 'vinho': 'vinho' };
+        const plural = (n, s, p) => {
+            const id = PT_TO_WORDID[s];
+            return id ? I18N.pluralWord(n, id) : `${n} ${n === 1 ? s : p}`;
+        };
 
         /* ===== FAIXA DE DESTAQUE ===== */
         function renderHero(wines, periodo) {
@@ -715,22 +722,25 @@
             const uvaTop  = Object.entries(countBy(wines, 'uva')).sort((a, b) => b[1] - a[1])[0];
 
             document.getElementById('hero-periodo').textContent =
-                periodo === 'todos' ? 'Retrato da adega' : `Retrato de ${periodo}`;
+                periodo === 'todos' ? I18N.t('stats.hero_default') : I18N.t('stats.hero_period', { periodo });
             document.getElementById('hero-total').textContent = wines.length;
             document.getElementById('hero-unidade').textContent =
-                wines.length === 1 ? 'rótulo registrado' : 'rótulos registrados';
+                wines.length === 1 ? I18N.t('stats.hero_unit_singular') : I18N.t('stats.hero_unit_plural');
 
             document.getElementById('hero-frase').innerHTML = wines.length
-                ? `Nossa adega passeia por <strong>${plural(paises, 'país', 'países')}</strong> e
-                   <strong>${plural(castas, 'casta', 'castas')}</strong> diferentes.
-                   ${paisTop ? `A origem que mais volta à mesa é <strong>${esc(paisTop[0])}</strong>` : ''}${uvaTop ? `, e a casta preferida é <strong>${esc(uvaTop[0])}</strong>` : ''}.`
-                : 'Nenhum rótulo registrado neste período.';
+                ? I18N.t('stats.hero_phrase', {
+                    paises: `<strong>${plural(paises, 'país', 'países')}</strong>`,
+                    castas: `<strong>${plural(castas, 'casta', 'castas')}</strong>`,
+                    origem: paisTop ? I18N.t('stats.hero_top_origin', { val: `<strong>${esc(I18N.translateCountry(paisTop[0]))}</strong>` }) : '',
+                    casta: uvaTop ? I18N.t('stats.hero_top_grape', { val: `<strong>${esc(uvaTop[0])}</strong>` }) : ''
+                  })
+                : I18N.t('stats.hero_none');
 
             document.getElementById('hero-mini').innerHTML = [
-                { n: mediaGeral, l: 'Nota média' },
-                { n: paises, l: 'Países' },
-                { n: castas, l: 'Castas' },
-                { n: comNotas.length, l: 'Avaliados' },
+                { n: mediaGeral, l: I18N.t('stats.mini_avg') },
+                { n: paises, l: I18N.t('stats.mini_countries') },
+                { n: castas, l: I18N.t('stats.mini_grapes') },
+                { n: comNotas.length, l: I18N.t('stats.mini_rated') },
             ].map(i => `<div class="hero-mini-item"><div class="n">${i.n}</div><div class="l">${i.l}</div></div>`).join('');
         }
 
@@ -740,7 +750,7 @@
             const lista = document.getElementById('podio-lista');
 
             if (!top.length) {
-                lista.innerHTML = '<p class="vazio-nota">Nenhuma avaliação neste período.</p>';
+                lista.innerHTML = `<p class="vazio-nota">${I18N.t('stats.podium_empty')}</p>`;
                 return;
             }
 
@@ -749,7 +759,7 @@
                     <span class="podio-pos">${i + 1}</span>
                     <span class="podio-info">
                         <span class="podio-nome">${esc(w.nome)}</span>
-                        <span class="podio-meta">${esc(w.pais)} · ${esc(w.uva)}</span>
+                        <span class="podio-meta">${esc(I18N.translateCountry(w.pais))} · ${esc(w.uva)}</span>
                     </span>
                     <span class="podio-nota">${w.media.toFixed(1)}</span>
                 </button>
@@ -777,12 +787,12 @@
             const melhor = comNotas.slice().sort((a, b) => b.media - a.media)[0];
 
             const cards = [
-                { icon: 'fa-wine-bottle',     value: wines.length,          label: 'Vinhos na adega',        sub: null },
-                { icon: 'fa-star',            value: mediaGeral,            label: 'Média geral',            sub: `de ${comNotas.length} avaliados` },
-                { icon: 'fa-globe-americas',  value: paisTop[0],            label: 'País favorito',          sub: plural(paisTop[1], 'rótulo', 'rótulos') },
-                { icon: 'fa-seedling',        value: uvaTop[0],             label: 'Uva favorita',           sub: plural(uvaTop[1], 'vez', 'vezes') },
-                { icon: 'fa-wine-glass-alt',  value: tipoTop[0],            label: 'Estilo predileto',       sub: plural(tipoTop[1], 'rótulo', 'rótulos') },
-                { icon: 'fa-award',           value: melhor ? melhor.media.toFixed(1) : '—', label: 'Maior nota', sub: melhor ? melhor.nome.split(' ').slice(0, 3).join(' ') : '' },
+                { icon: 'fa-wine-bottle',     value: wines.length,          label: I18N.t('stats.card_wines'),        sub: null },
+                { icon: 'fa-star',            value: mediaGeral,            label: I18N.t('stats.card_avg'),          sub: I18N.t('stats.card_avg_sub', { n: comNotas.length }) },
+                { icon: 'fa-globe-americas',  value: I18N.translateCountry(paisTop[0]), label: I18N.t('stats.card_top_country'), sub: plural(paisTop[1], 'rótulo', 'rótulos') },
+                { icon: 'fa-seedling',        value: uvaTop[0],             label: I18N.t('stats.card_top_grape'),    sub: plural(uvaTop[1], 'vez', 'vezes') },
+                { icon: 'fa-wine-glass-alt',  value: I18N.translateTipo(tipoTop[0]), label: I18N.t('stats.card_top_type'), sub: plural(tipoTop[1], 'rótulo', 'rótulos') },
+                { icon: 'fa-award',           value: melhor ? melhor.media.toFixed(1) : '—', label: I18N.t('stats.card_top_rating'), sub: melhor ? melhor.nome.split(' ').slice(0, 3).join(' ') : '' },
             ];
 
             document.getElementById('summary-grid').innerHTML = cards.map(c => `
@@ -798,17 +808,17 @@
         /* ===== GRÁFICO 1: DONUT POR PAÍS ===== */
         function renderChartPaises(wines) {
             const sorted = Object.entries(countBy(wines, 'pais')).sort((a, b) => b[1] - a[1]);
-            if (!sorted.length) { semDados('chart-paises', 'Sem origens registradas neste período.'); insight('paises-insight'); return; }
+            if (!sorted.length) { semDados('chart-paises', I18N.t('stats.empty_countries')); insight('paises-insight'); return; }
 
             const total = wines.length;
             const share = Math.round((sorted[0][1] / total) * 100);
             insight('paises-insight', '#8a2233',
-                `<strong style="color:var(--dourado-claro)">${esc(sorted[0][0])}</strong> responde por <strong>${share}%</strong> da adega`);
+                I18N.t('stats.insight_country_share', { pais: `<strong style="color:var(--dourado-claro)">${esc(I18N.translateCountry(sorted[0][0]))}</strong>`, pct: share }));
 
             mount('chart-paises', {
                 type: 'doughnut',
                 data: {
-                    labels: sorted.map(e => e[0]),
+                    labels: sorted.map(e => I18N.translateCountry(e[0])),
                     datasets: [{
                         data: sorted.map(e => e[1]),
                         backgroundColor: sorted.map((_, i) => PALETTE[i % PALETTE.length]),
@@ -837,7 +847,7 @@
         /* ===== GRÁFICO 2: BARRAS HORIZONTAIS — UVAS ===== */
         function renderChartUvas(wines) {
             const top10 = Object.entries(countBy(wines, 'uva')).sort((a, b) => b[1] - a[1]).slice(0, 10);
-            if (!top10.length) { semDados('chart-uvas', 'Sem castas registradas neste período.'); return; }
+            if (!top10.length) { semDados('chart-uvas', I18N.t('stats.empty_grapes')); return; }
 
             mount('chart-uvas', {
                 type: 'bar',
@@ -871,12 +881,11 @@
             const comData = wines.filter(w => w.dataConsumo);
 
             if (comData.length === 0) {
-                semDados('chart-tempo', 'Sem datas de consumo registradas ainda.');
+                semDados('chart-tempo', I18N.t('stats.empty_time'));
                 insight('tempo-insight');
                 return;
             }
 
-            const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
             const anos = [...new Set(comData.map(w => w.dataConsumo.getFullYear()))];
             let entries;
 
@@ -888,7 +897,7 @@
                 });
                 entries = Object.entries(byMonth).sort().map(([k, v]) => {
                     const [y, m] = k.split('-');
-                    return [MESES[+m] + '/' + y.slice(2), v];
+                    return [I18N.translateMonthAbrev(+m) + '/' + y.slice(2), v];
                 });
             } else {
                 const byYear = {};
@@ -901,14 +910,14 @@
 
             const pico = entries.slice().sort((a, b) => b[1] - a[1])[0];
             insight('tempo-insight', '#c6a15b',
-                `Período mais generoso: <strong style="color:var(--dourado-claro)">${esc(pico[0])}</strong> com <strong>${plural(pico[1], 'rótulo', 'rótulos')}</strong>`);
+                I18N.t('stats.insight_time_peak', { periodo: `<strong style="color:var(--dourado-claro)">${esc(pico[0])}</strong>`, n: `<strong>${plural(pico[1], 'rótulo', 'rótulos')}</strong>` }));
 
             mount('chart-tempo', {
                 type: 'line',
                 data: {
                     labels: entries.map(e => e[0]),
                     datasets: [{
-                        label: 'Vinhos degustados',
+                        label: I18N.t('index.stat_wines'),
                         data: entries.map(e => e[1]),
                         borderColor: '#8a2233',
                         backgroundColor: 'rgba(138, 34, 51, 0.12)',
@@ -942,7 +951,7 @@
             const entries = ordem.filter(t => cont[t]).map(t => [t, cont[t]]);
 
             if (!entries.length || (entries.length === 1 && entries[0][0] === 'Outros')) {
-                semDados('chart-tipos', 'Estilos ainda não classificados na planilha.');
+                semDados('chart-tipos', I18N.t('stats.empty_types'));
                 insight('tipos-insight');
                 return;
             }
@@ -950,12 +959,12 @@
             const top = entries.slice().sort((a, b) => b[1] - a[1])[0];
             const pct = Math.round((top[1] / wines.length) * 100);
             insight('tipos-insight', CORES_TIPO[top[0]] || '#c6a15b',
-                `<strong style="color:var(--dourado-claro)">${esc(top[0])}s</strong> são <strong>${pct}%</strong> do que abrimos`);
+                I18N.t('stats.insight_type_share', { tipo: `<strong style="color:var(--dourado-claro)">${esc(I18N.translateTipo(top[0]))}</strong>`, pct }));
 
             mount('chart-tipos', {
                 type: 'bar',
                 data: {
-                    labels: entries.map(e => e[0]),
+                    labels: entries.map(e => I18N.translateTipo(e[0])),
                     datasets: [{
                         data: entries.map(e => e[1]),
                         backgroundColor: entries.map(e => CORES_TIPO[e[0]] || '#6a5d57'),
@@ -983,23 +992,23 @@
         function renderChartNotas(wines) {
             const comNotas = wines.filter(w => w.media > 0);
             if (!comNotas.length) {
-                semDados('chart-notas', 'Nenhuma nota registrada neste período.');
+                semDados('chart-notas', I18N.t('stats.empty_ratings'));
                 insight('notas-insight');
                 return;
             }
 
             const faixas = [
-                { label: 'até 5,9', test: m => m < 6 },
-                { label: '6 – 6,9', test: m => m >= 6 && m < 7 },
-                { label: '7 – 7,9', test: m => m >= 7 && m < 8 },
-                { label: '8 – 8,9', test: m => m >= 8 && m < 9 },
-                { label: '9 – 10',  test: m => m >= 9 },
+                { label: I18N.t('stats.range_under6'), test: m => m < 6 },
+                { label: I18N.t('stats.range_6to7'), test: m => m >= 6 && m < 7 },
+                { label: I18N.t('stats.range_7to8'), test: m => m >= 7 && m < 8 },
+                { label: I18N.t('stats.range_8to9'), test: m => m >= 8 && m < 9 },
+                { label: I18N.t('stats.range_9to10'),  test: m => m >= 9 },
             ];
             const dados = faixas.map(f => comNotas.filter(w => f.test(w.media)).length);
             const maiorIdx = dados.indexOf(Math.max(...dados));
 
             insight('notas-insight', '#c6a15b',
-                `A maioria dos nossos vinhos fica entre <strong style="color:var(--dourado-claro)">${faixas[maiorIdx].label.replace(' – ', ' e ')}</strong>`);
+                I18N.t('stats.insight_ratings_range', { faixa: `<strong style="color:var(--dourado-claro)">${faixas[maiorIdx].label.replace(' – ', I18N.t('stats.range_and'))}</strong>` }));
 
             mount('chart-notas', {
                 type: 'bar',
@@ -1033,7 +1042,7 @@
             const comAmbos = wines.filter(w => w.notaF > 0 && w.notaH > 0);
 
             if (comAmbos.length === 0) {
-                semDados('chart-fvsh', 'Avaliações duplas ainda não registradas.');
+                semDados('chart-fvsh', I18N.t('stats.empty_duel'));
                 insight('fvsh-insight');
                 return;
             }
@@ -1051,15 +1060,15 @@
             const pctAcordo = Math.round((acordo / comAmbos.length) * 100);
 
             insight('fvsh-insight', '#c6a15b', diffAbs === '0.0'
-                ? `Notas praticamente idênticas — concordamos em <strong>${pctAcordo}%</strong> dos rótulos`
-                : `<strong style="color:var(--dourado-claro)">${maisGeneroso}</strong> dá <strong>+${diffAbs}</strong> que ${maisRigido} · concordamos em <strong>${pctAcordo}%</strong>`);
+                ? I18N.t('stats.insight_duel_tie', { pct: pctAcordo })
+                : I18N.t('stats.insight_duel_diff', { quem: `<strong style="color:var(--dourado-claro)">${maisGeneroso}</strong>`, diff: diffAbs, outro: maisRigido, pct: pctAcordo }));
 
             mount('chart-fvsh', {
                 type: 'scatter',
                 data: {
                     datasets: [
                         {
-                            label: 'Vinhos',
+                            label: I18N.t('index.stat_wines'),
                             data: comAmbos.map(w => ({ x: w.notaF, y: w.notaH, nome: w.nome })),
                             backgroundColor: 'rgba(198, 161, 91, 0.65)',
                             borderColor: 'rgba(198, 161, 91, 0.25)',
@@ -1103,13 +1112,13 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Nota Fellype', color: '#94867f', font: { size: 11 } },
+                            title: { display: true, text: I18N.t('stats.axis_fellype'), color: '#94867f', font: { size: 11 } },
                             grid: { color: '#2a2220' },
                             ticks: { color: '#a0938c' },
                             min: minV, max: maxV,
                         },
                         y: {
-                            title: { display: true, text: 'Nota Hwlly', color: '#94867f', font: { size: 11 } },
+                            title: { display: true, text: I18N.t('stats.axis_hwlly'), color: '#94867f', font: { size: 11 } },
                             grid: { color: '#2a2220' },
                             ticks: { color: '#a0938c' },
                             min: minV, max: maxV,
@@ -1140,7 +1149,7 @@
             const box = document.getElementById('year-filter');
             if (anos.length < 2) { box.style.display = 'none'; return; }
 
-            const opcoes = [{ id: 'todos', label: 'Toda a adega' },
+            const opcoes = [{ id: 'todos', label: I18N.t('stats.filter_all_time') },
                             ...anos.map(a => ({ id: String(a), label: String(a) }))];
 
             box.innerHTML = opcoes.map((o, i) => `
@@ -1181,15 +1190,16 @@
                 document.getElementById('skeleton-stats').innerHTML = `
                     <div style="text-align:center; padding:80px 20px; color:var(--subtexto); font-family:'Outfit', sans-serif;">
                         <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#3a302d; display:block; margin-bottom:15px;" aria-hidden="true"></i>
-                        <p style="margin:0 0 20px;">Não conseguimos carregar as estatísticas agora.</p>
+                        <p style="margin:0 0 20px;">${I18N.t('stats.error_title')}</p>
                         <button class="btn-secundario" onclick="location.reload()">
-                            <i class="fas fa-redo" aria-hidden="true"></i> Tentar novamente
+                            <i class="fas fa-redo" aria-hidden="true"></i> ${I18N.t('stats.btn_retry')}
                         </button>
                     </div>`;
             }
         }
 
         loadStats();
+        window.addEventListener('i18n:change', loadStats);
     </script>
 </body>
 </html>

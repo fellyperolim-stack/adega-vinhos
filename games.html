@@ -216,63 +216,63 @@
     <div id="navbar-placeholder"></div>
 
     <header class="header-section" style="text-align:center; background: linear-gradient(to bottom, #1d1716, var(--bg));">
-        <h1>Lounge de Jogos</h1>
-        <p class="subtitulo">Desafios criados a partir dos vinhos que já registramos.</p>
+        <h1 data-i18n="games.title">Lounge de Jogos</h1>
+        <p class="subtitulo" data-i18n="games.subtitle">Desafios criados a partir dos vinhos que já registramos.</p>
         <div class="header-score-wrapper">
             <div class="score-board">
                 <i class="fas fa-wine-glass-alt" aria-hidden="true"></i>
-                Taças de Ouro: <span id="global-score">0</span>
+                <span data-i18n="games.score_label">Taças de Ouro:</span> <span id="global-score">0</span>
             </div>
         </div>
     </header>
 
     <main class="container">
         <div id="loading-data" class="loading-data">
-            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Preparando as taças...
+            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i> <span data-i18n="games.preparing">Preparando as taças...</span>
         </div>
 
         <div id="games-hub" class="games-grid" style="display:none;">
             <div class="game-card" onclick="openGame('pais')">
-                <div class="badge-bot">Planilha</div>
+                <div class="badge-bot" data-i18n="games.badge_sheet">Planilha</div>
                 <div class="game-icon"><i class="fas fa-globe" aria-hidden="true"></i></div>
-                <h3>Mestre do Terroir</h3>
-                <p>De qual país é este rótulo?</p>
+                <h3 data-i18n="games.card1_title">Mestre do Terroir</h3>
+                <p data-i18n="games.card1_desc">De qual país é este rótulo?</p>
             </div>
             <div class="game-card" onclick="openGame('uva')">
-                <div class="badge-bot">Planilha</div>
+                <div class="badge-bot" data-i18n="games.badge_sheet">Planilha</div>
                 <div class="game-icon"><i class="fas fa-leaf" aria-hidden="true"></i></div>
-                <h3>Degustação Cega</h3>
-                <p>Qual uva compõe este vinho?</p>
+                <h3 data-i18n="games.card2_title">Degustação Cega</h3>
+                <p data-i18n="games.card2_desc">Qual uva compõe este vinho?</p>
             </div>
             <div class="game-card" onclick="openGame('duelo')">
-                <div class="badge-bot">Planilha</div>
+                <div class="badge-bot" data-i18n="games.badge_sheet">Planilha</div>
                 <div class="game-icon"><i class="fas fa-balance-scale" aria-hidden="true"></i></div>
-                <h3>Duelo de Paladares</h3>
-                <p>Quem deu a maior nota para o vinho?</p>
+                <h3 data-i18n="games.card3_title">Duelo de Paladares</h3>
+                <p data-i18n="games.card3_desc">Quem deu a maior nota para o vinho?</p>
             </div>
             <div class="game-card" onclick="openGame('forca')">
-                <div class="badge-bot">Puzzle</div>
+                <div class="badge-bot" data-i18n="games.badge_puzzle">Puzzle</div>
                 <div class="game-icon"><i class="fas fa-font" aria-hidden="true"></i></div>
-                <h3>Forca Etílica</h3>
-                <p>Descubra a palavra do mundo dos vinhos.</p>
+                <h3 data-i18n="games.card4_title">Forca Etílica</h3>
+                <p data-i18n="games.card4_desc">Descubra a palavra do mundo dos vinhos.</p>
             </div>
         </div>
 
         <div id="game-dynamic" class="game-screen">
-            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar</button>
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left" aria-hidden="true"></i> <span data-i18n="games.btn_back">Voltar</span></button>
             <h2 class="game-title" id="dyn-title">Título</h2>
-            <img src="" id="dyn-img" class="game-wine-img" alt="Foto do vinho" onerror="this.src='assets/wine-placeholder.svg'">
+            <img src="" id="dyn-img" class="game-wine-img" alt="Foto do vinho" data-i18n-alt="modal.wine_photo" onerror="this.src='assets/wine-placeholder.svg'">
             <div class="game-wine-name" id="dyn-name">Nome do Vinho</div>
-            <div class="game-wine-date" id="dyn-date"><i class="far fa-calendar-alt" aria-hidden="true"></i> Consumido em: <span></span></div>
+            <div class="game-wine-date" id="dyn-date"><i class="far fa-calendar-alt" aria-hidden="true"></i> <span data-i18n="games.consumed_on">Consumido em:</span> <span></span></div>
             <div class="quiz-question" id="dyn-question">Pergunta?</div>
             <div class="quiz-options" id="dyn-options"></div>
             <p class="feedback-msg" id="dyn-feedback"></p>
-            <button class="btn-game btn-next" id="btn-next-dyn" onclick="nextDynamicGame()">Próxima Rodada</button>
+            <button class="btn-game btn-next" id="btn-next-dyn" onclick="nextDynamicGame()" data-i18n="games.btn_next_round">Próxima Rodada</button>
         </div>
 
         <div id="game-forca" class="game-screen">
-            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar</button>
-            <h2 class="game-title">Forca Etílica</h2>
+            <button class="btn-voltar" onclick="closeGames()"><i class="fas fa-arrow-left" aria-hidden="true"></i> <span data-i18n="games.btn_back">Voltar</span></button>
+            <h2 class="game-title" data-i18n="games.card4_title">Forca Etílica</h2>
 
             <!-- Desenho SVG do enforcado -->
             <div class="forca-visual">
@@ -292,16 +292,17 @@
                 </svg>
             </div>
 
-            <p>Erros: <span id="hang-errors" style="color:#d2685f; font-weight:bold;">0</span> / 6</p>
+            <p><span data-i18n="games.errors_label">Erros:</span> <span id="hang-errors" style="color:#d2685f; font-weight:bold;">0</span> / 6</p>
             <div class="word-display" id="hang-word" aria-live="polite">_ _ _ _ _</div>
             <p class="feedback-msg" id="hang-msg" aria-live="assertive"></p>
             <div class="keyboard" id="hang-keyboard"></div>
-            <button class="btn-game btn-next" id="btn-restart-hang" onclick="startForca()" style="display:none;">Nova Palavra</button>
+            <button class="btn-game btn-next" id="btn-restart-hang" onclick="startForca()" style="display:none;" data-i18n="games.btn_new_word">Nova Palavra</button>
         </div>
     </main>
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         // --- SCORE ---
@@ -320,7 +321,7 @@
 
         // --- DATA ---
         function formatarDataPlanilha(dataRaw) {
-            if (!dataRaw) return "Data não informada";
+            if (!dataRaw) return I18N.t('games.date_not_informed');
             if (dataRaw.toString().includes('T') || dataRaw.toString().includes('-')) {
                 try {
                     const d = new Date(dataRaw);
@@ -351,7 +352,7 @@
                         uva: getVal(['uva', 'casta']) || "Blend",
                         pais: getVal(['país', 'pais', 'origem']) || "Outros",
                         foto: getVal(['foto', 'imagem', 'link']) || "",
-                        data: getVal(['data', 'consumo', 'dia']) || "Data não informada",
+                        data: getVal(['data', 'consumo', 'dia']) || I18N.t('games.date_not_informed'),
                         notaF: parseFloat(getVal(['fellype', 'notaf']) || 0),
                         notaH: parseFloat(getVal(['hwlly', 'notah']) || 0)
                     };
@@ -390,7 +391,7 @@
             document.getElementById('dyn-options').innerHTML = '';
 
             if (adegaData.length < 4) {
-                document.getElementById('dyn-name').innerText = "Poucos vinhos na adega para jogar!";
+                document.getElementById('dyn-name').innerText = I18N.t('games.few_wines');
                 return;
             }
 
@@ -446,18 +447,18 @@
         }
 
         function setupQuizPais(wine) {
-            document.getElementById('dyn-title').innerText = "Mestre do Terroir";
-            document.getElementById('dyn-question').innerText = "De qual país é este vinho?";
+            document.getElementById('dyn-title').innerText = I18N.t('games.quiz_pais_title');
+            document.getElementById('dyn-question').innerText = I18N.t('games.quiz_pais_question');
             let options = new Set([wine.pais]);
             while (options.size < 4) options.add(adegaData[Math.floor(Math.random() * adegaData.length)].pais);
             Array.from(options).sort(() => Math.random() - 0.5).forEach(opt =>
                 document.getElementById('dyn-options').appendChild(
-                    createOptionBtn(opt, opt === wine.pais, "Acertou! +10 Taças 🏆", `Errou! Era do(a) ${wine.pais}`)));
+                    createOptionBtn(I18N.translateCountry(opt), opt === wine.pais, I18N.t('games.correct_pais'), I18N.t('games.wrong_pais', { val: I18N.translateCountry(wine.pais) }))));
         }
 
         function setupQuizUva(wine) {
-            document.getElementById('dyn-title').innerText = "Degustação Cega";
-            document.getElementById('dyn-question').innerText = "Qual a uva principal deste rótulo?";
+            document.getElementById('dyn-title').innerText = I18N.t('games.quiz_uva_title');
+            document.getElementById('dyn-question').innerText = I18N.t('games.quiz_uva_question');
             let options = new Set([wine.uva]);
             while (options.size < 4) {
                 let r = adegaData[Math.floor(Math.random() * adegaData.length)].uva;
@@ -465,18 +466,18 @@
             }
             Array.from(options).sort(() => Math.random() - 0.5).forEach(opt =>
                 document.getElementById('dyn-options').appendChild(
-                    createOptionBtn(opt, opt === wine.uva, "Exato! +10 Taças 🍇", `Na verdade era ${wine.uva}`)));
+                    createOptionBtn(opt, opt === wine.uva, I18N.t('games.correct_uva'), I18N.t('games.wrong_uva', { val: wine.uva }))));
         }
 
         function setupDuelo(wine) {
-            document.getElementById('dyn-title').innerText = "Duelo de Paladares";
-            document.getElementById('dyn-question').innerText = "Quem deu a nota mais alta para este vinho?";
+            document.getElementById('dyn-title').innerText = I18N.t('games.quiz_duelo_title');
+            document.getElementById('dyn-question').innerText = I18N.t('games.quiz_duelo_question');
             let vencedor = wine.notaF > wine.notaH ? "Fellype" : wine.notaH > wine.notaF ? "Hwlly" : "Empate";
             const msgFinal = `Fellype: ${wine.notaF} | Hwlly: ${wine.notaH}`;
             const container = document.getElementById('dyn-options');
-            container.appendChild(createOptionBtn("Fellype", vencedor === "Fellype", `Acertou! ${msgFinal}`, `Errou! ${msgFinal}`));
-            container.appendChild(createOptionBtn("Hwlly", vencedor === "Hwlly", `Acertou! ${msgFinal}`, `Errou! ${msgFinal}`));
-            container.appendChild(createOptionBtn("Notas Iguais (Empate)", vencedor === "Empate", `Acertou! ${msgFinal}`, `Errou! ${msgFinal}`));
+            container.appendChild(createOptionBtn("Fellype", vencedor === "Fellype", I18N.t('games.duelo_correct', { msg: msgFinal }), I18N.t('games.duelo_wrong', { msg: msgFinal })));
+            container.appendChild(createOptionBtn("Hwlly", vencedor === "Hwlly", I18N.t('games.duelo_correct', { msg: msgFinal }), I18N.t('games.duelo_wrong', { msg: msgFinal })));
+            container.appendChild(createOptionBtn(I18N.t('games.duelo_tie'), vencedor === "Empate", I18N.t('games.duelo_correct', { msg: msgFinal }), I18N.t('games.duelo_wrong', { msg: msgFinal })));
         }
 
         // --- FORCA ETÍLICA ---
@@ -517,12 +518,12 @@
             }
 
             if (!display.includes('_')) {
-                document.getElementById('hang-msg').innerText = "Você salvou o vinho! +20 Taças 🍷";
+                document.getElementById('hang-msg').innerText = I18N.t('games.hang_saved');
                 document.getElementById('hang-msg').style.color = "#a8d5a2";
                 addCoins(20);
                 endForca();
             } else if (hangErrors >= 6) {
-                document.getElementById('hang-msg').innerText = `A garrafa quebrou! A palavra era ${currentWord}.`;
+                document.getElementById('hang-msg').innerText = I18N.t('games.hang_broke', { word: currentWord });
                 document.getElementById('hang-msg').style.color = "#e08b84";
                 endForca();
             }
@@ -535,7 +536,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'key-btn';
                 btn.innerText = letter;
-                btn.setAttribute('aria-label', `Letra ${letter}`);
+                btn.setAttribute('aria-label', I18N.t('games.letter_aria', { letter: letter }));
                 btn.onclick = () => {
                     btn.disabled = true;
                     guessedLetters.push(letter);

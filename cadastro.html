@@ -362,16 +362,16 @@
             <div id="chat-window" class="chat-window"></div>
 
             <div class="undo-bar" id="undo-bar">
-                <button id="undo-btn" class="undo-btn" onclick="desfazerUltimo()" title="Corrigir última resposta">
-                    ↩ Corrigir última resposta
+                <button id="undo-btn" class="undo-btn" onclick="desfazerUltimo()" title="Corrigir última resposta" data-i18n-title="cadastro.undo_title">
+                    <span data-i18n="cadastro.undo_btn">↩ Corrigir última resposta</span>
                 </button>
             </div>
 
             <div id="suggestions-bar" style="display:none; padding:0 20px 8px; overflow-x:auto; white-space:nowrap;"></div>
 
             <div id="input-container" class="input-container">
-                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off" aria-label="Sua resposta">
-                <button class="send-btn" onclick="sendMessage()" aria-label="Enviar">
+                <input type="text" id="userInput" class="msg-input" placeholder="Envie uma mensagem..." autocomplete="off" aria-label="Sua resposta" data-i18n-placeholder="cadastro.input_placeholder" data-i18n-aria-label="cadastro.answer_aria">
+                <button class="send-btn" onclick="sendMessage()" aria-label="Enviar" data-i18n-aria-label="cadastro.send_aria">
                     <i class="fas fa-paper-plane" aria-hidden="true"></i>
                 </button>
             </div>
@@ -379,10 +379,10 @@
     </div>
 
     <dialog id="ratingModal" aria-labelledby="modal-title">
-        <h2 id="modal-title" style="font-family:'Cinzel',serif; text-align:center; margin-bottom:20px; color:var(--dourado)">Avaliação Final</h2>
+        <h2 id="modal-title" style="font-family:'Cinzel',serif; text-align:center; margin-bottom:20px; color:var(--dourado)" data-i18n="cadastro.dialog_title">Avaliação Final</h2>
         <div style="display:flex; flex-direction:column; gap:8px">
 
-            <span class="modal-label">Nota Fellype</span>
+            <span class="modal-label" data-i18n="cadastro.label_rating_fellype">Nota Fellype</span>
             <div class="nota-chips" id="chips-fellype">
                 <div class="chip" onclick="setNota('notF', '5.0', this)">5.0</div>
                 <div class="chip" onclick="setNota('notF', '5.5', this)">5.5</div>
@@ -396,9 +396,9 @@
                 <div class="chip" onclick="setNota('notF', '9.5', this)">9.5</div>
                 <div class="chip" onclick="setNota('notF', '10', this)">10</div>
             </div>
-            <input type="number" id="notF" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Fellype">
+            <input type="number" id="notF" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Fellype" data-i18n-aria-label="cadastro.label_rating_fellype">
 
-            <span class="modal-label">Nota Hwlly</span>
+            <span class="modal-label" data-i18n="cadastro.label_rating_hwlly">Nota Hwlly</span>
             <div class="nota-chips" id="chips-hwlly">
                 <div class="chip" onclick="setNota('notH', '5.0', this)">5.0</div>
                 <div class="chip" onclick="setNota('notH', '5.5', this)">5.5</div>
@@ -412,36 +412,37 @@
                 <div class="chip" onclick="setNota('notH', '9.5', this)">9.5</div>
                 <div class="chip" onclick="setNota('notH', '10', this)">10</div>
             </div>
-            <input type="number" id="notH" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Hwlly">
+            <input type="number" id="notH" step="0.5" min="0" max="10" class="modal-input" placeholder="0.0" aria-label="Nota Hwlly" data-i18n-aria-label="cadastro.label_rating_hwlly">
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px">
                 <div>
-                    <span class="modal-label">Voltaria a comprar?</span>
-                    <select id="reCompra" class="modal-input"><option value="Sim">Sim</option><option value="Não">Não</option></select>
+                    <span class="modal-label" data-i18n="cadastro.label_would_buy">Voltaria a comprar?</span>
+                    <select id="reCompra" class="modal-input"><option value="Sim" data-i18n="cadastro.opt_yes">Sim</option><option value="Não" data-i18n="cadastro.opt_no">Não</option></select>
                 </div>
                 <div>
-                    <span class="modal-label">Data do Consumo</span>
+                    <span class="modal-label" data-i18n="cadastro.label_date">Data do Consumo</span>
                     <input type="date" id="dataConsumo" class="modal-input">
                 </div>
             </div>
 
             <div>
-                <span class="modal-label">Foto do Brinde</span>
+                <span class="modal-label" data-i18n="cadastro.label_photo">Foto do Brinde</span>
                 <label class="custom-file-upload">
                     <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
-                    <i class="fas fa-camera" aria-hidden="true"></i> Selecionar ou Tirar Foto
+                    <i class="fas fa-camera" aria-hidden="true"></i> <span data-i18n="cadastro.btn_select_photo">Selecionar ou Tirar Foto</span>
                 </label>
-                <img id="preview" alt="Pré-visualização da foto">
+                <img id="preview" alt="Pré-visualização da foto" data-i18n-alt="cadastro.photo_preview_alt">
             </div>
 
             <button id="btnFinalizar" class="btn-gold" onclick="finishAll()">
-                Finalizar Brinde 🍷
+                <span data-i18n="cadastro.btn_finish">Finalizar Brinde 🍷</span>
             </button>
         </div>
     </dialog>
 
     <div id="footer-placeholder"></div>
 
+    <script src="i18n.js"></script>
     <script src="nav.js"></script>
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
@@ -454,26 +455,28 @@
         let base64Image = "";
         let historico = []; // Para o desfazer
 
+        const T = (k, vars) => (window.I18N ? window.I18N.t(k, vars) : k);
+
         const fluxo = [
-            { key: 'wineName',      q: "Qual o nome do rótulo?",                          bot: 'leblonzito', type: 'text' },
-            { key: 'produtor',      q: "Quem é o produtor ou vinícola?",                  bot: 'ipanemita',  type: 'text' },
-            { key: 'classificacao', q: "Qual a classificação? (Ex: Reserva, Blend...)",   bot: 'leblonzito', type: 'text', list: 'lista-classificacao' },
-            { key: 'uva',           q: "Quais as uvas principais?",                       bot: 'ipanemita',  type: 'text', list: 'lista-uvas' },
-            { key: 'wineType',      q: "Qual o tipo? (Tinto, Branco, Rosé...)",           bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
-            { key: 'year',          q: "Qual a safra (ano)?",                             bot: 'ipanemita',  type: 'number' },
-            { key: 'pais',          q: "De qual país ele é?",                             bot: 'leblonzito', type: 'text', list: 'lista-paises' },
-            { key: 'regiao',        q: "Qual a região?",                                  bot: 'ipanemita',  type: 'text' },
-            { key: 'teor',          q: "Qual o teor alcoólico?",                          bot: 'leblonzito', type: 'text' },
-            { key: 'tokenAcesso',   q: "Agora a senha de acesso para salvar:",            bot: 'leblonzito', type: 'password' }
+            { key: 'wineName',      get q() { return T('cadastro.q_wine_name'); },      bot: 'leblonzito', type: 'text' },
+            { key: 'produtor',      get q() { return T('cadastro.q_producer'); },        bot: 'ipanemita',  type: 'text' },
+            { key: 'classificacao', get q() { return T('cadastro.q_classification'); },  bot: 'leblonzito', type: 'text', list: 'lista-classificacao' },
+            { key: 'uva',           get q() { return T('cadastro.q_grape'); },           bot: 'ipanemita',  type: 'text', list: 'lista-uvas' },
+            { key: 'wineType',      get q() { return T('cadastro.q_type'); },            bot: 'leblonzito', type: 'text', list: 'lista-tipos' },
+            { key: 'year',          get q() { return T('cadastro.q_year'); },            bot: 'ipanemita',  type: 'number' },
+            { key: 'pais',          get q() { return T('cadastro.q_country'); },         bot: 'leblonzito', type: 'text', list: 'lista-paises' },
+            { key: 'regiao',        get q() { return T('cadastro.q_region'); },          bot: 'ipanemita',  type: 'text' },
+            { key: 'teor',          get q() { return T('cadastro.q_abv'); },             bot: 'leblonzito', type: 'text' },
+            { key: 'tokenAcesso',   get q() { return T('cadastro.q_password'); },        bot: 'leblonzito', type: 'password' }
         ];
 
         window.onload = () => {
             updateHeader('leblonzito');
-            addMsg("Olá! Sou o Leblonzito. Vamos registrar esse brinde? " + fluxo[0].q, 'leblonzito');
+            addMsg(T('cadastro.greeting') + fluxo[0].q, 'leblonzito');
             document.getElementById('dataConsumo').valueAsDate = new Date();
 
             const lastPais = localStorage.getItem('last_pais');
-            if (lastPais) fluxo.find(f => f.key === 'pais').placeholder = `Último: ${lastPais}`;
+            if (lastPais) fluxo.find(f => f.key === 'pais').placeholder = T('cadastro.last_hint', { val: lastPais });
 
             preloadLocalWines();
         };
@@ -549,7 +552,7 @@
             addMsg(next.q, next.bot);
             input.type = next.type;
             input.setAttribute('list', next.list || '');
-            input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+            input.placeholder = next.placeholder || T('cadastro.skip_hint');
         }
 
         // Chamada APÓS o usuário enviar o nome (step 0 já processado, step agora é 1)
@@ -666,7 +669,7 @@
 
             const skipBtn = document.createElement('button');
             skipBtn.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:1px solid #372e2b;background:none;color:#7b6e68;cursor:pointer;font-family:Outfit,sans-serif;font-size:11px;margin-top:2px';
-            skipBtn.textContent = skipLabel || 'Preencher manualmente →';
+            skipBtn.textContent = skipLabel || T('cadastro.skip_manual');
             skipBtn.onclick = () => {
                 hideSuggestions();
                 const next = fluxo[1];
@@ -674,7 +677,7 @@
                 addMsg(next.q, next.bot);
                 input.type = next.type;
                 input.setAttribute('list', next.list || '');
-                input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                input.placeholder = next.placeholder || T('cadastro.skip_hint');
             };
             bubble.appendChild(skipBtn);
 
@@ -708,14 +711,14 @@
         function showGeminiResult(wine) {
             const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
             const campos = [
-                { key: 'produtor',      label: 'Produtor',      value: wine.produtor },
-                { key: 'pais',          label: 'País',          value: wine.pais },
-                { key: 'regiao',        label: 'Região',        value: wine.regiao },
-                { key: 'uva',           label: 'Uva',           value: wine.uva },
-                { key: 'tipo',          label: 'Tipo',          value: wine.tipo },
-                { key: 'safra',         label: 'Safra',         value: wine.safra },
-                { key: 'teor',          label: 'Teor',          value: wine.teor ? wine.teor + '% vol' : null },
-                { key: 'classificacao', label: 'Classificação', value: wine.classificacao },
+                { key: 'produtor',      label: T('cadastro.field_producer'),      value: wine.produtor },
+                { key: 'pais',          label: T('cadastro.field_country'),       value: wine.pais && window.I18N ? I18N.translateCountry(wine.pais) : wine.pais },
+                { key: 'regiao',        label: T('cadastro.field_region'),        value: wine.regiao },
+                { key: 'uva',           label: T('cadastro.field_grape'),         value: wine.uva },
+                { key: 'tipo',          label: T('cadastro.field_type'),          value: wine.tipo && window.I18N ? I18N.translateTipo(wine.tipo) : wine.tipo },
+                { key: 'safra',         label: T('cadastro.field_year'),          value: wine.safra },
+                { key: 'teor',          label: T('cadastro.field_abv'),           value: wine.teor ? wine.teor + '% vol' : null },
+                { key: 'classificacao', label: T('cadastro.field_classification'), value: wine.classificacao },
             ].filter(c => c.value);
 
             const win = document.getElementById('chat-window');
@@ -733,7 +736,7 @@
 
             const subtitulo = document.createElement('div');
             subtitulo.style.cssText = 'font-size:11px;opacity:0.4;margin-bottom:10px';
-            subtitulo.textContent = 'Selecione os dados que deseja confirmar:';
+            subtitulo.textContent = T('cadastro.select_confirm_label');
             bubble.appendChild(subtitulo);
 
             // Checkbox para cada campo encontrado
@@ -759,7 +762,7 @@
 
             const btnConfirmar = document.createElement('button');
             btnConfirmar.style.cssText = 'display:block;width:100%;text-align:center;padding:9px;border-radius:10px;cursor:pointer;font-family:Outfit,sans-serif;font-size:13px;border:1px solid var(--dourado);background:rgba(198, 161, 91,0.18);color:#fff;margin-top:12px;font-weight:600';
-            btnConfirmar.textContent = '✓ Confirmar selecionados';
+            btnConfirmar.textContent = T('cadastro.btn_confirm_selected');
             btnConfirmar.onclick = () => {
                 // Monta wine filtrado apenas com campos selecionados
                 const wineFiltrado = { nome: wine.nome };
@@ -775,7 +778,7 @@
 
             const btnManual = document.createElement('button');
             btnManual.style.cssText = 'display:block;width:100%;text-align:center;padding:6px;border-radius:8px;border:none;background:none;color:#7b6e68;cursor:pointer;font-family:Outfit,sans-serif;font-size:11px;margin-top:4px';
-            btnManual.textContent = 'Preencher manualmente →';
+            btnManual.textContent = T('cadastro.skip_manual');
             btnManual.onclick = () => { hideSuggestions(); continuarFluxoNormal(); };
             bubble.appendChild(btnManual);
 
@@ -805,11 +808,11 @@
             // Monta resumo apenas com o que a IA encontrou
             const emoji = { tinto:'🍷', branco:'🥂', rosé:'🌸', espumante:'🍾' }[wine.tipo?.toLowerCase()] || '🍷';
             const encontrados = [
-                wine.pais    && `📍 ${wine.pais}${wine.regiao ? ' · ' + wine.regiao : ''}`,
+                wine.pais    && `📍 ${window.I18N ? I18N.translateCountry(wine.pais) : wine.pais}${wine.regiao ? ' · ' + wine.regiao : ''}`,
                 wine.uva     && `🍇 ${wine.uva}`,
                 wine.produtor && `🏭 ${wine.produtor}`,
-                wine.safra   && `📅 Safra ${wine.safra}`,
-                wine.tipo    && `🍾 ${wine.tipo}`,
+                wine.safra   && `📅 ${T('cadastro.safra_label', { val: wine.safra })}`,
+                wine.tipo    && `🍾 ${window.I18N ? I18N.translateTipo(wine.tipo) : wine.tipo}`,
                 wine.teor    && `💧 ${wine.teor}% vol`,
             ].filter(Boolean).join('\n');
 
@@ -819,9 +822,9 @@
 
             updateHeader('ipanemita');
             if (temFaltantes) {
-                addMsg(`${emoji} Encontrei alguns dados sobre esse vinho!\n\n${encontrados}\n\nVamos preencher o que faltou?`, 'ipanemita');
+                addMsg(T('cadastro.found_data', { emoji, lista: encontrados }), 'ipanemita');
             } else {
-                addMsg(`${emoji} Tudo preenchido pela IA!\n\n${encontrados}`, 'ipanemita');
+                addMsg(T('cadastro.all_filled', { emoji, lista: encontrados }), 'ipanemita');
             }
 
             setTimeout(() => {
@@ -832,7 +835,7 @@
                     addMsg(next.q, next.bot);
                     input.type = next.type || 'text';
                     input.setAttribute('list', next.list || '');
-                    input.placeholder = next.placeholder || 'Pressione Enter para pular...';
+                    input.placeholder = next.placeholder || T('cadastro.skip_hint');
                 } else {
                     step = 9;
                     updateHeader('leblonzito');
@@ -846,14 +849,15 @@
         function applyCatalogWine(wine) {
             hideSuggestions();
             const input = document.getElementById('userInput');
-            const produtor  = wine['Produtor'] || wine['Vinícola'] || 'Não informado';
-            const pais      = wine['País'] || wine['Pais'] || 'Não informado';
-            const regiao    = wine['Região'] || wine['Regiao'] || 'Não informado';
-            const uva       = wine['Uva(s)'] || wine['Uva'] || 'Não informado';
-            const tipo      = wine['Tipo'] || 'Não informado';
-            const safra     = wine['Safra'] || 'Não informado';
-            const teor      = wine['Teor Alcoólico'] || wine['Teor'] || 'Não informado';
-            const classif   = wine['Classificação'] || wine['Classificacao'] || 'Não informado';
+            const naoInformado = T('cadastro.not_informed');
+            const produtor  = wine['Produtor'] || wine['Vinícola'] || naoInformado;
+            const pais      = wine['País'] || wine['Pais'] || naoInformado;
+            const regiao    = wine['Região'] || wine['Regiao'] || naoInformado;
+            const uva       = wine['Uva(s)'] || wine['Uva'] || naoInformado;
+            const tipo      = wine['Tipo'] || naoInformado;
+            const safra     = wine['Safra'] || naoInformado;
+            const teor      = wine['Teor Alcoólico'] || wine['Teor'] || naoInformado;
+            const classif   = wine['Classificação'] || wine['Classificacao'] || naoInformado;
 
             Object.assign(dataVinho, {
                 wineName: wine['Nome do Vinho'], produtor, classificacao: classif,
@@ -865,8 +869,10 @@
 
             const emoji = { Tinto:'🍷', Branco:'🥂', Rosé:'🌸', Espumante:'🍾' }[tipo] || '🍷';
             updateHeader('ipanemita');
-            const regInfo = regiao !== 'Não informado' ? ` · ${regiao}` : '';
-            addMsg(`${emoji} Preenchendo automaticamente:\n\n📍 ${pais}${regInfo}\n🍇 ${uva}\n🏭 ${produtor}\n📅 Safra ${safra}`, 'ipanemita');
+            const regInfo = regiao !== naoInformado ? ` · ${regiao}` : '';
+            const paisDisplay = window.I18N ? I18N.translateCountry(pais) : pais;
+            const autoLista = `📍 ${paisDisplay}${regInfo}\n🍇 ${uva}\n🏭 ${produtor}\n📅 ${T('cadastro.safra_label', { val: safra })}`;
+            addMsg(T('cadastro.autofilling', { emoji, lista: autoLista }), 'ipanemita');
             setTimeout(() => {
                 updateHeader('leblonzito');
                 addMsg(fluxo[9].q, 'leblonzito');
@@ -925,9 +931,9 @@
         function updateHeader(bot) {
             const head = document.getElementById('header-content');
             if (bot === 'leblonzito') {
-                head.innerHTML = `${getAvatarHtml(IMG_L, 'Leblonzito')} <div><div style="font-weight:600; color:var(--dourado); font-family:'Outfit', sans-serif;">Leblonzito</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">Sommelier Online</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_L, 'Leblonzito')} <div><div style="font-weight:600; color:var(--dourado); font-family:'Outfit', sans-serif;">Leblonzito</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">${T('cadastro.sommelier_online')}</div></div>`;
             } else if (bot === 'ipanemita') {
-                head.innerHTML = `${getAvatarHtml(IMG_I, 'Ipanemita')} <div><div style="font-weight:600; color:#b8ada6; font-family:'Outfit', sans-serif;">Ipanemita</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">Curadoria Inteligente</div></div>`;
+                head.innerHTML = `${getAvatarHtml(IMG_I, 'Ipanemita')} <div><div style="font-weight:600; color:#b8ada6; font-family:'Outfit', sans-serif;">Ipanemita</div><div style="font-size:10px; opacity:0.6; font-family:'Outfit', sans-serif;">${T('cadastro.smart_curation')}</div></div>`;
             } else {
                 head.innerHTML = `<div style="display:flex; width:100%; justify-content:center; gap:10px;">${getAvatarHtml(IMG_L, 'Leblonzito')}${getAvatarHtml(IMG_I, 'Ipanemita')}</div>`;
             }
@@ -946,7 +952,7 @@
 
             if (!rawMsg && fluxo[step].key === 'tokenAcesso') return;
 
-            const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? "Não informado" : rawMsg;
+            const msg = (rawMsg === "" && fluxo[step].key !== 'tokenAcesso') ? T('cadastro.not_informed') : rawMsg;
             const displayMsg = (fluxo[step].type === 'password' && rawMsg) ? '••••••••' : (rawMsg || "(pulado)");
             addMsg(displayMsg, 'user');
             input.value = "";
@@ -978,7 +984,7 @@
                     addMsg(nextStep.q, nextStep.bot);
                     input.type = nextStep.type;
                     input.setAttribute('list', nextStep.list || "");
-                    input.placeholder = nextStep.placeholder || "Pressione Enter para pular...";
+                    input.placeholder = nextStep.placeholder || T('cadastro.skip_hint');
                 }, 600);
             } else {
                 document.getElementById('undo-bar').classList.remove('visible');
@@ -1007,7 +1013,7 @@
             const input = document.getElementById('userInput');
             input.type = currentStep.type;
             input.setAttribute('list', currentStep.list || "");
-            input.placeholder = currentStep.placeholder || "Pressione Enter para pular...";
+            input.placeholder = currentStep.placeholder || T('cadastro.skip_hint');
             updateHeader(currentStep.bot);
 
             if (step <= 1) document.getElementById('undo-bar').classList.remove('visible');
@@ -1018,7 +1024,7 @@
         async function validarSenhaFinal() {
             isValidating = true;
             updateHeader('final');
-            addMsg("Validando acesso...", 'final');
+            addMsg(T('cadastro.validating'), 'final');
 
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -1028,7 +1034,7 @@
                 const res = await response.json();
                 if (res.result === "success") {
                     isValidating = false;
-                    addMsg("Acesso autorizado! Hora de dar as notas e finalizar o brinde. 🍷", 'final');
+                    addMsg(T('cadastro.access_granted'), 'final');
                     setTimeout(() => { document.getElementById('ratingModal').showModal(); }, 800);
                 } else {
                     throw new Error();
@@ -1036,7 +1042,7 @@
             } catch (e) {
                 isValidating = false;
                 step--;
-                addMsg("Senha incorreta. Tente novamente:", 'leblonzito');
+                addMsg(T('cadastro.wrong_password'), 'leblonzito');
                 updateHeader('leblonzito');
                 document.getElementById('userInput').type = "password";
                 document.getElementById('undo-bar').classList.remove('visible');
@@ -1069,7 +1075,7 @@
 
         async function finishAll() {
             const btn = document.getElementById('btnFinalizar');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eternizando Memória...';
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${T('cadastro.btn_finishing')}`;
             btn.disabled = true;
 
             const notF_formatada = document.getElementById('notF').value.replace('.', ',');
@@ -1103,14 +1109,14 @@
 
                 // Feedback in-chat em vez de alert()
                 updateHeader('final');
-                addMsg("🍷 Brinde eternizado com sucesso!\n\nO vinho foi adicionado à nossa adega. Redirecionando para o catálogo...", 'success');
+                addMsg(T('cadastro.toast_success'), 'success');
 
                 setTimeout(() => { location.href = "catalogo.html"; }, 2500);
 
             } catch (e) {
                 document.getElementById('ratingModal').close();
                 if (window.clearWineCache) window.clearWineCache();
-                addMsg("✅ Brinde registrado! Redirecionando...", 'success');
+                addMsg(T('cadastro.toast_success_fallback'), 'success');
                 setTimeout(() => { location.href = "catalogo.html"; }, 2500);
             }
         }

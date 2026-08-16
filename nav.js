@@ -78,19 +78,20 @@ document.addEventListener('error', (e) => {
 
 (function () {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const T = window.I18N ? window.I18N.t : (k) => k;
 
     const mainLinks = [
-        { href: 'index.html',    label: 'Início' },
-        { href: 'catalogo.html', label: 'Catálogo' },
-        { href: 'melhores.html', label: 'Do Mês' },
-        { href: 'games.html',    label: 'Games' },
+        { href: 'index.html',    key: 'nav.home' },
+        { href: 'catalogo.html', key: 'nav.catalog' },
+        { href: 'melhores.html', key: 'nav.best' },
+        { href: 'games.html',    key: 'nav.games' },
     ];
 
     const explorarLinks = [
-        { href: 'paises.html',    label: 'Por países' },
-        { href: 'uvas.html',      label: 'Por uvas' },
-        { href: 'vinicolas.html', label: 'Vinícolas' },
-        { href: 'stats.html',     label: 'Estatísticas' },
+        { href: 'paises.html',    key: 'nav.countries' },
+        { href: 'uvas.html',      key: 'nav.grapes' },
+        { href: 'vinicolas.html', key: 'nav.wineries' },
+        { href: 'stats.html',     key: 'nav.stats' },
     ];
 
     const isExplore = explorarLinks.some(l => l.href === currentPage);
@@ -100,42 +101,45 @@ document.addEventListener('error', (e) => {
         return href === currentPage;
     }
 
+    const langSwitcherHTML = window.I18N ? window.I18N.buildSwitcherHTML() : '';
+
     const navHTML = `
-        <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-        <nav class="navbar" aria-label="Navegação principal">
+        <a class="skip-link" href="#conteudo" data-i18n="nav.skip">${T('nav.skip')}</a>
+        <nav class="navbar" data-i18n-aria-label="common.main_nav_aria" aria-label="${T('common.main_nav_aria')}">
             <div class="nav-logo">
-                <a href="index.html" aria-label="Fellype &amp; Hwlly — página inicial">
+                <a href="index.html" data-i18n-aria-label="nav.home_aria" aria-label="${T('nav.home_aria')}">
                     <img src="assets/favicon.svg" class="brand-mark" alt="" width="34" height="34">
                     <span class="brand-text">
                         <span class="brand-name">Fellype &amp; Hwlly</span>
-                        <span class="brand-tagline">Adega pessoal</span>
+                        <span class="brand-tagline" data-i18n="nav.tagline">${T('nav.tagline')}</span>
                     </span>
                 </a>
             </div>
-            <button class="menu-toggle" id="mobile-menu-icon" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links-container">
+            <button class="menu-toggle" id="mobile-menu-icon" data-i18n-aria-label="nav.open_menu" aria-label="${T('nav.open_menu')}" aria-expanded="false" aria-controls="nav-links-container">
                 <i class="fas fa-bars" aria-hidden="true"></i>
             </button>
             <ul class="nav-links" id="nav-links-container">
                 ${mainLinks.map(l => `
                     <li>
-                        <a href="${l.href}" ${isActive(l.href) ? 'class="active" aria-current="page"' : ''}>${l.label}</a>
+                        <a href="${l.href}" data-i18n="${l.key}" ${isActive(l.href) ? 'class="active" aria-current="page"' : ''}>${T(l.key)}</a>
                     </li>
                 `).join('')}
                 <li class="dropdown">
                     <button class="dropbtn nav-link-style${isExplore ? ' active' : ''}" id="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
-                        Explorar <i class="fa fa-caret-down" aria-hidden="true" style="font-size:0.75rem;"></i>
+                        <span data-i18n="nav.explore">${T('nav.explore')}</span> <i class="fa fa-caret-down" aria-hidden="true" style="font-size:0.75rem;"></i>
                     </button>
                     <div class="dropdown-content" id="dropdown-content">
                         ${explorarLinks.map(l => `
-                            <a href="${l.href}" ${l.href === currentPage ? 'class="active" aria-current="page"' : ''}>${l.label}</a>
+                            <a href="${l.href}" data-i18n="${l.key}" ${l.href === currentPage ? 'class="active" aria-current="page"' : ''}>${T(l.key)}</a>
                         `).join('')}
                     </div>
                 </li>
                 <li>
                     <a href="cadastro.html" class="btn-primario" style="padding:11px 18px; min-height:40px; font-size:0.66rem;">
-                        <i class="fas fa-plus" aria-hidden="true"></i> Registrar
+                        <i class="fas fa-plus" aria-hidden="true"></i> <span data-i18n="nav.register">${T('nav.register')}</span>
                     </a>
                 </li>
+                ${langSwitcherHTML}
             </ul>
         </nav>`;
 
@@ -143,22 +147,22 @@ document.addEventListener('error', (e) => {
         <footer>
             <div class="footer-brand">Fellype &amp; Hwlly</div>
             <div class="footer-links">
-                <a href="index.html">Início</a>
-                <a href="catalogo.html">Catálogo</a>
-                <a href="melhores.html">Melhores do mês</a>
-                <a href="paises.html">Por países</a>
-                <a href="uvas.html">Por uvas</a>
-                <a href="vinicolas.html">Vinícolas</a>
-                <a href="stats.html">Estatísticas</a>
-                <a href="games.html">Games</a>
+                <a href="index.html" data-i18n="nav.home">${T('nav.home')}</a>
+                <a href="catalogo.html" data-i18n="nav.catalog">${T('nav.catalog')}</a>
+                <a href="melhores.html" data-i18n="nav.best">${T('nav.best')}</a>
+                <a href="paises.html" data-i18n="nav.countries">${T('nav.countries')}</a>
+                <a href="uvas.html" data-i18n="nav.grapes">${T('nav.grapes')}</a>
+                <a href="vinicolas.html" data-i18n="nav.wineries">${T('nav.wineries')}</a>
+                <a href="stats.html" data-i18n="nav.stats">${T('nav.stats')}</a>
+                <a href="games.html" data-i18n="nav.games">${T('nav.games')}</a>
             </div>
             <hr class="footer-divider">
             <div class="footer-nota">
-                Feito com ❤️ para as nossas memórias.<br>
-                <span id="footer-year"></span> · Curadoria de Leblonzito &amp; Ipanemita
+                <span data-i18n="footer.tagline">${T('footer.tagline')}</span><br>
+                <span id="footer-year"></span> · <span data-i18n="footer.curation">${T('footer.curation')}</span>
             </div>
         </footer>
-        <button class="back-to-top" id="back-to-top" aria-label="Voltar ao topo">
+        <button class="back-to-top" id="back-to-top" data-i18n-aria-label="common.back_to_top" aria-label="${T('common.back_to_top')}">
             <i class="fas fa-chevron-up" aria-hidden="true"></i>
         </button>`;
 
@@ -174,6 +178,12 @@ document.addEventListener('error', (e) => {
         const existingFooter = document.querySelector('footer');
         if (existingFooter) existingFooter.outerHTML = footerHTML;
         else document.body.insertAdjacentHTML('beforeend', footerHTML);
+    }
+
+    /* ---- Seletor de idioma ---- */
+    if (window.I18N) {
+        window.I18N.wireSwitcher(document);
+        window.addEventListener('i18n:change', () => window.I18N.applyStaticI18n());
     }
 
     /* ---- Alvo do "ir para o conteúdo" ---- */
@@ -249,9 +259,15 @@ document.addEventListener('error', (e) => {
 
     /* ---- Modal de detalhe do vinho ---- */
     let ultimoFoco = null;
+    let vinhoAtual = null;
+    const Tm = (k) => (window.I18N ? window.I18N.t(k) : k);
+    const trPais = (v) => (window.I18N ? window.I18N.translateCountry(v) : v);
+    const trTipo = (v) => (window.I18N ? window.I18N.translateTipo(v) : v);
+    const trClass = (v) => (window.I18N ? window.I18N.translateClassificacao(v) : v);
 
     window.WineModal = {
         open(vinho) {
+            vinhoAtual = vinho;
             let backdrop = document.getElementById('wine-modal-backdrop');
             if (!backdrop) {
                 backdrop = document.createElement('div');
@@ -259,7 +275,7 @@ document.addEventListener('error', (e) => {
                 backdrop.className = 'wine-modal-backdrop';
                 backdrop.innerHTML = `
                     <div class="wine-modal" role="dialog" aria-modal="true" aria-labelledby="modal-wine-name">
-                        <button class="wine-modal-close" onclick="WineModal.close()" aria-label="Fechar detalhes">
+                        <button class="wine-modal-close" onclick="WineModal.close()" data-i18n-aria-label="modal.close" aria-label="${Tm('modal.close')}">
                             <i class="fas fa-times" aria-hidden="true"></i>
                         </button>
                         <img id="modal-img" class="wine-modal-img" src="" alt="" data-fallback="${window.IMG_FALLBACK}">
@@ -279,20 +295,20 @@ document.addEventListener('error', (e) => {
             const img = document.getElementById('modal-img');
             img.dataset.fbApplied = '';
             img.src = vinho.foto || window.IMG_FALLBACK;
-            img.alt = vinho.nome ? 'Rótulo: ' + vinho.nome : 'Foto do vinho';
+            img.alt = vinho.nome ? Tm('modal.label_prefix') + vinho.nome : Tm('modal.wine_photo');
 
-            document.getElementById('modal-wine-name').textContent = vinho.nome || 'Rótulo especial';
+            document.getElementById('modal-wine-name').textContent = vinho.nome || Tm('modal.special_label');
             document.getElementById('modal-produtor').textContent = vinho.produtor || vinho.vinicola || '';
 
             const campos = [
-                { label: 'País', value: vinho.pais },
-                { label: 'Região', value: vinho.regiao },
-                { label: 'Uva(s)', value: vinho.uva },
-                { label: 'Tipo', value: vinho.tipo },
-                { label: 'Safra', value: vinho.safra },
-                { label: 'Teor alcoólico', value: vinho.teor },
-                { label: 'Classificação', value: vinho.classificacao },
-                { label: 'Degustado em', value: vinho.data },
+                { label: Tm('modal.country'), value: trPais(vinho.pais) },
+                { label: Tm('modal.region'), value: vinho.regiao },
+                { label: Tm('modal.grapes'), value: vinho.uva },
+                { label: Tm('modal.type'), value: trTipo(vinho.tipo) },
+                { label: Tm('modal.vintage'), value: vinho.safra },
+                { label: Tm('modal.abv'), value: vinho.teor },
+                { label: Tm('modal.classification'), value: trClass(vinho.classificacao) },
+                { label: Tm('modal.tasted_on'), value: vinho.data },
             ].filter(c => c.value && c.value !== 'N/A' && c.value !== '-');
 
             document.getElementById('modal-grid').innerHTML = campos.map(c => `
@@ -325,6 +341,12 @@ document.addEventListener('error', (e) => {
             if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus({ preventScroll: true });
         }
     };
+
+    /* Reabre com os mesmos dados ao trocar de idioma, se a modal estiver aberta */
+    window.addEventListener('i18n:change', () => {
+        const b = document.getElementById('wine-modal-backdrop');
+        if (b && b.classList.contains('open') && vinhoAtual) WineModal.open(vinhoAtual);
+    });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') WineModal.close();
