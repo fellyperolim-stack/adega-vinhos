@@ -353,7 +353,7 @@ document.addEventListener('error', (e) => {
     }
 
     async function buildShareCard(vinho, fotoBlob) {
-        const W = 1080, H = 2000, PAD = 60, PHOTO_H = 760, FRAME = 22;
+        const W = 1080, H = 1920, PAD = 56, PHOTO_H = 720, FRAME = 22;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         const ctx = canvas.getContext('2d');
@@ -374,13 +374,7 @@ document.addEventListener('error', (e) => {
             ctx.fillRect(0, 0, W, PHOTO_H);
         }
 
-        // véu escuro no topo (legibilidade da marca) e transição foto → painel
-        const topShade = ctx.createLinearGradient(0, 0, 0, 200);
-        topShade.addColorStop(0, 'rgba(10,7,7,0.65)');
-        topShade.addColorStop(1, 'rgba(10,7,7,0)');
-        ctx.fillStyle = topShade;
-        ctx.fillRect(0, 0, W, 200);
-
+        // transição foto → painel (topo fica limpo: zona coberta pelo cabeçalho do Instagram nos Stories)
         const grad = ctx.createLinearGradient(0, PHOTO_H - 280, 0, PHOTO_H);
         grad.addColorStop(0, 'rgba(21,16,15,0)');
         grad.addColorStop(1, 'rgba(21,16,15,1)');
@@ -394,16 +388,8 @@ document.addEventListener('error', (e) => {
             try { await document.fonts.ready; } catch (e) {}
         }
 
-        // marca no topo, sobre a foto
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 26px 'Outfit', Arial, sans-serif";
-        setLetterSpacing(ctx, 4);
-        ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, 78);
-        setLetterSpacing(ctx, 0);
-
         ctx.textAlign = 'left';
-        let cy = PHOTO_H + 84;
+        let cy = PHOTO_H + 78;
 
         // selo do tipo de vinho
         if (vinho.tipo && vinho.tipo !== '-') {
@@ -423,28 +409,28 @@ document.addEventListener('error', (e) => {
             ctx.fillText(tipoTxt, PAD + pillW / 2, cy - 1);
             ctx.textAlign = 'left';
             setLetterSpacing(ctx, 0);
-            cy += 58;
+            cy += 54;
         }
 
         // nome do vinho (até 2 linhas)
         ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 54px Cinzel, Georgia, serif";
+        ctx.font = "600 50px Cinzel, Georgia, serif";
         const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial').toUpperCase(), W - PAD * 2, 2);
-        nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 60));
-        cy += (nomeLinhas.length - 1) * 60 + 50;
+        nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 56));
+        cy += (nomeLinhas.length - 1) * 56 + 46;
 
         if (vinho.produtor) {
             ctx.fillStyle = '#A0938C';
-            ctx.font = "400 30px 'Outfit', Arial, sans-serif";
+            ctx.font = "400 28px 'Outfit', Arial, sans-serif";
             ctx.fillText(fitText(ctx, vinho.produtor, W - PAD * 2), PAD, cy);
-            cy += 52;
+            cy += 46;
         } else {
-            cy += 12;
+            cy += 10;
         }
 
-        cy += 28;
+        cy += 22;
         drawOrnamentLine(ctx, cy, W, PAD);
-        cy += 46;
+        cy += 38;
 
         // grade de campos (mesmos rótulos da modal do site)
         const campos = [
@@ -458,9 +444,9 @@ document.addEventListener('error', (e) => {
         ].filter(c => c.value && c.value !== 'N/A' && c.value !== '-');
 
         if (campos.length) {
-            const fGap = 16;
+            const fGap = 14;
             const fW = (W - PAD * 2 - fGap) / 2;
-            const fH = 106;
+            const fH = 92;
             campos.forEach((c, i) => {
                 const col = i % 2, row = Math.floor(i / 2);
                 const bx = PAD + col * (fW + fGap);
@@ -474,25 +460,25 @@ document.addEventListener('error', (e) => {
                 ctx.stroke();
 
                 ctx.fillStyle = '#C6A15B';
-                ctx.font = "600 18px 'Outfit', Arial, sans-serif";
+                ctx.font = "600 16px 'Outfit', Arial, sans-serif";
                 setLetterSpacing(ctx, 2);
-                ctx.fillText(fitText(ctx, c.label, fW - 36), bx + 22, by + 36);
+                ctx.fillText(fitText(ctx, c.label, fW - 34), bx + 20, by + 32);
                 setLetterSpacing(ctx, 0);
 
                 ctx.fillStyle = '#ECE4DD';
-                ctx.font = "500 28px 'Outfit', Arial, sans-serif";
-                ctx.fillText(fitText(ctx, String(c.value), fW - 36), bx + 22, by + 74);
+                ctx.font = "500 25px 'Outfit', Arial, sans-serif";
+                ctx.fillText(fitText(ctx, String(c.value), fW - 34), bx + 20, by + 65);
             });
             const rows = Math.ceil(campos.length / 2);
-            cy += rows * fH + (rows - 1) * fGap + 42;
+            cy += rows * fH + (rows - 1) * fGap + 34;
         } else {
-            cy += 16;
+            cy += 14;
         }
 
         // notas
-        const boxGap = 32;
+        const boxGap = 28;
         const boxW = (W - PAD * 2 - boxGap) / 2;
-        const boxH = 156;
+        const boxH = 134;
         const boxes = [
             { label: 'FELLYPE', valor: vinho.notaF || '—' },
             { label: 'HWLLY', valor: vinho.notaH || '—' },
@@ -509,38 +495,46 @@ document.addEventListener('error', (e) => {
             ctx.stroke();
 
             ctx.fillStyle = '#C6A15B';
-            ctx.font = "20px Georgia, serif";
-            ctx.fillText('★ ★ ★ ★ ★', bx + boxW / 2, by + 36);
+            ctx.font = "18px Georgia, serif";
+            ctx.fillText('★ ★ ★ ★ ★', bx + boxW / 2, by + 32);
 
             ctx.fillStyle = '#A0938C';
-            ctx.font = "600 18px 'Outfit', Arial, sans-serif";
+            ctx.font = "600 16px 'Outfit', Arial, sans-serif";
             setLetterSpacing(ctx, 2);
-            ctx.fillText(b.label, bx + boxW / 2, by + 66);
+            ctx.fillText(b.label, bx + boxW / 2, by + 58);
             setLetterSpacing(ctx, 0);
 
             ctx.fillStyle = '#E4CB94';
-            ctx.font = "600 58px Cinzel, Georgia, serif";
-            ctx.fillText(String(b.valor), bx + boxW / 2, by + 130);
+            ctx.font = "600 50px Cinzel, Georgia, serif";
+            ctx.fillText(String(b.valor), bx + boxW / 2, by + 112);
         });
         cy += boxH;
 
-        // rodapé sempre ancorado perto da base do cartão (não flutua "colado" nos dados)
-        cy = Math.max(cy + 46, H - 150);
+        // rodapé sempre ancorado bem acima da base (fora da zona onde o Instagram
+        // sobrepõe a caixa de resposta dos Stories, ~300px inferiores)
+        cy = Math.max(cy + 34, H - 300);
 
         drawOrnamentLine(ctx, cy, W, PAD);
-        cy += 40;
+        cy += 34;
 
         ctx.textAlign = 'center';
         ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 25px 'Outfit', Arial, sans-serif";
+        ctx.font = "600 23px 'Outfit', Arial, sans-serif";
         setLetterSpacing(ctx, 3);
         ctx.fillText('CONFIRA MAIS EM', W / 2, cy);
         setLetterSpacing(ctx, 0);
-        cy += 42;
+        cy += 38;
 
         ctx.fillStyle = '#C6A15B';
-        ctx.font = "500 32px 'Outfit', Arial, sans-serif";
+        ctx.font = "500 30px 'Outfit', Arial, sans-serif";
         ctx.fillText('fellypehwlly-adega.space', W / 2, cy);
+        cy += 46;
+
+        ctx.fillStyle = '#8A7D76';
+        ctx.font = "500 20px 'Outfit', Arial, sans-serif";
+        setLetterSpacing(ctx, 2);
+        ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, cy);
+        setLetterSpacing(ctx, 0);
         ctx.textAlign = 'left';
 
         // moldura dourada
