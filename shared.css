@@ -724,21 +724,11 @@ footer {
 }
 
 .share-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 0.82rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
     flex-shrink: 0;
-}
-
-.share-icon-whatsapp { background: #25D366; }
-
-.share-icon-instagram {
-    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    object-fit: cover;
 }
 
 .share-whatsapp:hover, .share-whatsapp:focus-visible {
