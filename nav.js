@@ -260,6 +260,7 @@ document.addEventListener('error', (e) => {
     /* ---- Modal de detalhe do vinho ---- */
     let ultimoFoco = null;
     let vinhoAtual = null;
+    let imagemAtualFile = null;
     const Tm = (k) => (window.I18N ? window.I18N.t(k) : k);
     const trPais = (v) => (window.I18N ? window.I18N.translateCountry(v) : v);
     const trTipo = (v) => (window.I18N ? window.I18N.translateTipo(v) : v);
@@ -268,6 +269,8 @@ document.addEventListener('error', (e) => {
     window.WineModal = {
         open(vinho) {
             vinhoAtual = vinho;
+            imagemAtualFile = null;
+            this._prefetchImage(vinho);
             let backdrop = document.getElementById('wine-modal-backdrop');
             if (!backdrop) {
                 backdrop = document.createElement('div');
@@ -348,15 +351,11 @@ document.addEventListener('error', (e) => {
             document.body.style.overflow = '';
             if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus({ preventScroll: true });
         },
-        buildShareText(vinho) {
+        buildShareCaption(vinho) {
             const v = vinho || vinhoAtual || {};
-            const linhas = [`🍷 *${v.nome || 'Vinho'}*`];
-            const produtor = v.produtor || v.vinicola;
-            if (produtor) linhas.push(`Produtor: ${produtor}`);
-            if (v.pais) linhas.push(`País: ${v.pais}`);
-            if (v.regiao && v.regiao !== '-') linhas.push(`Região: ${v.regiao}`);
-            if (v.uva) linhas.push(`Uva: ${v.uva}`);
-            if (v.safra && v.safra !== '-') linhas.push(`Safra: ${v.safra}`);
+            const partes = [`🍷 ${v.nome || 'Vinho'}`];
+            if (v.pais) partes.push(v.pais);
+            if (v.uva) partes.push(v.uva);
 
             const notaF = v.notaF || v['Pontuação Fellype'];
             const notaH = v.notaH || v['Pontuação Hwlly'];
@@ -364,33 +363,68 @@ document.addEventListener('error', (e) => {
                 const notas = [];
                 if (notaF) notas.push(`Fellype ★${notaF}`);
                 if (notaH) notas.push(`Hwlly ★${notaH}`);
-                linhas.push(`Nota: ${notas.join(' | ')}`);
+                partes.push(notas.join(' | '));
             }
 
-            linhas.push('', '🥂 Adega Fellype & Hwlly');
-            return linhas.join('\n');
+            return `${partes.join(' · ')}\n🥂 Adega Fellype & Hwlly`;
+        },
+        buildShareUrl(vinho) {
+            const v = vinho || vinhoAtual || {};
+            const base = `${location.origin}/catalogo.html`;
+            return v.nome ? `${base}?vinho=${encodeURIComponent(v.nome)}` : base;
+        },
+        async _prefetchImage(vinho) {
+            if (!vinho || !vinho.foto) return;
+            try {
+                const resp = await fetch(vinho.foto);
+                if (!resp.ok) return;
+                const blob = await resp.blob();
+                if (!blob.type.startsWith('image/') || vinhoAtual !== vinho) return;
+                const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+                const nomeArq = (vinho.nome || 'vinho')
+                    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+                    .replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'vinho';
+                imagemAtualFile = new File([blob], `${nomeArq}.${ext}`, { type: blob.type });
+            } catch (e) {
+                imagemAtualFile = null;
+            }
         },
         shareWhatsApp() {
-            const texto = this.buildShareText();
-            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
-        },
-        async shareInstagram() {
-            const texto = this.buildShareText();
+            const v = vinhoAtual || {};
+            const url = this.buildShareUrl(v);
+            const texto = `${this.buildShareCaption(v)}\n${url}`;
 
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: (vinhoAtual && vinhoAtual.nome) || 'Vinho', text: texto });
-                    return;
-                } catch (e) {
-                    if (e.name === 'AbortError') return;
-                }
+            if (imagemAtualFile && navigator.canShare && navigator.canShare({ files: [imagemAtualFile] })) {
+                navigator.share({ files: [imagemAtualFile], text: texto, title: v.nome || 'Vinho' }).catch(() => {});
+                return;
             }
 
+            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
+            if (!imagemAtualFile) this._toast('A imagem ainda não carregou para anexar — enviamos o link do vinho.');
+        },
+        shareInstagram() {
+            const v = vinhoAtual || {};
+            const url = this.buildShareUrl(v);
+            const texto = `${this.buildShareCaption(v)}\n${url}`;
+
+            if (imagemAtualFile && navigator.canShare && navigator.canShare({ files: [imagemAtualFile] })) {
+                navigator.share({ files: [imagemAtualFile], text: texto, title: v.nome || 'Vinho' }).catch(() => {});
+                return;
+            }
+
+            if (navigator.share) {
+                navigator.share({ title: v.nome || 'Vinho', text: texto, url }).catch(() => {});
+                return;
+            }
+
+            this._copyAndOpenInstagram(texto);
+        },
+        async _copyAndOpenInstagram(texto) {
             try {
                 await navigator.clipboard.writeText(texto);
-                this._toast('Texto copiado! Cole no Instagram 📋');
+                this._toast('Link copiado! Cole no Instagram 📋');
             } catch (e) {
-                this._toast('Não foi possível copiar o texto automaticamente.');
+                this._toast('Não foi possível copiar o link automaticamente.');
             }
             window.open('https://instagram.com', '_blank');
         },

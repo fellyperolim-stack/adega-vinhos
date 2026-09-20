@@ -380,6 +380,42 @@ const getFlagUrl = (pais) => {
             return parseFloat(String(val).replace(',', '.')) || 0;
         }
 
+        function resolveFoto(v) {
+            let urlFinal = IMG_PADRAO;
+            const fotoRaw = v['Foto'] || v['foto'];
+            if (fotoRaw && fotoRaw.length > 10) {
+                if (fotoRaw.startsWith('data:image')) {
+                    urlFinal = fotoRaw;
+                } else if (fotoRaw.includes('drive.google.com')) {
+                    const id = fotoRaw.match(/[-\w]{25,}/);
+                    urlFinal = id ? `https://lh3.googleusercontent.com/d/${id[0]}` : fotoRaw;
+                } else {
+                    urlFinal = fotoRaw;
+                }
+            }
+            return urlFinal;
+        }
+
+        function toVinhoObj(v) {
+            const notaF = parseFloat2(v['Pontuação Fellype']);
+            const notaH = parseFloat2(v['Pontuação Hwlly']);
+            return {
+                nome: v['Nome do Vinho'],
+                produtor: v['Produtor'] || v['Vinícola'] || '',
+                pais: v['País'] || v['Pais'],
+                regiao: v['Região'] || v['Regiao'],
+                uva: v['Uva(s)'] || v['Uva'],
+                tipo: v['Tipo'],
+                safra: v['Safra'],
+                teor: v['Teor Alcoólico'] || v['Teor'],
+                classificacao: v['Classificação'] || v['Classificacao'],
+                data: v['Ano de Consumo'] || v['Data'],
+                notaF: notaF || null,
+                notaH: notaH || null,
+                foto: resolveFoto(v),
+            };
+        }
+
         async function fetchVinhos() {
             try {
                 vinhos = await fetchWithCache(SCRIPT_URL);
@@ -394,6 +430,12 @@ const getFlagUrl = (pais) => {
                 document.getElementById('skeleton-grid').style.display = 'none';
                 document.getElementById('vinho-grid').style.display = 'grid';
                 aplicarFiltros();
+
+                const vinhoParam = params.get('vinho');
+                if (vinhoParam) {
+                    const alvo = vinhos.find(v => (v['Nome do Vinho'] || '').trim().toLowerCase() === vinhoParam.trim().toLowerCase());
+                    if (alvo) setTimeout(() => WineModal.open(toVinhoObj(alvo)), 250);
+                }
             } catch (e) {
                 document.getElementById('skeleton-grid').innerHTML = `
                     <div class="empty-state" style="grid-column:1/-1">
@@ -462,37 +504,10 @@ const getFlagUrl = (pais) => {
             count.textContent = lista.length + ' ' + (lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular'));
 
             grid.innerHTML = lista.map(v => {
-                let urlFinal = IMG_PADRAO;
-                const fotoRaw = v['Foto'] || v['foto'];
-                if (fotoRaw && fotoRaw.length > 10) {
-                    if (fotoRaw.startsWith('data:image')) {
-                        urlFinal = fotoRaw;
-                    } else if (fotoRaw.includes('drive.google.com')) {
-                        const id = fotoRaw.match(/[-\w]{25,}/);
-                        urlFinal = id ? `https://lh3.googleusercontent.com/d/${id[0]}` : fotoRaw;
-                    } else {
-                        urlFinal = fotoRaw;
-                    }
-                }
-
+                const urlFinal = resolveFoto(v);
                 const notaF = parseFloat2(v['Pontuação Fellype']);
                 const notaH = parseFloat2(v['Pontuação Hwlly']);
-
-                const vinhoObj = {
-                    nome: v['Nome do Vinho'],
-                    produtor: v['Produtor'] || v['Vinícola'] || '',
-                    pais: v['País'] || v['Pais'],
-                    regiao: v['Região'] || v['Regiao'],
-                    uva: v['Uva(s)'] || v['Uva'],
-                    tipo: v['Tipo'],
-                    safra: v['Safra'],
-                    teor: v['Teor Alcoólico'] || v['Teor'],
-                    classificacao: v['Classificação'] || v['Classificacao'],
-                    data: v['Ano de Consumo'] || v['Data'],
-                    notaF: notaF || null,
-                    notaH: notaH || null,
-                    foto: urlFinal,
-                };
+                const vinhoObj = toVinhoObj(v);
 
                 return `
                 <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
