@@ -278,6 +278,126 @@
             text-transform: uppercase;
         }
 
+        /* --- ALTERNÂNCIA DE VISUALIZAÇÃO --- */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 20px 18px;
+        }
+
+        .view-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--subtexto);
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transicao);
+        }
+        .view-btn:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado-claro); }
+        .view-btn.active {
+            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+            border-color: rgba(198, 161, 91, 0.2);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        /* --- LINHA DO TEMPO --- */
+        .timeline-container { max-width: 720px; margin: 0 auto; padding: 6px 5% 70px; }
+
+        .timeline-month { margin-bottom: 34px; }
+
+        .timeline-month-label {
+            font-family: 'Cinzel', serif;
+            color: var(--dourado);
+            font-size: 0.98rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin: 0 0 18px;
+            padding-left: 40px;
+            position: relative;
+        }
+        .timeline-month-label::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--dourado);
+            box-shadow: 0 0 0 4px rgba(198, 161, 91, 0.15);
+        }
+
+        .timeline-track {
+            position: relative;
+            padding-left: 40px;
+            margin-left: 11px;
+            border-left: 2px solid rgba(198, 161, 91, 0.16);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 26px;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(198, 161, 91, 0.55);
+        }
+
+        .timeline-card {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 12px;
+            transition: var(--transicao);
+        }
+        .timeline-card:hover {
+            border-color: rgba(139, 0, 32, 0.4);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(4px);
+        }
+
+        .timeline-img { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+
+        .timeline-info { flex: 1; min-width: 0; }
+        .timeline-date {
+            font-size: 0.66rem;
+            color: var(--subtexto);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .timeline-nome {
+            font-family: 'Cinzel', serif;
+            color: var(--texto);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 3px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .timeline-meta { font-size: 0.75rem; color: var(--subtexto); font-family: 'Outfit', sans-serif; }
+        .timeline-nota { font-family: 'Cinzel', serif; color: var(--dourado); font-weight: 600; font-size: 1.15rem; flex-shrink: 0; }
+
         @media (max-width: 992px) {
             .search-section { padding: 45px 15px 10px; }
             .search-section h1 { font-size: 1.7rem; }
@@ -291,6 +411,7 @@
             .filter-chip { padding: 8px 14px; font-size: 0.78rem; min-height: 38px; }
             .sort-btn { padding: 8px 12px; font-size: 0.78rem; min-height: 36px; }
             .sort-bar { flex-wrap: wrap; gap: 6px; padding: 0 15px 16px; }
+            .view-btn { padding: 8px 14px; font-size: 0.75rem; min-height: 38px; }
         }
 
         @media (max-width: 480px) {
@@ -299,10 +420,16 @@
             .filter-chip:active { background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro)); color: #fff; }
             .sort-btn { padding: 10px 12px; font-size: 0.8rem; min-height: 44px; }
             .sort-btn:active { color: var(--dourado); }
+            .view-btn { padding: 10px 14px; font-size: 0.76rem; min-height: 44px; }
             .filters-bar { gap: 6px; padding: 10px 12px; }
             .search-section h1 { font-size: 1.2rem; }
             .search-section p.sub-titulo { font-size: 0.85rem; }
             .vinho-img-container { aspect-ratio: 1 / 1; }
+            .timeline-track { padding-left: 30px; margin-left: 6px; }
+            .timeline-month-label { padding-left: 28px; }
+            .timeline-item::before { left: -34px; }
+            .timeline-img { width: 48px; height: 48px; }
+            .timeline-nota { font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -327,7 +454,16 @@
         <button class="filter-chip" data-filter="Espumante" data-i18n="catalogo.filter_sparkling">Espumantes</button>
     </div>
 
-    <div class="sort-bar">
+    <div class="view-toggle">
+        <button class="view-btn active" id="view-grade-btn">
+            <i class="fas fa-th" aria-hidden="true"></i> <span data-i18n="catalogo.view_grid">Grade</span>
+        </button>
+        <button class="view-btn" id="view-timeline-btn">
+            <i class="fas fa-stream" aria-hidden="true"></i> <span data-i18n="catalogo.view_timeline">Linha do Tempo</span>
+        </button>
+    </div>
+
+    <div class="sort-bar" id="sort-bar">
         <span data-i18n="catalogo.sort_label">Ordenar:</span>
         <button class="sort-btn active" data-sort="recentes" data-i18n="catalogo.sort_recent">Mais Recentes</button>
         <button class="sort-btn" data-sort="nota-desc" data-i18n="catalogo.sort_rating_desc">Maior Nota</button>
@@ -348,6 +484,7 @@
     </div>
 
     <div class="vinho-grid" id="vinho-grid" style="display:none;"></div>
+    <div class="timeline-container" id="timeline-container" style="display:none;"></div>
 
     <div id="footer-placeholder"></div>
 
@@ -374,6 +511,7 @@ const getFlagUrl = (pais) => {
         let filtroAtual = 'todos';
         let ordenacaoAtual = 'recentes';
         let buscaAtual = '';
+        let viewMode = localStorage.getItem('adega_view_mode') || 'grade';
 
         function parseFloat2(val) {
             if (!val) return 0;
@@ -484,12 +622,122 @@ const getFlagUrl = (pais) => {
             }
             // 'recentes' = ordem padrão da API
 
-            renderVinhos(lista);
+            if (viewMode === 'timeline') {
+                renderTimeline(lista);
+            } else {
+                renderVinhos(lista);
+            }
+        }
+
+        function parseDataVinho(str) {
+            if (!str) return null;
+            const s = String(str).trim();
+            let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (m) return { year: +m[1], month: +m[2] };
+            m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (m) return { year: +m[3], month: +m[2] };
+            m = s.match(/^(\d{4})$/);
+            if (m) return { year: +m[1], month: null };
+            return null;
+        }
+
+        const MESES_PT = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+        function renderTimeline(lista) {
+            const container = document.getElementById('timeline-container');
+            const grid = document.getElementById('vinho-grid');
+            const count = document.getElementById('result-count');
+            grid.style.display = 'none';
+            container.style.display = 'block';
+
+            if (lista.length === 0) {
+                count.textContent = '';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-wine-glass"></i>
+                        <h3>${I18N.t('catalogo.empty_title')}</h3>
+                        <p>${I18N.t('catalogo.empty_text')}</p>
+                        <button class="btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
+                    </div>`;
+                return;
+            }
+
+            count.textContent = lista.length + ' ' + (lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular'));
+
+            const comData = [];
+            const semData = [];
+            lista.forEach(v => {
+                const d = parseDataVinho(v['Ano de Consumo'] || v['Data']);
+                if (d) comData.push({ v, d });
+                else semData.push({ v, d: null });
+            });
+            comData.sort((a, b) => (b.d.year - a.d.year) || ((b.d.month || 0) - (a.d.month || 0)));
+
+            const grupos = [];
+            let grupoAtual = null;
+            comData.forEach(({ v, d }) => {
+                const chave = d.month ? `${d.year}-${d.month}` : `${d.year}`;
+                if (!grupoAtual || grupoAtual.chave !== chave) {
+                    grupoAtual = {
+                        chave,
+                        label: d.month ? `${MESES_PT[d.month - 1]} ${d.year}` : String(d.year),
+                        itens: [],
+                    };
+                    grupos.push(grupoAtual);
+                }
+                grupoAtual.itens.push(v);
+            });
+            if (semData.length) {
+                grupos.push({ chave: 'sem-data', label: I18N.t('catalogo.timeline_no_date'), itens: semData.map(s => s.v) });
+            }
+
+            container.innerHTML = grupos.map(g => `
+                <div class="timeline-month">
+                    <h2 class="timeline-month-label">${g.label}</h2>
+                    <div class="timeline-track">
+                        ${g.itens.map(v => {
+                            const urlFinal = resolveFoto(v);
+                            const notaF = parseFloat2(v['Pontuação Fellype']);
+                            const notaH = parseFloat2(v['Pontuação Hwlly']);
+                            const media = (notaF > 0 && notaH > 0) ? ((notaF + notaH) / 2).toFixed(1) : (notaF || notaH || null);
+                            const vinhoObj = toVinhoObj(v);
+                            return `
+                            <div class="timeline-item" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
+                                <div class="timeline-card">
+                                    <img class="timeline-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || I18N.t('modal.wine_photo')}">
+                                    <div class="timeline-info">
+                                        <div class="timeline-date">${v['Ano de Consumo'] || v['Data'] || ''}</div>
+                                        <div class="timeline-nome">${v['Nome do Vinho'] || I18N.t('catalogo.special_label')}</div>
+                                        <div class="timeline-meta">${I18N.translateCountry(v['País']) || ''}${(v['Uva(s)'] || v['Uva']) ? ' · ' + (v['Uva(s)'] || v['Uva']) : ''}</div>
+                                    </div>
+                                    <div class="timeline-nota">${media ? '★ ' + media : ''}</div>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>`).join('');
+
+            container.querySelectorAll('[role="button"]').forEach(item => {
+                item.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') item.click();
+                });
+            });
+        }
+
+        function setViewMode(modo) {
+            viewMode = modo;
+            localStorage.setItem('adega_view_mode', modo);
+            document.getElementById('view-grade-btn').classList.toggle('active', modo === 'grade');
+            document.getElementById('view-timeline-btn').classList.toggle('active', modo === 'timeline');
+            document.getElementById('sort-bar').style.display = modo === 'timeline' ? 'none' : 'flex';
+            if (vinhos.length) aplicarFiltros();
         }
 
         function renderVinhos(lista) {
             const grid = document.getElementById('vinho-grid');
             const count = document.getElementById('result-count');
+            document.getElementById('timeline-container').style.display = 'none';
+            grid.style.display = 'grid';
 
             if (lista.length === 0) {
                 count.textContent = '';
@@ -578,6 +826,15 @@ const getFlagUrl = (pais) => {
                 aplicarFiltros();
             });
         });
+
+        // Alternância Grade / Linha do Tempo
+        document.getElementById('view-grade-btn').addEventListener('click', () => setViewMode('grade'));
+        document.getElementById('view-timeline-btn').addEventListener('click', () => setViewMode('timeline'));
+        if (viewMode === 'timeline') {
+            document.getElementById('view-grade-btn').classList.remove('active');
+            document.getElementById('view-timeline-btn').classList.add('active');
+            document.getElementById('sort-bar').style.display = 'none';
+        }
 
         fetchVinhos();
         window.addEventListener('i18n:change', () => { if (vinhos.length) aplicarFiltros(); });

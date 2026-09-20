@@ -77,11 +77,12 @@
                 search_placeholder: 'Pesquisar vinho, uva ou país...',
                 filter_all: 'Todos', filter_red: 'Tintos', filter_white: 'Brancos', filter_rose: 'Rosés', filter_sparkling: 'Espumantes',
                 sort_label: 'Ordenar:', sort_recent: 'Mais Recentes', sort_rating_desc: 'Maior Nota', sort_rating_asc: 'Menor Nota', sort_az: 'A–Z',
+                view_grid: 'Grade', view_timeline: 'Linha do Tempo',
                 empty_title: 'Nenhum vinho encontrado', empty_text: 'Tente outros termos ou limpe os filtros.', btn_clear: 'Limpar filtros',
                 result_singular: 'vinho', result_plural: 'vinhos',
                 error_title: 'Erro ao carregar a adega', error_text: 'Tente recarregar a página.',
                 grape_not_informed: 'Uva não informada', origin_not_informed: 'Origem não informada',
-                special_label: 'Rótulo Especial'
+                special_label: 'Rótulo Especial', timeline_no_date: 'Sem data'
             },
             melhores: {
                 title: 'Melhores do Mês', subtitle: 'Os rótulos que mais marcaram cada período da nossa adega.',
@@ -244,11 +245,12 @@
                 search_placeholder: 'Search wine, grape or country...',
                 filter_all: 'All', filter_red: 'Reds', filter_white: 'Whites', filter_rose: 'Rosés', filter_sparkling: 'Sparkling',
                 sort_label: 'Sort:', sort_recent: 'Most Recent', sort_rating_desc: 'Highest Rated', sort_rating_asc: 'Lowest Rated', sort_az: 'A–Z',
+                view_grid: 'Grid', view_timeline: 'Timeline',
                 empty_title: 'No wine found', empty_text: 'Try other terms or clear the filters.', btn_clear: 'Clear filters',
                 result_singular: 'wine', result_plural: 'wines',
                 error_title: 'Error loading the cellar', error_text: 'Try reloading the page.',
                 grape_not_informed: 'Grape not informed', origin_not_informed: 'Origin not informed',
-                special_label: 'Special Label'
+                special_label: 'Special Label', timeline_no_date: 'No date'
             },
             melhores: {
                 title: 'Best of the Month', subtitle: 'The labels that stood out in each period of our cellar.',
@@ -411,11 +413,12 @@
                 search_placeholder: 'Buscar vino, uva o país...',
                 filter_all: 'Todos', filter_red: 'Tintos', filter_white: 'Blancos', filter_rose: 'Rosados', filter_sparkling: 'Espumosos',
                 sort_label: 'Ordenar:', sort_recent: 'Más Recientes', sort_rating_desc: 'Mayor Nota', sort_rating_asc: 'Menor Nota', sort_az: 'A–Z',
+                view_grid: 'Cuadrícula', view_timeline: 'Línea de Tiempo',
                 empty_title: 'Ningún vino encontrado', empty_text: 'Prueba otros términos o borra los filtros.', btn_clear: 'Borrar filtros',
                 result_singular: 'vino', result_plural: 'vinos',
                 error_title: 'Error al cargar la bodega', error_text: 'Intenta recargar la página.',
                 grape_not_informed: 'Uva no informada', origin_not_informed: 'Origen no informado',
-                special_label: 'Etiqueta Especial'
+                special_label: 'Etiqueta Especial', timeline_no_date: 'Sin fecha'
             },
             melhores: {
                 title: 'Mejores del Mes', subtitle: 'Las etiquetas que más destacaron en cada período de nuestra bodega.',
@@ -578,11 +581,12 @@
                 search_placeholder: 'Cerca vino, vitigno o paese...',
                 filter_all: 'Tutti', filter_red: 'Rossi', filter_white: 'Bianchi', filter_rose: 'Rosé', filter_sparkling: 'Spumanti',
                 sort_label: 'Ordina:', sort_recent: 'Più Recenti', sort_rating_desc: 'Voto Più Alto', sort_rating_asc: 'Voto Più Basso', sort_az: 'A–Z',
+                view_grid: 'Griglia', view_timeline: 'Cronologia',
                 empty_title: 'Nessun vino trovato', empty_text: 'Prova altri termini o rimuovi i filtri.', btn_clear: 'Rimuovi filtri',
                 result_singular: 'vino', result_plural: 'vini',
                 error_title: 'Errore nel caricamento della cantina', error_text: 'Prova a ricaricare la pagina.',
                 grape_not_informed: 'Vitigno non indicato', origin_not_informed: 'Origine non indicata',
-                special_label: 'Etichetta Speciale'
+                special_label: 'Etichetta Speciale', timeline_no_date: 'Senza data'
             },
             melhores: {
                 title: 'Migliori del Mese', subtitle: 'Le etichette che hanno segnato ogni periodo della nostra cantina.',
@@ -745,11 +749,12 @@
                 search_placeholder: 'Rechercher un vin, un cépage ou un pays...',
                 filter_all: 'Tous', filter_red: 'Rouges', filter_white: 'Blancs', filter_rose: 'Rosés', filter_sparkling: 'Effervescents',
                 sort_label: 'Trier :', sort_recent: 'Plus Récents', sort_rating_desc: 'Meilleure Note', sort_rating_asc: 'Note la Plus Basse', sort_az: 'A–Z',
+                view_grid: 'Grille', view_timeline: 'Chronologie',
                 empty_title: 'Aucun vin trouvé', empty_text: 'Essayez d’autres termes ou effacez les filtres.', btn_clear: 'Effacer les filtres',
                 result_singular: 'vin', result_plural: 'vins',
                 error_title: 'Erreur lors du chargement de la cave', error_text: 'Essayez de recharger la page.',
                 grape_not_informed: 'Cépage non renseigné', origin_not_informed: 'Origine non renseignée',
-                special_label: 'Étiquette Spéciale'
+                special_label: 'Étiquette Spéciale', timeline_no_date: 'Sans date'
             },
             melhores: {
                 title: 'Meilleurs du Mois', subtitle: 'Les étiquettes qui ont marqué chaque période de notre cave.',
