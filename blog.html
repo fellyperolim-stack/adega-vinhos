@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog da Adega - Fellype & Hwlly</title>
+    <meta name="description" content="Histórias e resenhas sobre os vinhos que já degustamos, escritas com a ajuda de IA a partir das nossas próprias notas.">
+    <meta name="keywords" content="blog de vinhos, resenhas de vinho, histórias de vinho, Fellype e Hwlly">
+    <meta property="og:title" content="Blog da Adega | Fellype & Hwlly">
+    <meta property="og:description" content="Histórias e resenhas sobre os vinhos que já degustamos.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fellypehwlly-adega.space/blog.html">
+    <link rel="canonical" href="https://fellypehwlly-adega.space/blog.html">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 5% 70px; }
+
+        .blog-header {
+            padding: 65px 20px 15px;
+            text-align: center;
+            background: linear-gradient(to bottom, #1c1413, var(--bg));
+        }
+        .blog-header h1 {
+            color: var(--dourado);
+            font-size: 2rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+        }
+        .blog-header h1::after {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
+            margin: 12px auto 0;
+        }
+        .blog-header p {
+            color: var(--subtexto);
+            font-size: 0.88rem;
+            font-style: italic;
+            margin: 16px 0 28px;
+            opacity: 0.85;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+            padding: 30px 0;
+        }
+
+        .blog-card {
+            background: var(--card);
+            border: 1px solid var(--borda);
+            border-radius: var(--raio);
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transicao);
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(198, 161, 91, 0.35);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .blog-card-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+        .blog-card-body { padding: 18px 20px 22px; }
+
+        .blog-card-data {
+            font-size: 0.66rem;
+            color: var(--subtexto);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .blog-card-titulo {
+            font-family: 'Cinzel', serif;
+            color: var(--dourado-claro);
+            font-size: 1.15rem;
+            margin: 8px 0 10px;
+            font-weight: 500;
+        }
+
+        .blog-card-excerto {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: var(--texto-suave);
+            font-family: 'Outfit', sans-serif;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-ler-mais {
+            margin-top: 12px;
+            font-size: 0.76rem;
+            color: var(--dourado);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .blog-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--subtexto);
+            font-family: 'Outfit', sans-serif;
+        }
+        .blog-empty i { font-size: 2.4rem; display: block; margin-bottom: 16px; color: rgba(198, 161, 91, 0.3); }
+
+        @media (max-width: 480px) {
+            .blog-header h1 { font-size: 1.4rem; }
+            .blog-grid { grid-template-columns: 1fr; gap: 16px; padding: 20px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div class="blog-header">
+        <h1 data-i18n="blog.title">Blog da Adega</h1>
+        <p data-i18n="blog.subtitle">Histórias sobre os vinhos que já dividimos, escritas com a ajuda de IA a partir das nossas próprias notas.</p>
+    </div>
+
+    <main class="container" id="main-content"></main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="i18n.js"></script>
+    <script src="nav.js"></script>
+    <script>
+        const SCRIPT_URL_BLOG = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        const IMG_PADRAO_BLOG = "assets/wine-placeholder.svg";
+
+        function resolveFotoBlog(v) {
+            let urlFinal = IMG_PADRAO_BLOG;
+            const fotoRaw = v['Foto'] || v['foto'];
+            if (fotoRaw && fotoRaw.length > 10) {
+                if (fotoRaw.startsWith('data:image')) {
+                    urlFinal = fotoRaw;
+                } else if (fotoRaw.includes('drive.google.com')) {
+                    const id = fotoRaw.match(/[-\w]{25,}/);
+                    urlFinal = id ? `https://lh3.googleusercontent.com/d/${id[0]}` : fotoRaw;
+                } else {
+                    urlFinal = fotoRaw;
+                }
+            }
+            return urlFinal;
+        }
+
+        function toVinhoObjBlog(v, idx, total) {
+            return {
+                nome: v['Nome do Vinho'],
+                produtor: v['Produtor'] || v['Vinícola'] || '',
+                pais: v['País'] || v['Pais'],
+                regiao: v['Região'] || v['Regiao'],
+                uva: v['Uva(s)'] || v['Uva'],
+                tipo: v['Tipo'],
+                safra: v['Safra'],
+                teor: v['Teor Alcoólico'] || v['Teor'],
+                classificacao: v['Classificação'] || v['Classificacao'],
+                data: v['Ano de Consumo'] || v['Data'],
+                notaF: parseFloat(String(v['Pontuação Fellype'] || '').replace(',', '.')) || null,
+                notaH: parseFloat(String(v['Pontuação Hwlly'] || '').replace(',', '.')) || null,
+                foto: resolveFotoBlog(v),
+                numero: idx >= 0 ? total - idx : null,
+                artigo: v['Artigo'] || null,
+                artigoPublicado: v['Artigo Publicado'] === 'SIM' || v['Artigo Publicado'] === true,
+            };
+        }
+
+        async function carregarBlog() {
+            const main = document.getElementById('main-content');
+            try {
+                const data = await fetchWithCache(SCRIPT_URL_BLOG);
+                const publicados = data
+                    .map((v, i) => ({ raw: v, idx: i }))
+                    .filter(({ raw }) => (raw['Artigo Publicado'] === 'SIM' || raw['Artigo Publicado'] === true) && raw['Artigo']);
+
+                if (!publicados.length) {
+                    main.innerHTML = `
+                        <div class="blog-empty">
+                            <i class="fas fa-feather-alt" aria-hidden="true"></i>
+                            <p>${I18N.t('blog.empty_text')}</p>
+                        </div>`;
+                    return;
+                }
+
+                main.innerHTML = `<div class="blog-grid">
+                    ${publicados.map(({ raw, idx }) => {
+                        const vinhoObj = toVinhoObjBlog(raw, idx, data.length);
+                        const foto = vinhoObj.foto;
+                        const artigo = String(vinhoObj.artigo || '');
+                        const excerto = artigo.length > 180 ? artigo.slice(0, 180).trim() + '…' : artigo;
+                        return `
+                        <div class="blog-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${vinhoObj.nome || ''}">
+                            <img class="blog-card-img" src="${foto}" loading="lazy" onerror="this.src='${IMG_PADRAO_BLOG}'" alt="${vinhoObj.nome || ''}">
+                            <div class="blog-card-body">
+                                <div class="blog-card-data">${vinhoObj.data || ''}</div>
+                                <h2 class="blog-card-titulo">${vinhoObj.nome || ''}</h2>
+                                <p class="blog-card-excerto">${excerto}</p>
+                                <div class="blog-card-ler-mais">${I18N.t('blog.read_more')} →</div>
+                            </div>
+                        </div>`;
+                    }).join('')}
+                </div>`;
+            } catch (e) {
+                main.innerHTML = `
+                    <div class="blog-empty">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        <p>${I18N.t('blog.error_text')}</p>
+                    </div>`;
+            }
+        }
+
+        carregarBlog();
+        window.addEventListener('i18n:change', carregarBlog);
+    </script>
+</body>
+</html>

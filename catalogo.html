@@ -554,6 +554,8 @@ const getFlagUrl = (pais) => {
                 notaH: notaH || null,
                 foto: resolveFoto(v),
                 numero: idx >= 0 ? vinhos.length - idx : null,
+                artigo: v['Artigo'] || null,
+                artigoPublicado: v['Artigo Publicado'] === 'SIM' || v['Artigo Publicado'] === true,
             };
         }
 

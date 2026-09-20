@@ -2,7 +2,7 @@
    - Shell do site: cache-first (rápido e offline)
    - Dados da planilha: sempre pela rede (o cache de dados fica no nav.js) */
 
-const CACHE_NAME = 'adega-v25';
+const CACHE_NAME = 'adega-v26';
 const CACHE_URLS = [
   '/',
   '/index.html',
@@ -14,6 +14,7 @@ const CACHE_URLS = [
   '/vinicolas.html',
   '/stats.html',
   '/games.html',
+  '/blog.html',
   '/shared.css',
   '/nav.js',
   '/manifest.json',

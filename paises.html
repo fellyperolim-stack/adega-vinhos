@@ -218,6 +218,8 @@
                     const safra = findVal(v, ['safra', 'vintage']) || '-';
                     const tipo = findVal(v, ['tipo', 'type']) || '-';
                     const produtor = findVal(v, ['produtor']) || '';
+                    const artigo = findVal(v, ['artigo']) || null;
+                    const artigoPublicado = findVal(v, ['publicado']) === 'SIM';
 
                     let mediaExibicao = "-";
                     if (notaF > 0 || notaH > 0) {
@@ -226,7 +228,7 @@
                             : (notaF || notaH).toFixed(1);
                     }
 
-                    return { nome, pais, uva, foto, media: mediaExibicao, notaF, notaH, regiao, safra, tipo, produtor };
+                    return { nome, pais, uva, foto, media: mediaExibicao, notaF, notaH, regiao, safra, tipo, produtor, artigo, artigoPublicado };
                 });
 
                 const agrupados = vinhosProcessados.reduce((acc, v) => {

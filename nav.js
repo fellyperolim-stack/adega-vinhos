@@ -103,6 +103,7 @@ document.addEventListener('error', (e) => {
         { href: 'uvas.html',      key: 'nav.grapes' },
         { href: 'vinicolas.html', key: 'nav.wineries' },
         { href: 'stats.html',     key: 'nav.stats' },
+        { href: 'blog.html',      key: 'nav.blog' },
     ];
 
     const isExplore = explorarLinks.some(l => l.href === currentPage);
@@ -166,6 +167,7 @@ document.addEventListener('error', (e) => {
                 <a href="vinicolas.html" data-i18n="nav.wineries">${T('nav.wineries')}</a>
                 <a href="stats.html" data-i18n="nav.stats">${T('nav.stats')}</a>
                 <a href="games.html" data-i18n="nav.games">${T('nav.games')}</a>
+                <a href="blog.html" data-i18n="nav.blog">${T('nav.blog')}</a>
             </div>
             <hr class="footer-divider">
             <div class="footer-nota">
@@ -269,9 +271,11 @@ document.addEventListener('error', (e) => {
     }
 
     /* ---- Modal de detalhe do vinho ---- */
+    const ARTIGO_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec';
     let ultimoFoco = null;
     let vinhoAtual = null;
     let imagemAtualFile = null;
+    let tokenAcessoSessao = null;
     const Tm = (k) => (window.I18N ? window.I18N.t(k) : k);
     const trPais = (v) => (window.I18N ? window.I18N.translateCountry(v) : v);
     const trTipo = (v) => (window.I18N ? window.I18N.translateTipo(v) : v);
@@ -701,6 +705,7 @@ document.addEventListener('error', (e) => {
                             </div>
                             <div class="wine-modal-grid" id="modal-grid"></div>
                             <div class="wine-modal-notas" id="modal-notas"></div>
+                            <div class="wine-modal-artigo" id="modal-artigo"></div>
                         </div>
                     </div>`;
                 document.body.appendChild(backdrop);
@@ -745,6 +750,8 @@ document.addEventListener('error', (e) => {
                     <div class="wine-modal-nota-label">Hwlly</div>
                     <div class="wine-modal-nota-valor">${notaH || '—'}</div>
                 </div>`;
+
+            this._renderArtigo();
 
             ultimoFoco = document.activeElement;
             backdrop.classList.add('open');
@@ -860,6 +867,126 @@ document.addEventListener('error', (e) => {
             t.classList.add('show');
             clearTimeout(this._toastTimer);
             this._toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+        },
+
+        /* ---- Blog: artigo gerado por IA ---- */
+        _escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str || '';
+            return d.innerHTML;
+        },
+        _pedirToken() {
+            if (tokenAcessoSessao) return tokenAcessoSessao;
+            const t = window.prompt(Tm('blog.ask_password'));
+            if (t) tokenAcessoSessao = t;
+            return t;
+        },
+        _renderArtigo() {
+            const v = vinhoAtual || {};
+            const box = document.getElementById('modal-artigo');
+            if (!box) return;
+
+            if (v.artigoPublicado && v.artigo) {
+                box.innerHTML = `
+                    <div class="wine-modal-artigo-header">
+                        <span class="wine-modal-artigo-titulo"><i class="fas fa-feather-alt" aria-hidden="true"></i> ${Tm('blog.article_label')}</span>
+                        <button class="artigo-btn-mini" onclick="WineModal._editarArtigo()"><i class="fas fa-pen" aria-hidden="true"></i> ${Tm('blog.btn_edit')}</button>
+                    </div>
+                    <p class="wine-modal-artigo-texto">${this._escapeHtml(v.artigo).replace(/\n/g, '<br>')}</p>`;
+                return;
+            }
+
+            if (v.artigo) {
+                this._renderArtigoEdicao(v.artigo, false);
+                return;
+            }
+
+            box.innerHTML = `
+                <div class="wine-modal-artigo-header">
+                    <span class="wine-modal-artigo-titulo"><i class="fas fa-feather-alt" aria-hidden="true"></i> ${Tm('blog.article_label')}</span>
+                </div>
+                <button class="artigo-btn-gerar" onclick="WineModal._gerarArtigo()">
+                    <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> ${Tm('blog.btn_generate')}
+                </button>`;
+        },
+        _renderArtigoEdicao(texto, jaPublicado) {
+            const box = document.getElementById('modal-artigo');
+            if (!box) return;
+            box.innerHTML = `
+                <div class="wine-modal-artigo-header">
+                    <span class="wine-modal-artigo-titulo"><i class="fas fa-feather-alt" aria-hidden="true"></i> ${Tm('blog.article_label')} ${jaPublicado ? '' : `(${Tm('blog.draft_label')})`}</span>
+                </div>
+                <textarea class="wine-modal-artigo-edit" id="modal-artigo-textarea" rows="8">${this._escapeHtml(texto)}</textarea>
+                <div class="wine-modal-artigo-acoes">
+                    <button class="artigo-btn-aprovar" onclick="WineModal._salvarArtigo(true)">
+                        <i class="fas fa-check" aria-hidden="true"></i> ${jaPublicado ? Tm('blog.btn_save') : Tm('blog.btn_approve')}
+                    </button>
+                    ${jaPublicado ? '' : `<button class="artigo-btn-mini" onclick="WineModal._gerarArtigo()"><i class="fas fa-rotate" aria-hidden="true"></i> ${Tm('blog.btn_regenerate')}</button>`}
+                </div>`;
+        },
+        async _gerarArtigo() {
+            const v = vinhoAtual || {};
+            if (!v.nome) return;
+            const token = this._pedirToken();
+            if (!token) return;
+
+            const box = document.getElementById('modal-artigo');
+            box.innerHTML = `<p class="wine-modal-artigo-status"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> ${Tm('blog.status_generating')}</p>`;
+
+            try {
+                const resp = await fetch(ARTIGO_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'gerarArtigo', tokenAcesso: token,
+                        nome: v.nome, produtor: v.produtor, pais: v.pais, regiao: v.regiao,
+                        uva: v.uva, tipo: v.tipo, safra: v.safra, classificacao: v.classificacao,
+                        notaFellype: v.notaF, notaHwlly: v.notaH,
+                    }),
+                });
+                const data = await resp.json();
+                if (!data.success) {
+                    tokenAcessoSessao = null;
+                    box.innerHTML = `<p class="wine-modal-artigo-status erro">${data.erro || Tm('blog.status_error')} <button class="artigo-btn-mini" onclick="WineModal._gerarArtigo()">${Tm('blog.btn_retry')}</button></p>`;
+                    return;
+                }
+                this._renderArtigoEdicao(data.artigo, false);
+            } catch (e) {
+                box.innerHTML = `<p class="wine-modal-artigo-status erro">${Tm('blog.status_offline')} <button class="artigo-btn-mini" onclick="WineModal._gerarArtigo()">${Tm('blog.btn_retry')}</button></p>`;
+            }
+        },
+        _editarArtigo() {
+            const v = vinhoAtual || {};
+            this._renderArtigoEdicao(v.artigo || '', true);
+        },
+        async _salvarArtigo(publicar) {
+            const v = vinhoAtual || {};
+            const textarea = document.getElementById('modal-artigo-textarea');
+            if (!v.nome || !textarea) return;
+            const token = this._pedirToken();
+            if (!token) return;
+
+            const texto = textarea.value.trim();
+            const box = document.getElementById('modal-artigo');
+            box.insertAdjacentHTML('beforeend', `<p class="wine-modal-artigo-status"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> ${Tm('blog.status_saving')}</p>`);
+
+            try {
+                const resp = await fetch(ARTIGO_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'salvarArtigo', tokenAcesso: token, nome: v.nome, artigo: texto, publicado: publicar }),
+                });
+                const data = await resp.json();
+                if (!data.success) {
+                    tokenAcessoSessao = null;
+                    this._toast(data.erro || Tm('blog.status_save_error'));
+                    return;
+                }
+                v.artigo = texto;
+                v.artigoPublicado = publicar;
+                this._toast(publicar ? Tm('blog.status_published') : Tm('blog.status_saved'));
+                this._renderArtigo();
+            } catch (e) {
+                this._toast(Tm('blog.status_save_error'));
+            }
         }
     };
 

@@ -32,13 +32,36 @@
             nav: {
                 home: 'Início', catalog: 'Catálogo', best: 'Do Mês', games: 'Games',
                 explore: 'Explorar', countries: 'Por países', grapes: 'Por uvas',
-                wineries: 'Vinícolas', stats: 'Estatísticas', register: 'Registrar',
+                wineries: 'Vinícolas', stats: 'Estatísticas', register: 'Registrar', blog: 'Blog',
                 skip: 'Ir para o conteúdo', open_menu: 'Abrir menu',
                 home_aria: 'Fellype & Hwlly — página inicial', tagline: 'Adega pessoal'
             },
             footer: {
                 tagline: 'Feito com ❤️ para as nossas memórias.',
                 curation: 'Curadoria de Leblonzito & Ipanemita'
+            },
+            blog: {
+                title: 'Blog da Adega',
+                subtitle: 'Histórias sobre os vinhos que já dividimos, escritas com a ajuda de IA a partir das nossas próprias notas.',
+                empty_text: 'Nenhum artigo publicado ainda.',
+                read_more: 'Ler mais',
+                error_text: 'Erro ao carregar o blog. Tente novamente.',
+                ask_password: 'Senha de acesso da adega:',
+                article_label: 'Artigo',
+                draft_label: 'rascunho',
+                btn_generate: 'Gerar Artigo com IA',
+                btn_edit: 'Editar',
+                btn_save: 'Salvar Alterações',
+                btn_approve: 'Aprovar e Publicar',
+                btn_regenerate: 'Gerar Novamente',
+                btn_retry: 'Tentar de novo',
+                status_generating: 'Gerando artigo com IA...',
+                status_saving: 'Salvando...',
+                status_error: 'Erro ao gerar o artigo.',
+                status_offline: 'IA offline.',
+                status_save_error: 'Não foi possível salvar o artigo.',
+                status_published: 'Artigo publicado! ✨',
+                status_saved: 'Alterações salvas.'
             },
             modal: {
                 close: 'Fechar detalhes', country: 'País', region: 'Região', grapes: 'Uva(s)',
@@ -200,13 +223,36 @@
             nav: {
                 home: 'Home', catalog: 'Catalog', best: 'Of the Month', games: 'Games',
                 explore: 'Explore', countries: 'By Country', grapes: 'By Grape',
-                wineries: 'Wineries', stats: 'Statistics', register: 'Register',
+                wineries: 'Wineries', stats: 'Statistics', register: 'Register', blog: 'Blog',
                 skip: 'Skip to content', open_menu: 'Open menu',
                 home_aria: 'Fellype & Hwlly — homepage', tagline: 'Personal cellar'
             },
             footer: {
                 tagline: 'Made with ❤️ for our memories.',
                 curation: 'Curated by Leblonzito & Ipanemita'
+            },
+            blog: {
+                title: 'Cellar Blog',
+                subtitle: 'Stories about the wines we’ve shared, written with AI help from our own tasting notes.',
+                empty_text: 'No articles published yet.',
+                read_more: 'Read more',
+                error_text: 'Error loading the blog. Please try again.',
+                ask_password: 'Cellar access password:',
+                article_label: 'Article',
+                draft_label: 'draft',
+                btn_generate: 'Generate Article with AI',
+                btn_edit: 'Edit',
+                btn_save: 'Save Changes',
+                btn_approve: 'Approve & Publish',
+                btn_regenerate: 'Regenerate',
+                btn_retry: 'Try again',
+                status_generating: 'Generating article with AI...',
+                status_saving: 'Saving...',
+                status_error: 'Error generating the article.',
+                status_offline: 'AI offline.',
+                status_save_error: 'Could not save the article.',
+                status_published: 'Article published! ✨',
+                status_saved: 'Changes saved.'
             },
             modal: {
                 close: 'Close details', country: 'Country', region: 'Region', grapes: 'Grape(s)',
@@ -368,13 +414,36 @@
             nav: {
                 home: 'Inicio', catalog: 'Catálogo', best: 'Del Mes', games: 'Juegos',
                 explore: 'Explorar', countries: 'Por países', grapes: 'Por uvas',
-                wineries: 'Bodegas', stats: 'Estadísticas', register: 'Registrar',
+                wineries: 'Bodegas', stats: 'Estadísticas', register: 'Registrar', blog: 'Blog',
                 skip: 'Ir al contenido', open_menu: 'Abrir menú',
                 home_aria: 'Fellype & Hwlly — página de inicio', tagline: 'Bodega personal'
             },
             footer: {
                 tagline: 'Hecho con ❤️ para nuestros recuerdos.',
                 curation: 'Curaduría de Leblonzito & Ipanemita'
+            },
+            blog: {
+                title: 'Blog de la Bodega',
+                subtitle: 'Historias sobre los vinos que ya compartimos, escritas con ayuda de IA a partir de nuestras propias notas.',
+                empty_text: 'Todavía no hay artículos publicados.',
+                read_more: 'Leer más',
+                error_text: 'Error al cargar el blog. Intenta de nuevo.',
+                ask_password: 'Contraseña de acceso de la bodega:',
+                article_label: 'Artículo',
+                draft_label: 'borrador',
+                btn_generate: 'Generar Artículo con IA',
+                btn_edit: 'Editar',
+                btn_save: 'Guardar Cambios',
+                btn_approve: 'Aprobar y Publicar',
+                btn_regenerate: 'Generar de Nuevo',
+                btn_retry: 'Intentar de nuevo',
+                status_generating: 'Generando artículo con IA...',
+                status_saving: 'Guardando...',
+                status_error: 'Error al generar el artículo.',
+                status_offline: 'IA fuera de línea.',
+                status_save_error: 'No se pudo guardar el artículo.',
+                status_published: '¡Artículo publicado! ✨',
+                status_saved: 'Cambios guardados.'
             },
             modal: {
                 close: 'Cerrar detalles', country: 'País', region: 'Región', grapes: 'Uva(s)',
@@ -536,13 +605,36 @@
             nav: {
                 home: 'Home', catalog: 'Catalogo', best: 'Del Mese', games: 'Giochi',
                 explore: 'Esplora', countries: 'Per paese', grapes: 'Per vitigno',
-                wineries: 'Cantine', stats: 'Statistiche', register: 'Registra',
+                wineries: 'Cantine', stats: 'Statistiche', register: 'Registra', blog: 'Blog',
                 skip: 'Vai al contenuto', open_menu: 'Apri menu',
                 home_aria: 'Fellype & Hwlly — pagina iniziale', tagline: 'Cantina personale'
             },
             footer: {
                 tagline: 'Fatto con ❤️ per i nostri ricordi.',
                 curation: 'A cura di Leblonzito & Ipanemita'
+            },
+            blog: {
+                title: 'Blog della Cantina',
+                subtitle: 'Storie sui vini che abbiamo condiviso, scritte con l’aiuto dell’IA a partire dalle nostre note di degustazione.',
+                empty_text: 'Nessun articolo pubblicato ancora.',
+                read_more: 'Leggi di più',
+                error_text: 'Errore nel caricamento del blog. Riprova.',
+                ask_password: 'Password di accesso alla cantina:',
+                article_label: 'Articolo',
+                draft_label: 'bozza',
+                btn_generate: 'Genera Articolo con IA',
+                btn_edit: 'Modifica',
+                btn_save: 'Salva Modifiche',
+                btn_approve: 'Approva e Pubblica',
+                btn_regenerate: 'Genera di Nuovo',
+                btn_retry: 'Riprova',
+                status_generating: 'Generazione articolo con IA...',
+                status_saving: 'Salvataggio...',
+                status_error: 'Errore nella generazione dell’articolo.',
+                status_offline: 'IA offline.',
+                status_save_error: 'Impossibile salvare l’articolo.',
+                status_published: 'Articolo pubblicato! ✨',
+                status_saved: 'Modifiche salvate.'
             },
             modal: {
                 close: 'Chiudi dettagli', country: 'Paese', region: 'Regione', grapes: 'Vitigno/i',
@@ -704,13 +796,36 @@
             nav: {
                 home: 'Accueil', catalog: 'Catalogue', best: 'Du Mois', games: 'Jeux',
                 explore: 'Explorer', countries: 'Par pays', grapes: 'Par cépage',
-                wineries: 'Domaines viticoles', stats: 'Statistiques', register: 'Enregistrer',
+                wineries: 'Domaines viticoles', stats: 'Statistiques', register: 'Enregistrer', blog: 'Blog',
                 skip: 'Aller au contenu', open_menu: 'Ouvrir le menu',
                 home_aria: 'Fellype & Hwlly — page d’accueil', tagline: 'Cave personnelle'
             },
             footer: {
                 tagline: 'Fait avec ❤️ pour nos souvenirs.',
                 curation: 'Sélection de Leblonzito & Ipanemita'
+            },
+            blog: {
+                title: 'Blog de la Cave',
+                subtitle: 'Histoires sur les vins que nous avons partagés, écrites avec l’aide de l’IA à partir de nos propres notes de dégustation.',
+                empty_text: 'Aucun article publié pour l’instant.',
+                read_more: 'Lire la suite',
+                error_text: 'Erreur lors du chargement du blog. Réessayez.',
+                ask_password: 'Mot de passe d’accès à la cave :',
+                article_label: 'Article',
+                draft_label: 'brouillon',
+                btn_generate: 'Générer un Article avec l’IA',
+                btn_edit: 'Modifier',
+                btn_save: 'Enregistrer les Modifications',
+                btn_approve: 'Approuver et Publier',
+                btn_regenerate: 'Régénérer',
+                btn_retry: 'Réessayer',
+                status_generating: 'Génération de l’article avec l’IA...',
+                status_saving: 'Enregistrement...',
+                status_error: 'Erreur lors de la génération de l’article.',
+                status_offline: 'IA hors ligne.',
+                status_save_error: 'Impossible d’enregistrer l’article.',
+                status_published: 'Article publié ! ✨',
+                status_saved: 'Modifications enregistrées.'
             },
             modal: {
                 close: 'Fermer les détails', country: 'Pays', region: 'Région', grapes: 'Cépage(s)',

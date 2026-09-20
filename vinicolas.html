@@ -296,6 +296,8 @@
                     data:         findVal(v, ['data', 'consumo', 'dia']) || '-',
                     notaF:        parseFloat(findVal(v, ['fellype', 'notaf']) || 0),
                     notaH:        parseFloat(findVal(v, ['hwlly', 'notah']) || 0),
+                    artigo:       findVal(v, ['artigo']) || null,
+                    artigoPublicado: findVal(v, ['publicado']) === 'SIM',
                 }));
 
                 allGroups = processados.reduce((acc, v) => {

@@ -241,6 +241,8 @@
                     produtor:findVal(v, ['produtor']) || '',
                     notaF:   parseFloat(findVal(v, ['fellype', 'notaf']) || 0),
                     notaH:   parseFloat(findVal(v, ['hwlly', 'notah']) || 0),
+                    artigo:  findVal(v, ['artigo']) || null,
+                    artigoPublicado: findVal(v, ['publicado']) === 'SIM',
                 }));
 
                 const agrupados = vinhosProcessados.reduce((acc, v) => {
