@@ -723,7 +723,7 @@ footer {
     min-height: 44px;
 }
 
-.share-btn i { font-size: 1.05rem; }
+.share-emoji { font-size: 1.05rem; line-height: 1; }
 
 .share-whatsapp:hover, .share-whatsapp:focus-visible {
     background: rgba(37, 211, 102, 0.12);
