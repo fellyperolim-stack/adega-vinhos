@@ -1096,49 +1096,17 @@
             reader.readAsDataURL(file);
         }
 
-        async function finishAll() {
+        function finishAll() {
             const btn = document.getElementById('btnFinalizar');
             btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${T('cadastro.btn_finishing')}`;
             btn.disabled = true;
 
-            const notF_formatada = document.getElementById('notF').value.replace('.', ',');
-            const notH_formatada = document.getElementById('notH').value.replace('.', ',');
+            dataVinho._notF = document.getElementById('notF').value.replace('.', ',');
+            dataVinho._notH = document.getElementById('notH').value.replace('.', ',');
+            dataVinho._wouldBuy = document.getElementById('reCompra').value;
+            dataVinho._anoConsumo = document.getElementById('dataConsumo').value;
 
-            const payload = {
-                action: "salvarVinho",
-                tokenAcesso: dataVinho.tokenAcesso,
-                wineName: dataVinho.wineName,
-                produtor: dataVinho.produtor,
-                classificacao: dataVinho.classificacao,
-                uva: dataVinho.uva,
-                wineType: dataVinho.wineType,
-                year: dataVinho.year,
-                pais: dataVinho.pais,
-                regiao: dataVinho.regiao,
-                teor: dataVinho.teor,
-                ratingFellype: notF_formatada,
-                ratingHwlly: notH_formatada,
-                wouldBuy: document.getElementById('reCompra').value,
-                base64Photo: base64Image,
-                anoConsumo: document.getElementById('dataConsumo').value
-            };
-
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-
-                // Invalida o cache para que o catálogo carregue com dados frescos
-                if (window.clearWineCache) window.clearWineCache();
-
-                dataVinho._notF = notF_formatada;
-                dataVinho._notH = notH_formatada;
-                mostrarEtapaArtigo();
-
-            } catch (e) {
-                document.getElementById('ratingModal').close();
-                if (window.clearWineCache) window.clearWineCache();
-                addMsg(T('cadastro.toast_success_fallback'), 'success');
-                setTimeout(() => { location.href = "catalogo.html"; }, 2500);
-            }
+            mostrarEtapaArtigo();
         }
 
         function finalizarCadastro() {
@@ -1160,7 +1128,7 @@
                 <button class="btn-gold" onclick="gerarArtigoCadastro()">
                     <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> ${T('cadastro.artigo_btn_generate')}
                 </button>
-                <button class="btn-secundario" onclick="finalizarCadastro()">${T('cadastro.artigo_btn_skip')}</button>`;
+                <button class="btn-secundario" onclick="salvarVinhoCompleto('', false)">${T('cadastro.artigo_btn_skip')}</button>`;
         }
 
         async function gerarArtigoCadastro() {
@@ -1183,7 +1151,7 @@
                     body.innerHTML = `
                         <p class="modal-label" style="font-weight:400; text-align:center; color:#d98080;">${data.erro || T('cadastro.artigo_status_error')}</p>
                         <button class="btn-gold" onclick="gerarArtigoCadastro()">${T('cadastro.artigo_btn_retry')}</button>
-                        <button class="btn-secundario" onclick="finalizarCadastro()">${T('cadastro.artigo_btn_skip')}</button>`;
+                        <button class="btn-secundario" onclick="salvarVinhoCompleto('', false)">${T('cadastro.artigo_btn_skip')}</button>`;
                     return;
                 }
                 renderArtigoStepRascunho(data.artigo);
@@ -1191,7 +1159,7 @@
                 body.innerHTML = `
                     <p class="modal-label" style="font-weight:400; text-align:center; color:#d98080;">${T('cadastro.artigo_status_offline')}</p>
                     <button class="btn-gold" onclick="gerarArtigoCadastro()">${T('cadastro.artigo_btn_retry')}</button>
-                    <button class="btn-secundario" onclick="finalizarCadastro()">${T('cadastro.artigo_btn_skip')}</button>`;
+                    <button class="btn-secundario" onclick="salvarVinhoCompleto('', false)">${T('cadastro.artigo_btn_skip')}</button>`;
             }
         }
 
@@ -1206,25 +1174,42 @@
                 <button class="btn-secundario" onclick="gerarArtigoCadastro()">
                     <i class="fas fa-rotate" aria-hidden="true"></i> ${T('cadastro.artigo_btn_regenerate')}
                 </button>
-                <button class="btn-secundario" onclick="finalizarCadastro()">${T('cadastro.artigo_btn_skip')}</button>`;
+                <button class="btn-secundario" onclick="salvarVinhoCompleto('', false)">${T('cadastro.artigo_btn_skip')}</button>`;
         }
 
-        async function aprovarArtigoCadastro() {
+        function aprovarArtigoCadastro() {
             const textarea = document.getElementById('artigo-cadastro-textarea');
             const texto = textarea.value.trim();
+            salvarVinhoCompleto(texto, true);
+        }
+
+        async function salvarVinhoCompleto(artigoTexto, publicado) {
             const body = document.getElementById('artigo-step-body');
-            body.insertAdjacentHTML('beforeend', `<p class="modal-label" style="font-weight:400; text-align:center;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> ${T('cadastro.artigo_status_saving')}</p>`);
+            body.innerHTML = `<p class="modal-label" style="font-weight:400; text-align:center;"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i> ${T('cadastro.btn_finishing')}</p>`;
+
+            const payload = {
+                action: "salvarVinho",
+                tokenAcesso: dataVinho.tokenAcesso,
+                wineName: dataVinho.wineName,
+                produtor: dataVinho.produtor,
+                classificacao: dataVinho.classificacao,
+                uva: dataVinho.uva,
+                wineType: dataVinho.wineType,
+                year: dataVinho.year,
+                pais: dataVinho.pais,
+                regiao: dataVinho.regiao,
+                teor: dataVinho.teor,
+                ratingFellype: dataVinho._notF,
+                ratingHwlly: dataVinho._notH,
+                wouldBuy: dataVinho._wouldBuy,
+                base64Photo: base64Image,
+                anoConsumo: dataVinho._anoConsumo,
+                artigo: artigoTexto || '',
+                artigoPublicado: !!publicado
+            };
 
             try {
-                const resp = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'salvarArtigo', tokenAcesso: dataVinho.tokenAcesso, nome: dataVinho.wineName, artigo: texto, publicado: true }),
-                });
-                const data = await resp.json();
-                if (!data.success) {
-                    body.insertAdjacentHTML('beforeend', `<p class="modal-label" style="font-weight:400; text-align:center; color:#d98080;">${data.erro || T('cadastro.artigo_status_save_error')}</p>`);
-                    return;
-                }
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 if (window.clearWineCache) window.clearWineCache();
                 finalizarCadastro();
             } catch (e) {
