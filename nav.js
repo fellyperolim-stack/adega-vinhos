@@ -277,6 +277,21 @@ document.addEventListener('error', (e) => {
         });
     }
 
+    function getFlagUrl(pais) {
+        if (!pais) return 'https://flagcdn.com/w80/un.png';
+        const n = pais.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+        const flags = {
+            'franca': 'fr', 'italia': 'it', 'espanha': 'es', 'portugal': 'pt', 'chile': 'cl',
+            'argentina': 'ar', 'estados unidos': 'us', 'eua': 'us', 'brasil': 'br', 'alemanha': 'de',
+            'austria': 'at', 'australia': 'au', 'nova zelandia': 'nz', 'africa do sul': 'za',
+            'uruguai': 'uy', 'hungria': 'hu', 'grecia': 'gr', 'georgia': 'ge', 'suica': 'ch',
+            'israel': 'il', 'libano': 'lb', 'romenia': 'ro', 'bulgaria': 'bg', 'croacia': 'hr',
+            'eslovenia': 'si', 'moldavia': 'md', 'canada': 'ca', 'inglaterra': 'gb', 'reino unido': 'gb',
+            'japao': 'jp', 'china': 'cn'
+        };
+        return `https://flagcdn.com/w80/${flags[n] || 'un'}.png`;
+    }
+
     function drawCover(ctx, img, x, y, w, h) {
         const imgRatio = img.width / img.height;
         const boxRatio = w / h;
@@ -352,7 +367,7 @@ document.addEventListener('error', (e) => {
         ctx.textAlign = 'left';
     }
 
-    async function buildShareCard(vinho, fotoBlob) {
+    async function buildShareCard(vinho, fotoBlob, flagBlob) {
         const W = 1080, H = 1920, PAD = 56, PHOTO_H = 720, FRAME = 22;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
@@ -360,6 +375,11 @@ document.addEventListener('error', (e) => {
 
         ctx.fillStyle = '#15100F';
         ctx.fillRect(0, 0, W, H);
+
+        let flagImg = null;
+        if (flagBlob) {
+            try { flagImg = await loadImageFromBlob(flagBlob); } catch (e) {}
+        }
 
         if (fotoBlob) {
             try {
@@ -434,7 +454,7 @@ document.addEventListener('error', (e) => {
 
         // grade de campos (mesmos rótulos da modal do site)
         const campos = [
-            { label: 'PAÍS', value: trPais(vinho.pais) },
+            { label: 'PAÍS', value: trPais(vinho.pais), flag: true },
             { label: 'REGIÃO', value: vinho.regiao },
             { label: 'UVA(S)', value: vinho.uva },
             { label: 'SAFRA', value: vinho.safra },
@@ -465,9 +485,19 @@ document.addEventListener('error', (e) => {
                 ctx.fillText(fitText(ctx, c.label, fW - 34), bx + 20, by + 32);
                 setLetterSpacing(ctx, 0);
 
+                let valueX = bx + 20;
+                if (c.flag && flagImg) {
+                    const flagW = 30, flagH = 20, flagX = bx + 20, flagY = by + 47;
+                    ctx.drawImage(flagImg, flagX, flagY, flagW, flagH);
+                    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(flagX, flagY, flagW, flagH);
+                    valueX = flagX + flagW + 12;
+                }
+
                 ctx.fillStyle = '#ECE4DD';
                 ctx.font = "500 25px 'Outfit', Arial, sans-serif";
-                ctx.fillText(fitText(ctx, String(c.value), fW - 34), bx + 20, by + 65);
+                ctx.fillText(fitText(ctx, String(c.value), fW - (valueX - bx) - 14), valueX, by + 65);
             });
             const rows = Math.ceil(campos.length / 2);
             cy += rows * fH + (rows - 1) * fGap + 34;
@@ -653,20 +683,26 @@ document.addEventListener('error', (e) => {
             const base = `${location.origin}/catalogo.html`;
             return v.nome ? `${base}?vinho=${encodeURIComponent(v.nome)}` : base;
         },
+        async _fetchImageBlob(url) {
+            try {
+                const resp = await fetch(url);
+                if (!resp.ok) return null;
+                const blob = await resp.blob();
+                return blob.type.startsWith('image/') ? blob : null;
+            } catch (e) {
+                return null;
+            }
+        },
         async _prefetchImage(vinho) {
             if (!vinho) return;
             try {
-                let fotoBlob = null;
-                if (vinho.foto) {
-                    const resp = await fetch(vinho.foto);
-                    if (resp.ok) {
-                        const blob = await resp.blob();
-                        if (blob.type.startsWith('image/')) fotoBlob = blob;
-                    }
-                }
+                const [fotoBlob, flagBlob] = await Promise.all([
+                    vinho.foto ? this._fetchImageBlob(vinho.foto) : null,
+                    vinho.pais ? this._fetchImageBlob(getFlagUrl(vinho.pais)) : null,
+                ]);
                 if (vinhoAtual !== vinho) return;
 
-                const cardBlob = await buildShareCard(vinho, fotoBlob);
+                const cardBlob = await buildShareCard(vinho, fotoBlob, flagBlob);
                 if (!cardBlob || vinhoAtual !== vinho) return;
 
                 const nomeArq = (vinho.nome || 'vinho')
