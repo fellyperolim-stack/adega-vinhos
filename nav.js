@@ -330,8 +330,30 @@ document.addEventListener('error', (e) => {
         ctx.closePath();
     }
 
+    function setLetterSpacing(ctx, px) {
+        try { ctx.letterSpacing = px + 'px'; } catch (e) {}
+    }
+
+    function drawOrnamentLine(ctx, cy, W, PAD) {
+        const midGap = 26;
+        ctx.strokeStyle = 'rgba(198,161,91,0.4)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(PAD, cy);
+        ctx.lineTo(W / 2 - midGap, cy);
+        ctx.moveTo(W / 2 + midGap, cy);
+        ctx.lineTo(W - PAD, cy);
+        ctx.stroke();
+
+        ctx.fillStyle = '#C6A15B';
+        ctx.font = '22px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('◆', W / 2, cy + 7);
+        ctx.textAlign = 'left';
+    }
+
     async function buildShareCard(vinho, fotoBlob) {
-        const W = 1080, H = 1400, PAD = 64, PHOTO_H = 700;
+        const W = 1080, H = 2000, PAD = 60, PHOTO_H = 760, FRAME = 22;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         const ctx = canvas.getContext('2d');
@@ -352,11 +374,18 @@ document.addEventListener('error', (e) => {
             ctx.fillRect(0, 0, W, PHOTO_H);
         }
 
-        const grad = ctx.createLinearGradient(0, PHOTO_H - 240, 0, PHOTO_H);
+        // véu escuro no topo (legibilidade da marca) e transição foto → painel
+        const topShade = ctx.createLinearGradient(0, 0, 0, 200);
+        topShade.addColorStop(0, 'rgba(10,7,7,0.65)');
+        topShade.addColorStop(1, 'rgba(10,7,7,0)');
+        ctx.fillStyle = topShade;
+        ctx.fillRect(0, 0, W, 200);
+
+        const grad = ctx.createLinearGradient(0, PHOTO_H - 280, 0, PHOTO_H);
         grad.addColorStop(0, 'rgba(21,16,15,0)');
         grad.addColorStop(1, 'rgba(21,16,15,1)');
         ctx.fillStyle = grad;
-        ctx.fillRect(0, PHOTO_H - 240, W, 240);
+        ctx.fillRect(0, PHOTO_H - 280, W, 280);
 
         ctx.fillStyle = '#15100F';
         ctx.fillRect(0, PHOTO_H, W, H - PHOTO_H);
@@ -365,43 +394,105 @@ document.addEventListener('error', (e) => {
             try { await document.fonts.ready; } catch (e) {}
         }
 
-        ctx.textAlign = 'left';
-        let cy = PHOTO_H + 78;
-
+        // marca no topo, sobre a foto
+        ctx.textAlign = 'center';
         ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 48px Cinzel, Georgia, serif";
+        ctx.font = "600 26px 'Outfit', Arial, sans-serif";
+        setLetterSpacing(ctx, 4);
+        ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, 78);
+        setLetterSpacing(ctx, 0);
+
+        ctx.textAlign = 'left';
+        let cy = PHOTO_H + 84;
+
+        // selo do tipo de vinho
+        if (vinho.tipo && vinho.tipo !== '-') {
+            const tipoTxt = (trTipo(vinho.tipo) || vinho.tipo).toUpperCase();
+            ctx.font = "600 22px 'Outfit', Arial, sans-serif";
+            setLetterSpacing(ctx, 3);
+            const tw = ctx.measureText(tipoTxt).width;
+            const pillW = tw + 56, pillH = 46;
+            ctx.fillStyle = 'rgba(198,161,91,0.12)';
+            ctx.strokeStyle = 'rgba(198,161,91,0.5)';
+            ctx.lineWidth = 2;
+            roundRect(ctx, PAD, cy - 32, pillW, pillH, pillH / 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#E4CB94';
+            ctx.textAlign = 'center';
+            ctx.fillText(tipoTxt, PAD + pillW / 2, cy - 1);
+            ctx.textAlign = 'left';
+            setLetterSpacing(ctx, 0);
+            cy += 58;
+        }
+
+        // nome do vinho (até 2 linhas)
+        ctx.fillStyle = '#E4CB94';
+        ctx.font = "600 54px Cinzel, Georgia, serif";
         const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial').toUpperCase(), W - PAD * 2, 2);
-        nomeLinhas.forEach((linha, i) => {
-            ctx.fillText(linha, PAD, cy + i * 54);
-        });
-        cy += (nomeLinhas.length - 1) * 54 + 46;
+        nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 60));
+        cy += (nomeLinhas.length - 1) * 60 + 50;
 
         if (vinho.produtor) {
             ctx.fillStyle = '#A0938C';
-            ctx.font = "400 28px 'Outfit', Arial, sans-serif";
+            ctx.font = "400 30px 'Outfit', Arial, sans-serif";
             ctx.fillText(fitText(ctx, vinho.produtor, W - PAD * 2), PAD, cy);
-            cy += 50;
+            cy += 52;
         } else {
-            cy += 14;
+            cy += 12;
         }
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.14)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(PAD, cy);
-        ctx.lineTo(W - PAD, cy);
-        ctx.stroke();
-        cy += 54;
+        cy += 28;
+        drawOrnamentLine(ctx, cy, W, PAD);
+        cy += 46;
 
-        const infoPartes = [vinho.pais, vinho.uva, (vinho.safra && vinho.safra !== '-') ? vinho.safra : null].filter(Boolean);
-        ctx.fillStyle = '#ECE4DD';
-        ctx.font = "500 30px 'Outfit', Arial, sans-serif";
-        ctx.fillText(fitText(ctx, infoPartes.join('   ·   '), W - PAD * 2), PAD, cy);
-        cy += 68;
+        // grade de campos (mesmos rótulos da modal do site)
+        const campos = [
+            { label: 'PAÍS', value: trPais(vinho.pais) },
+            { label: 'REGIÃO', value: vinho.regiao },
+            { label: 'UVA(S)', value: vinho.uva },
+            { label: 'SAFRA', value: vinho.safra },
+            { label: 'TEOR ALCOÓLICO', value: vinho.teor },
+            { label: 'CLASSIFICAÇÃO', value: trClass(vinho.classificacao) },
+            { label: 'DEGUSTADO EM', value: vinho.data },
+        ].filter(c => c.value && c.value !== 'N/A' && c.value !== '-');
 
-        const boxGap = 36;
+        if (campos.length) {
+            const fGap = 16;
+            const fW = (W - PAD * 2 - fGap) / 2;
+            const fH = 106;
+            campos.forEach((c, i) => {
+                const col = i % 2, row = Math.floor(i / 2);
+                const bx = PAD + col * (fW + fGap);
+                const by = cy + row * (fH + fGap);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.03)';
+                ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+                ctx.lineWidth = 2;
+                roundRect(ctx, bx, by, fW, fH, 14);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#C6A15B';
+                ctx.font = "600 18px 'Outfit', Arial, sans-serif";
+                setLetterSpacing(ctx, 2);
+                ctx.fillText(fitText(ctx, c.label, fW - 36), bx + 22, by + 36);
+                setLetterSpacing(ctx, 0);
+
+                ctx.fillStyle = '#ECE4DD';
+                ctx.font = "500 28px 'Outfit', Arial, sans-serif";
+                ctx.fillText(fitText(ctx, String(c.value), fW - 36), bx + 22, by + 74);
+            });
+            const rows = Math.ceil(campos.length / 2);
+            cy += rows * fH + (rows - 1) * fGap + 42;
+        } else {
+            cy += 16;
+        }
+
+        // notas
+        const boxGap = 32;
         const boxW = (W - PAD * 2 - boxGap) / 2;
-        const boxH = 160;
+        const boxH = 156;
         const boxes = [
             { label: 'FELLYPE', valor: vinho.notaF || '—' },
             { label: 'HWLLY', valor: vinho.notaH || '—' },
@@ -410,32 +501,53 @@ document.addEventListener('error', (e) => {
         boxes.forEach((b, i) => {
             const bx = PAD + i * (boxW + boxGap);
             const by = cy;
-            ctx.fillStyle = 'rgba(198,161,91,0.07)';
-            ctx.strokeStyle = 'rgba(198,161,91,0.35)';
+            ctx.fillStyle = 'rgba(198,161,91,0.08)';
+            ctx.strokeStyle = 'rgba(198,161,91,0.4)';
             ctx.lineWidth = 2;
             roundRect(ctx, bx, by, boxW, boxH, 18);
             ctx.fill();
             ctx.stroke();
 
-            ctx.fillStyle = '#A0938C';
-            ctx.font = "600 22px 'Outfit', Arial, sans-serif";
-            ctx.fillText(b.label, bx + boxW / 2, by + 46);
-
             ctx.fillStyle = '#C6A15B';
-            ctx.font = "600 60px Cinzel, Georgia, serif";
-            ctx.fillText(String(b.valor), bx + boxW / 2, by + 120);
-        });
-        cy += boxH + 62;
+            ctx.font = "20px Georgia, serif";
+            ctx.fillText('★ ★ ★ ★ ★', bx + boxW / 2, by + 36);
 
-        ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 24px 'Outfit', Arial, sans-serif";
-        ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, cy);
+            ctx.fillStyle = '#A0938C';
+            ctx.font = "600 18px 'Outfit', Arial, sans-serif";
+            setLetterSpacing(ctx, 2);
+            ctx.fillText(b.label, bx + boxW / 2, by + 66);
+            setLetterSpacing(ctx, 0);
+
+            ctx.fillStyle = '#E4CB94';
+            ctx.font = "600 58px Cinzel, Georgia, serif";
+            ctx.fillText(String(b.valor), bx + boxW / 2, by + 130);
+        });
+        cy += boxH;
+
+        // rodapé sempre ancorado perto da base do cartão (não flutua "colado" nos dados)
+        cy = Math.max(cy + 46, H - 150);
+
+        drawOrnamentLine(ctx, cy, W, PAD);
         cy += 40;
 
-        ctx.fillStyle = '#8A7D76';
-        ctx.font = "400 24px 'Outfit', Arial, sans-serif";
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#E4CB94';
+        ctx.font = "600 25px 'Outfit', Arial, sans-serif";
+        setLetterSpacing(ctx, 3);
+        ctx.fillText('CONFIRA MAIS EM', W / 2, cy);
+        setLetterSpacing(ctx, 0);
+        cy += 42;
+
+        ctx.fillStyle = '#C6A15B';
+        ctx.font = "500 32px 'Outfit', Arial, sans-serif";
         ctx.fillText('fellypehwlly-adega.space', W / 2, cy);
         ctx.textAlign = 'left';
+
+        // moldura dourada
+        ctx.strokeStyle = 'rgba(198,161,91,0.55)';
+        ctx.lineWidth = 3;
+        roundRect(ctx, FRAME, FRAME, W - FRAME * 2, H - FRAME * 2, 24);
+        ctx.stroke();
 
         return new Promise((resolve) => canvas.toBlob((b) => resolve(b), 'image/png', 0.95));
     }
