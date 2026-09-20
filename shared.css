@@ -443,6 +443,78 @@ footer {
     font-family: 'Cinzel', serif;
 }
 
+.wine-modal-share {
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.share-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--texto);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transicao);
+    min-height: 44px;
+}
+
+.share-btn i { font-size: 1.05rem; }
+
+.share-whatsapp:hover, .share-whatsapp:focus-visible {
+    background: rgba(37, 211, 102, 0.12);
+    border-color: rgba(37, 211, 102, 0.4);
+    color: #25D366;
+}
+
+.share-instagram:hover, .share-instagram:focus-visible {
+    background: rgba(228, 64, 95, 0.12);
+    border-color: rgba(228, 64, 95, 0.4);
+    color: #E4405F;
+}
+
+@media (hover: none) {
+    .share-whatsapp:active { background: rgba(37, 211, 102, 0.12); border-color: rgba(37, 211, 102, 0.4); color: #25D366; }
+    .share-instagram:active { background: rgba(228, 64, 95, 0.12); border-color: rgba(228, 64, 95, 0.4); color: #E4405F; }
+}
+
+.wine-share-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background: #141414;
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    color: var(--texto);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 10000;
+    max-width: 90%;
+    text-align: center;
+}
+
+.wine-share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 /* --- MOBILE --- */
 @media (max-width: 992px) {
     .navbar { padding: 10px 5%; }
