@@ -454,6 +454,7 @@ document.addEventListener('error', (e) => {
         if (document.fonts && document.fonts.ready) {
             try { await document.fonts.ready; } catch (e) {}
         }
+        try { await document.fonts.load("900 22px 'Font Awesome 6 Free'"); } catch (e) {}
 
         ctx.textAlign = 'left';
         let cy = PHOTO_H + 78;
@@ -512,12 +513,12 @@ document.addEventListener('error', (e) => {
         // grade de campos (mesmos rótulos da modal do site)
         const campos = [
             { label: 'PAÍS', value: trPais(vinho.pais), flag: true },
-            { label: 'REGIÃO', value: vinho.regiao },
-            { label: 'UVA(S)', value: vinho.uva },
-            { label: 'SAFRA', value: vinho.safra },
-            { label: 'TEOR ALCOÓLICO', value: vinho.teor },
-            { label: 'CLASSIFICAÇÃO', value: trClass(vinho.classificacao) },
-            { label: 'DEGUSTADO EM', value: vinho.data },
+            { label: 'REGIÃO', value: vinho.regiao, icon: '' },
+            { label: 'UVA(S)', value: vinho.uva, icon: '' },
+            { label: 'SAFRA', value: vinho.safra, icon: '' },
+            { label: 'TEOR ALCOÓLICO', value: vinho.teor, icon: '' },
+            { label: 'CLASSIFICAÇÃO', value: trClass(vinho.classificacao), icon: '' },
+            { label: 'DEGUSTADO EM', value: vinho.data, icon: '' },
         ].filter(c => c.value && c.value !== 'N/A' && c.value !== '-');
 
         if (campos.length) {
@@ -550,6 +551,11 @@ document.addEventListener('error', (e) => {
                     ctx.lineWidth = 1;
                     ctx.strokeRect(flagX, flagY, flagW, flagH);
                     valueX = flagX + flagW + 12;
+                } else if (c.icon) {
+                    ctx.fillStyle = '#DDB975';
+                    ctx.font = "900 22px 'Font Awesome 6 Free'";
+                    ctx.fillText(c.icon, bx + 20, by + 63);
+                    valueX = bx + 20 + 32;
                 }
 
                 ctx.fillStyle = '#ECE4DD';
