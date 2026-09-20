@@ -266,6 +266,180 @@ document.addEventListener('error', (e) => {
     const trTipo = (v) => (window.I18N ? window.I18N.translateTipo(v) : v);
     const trClass = (v) => (window.I18N ? window.I18N.translateClassificacao(v) : v);
 
+    /* ---- Geração do cartão de compartilhamento (canvas) ---- */
+    function loadImageFromBlob(blob) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(blob);
+            const img = new Image();
+            img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+            img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+            img.src = url;
+        });
+    }
+
+    function drawCover(ctx, img, x, y, w, h) {
+        const imgRatio = img.width / img.height;
+        const boxRatio = w / h;
+        let sx, sy, sw, sh;
+        if (imgRatio > boxRatio) {
+            sh = img.height; sw = sh * boxRatio; sx = (img.width - sw) / 2; sy = 0;
+        } else {
+            sw = img.width; sh = sw / boxRatio; sx = 0; sy = (img.height - sh) / 2;
+        }
+        ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    }
+
+    function fitText(ctx, text, maxWidth) {
+        if (ctx.measureText(text).width <= maxWidth) return text;
+        let t = text;
+        while (t.length > 1 && ctx.measureText(t + '…').width > maxWidth) t = t.slice(0, -1);
+        return t + '…';
+    }
+
+    function wrapLines(ctx, text, maxWidth, maxLines) {
+        const words = text.split(/\s+/).filter(Boolean);
+        const lines = [];
+        let current = '';
+        let idx = 0;
+        while (idx < words.length && lines.length < maxLines) {
+            const word = words[idx];
+            const test = current ? `${current} ${word}` : word;
+            if (ctx.measureText(test).width <= maxWidth || !current) {
+                current = test;
+                idx++;
+            } else {
+                lines.push(current);
+                current = '';
+            }
+        }
+        if (current) lines.push(current);
+        if (lines.length > maxLines) lines.length = maxLines;
+        if (idx < words.length && lines.length) {
+            lines[lines.length - 1] = fitText(ctx, lines[lines.length - 1] + '…', maxWidth);
+        }
+        return lines;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+    }
+
+    async function buildShareCard(vinho, fotoBlob) {
+        const W = 1080, H = 1400, PAD = 64, PHOTO_H = 700;
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#15100F';
+        ctx.fillRect(0, 0, W, H);
+
+        if (fotoBlob) {
+            try {
+                const img = await loadImageFromBlob(fotoBlob);
+                drawCover(ctx, img, 0, 0, W, PHOTO_H);
+            } catch (e) {
+                ctx.fillStyle = '#1C1413';
+                ctx.fillRect(0, 0, W, PHOTO_H);
+            }
+        } else {
+            ctx.fillStyle = '#1C1413';
+            ctx.fillRect(0, 0, W, PHOTO_H);
+        }
+
+        const grad = ctx.createLinearGradient(0, PHOTO_H - 240, 0, PHOTO_H);
+        grad.addColorStop(0, 'rgba(21,16,15,0)');
+        grad.addColorStop(1, 'rgba(21,16,15,1)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, PHOTO_H - 240, W, 240);
+
+        ctx.fillStyle = '#15100F';
+        ctx.fillRect(0, PHOTO_H, W, H - PHOTO_H);
+
+        if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch (e) {}
+        }
+
+        ctx.textAlign = 'left';
+        let cy = PHOTO_H + 78;
+
+        ctx.fillStyle = '#E4CB94';
+        ctx.font = "600 48px Cinzel, Georgia, serif";
+        const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial').toUpperCase(), W - PAD * 2, 2);
+        nomeLinhas.forEach((linha, i) => {
+            ctx.fillText(linha, PAD, cy + i * 54);
+        });
+        cy += (nomeLinhas.length - 1) * 54 + 46;
+
+        if (vinho.produtor) {
+            ctx.fillStyle = '#A0938C';
+            ctx.font = "400 28px 'Outfit', Arial, sans-serif";
+            ctx.fillText(fitText(ctx, vinho.produtor, W - PAD * 2), PAD, cy);
+            cy += 50;
+        } else {
+            cy += 14;
+        }
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(PAD, cy);
+        ctx.lineTo(W - PAD, cy);
+        ctx.stroke();
+        cy += 54;
+
+        const infoPartes = [vinho.pais, vinho.uva, (vinho.safra && vinho.safra !== '-') ? vinho.safra : null].filter(Boolean);
+        ctx.fillStyle = '#ECE4DD';
+        ctx.font = "500 30px 'Outfit', Arial, sans-serif";
+        ctx.fillText(fitText(ctx, infoPartes.join('   ·   '), W - PAD * 2), PAD, cy);
+        cy += 68;
+
+        const boxGap = 36;
+        const boxW = (W - PAD * 2 - boxGap) / 2;
+        const boxH = 160;
+        const boxes = [
+            { label: 'FELLYPE', valor: vinho.notaF || '—' },
+            { label: 'HWLLY', valor: vinho.notaH || '—' },
+        ];
+        ctx.textAlign = 'center';
+        boxes.forEach((b, i) => {
+            const bx = PAD + i * (boxW + boxGap);
+            const by = cy;
+            ctx.fillStyle = 'rgba(198,161,91,0.07)';
+            ctx.strokeStyle = 'rgba(198,161,91,0.35)';
+            ctx.lineWidth = 2;
+            roundRect(ctx, bx, by, boxW, boxH, 18);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#A0938C';
+            ctx.font = "600 22px 'Outfit', Arial, sans-serif";
+            ctx.fillText(b.label, bx + boxW / 2, by + 46);
+
+            ctx.fillStyle = '#C6A15B';
+            ctx.font = "600 60px Cinzel, Georgia, serif";
+            ctx.fillText(String(b.valor), bx + boxW / 2, by + 120);
+        });
+        cy += boxH + 62;
+
+        ctx.fillStyle = '#E4CB94';
+        ctx.font = "600 24px 'Outfit', Arial, sans-serif";
+        ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, cy);
+        cy += 40;
+
+        ctx.fillStyle = '#8A7D76';
+        ctx.font = "400 24px 'Outfit', Arial, sans-serif";
+        ctx.fillText('fellypehwlly-adega.space', W / 2, cy);
+        ctx.textAlign = 'left';
+
+        return new Promise((resolve) => canvas.toBlob((b) => resolve(b), 'image/png', 0.95));
+    }
+
     window.WineModal = {
         open(vinho) {
             vinhoAtual = vinho;
@@ -374,17 +548,25 @@ document.addEventListener('error', (e) => {
             return v.nome ? `${base}?vinho=${encodeURIComponent(v.nome)}` : base;
         },
         async _prefetchImage(vinho) {
-            if (!vinho || !vinho.foto) return;
+            if (!vinho) return;
             try {
-                const resp = await fetch(vinho.foto);
-                if (!resp.ok) return;
-                const blob = await resp.blob();
-                if (!blob.type.startsWith('image/') || vinhoAtual !== vinho) return;
-                const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+                let fotoBlob = null;
+                if (vinho.foto) {
+                    const resp = await fetch(vinho.foto);
+                    if (resp.ok) {
+                        const blob = await resp.blob();
+                        if (blob.type.startsWith('image/')) fotoBlob = blob;
+                    }
+                }
+                if (vinhoAtual !== vinho) return;
+
+                const cardBlob = await buildShareCard(vinho, fotoBlob);
+                if (!cardBlob || vinhoAtual !== vinho) return;
+
                 const nomeArq = (vinho.nome || 'vinho')
                     .normalize('NFD').replace(/[̀-ͯ]/g, '')
                     .replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'vinho';
-                imagemAtualFile = new File([blob], `${nomeArq}.${ext}`, { type: blob.type });
+                imagemAtualFile = new File([cardBlob], `${nomeArq}.png`, { type: 'image/png' });
             } catch (e) {
                 imagemAtualFile = null;
             }
