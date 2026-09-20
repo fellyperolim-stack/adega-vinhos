@@ -352,29 +352,8 @@ document.addEventListener('error', (e) => {
         ctx.textAlign = 'left';
     }
 
-    function averageColor(img) {
-        try {
-            const c = document.createElement('canvas');
-            c.width = 1; c.height = 1;
-            const cctx = c.getContext('2d');
-            cctx.drawImage(img, 0, 0, 1, 1);
-            const [r, g, b] = cctx.getImageData(0, 0, 1, 1).data;
-            return { r, g, b };
-        } catch (e) {
-            return { r: 59, g: 14, b: 26 };
-        }
-    }
-
-    function shadeColor(c, factor) {
-        return { r: c.r * factor, g: c.g * factor, b: c.b * factor };
-    }
-
-    function rgbaColor(c, a) {
-        return `rgba(${Math.round(c.r)},${Math.round(c.g)},${Math.round(c.b)},${a})`;
-    }
-
     async function buildShareCard(vinho, fotoBlob) {
-        const W = 1080, H = 1920, PAD = 56, FRAME = 22;
+        const W = 1080, H = 1920, PAD = 56, PHOTO_H = 720, FRAME = 22;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         const ctx = canvas.getContext('2d');
@@ -382,30 +361,35 @@ document.addEventListener('error', (e) => {
         ctx.fillStyle = '#15100F';
         ctx.fillRect(0, 0, W, H);
 
-        let tint = { r: 59, g: 14, b: 26 };
         if (fotoBlob) {
             try {
                 const img = await loadImageFromBlob(fotoBlob);
-                drawCover(ctx, img, 0, 0, W, H);
-                tint = shadeColor(averageColor(img), 0.5);
-            } catch (e) {}
+                drawCover(ctx, img, 0, 0, W, PHOTO_H);
+            } catch (e) {
+                ctx.fillStyle = '#1C1413';
+                ctx.fillRect(0, 0, W, PHOTO_H);
+            }
+        } else {
+            ctx.fillStyle = '#1C1413';
+            ctx.fillRect(0, 0, W, PHOTO_H);
         }
 
-        // degradê "canvas" — tingido com a cor média da própria foto, do vinho fotografado
-        const overlay = ctx.createLinearGradient(0, 0, 0, H);
-        overlay.addColorStop(0, rgbaColor(tint, 0.30));
-        overlay.addColorStop(0.32, rgbaColor(tint, 0.42));
-        overlay.addColorStop(0.6, rgbaColor(tint, 0.72));
-        overlay.addColorStop(1, rgbaColor(tint, 0.94));
-        ctx.fillStyle = overlay;
-        ctx.fillRect(0, 0, W, H);
+        // transição foto → painel (topo fica limpo: zona coberta pelo cabeçalho do Instagram nos Stories)
+        const grad = ctx.createLinearGradient(0, PHOTO_H - 280, 0, PHOTO_H);
+        grad.addColorStop(0, 'rgba(21,16,15,0)');
+        grad.addColorStop(1, 'rgba(21,16,15,1)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, PHOTO_H - 280, W, 280);
+
+        ctx.fillStyle = '#15100F';
+        ctx.fillRect(0, PHOTO_H, W, H - PHOTO_H);
 
         if (document.fonts && document.fonts.ready) {
             try { await document.fonts.ready; } catch (e) {}
         }
 
         ctx.textAlign = 'left';
-        let cy = H * 0.4;
+        let cy = PHOTO_H + 78;
 
         // selo do tipo de vinho
         if (vinho.tipo && vinho.tipo !== '-') {
@@ -414,13 +398,13 @@ document.addEventListener('error', (e) => {
             setLetterSpacing(ctx, 3);
             const tw = ctx.measureText(tipoTxt).width;
             const pillW = tw + 56, pillH = 46;
-            ctx.fillStyle = 'rgba(10,7,7,0.45)';
-            ctx.strokeStyle = 'rgba(198,161,91,0.6)';
+            ctx.fillStyle = 'rgba(198,161,91,0.12)';
+            ctx.strokeStyle = 'rgba(198,161,91,0.5)';
             ctx.lineWidth = 2;
             roundRect(ctx, PAD, cy - 32, pillW, pillH, pillH / 2);
             ctx.fill();
             ctx.stroke();
-            ctx.fillStyle = '#F1E2B8';
+            ctx.fillStyle = '#E4CB94';
             ctx.textAlign = 'center';
             ctx.fillText(tipoTxt, PAD + pillW / 2, cy - 1);
             ctx.textAlign = 'left';
@@ -428,27 +412,21 @@ document.addEventListener('error', (e) => {
             cy += 54;
         }
 
-        // nome do vinho (até 2 linhas) — sombra leve para ler bem sobre a foto
-        ctx.shadowColor = 'rgba(0,0,0,0.55)';
-        ctx.shadowBlur = 14;
-        ctx.shadowOffsetY = 3;
-        ctx.fillStyle = '#F1E2B8';
+        // nome do vinho (até 2 linhas)
+        ctx.fillStyle = '#E4CB94';
         ctx.font = "600 50px Cinzel, Georgia, serif";
         const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial').toUpperCase(), W - PAD * 2, 2);
         nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 56));
         cy += (nomeLinhas.length - 1) * 56 + 46;
 
         if (vinho.produtor) {
-            ctx.fillStyle = '#D9CFC7';
+            ctx.fillStyle = '#A0938C';
             ctx.font = "400 28px 'Outfit', Arial, sans-serif";
             ctx.fillText(fitText(ctx, vinho.produtor, W - PAD * 2), PAD, cy);
             cy += 46;
         } else {
             cy += 10;
         }
-        ctx.shadowColor = 'transparent';
-        ctx.shadowBlur = 0;
-        ctx.shadowOffsetY = 0;
 
         cy += 22;
         drawOrnamentLine(ctx, cy, W, PAD);
@@ -474,20 +452,20 @@ document.addEventListener('error', (e) => {
                 const bx = PAD + col * (fW + fGap);
                 const by = cy + row * (fH + fGap);
 
-                ctx.fillStyle = 'rgba(10,7,7,0.42)';
-                ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+                ctx.fillStyle = 'rgba(255,255,255,0.03)';
+                ctx.strokeStyle = 'rgba(255,255,255,0.10)';
                 ctx.lineWidth = 2;
                 roundRect(ctx, bx, by, fW, fH, 14);
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.fillStyle = '#DDB975';
+                ctx.fillStyle = '#C6A15B';
                 ctx.font = "600 16px 'Outfit', Arial, sans-serif";
                 setLetterSpacing(ctx, 2);
                 ctx.fillText(fitText(ctx, c.label, fW - 34), bx + 20, by + 32);
                 setLetterSpacing(ctx, 0);
 
-                ctx.fillStyle = '#F4EEE6';
+                ctx.fillStyle = '#ECE4DD';
                 ctx.font = "500 25px 'Outfit', Arial, sans-serif";
                 ctx.fillText(fitText(ctx, String(c.value), fW - 34), bx + 20, by + 65);
             });
@@ -509,24 +487,24 @@ document.addEventListener('error', (e) => {
         boxes.forEach((b, i) => {
             const bx = PAD + i * (boxW + boxGap);
             const by = cy;
-            ctx.fillStyle = 'rgba(10,7,7,0.45)';
-            ctx.strokeStyle = 'rgba(198,161,91,0.55)';
+            ctx.fillStyle = 'rgba(198,161,91,0.08)';
+            ctx.strokeStyle = 'rgba(198,161,91,0.4)';
             ctx.lineWidth = 2;
             roundRect(ctx, bx, by, boxW, boxH, 18);
             ctx.fill();
             ctx.stroke();
 
-            ctx.fillStyle = '#DDB975';
+            ctx.fillStyle = '#C6A15B';
             ctx.font = "18px Georgia, serif";
             ctx.fillText('★ ★ ★ ★ ★', bx + boxW / 2, by + 32);
 
-            ctx.fillStyle = '#D9CFC7';
+            ctx.fillStyle = '#A0938C';
             ctx.font = "600 16px 'Outfit', Arial, sans-serif";
             setLetterSpacing(ctx, 2);
             ctx.fillText(b.label, bx + boxW / 2, by + 58);
             setLetterSpacing(ctx, 0);
 
-            ctx.fillStyle = '#F1E2B8';
+            ctx.fillStyle = '#E4CB94';
             ctx.font = "600 50px Cinzel, Georgia, serif";
             ctx.fillText(String(b.valor), bx + boxW / 2, by + 112);
         });
