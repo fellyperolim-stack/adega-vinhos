@@ -284,6 +284,14 @@ document.addEventListener('error', (e) => {
                             <p class="wine-modal-produtor" id="modal-produtor"></p>
                             <div class="wine-modal-grid" id="modal-grid"></div>
                             <div class="wine-modal-notas" id="modal-notas"></div>
+                            <div class="wine-modal-share">
+                                <button class="share-btn share-whatsapp" onclick="WineModal.shareWhatsApp()">
+                                    <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
+                                </button>
+                                <button class="share-btn share-instagram" onclick="WineModal.shareInstagram()">
+                                    <i class="fab fa-instagram" aria-hidden="true"></i> Instagram
+                                </button>
+                            </div>
                         </div>
                     </div>`;
                 document.body.appendChild(backdrop);
@@ -339,6 +347,65 @@ document.addEventListener('error', (e) => {
             if (b) b.classList.remove('open');
             document.body.style.overflow = '';
             if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus({ preventScroll: true });
+        },
+        buildShareText(vinho) {
+            const v = vinho || vinhoAtual || {};
+            const linhas = [`🍷 *${v.nome || 'Vinho'}*`];
+            const produtor = v.produtor || v.vinicola;
+            if (produtor) linhas.push(`Produtor: ${produtor}`);
+            if (v.pais) linhas.push(`País: ${v.pais}`);
+            if (v.regiao && v.regiao !== '-') linhas.push(`Região: ${v.regiao}`);
+            if (v.uva) linhas.push(`Uva: ${v.uva}`);
+            if (v.safra && v.safra !== '-') linhas.push(`Safra: ${v.safra}`);
+
+            const notaF = v.notaF || v['Pontuação Fellype'];
+            const notaH = v.notaH || v['Pontuação Hwlly'];
+            if (notaF || notaH) {
+                const notas = [];
+                if (notaF) notas.push(`Fellype ★${notaF}`);
+                if (notaH) notas.push(`Hwlly ★${notaH}`);
+                linhas.push(`Nota: ${notas.join(' | ')}`);
+            }
+
+            linhas.push('', '🥂 Adega Fellype & Hwlly');
+            return linhas.join('\n');
+        },
+        shareWhatsApp() {
+            const texto = this.buildShareText();
+            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`, '_blank');
+        },
+        async shareInstagram() {
+            const texto = this.buildShareText();
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: (vinhoAtual && vinhoAtual.nome) || 'Vinho', text: texto });
+                    return;
+                } catch (e) {
+                    if (e.name === 'AbortError') return;
+                }
+            }
+
+            try {
+                await navigator.clipboard.writeText(texto);
+                this._toast('Texto copiado! Cole no Instagram 📋');
+            } catch (e) {
+                this._toast('Não foi possível copiar o texto automaticamente.');
+            }
+            window.open('https://instagram.com', '_blank');
+        },
+        _toast(msg) {
+            let t = document.getElementById('wine-share-toast');
+            if (!t) {
+                t = document.createElement('div');
+                t.id = 'wine-share-toast';
+                t.className = 'wine-share-toast';
+                document.body.appendChild(t);
+            }
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(this._toastTimer);
+            this._toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
         }
     };
 
