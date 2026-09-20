@@ -189,6 +189,7 @@
                 numero: idx >= 0 ? total - idx : null,
                 artigo: v['Artigo'] || null,
                 artigoPublicado: v['Artigo Publicado'] === 'SIM' || v['Artigo Publicado'] === true,
+                linha: v['_linha'] || null,
             };
         }
 
@@ -215,7 +216,9 @@
                         const foto = vinhoObj.foto;
                         const artigo = String(vinhoObj.artigo || '');
                         const excerto = artigo.length > 180 ? artigo.slice(0, 180).trim() + '…' : artigo;
-                        const href = `post.html?vinho=${encodeURIComponent(vinhoObj.nome || '')}`;
+                        const href = vinhoObj.linha
+                            ? `post.html?linha=${vinhoObj.linha}`
+                            : `post.html?vinho=${encodeURIComponent(vinhoObj.nome || '')}`;
                         return `
                         <a class="blog-card" href="${href}" aria-label="${vinhoObj.nome || ''}">
                             <img class="blog-card-img" src="${foto}" loading="lazy" onerror="this.src='${IMG_PADRAO_BLOG}'" alt="${vinhoObj.nome || ''}">

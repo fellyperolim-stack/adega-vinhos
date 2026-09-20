@@ -556,6 +556,7 @@ const getFlagUrl = (pais) => {
                 numero: idx >= 0 ? vinhos.length - idx : null,
                 artigo: v['Artigo'] || null,
                 artigoPublicado: v['Artigo Publicado'] === 'SIM' || v['Artigo Publicado'] === true,
+                linha: v['_linha'] || null,
             };
         }
 
@@ -574,11 +575,17 @@ const getFlagUrl = (pais) => {
                 document.getElementById('vinho-grid').style.display = 'grid';
                 aplicarFiltros();
 
+                const linhaParam = parseInt(params.get('linha'), 10);
                 const vinhoParam = params.get('vinho');
-                if (vinhoParam) {
-                    const alvo = vinhos.find(v => (v['Nome do Vinho'] || '').trim().toLowerCase() === vinhoParam.trim().toLowerCase());
-                    if (alvo) setTimeout(() => WineModal.open(toVinhoObj(alvo)), 250);
+                let alvo = null;
+                if (linhaParam) {
+                    alvo = vinhos.find(v => v['_linha'] === linhaParam);
+                } else if (vinhoParam) {
+                    // Compatibilidade com links antigos gerados por nome (menos preciso:
+                    // se houver dois vinhos com o mesmo nome, pega o primeiro encontrado).
+                    alvo = vinhos.find(v => (v['Nome do Vinho'] || '').trim().toLowerCase() === vinhoParam.trim().toLowerCase());
                 }
+                if (alvo) setTimeout(() => WineModal.open(toVinhoObj(alvo)), 250);
             } catch (e) {
                 document.getElementById('skeleton-grid').innerHTML = `
                     <div class="empty-state" style="grid-column:1/-1">

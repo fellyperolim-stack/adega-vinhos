@@ -784,6 +784,7 @@ document.addEventListener('error', (e) => {
         buildShareUrl(vinho) {
             const v = vinho || vinhoAtual || {};
             const base = `${location.origin}/catalogo.html`;
+            if (v.linha) return `${base}?linha=${v.linha}`;
             return v.nome ? `${base}?vinho=${encodeURIComponent(v.nome)}` : base;
         },
         async _fetchImageBlob(url) {
@@ -964,7 +965,7 @@ document.addEventListener('error', (e) => {
             try {
                 const resp = await fetch(ARTIGO_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ action: 'salvarArtigo', tokenAcesso: token, nome: v.nome, artigo: texto, publicado: true }),
+                    body: JSON.stringify({ action: 'salvarArtigo', tokenAcesso: token, linha: v.linha, nome: v.nome, artigo: texto, publicado: true }),
                 });
                 const data = await resp.json();
                 if (!data.success) {

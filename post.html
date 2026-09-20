@@ -254,9 +254,10 @@
         async function carregarPost() {
             const container = document.getElementById('post-content');
             const params = new URLSearchParams(window.location.search);
+            const linhaParam = parseInt(params.get('linha'), 10);
             const nomeParam = (params.get('vinho') || '').trim().toLowerCase();
 
-            if (!nomeParam) {
+            if (!linhaParam && !nomeParam) {
                 container.innerHTML = `
                     <div class="post-erro">
                         <i class="fas fa-feather-alt" aria-hidden="true"></i>
@@ -268,8 +269,12 @@
 
             try {
                 const data = await fetchWithCache(SCRIPT_URL_POST);
-                const v = data.find(item => (item['Nome do Vinho'] || '').trim().toLowerCase() === nomeParam
-                    && (item['Artigo Publicado'] === 'SIM' || item['Artigo Publicado'] === true) && item['Artigo']);
+                const publicado = item => (item['Artigo Publicado'] === 'SIM' || item['Artigo Publicado'] === true) && item['Artigo'];
+                // Identifica pela linha (precisa) sempre que possível; nome só serve
+                // como fallback pra links antigos, e pode ser ambíguo entre vinhos homônimos.
+                const v = linhaParam
+                    ? data.find(item => item['_linha'] === linhaParam && publicado(item))
+                    : data.find(item => (item['Nome do Vinho'] || '').trim().toLowerCase() === nomeParam && publicado(item));
 
                 if (!v) {
                     container.innerHTML = `

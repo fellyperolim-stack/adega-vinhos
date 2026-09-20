@@ -220,6 +220,7 @@
                     const produtor = findVal(v, ['produtor']) || '';
                     const artigo = findVal(v, ['artigo']) || null;
                     const artigoPublicado = findVal(v, ['publicado']) === 'SIM';
+                    const linha = v['_linha'] || null;
 
                     let mediaExibicao = "-";
                     if (notaF > 0 || notaH > 0) {
@@ -228,7 +229,7 @@
                             : (notaF || notaH).toFixed(1);
                     }
 
-                    return { nome, pais, uva, foto, media: mediaExibicao, notaF, notaH, regiao, safra, tipo, produtor, artigo, artigoPublicado };
+                    return { nome, pais, uva, foto, media: mediaExibicao, notaF, notaH, regiao, safra, tipo, produtor, artigo, artigoPublicado, linha };
                 });
 
                 const agrupados = vinhosProcessados.reduce((acc, v) => {

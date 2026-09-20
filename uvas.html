@@ -243,6 +243,7 @@
                     notaH:   parseFloat(findVal(v, ['hwlly', 'notah']) || 0),
                     artigo:  findVal(v, ['artigo']) || null,
                     artigoPublicado: findVal(v, ['publicado']) === 'SIM',
+                    linha: v['_linha'] || null,
                 }));
 
                 const agrupados = vinhosProcessados.reduce((acc, v) => {
