@@ -7,6 +7,17 @@
 window.IMG_FALLBACK  = 'assets/wine-placeholder.svg';
 window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
 
+/* ── Recarrega sozinho quando um service worker novo assume ── */
+(function autoReloadOnSwUpdate() {
+    if (!('serviceWorker' in navigator)) return;
+    let jaRecarregou = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (jaRecarregou) return;
+        jaRecarregou = true;
+        window.location.reload();
+    });
+})();
+
 /* ── PRECONNECTS (economiza handshake HTTPS) ────────── */
 (function injectPreconnects() {
     const hints = [
