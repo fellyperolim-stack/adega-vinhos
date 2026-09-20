@@ -571,9 +571,7 @@ document.addEventListener('error', (e) => {
                         <div class="wine-modal-body">
                             <h2 class="wine-modal-name" id="modal-wine-name"></h2>
                             <p class="wine-modal-produtor" id="modal-produtor"></p>
-                            <div class="wine-modal-grid" id="modal-grid"></div>
-                            <div class="wine-modal-notas" id="modal-notas"></div>
-                            <div class="wine-modal-share">
+                            <div class="wine-modal-share wine-modal-share-top">
                                 <button class="share-btn share-whatsapp" onclick="WineModal.shareWhatsApp()">
                                     <img class="share-icon" src="assets/whatsapp-icon.png" alt="" aria-hidden="true"> WhatsApp
                                 </button>
@@ -581,6 +579,8 @@ document.addEventListener('error', (e) => {
                                     <img class="share-icon" src="assets/instagram-icon.png" alt="" aria-hidden="true"> Instagram
                                 </button>
                             </div>
+                            <div class="wine-modal-grid" id="modal-grid"></div>
+                            <div class="wine-modal-notas" id="modal-notas"></div>
                         </div>
                     </div>`;
                 document.body.appendChild(backdrop);
