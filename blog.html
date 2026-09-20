@@ -73,6 +73,8 @@
             transition: var(--transicao);
             display: flex;
             flex-direction: column;
+            text-decoration: none;
+            color: inherit;
         }
         .blog-card:hover {
             transform: translateY(-4px);
@@ -213,8 +215,9 @@
                         const foto = vinhoObj.foto;
                         const artigo = String(vinhoObj.artigo || '');
                         const excerto = artigo.length > 180 ? artigo.slice(0, 180).trim() + '…' : artigo;
+                        const href = `post.html?vinho=${encodeURIComponent(vinhoObj.nome || '')}`;
                         return `
-                        <div class="blog-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${vinhoObj.nome || ''}">
+                        <a class="blog-card" href="${href}" aria-label="${vinhoObj.nome || ''}">
                             <img class="blog-card-img" src="${foto}" loading="lazy" onerror="this.src='${IMG_PADRAO_BLOG}'" alt="${vinhoObj.nome || ''}">
                             <div class="blog-card-body">
                                 <div class="blog-card-data">${vinhoObj.data || ''}</div>
@@ -222,7 +225,7 @@
                                 <p class="blog-card-excerto">${excerto}</p>
                                 <div class="blog-card-ler-mais">${I18N.t('blog.read_more')} →</div>
                             </div>
-                        </div>`;
+                        </a>`;
                     }).join('')}
                 </div>`;
             } catch (e) {

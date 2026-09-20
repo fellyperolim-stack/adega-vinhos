@@ -63,6 +63,14 @@
                 status_published: 'Artigo publicado! ✨',
                 status_saved: 'Alterações salvas.'
             },
+            post: {
+                eyebrow: 'História da Adega',
+                by: 'Fellype & Hwlly',
+                min_read: 'min de leitura',
+                about_wine: 'Sobre este vinho',
+                back_to_blog: '← Voltar ao Blog',
+                not_found: 'Essa matéria não foi encontrada ou ainda não foi publicada.'
+            },
             modal: {
                 close: 'Fechar detalhes', country: 'País', region: 'Região', grapes: 'Uva(s)',
                 type: 'Tipo', vintage: 'Safra', abv: 'Teor alcoólico', classification: 'Classificação',
@@ -265,6 +273,14 @@
                 status_save_error: 'Could not save the article.',
                 status_published: 'Article published! ✨',
                 status_saved: 'Changes saved.'
+            },
+            post: {
+                eyebrow: 'Cellar Story',
+                by: 'Fellype & Hwlly',
+                min_read: 'min read',
+                about_wine: 'About this wine',
+                back_to_blog: '← Back to Blog',
+                not_found: 'This story was not found or has not been published yet.'
             },
             modal: {
                 close: 'Close details', country: 'Country', region: 'Region', grapes: 'Grape(s)',
@@ -469,6 +485,14 @@
                 status_published: '¡Artículo publicado! ✨',
                 status_saved: 'Cambios guardados.'
             },
+            post: {
+                eyebrow: 'Historia de la Bodega',
+                by: 'Fellype & Hwlly',
+                min_read: 'min de lectura',
+                about_wine: 'Sobre este vino',
+                back_to_blog: '← Volver al Blog',
+                not_found: 'Este artículo no se encontró o todavía no ha sido publicado.'
+            },
             modal: {
                 close: 'Cerrar detalles', country: 'País', region: 'Región', grapes: 'Uva(s)',
                 type: 'Tipo', vintage: 'Añada', abv: 'Graduación alcohólica', classification: 'Clasificación',
@@ -672,6 +696,14 @@
                 status_published: 'Articolo pubblicato! ✨',
                 status_saved: 'Modifiche salvate.'
             },
+            post: {
+                eyebrow: 'Storia della Cantina',
+                by: 'Fellype & Hwlly',
+                min_read: 'min di lettura',
+                about_wine: 'Su questo vino',
+                back_to_blog: '← Torna al Blog',
+                not_found: 'Questo articolo non è stato trovato o non è ancora stato pubblicato.'
+            },
             modal: {
                 close: 'Chiudi dettagli', country: 'Paese', region: 'Regione', grapes: 'Vitigno/i',
                 type: 'Tipo', vintage: 'Annata', abv: 'Gradazione alcolica', classification: 'Classificazione',
@@ -874,6 +906,14 @@
                 status_save_error: 'Impossible d’enregistrer l’article.',
                 status_published: 'Article publié ! ✨',
                 status_saved: 'Modifications enregistrées.'
+            },
+            post: {
+                eyebrow: 'Histoire de la Cave',
+                by: 'Fellype & Hwlly',
+                min_read: 'min de lecture',
+                about_wine: 'À propos de ce vin',
+                back_to_blog: '← Retour au Blog',
+                not_found: 'Cet article n’a pas été trouvé ou n’a pas encore été publié.'
             },
             modal: {
                 close: 'Fermer les détails', country: 'Pays', region: 'Région', grapes: 'Cépage(s)',

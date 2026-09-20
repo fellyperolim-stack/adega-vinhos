@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matéria - Fellype & Hwlly</title>
+    <meta name="description" content="Uma história sobre um vinho da nossa adega.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://fellypehwlly-adega.space/post.html">
+    <meta property="og:image" content="https://fellypehwlly-adega.space/assets/og-image.png">
+    <meta property="og:locale" content="pt_BR">
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#15100f">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-180.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="shared.css">
+
+    <style>
+        body { background: var(--bg); }
+
+        .post-hero {
+            position: relative;
+            height: 62vh;
+            min-height: 380px;
+            max-height: 640px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+        }
+        .post-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(21,16,15,0.15) 0%, rgba(21,16,15,0.55) 55%, var(--bg) 100%);
+        }
+        .post-hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 24px 40px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .post-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--dourado-claro);
+            background: rgba(198, 161, 91, 0.14);
+            border: 1px solid rgba(198, 161, 91, 0.4);
+            padding: 7px 16px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+        }
+        .post-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: #fff;
+            text-shadow: 0 4px 24px rgba(0,0,0,0.6);
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .post-byline {
+            max-width: 700px;
+            margin: 26px auto 0;
+            padding: 0 24px;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            color: var(--subtexto);
+            letter-spacing: 0.4px;
+        }
+        .post-byline strong { color: var(--dourado-claro); font-weight: 600; }
+        .post-byline .dot { margin: 0 8px; opacity: 0.5; }
+
+        .post-body {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 24px 20px;
+        }
+
+        .post-body p {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: var(--texto-suave);
+            margin: 0 0 26px;
+        }
+        .post-body p:first-of-type::first-letter {
+            font-family: 'Cinzel', serif;
+            font-size: 3.6rem;
+            float: left;
+            line-height: 0.8;
+            padding: 6px 10px 0 0;
+            color: var(--dourado);
+        }
+
+        .post-verdict {
+            max-width: 700px;
+            margin: 10px auto 30px;
+            padding: 0 24px;
+            display: flex;
+            gap: 16px;
+        }
+        .post-verdict-box {
+            flex: 1;
+            background: var(--dourado-suave);
+            border: 1px solid var(--borda-dourada);
+            border-radius: var(--raio-sm);
+            padding: 18px;
+            text-align: center;
+        }
+        .post-verdict-label {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--subtexto);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .post-verdict-valor {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dourado);
+            font-family: 'Cinzel', serif;
+        }
+
+        .post-ficha {
+            max-width: 700px;
+            margin: 10px auto 40px;
+            padding: 24px;
+            border-top: 1px solid var(--borda);
+            border-bottom: 1px solid var(--borda);
+        }
+        .post-ficha-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--dourado);
+            margin: 0 0 16px;
+            text-align: center;
+        }
+        .post-ficha-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+        }
+        .post-ficha-item { text-align: center; }
+        .post-ficha-label {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--texto-fraco);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .post-ficha-valor {
+            font-size: 0.9rem;
+            color: var(--texto);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .post-share {
+            max-width: 700px;
+            margin: 0 auto 60px;
+            padding: 0 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .post-voltar {
+            display: block;
+            text-align: center;
+            padding: 40px 20px 70px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            color: var(--subtexto);
+        }
+        .post-voltar a { color: var(--dourado); font-weight: 600; }
+
+        .post-loading, .post-erro {
+            padding: 120px 20px;
+            text-align: center;
+            color: var(--subtexto);
+            font-family: 'Outfit', sans-serif;
+        }
+        .post-erro i { font-size: 2.2rem; display: block; margin-bottom: 16px; color: rgba(198, 161, 91, 0.3); }
+
+        @media (max-width: 480px) {
+            .post-hero { height: 46vh; min-height: 300px; }
+            .post-body p { font-size: 1rem; }
+            .post-verdict { flex-direction: row; }
+            .post-verdict-valor { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <div id="post-content">
+        <div class="post-loading"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="i18n.js"></script>
+    <script src="nav.js"></script>
+    <script>
+        const SCRIPT_URL_POST = "https://script.google.com/macros/s/AKfycbxvM8_kK9_BXLAhhEjdmsAIgofCEjWvw-BcPXx4G1GEXeKkJwILDCkckuvg29FsiHFf/exec";
+        const IMG_PADRAO_POST = "assets/wine-placeholder.svg";
+
+        function resolveFotoPost(v) {
+            let urlFinal = IMG_PADRAO_POST;
+            const fotoRaw = v['Foto'] || v['foto'];
+            if (fotoRaw && fotoRaw.length > 10) {
+                if (fotoRaw.startsWith('data:image')) {
+                    urlFinal = fotoRaw;
+                } else if (fotoRaw.includes('drive.google.com')) {
+                    const id = fotoRaw.match(/[-\w]{25,}/);
+                    urlFinal = id ? `https://lh3.googleusercontent.com/d/${id[0]}` : fotoRaw;
+                } else {
+                    urlFinal = fotoRaw;
+                }
+            }
+            return urlFinal;
+        }
+
+        function tempoDeLeitura(texto) {
+            const palavras = String(texto || '').trim().split(/\s+/).filter(Boolean).length;
+            return Math.max(1, Math.round(palavras / 200));
+        }
+
+        async function carregarPost() {
+            const container = document.getElementById('post-content');
+            const params = new URLSearchParams(window.location.search);
+            const nomeParam = (params.get('vinho') || '').trim().toLowerCase();
+
+            if (!nomeParam) {
+                container.innerHTML = `
+                    <div class="post-erro">
+                        <i class="fas fa-feather-alt" aria-hidden="true"></i>
+                        <p>${I18N.t('post.not_found')}</p>
+                        <p class="post-voltar" style="padding:20px 0 0;"><a href="blog.html">${I18N.t('post.back_to_blog')}</a></p>
+                    </div>`;
+                return;
+            }
+
+            try {
+                const data = await fetchWithCache(SCRIPT_URL_POST);
+                const v = data.find(item => (item['Nome do Vinho'] || '').trim().toLowerCase() === nomeParam
+                    && (item['Artigo Publicado'] === 'SIM' || item['Artigo Publicado'] === true) && item['Artigo']);
+
+                if (!v) {
+                    container.innerHTML = `
+                        <div class="post-erro">
+                            <i class="fas fa-feather-alt" aria-hidden="true"></i>
+                            <p>${I18N.t('post.not_found')}</p>
+                            <p class="post-voltar" style="padding:20px 0 0;"><a href="blog.html">${I18N.t('post.back_to_blog')}</a></p>
+                        </div>`;
+                    return;
+                }
+
+                document.title = `${v['Nome do Vinho']} - Fellype & Hwlly`;
+
+                const foto = resolveFotoPost(v);
+                const nome = v['Nome do Vinho'] || '';
+                const produtor = v['Produtor'] || v['Vinícola'] || '';
+                const pais = I18N.translateCountry(v['País']) || v['País'] || '';
+                const uva = v['Uva(s)'] || v['Uva'] || '';
+                const tipo = I18N.translateTipo ? (I18N.translateTipo(v['Tipo']) || v['Tipo'] || '') : (v['Tipo'] || '');
+                const regiao = v['Região'] || v['Regiao'] || '';
+                const safra = v['Safra'] || '';
+                const teor = v['Teor Alcoólico'] || v['Teor'] || '';
+                const classificacao = v['Classificação'] || v['Classificacao'] || '';
+                const data_ = v['Ano de Consumo'] || v['Data'] || '';
+                const notaF = v['Pontuação Fellype'] || '—';
+                const notaH = v['Pontuação Hwlly'] || '—';
+                const artigo = String(v['Artigo'] || '');
+                const paragrafos = artigo.split(/\n+/).filter(p => p.trim());
+                const minutos = tempoDeLeitura(artigo);
+
+                const fichaItens = [
+                    { label: I18N.t('modal.country'), valor: pais },
+                    { label: I18N.t('modal.region'), valor: regiao },
+                    { label: I18N.t('modal.grapes'), valor: uva },
+                    { label: I18N.t('modal.type'), valor: tipo },
+                    { label: I18N.t('modal.vintage'), valor: safra },
+                    { label: I18N.t('modal.abv'), valor: teor },
+                    { label: I18N.t('modal.classification'), valor: classificacao },
+                ].filter(f => f.valor && f.valor !== '-' && f.valor !== 'N/A');
+
+                container.innerHTML = `
+                    <div class="post-hero" style="background-image:url('${foto}')">
+                        <div class="post-hero-inner">
+                            <span class="post-eyebrow"><i class="fas fa-feather-alt" aria-hidden="true"></i> ${I18N.t('post.eyebrow')}</span>
+                            <h1 class="post-title">${nome}</h1>
+                        </div>
+                    </div>
+
+                    <p class="post-byline">
+                        <strong>${I18N.t('post.by')}</strong>
+                        <span class="dot">·</span>${data_}
+                        <span class="dot">·</span>${minutos} ${I18N.t('post.min_read')}
+                        ${produtor ? `<span class="dot">·</span>${produtor}` : ''}
+                    </p>
+
+                    <div class="post-body">
+                        ${paragrafos.map(p => `<p>${p.replace(/</g, '&lt;')}</p>`).join('')}
+                    </div>
+
+                    <div class="post-verdict">
+                        <div class="post-verdict-box">
+                            <div class="post-verdict-label">Fellype</div>
+                            <div class="post-verdict-valor">${notaF}</div>
+                        </div>
+                        <div class="post-verdict-box">
+                            <div class="post-verdict-label">Hwlly</div>
+                            <div class="post-verdict-valor">${notaH}</div>
+                        </div>
+                    </div>
+
+                    ${fichaItens.length ? `
+                    <div class="post-ficha">
+                        <div class="post-ficha-titulo">${I18N.t('post.about_wine')}</div>
+                        <div class="post-ficha-grid">
+                            ${fichaItens.map(f => `
+                                <div class="post-ficha-item">
+                                    <div class="post-ficha-label">${f.label}</div>
+                                    <div class="post-ficha-valor">${f.valor}</div>
+                                </div>`).join('')}
+                        </div>
+                    </div>` : ''}
+
+                    <p class="post-voltar"><a href="blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${I18N.t('post.back_to_blog')}</a></p>
+                `;
+            } catch (e) {
+                container.innerHTML = `
+                    <div class="post-erro">
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        <p>${I18N.t('blog.error_text')}</p>
+                    </div>`;
+            }
+        }
+
+        carregarPost();
+        window.addEventListener('i18n:change', carregarPost);
+    </script>
+</body>
+</html>
