@@ -745,6 +745,93 @@ footer {
     white-space: pre-line;
 }
 
+.artigo-btn-gerar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px dashed rgba(198, 161, 91, 0.4);
+    background: rgba(198, 161, 91, 0.06);
+    color: var(--dourado-claro);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transicao);
+}
+.artigo-btn-gerar:hover { background: rgba(198, 161, 91, 0.12); border-color: rgba(198, 161, 91, 0.6); }
+
+.artigo-btn-mini {
+    background: none;
+    border: 1px solid var(--borda);
+    color: var(--subtexto);
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transicao);
+}
+.artigo-btn-mini:hover { color: var(--dourado-claro); border-color: rgba(198, 161, 91, 0.4); }
+
+.wine-modal-artigo-edit {
+    width: 100%;
+    background: var(--superficie);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--texto);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    resize: vertical;
+    box-sizing: border-box;
+}
+.wine-modal-artigo-edit:focus { outline: none; border-color: rgba(198, 161, 91, 0.5); }
+
+.wine-modal-artigo-acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.artigo-btn-aprovar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: var(--transicao);
+}
+.artigo-btn-aprovar:hover { filter: brightness(1.1); }
+
+.wine-modal-artigo-status {
+    font-size: 0.8rem;
+    color: var(--subtexto);
+    font-family: 'Outfit', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.wine-modal-artigo-status.erro { color: #d98080; }
+
 .share-btn {
     flex: 1;
     display: flex;
