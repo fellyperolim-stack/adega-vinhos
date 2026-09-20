@@ -286,10 +286,10 @@ document.addEventListener('error', (e) => {
                             <div class="wine-modal-notas" id="modal-notas"></div>
                             <div class="wine-modal-share">
                                 <button class="share-btn share-whatsapp" onclick="WineModal.shareWhatsApp()">
-                                    <span class="share-emoji" aria-hidden="true">💬</span> WhatsApp
+                                    <span class="share-icon share-icon-whatsapp" aria-hidden="true"><i class="fab fa-whatsapp"></i></span> WhatsApp
                                 </button>
                                 <button class="share-btn share-instagram" onclick="WineModal.shareInstagram()">
-                                    <span class="share-emoji" aria-hidden="true">📸</span> Instagram
+                                    <span class="share-icon share-icon-instagram" aria-hidden="true"><i class="fab fa-instagram"></i></span> Instagram
                                 </button>
                             </div>
                         </div>
