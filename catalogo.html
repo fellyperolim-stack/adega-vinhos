@@ -399,6 +399,7 @@ const getFlagUrl = (pais) => {
         function toVinhoObj(v) {
             const notaF = parseFloat2(v['Pontuação Fellype']);
             const notaH = parseFloat2(v['Pontuação Hwlly']);
+            const idx = vinhos.indexOf(v);
             return {
                 nome: v['Nome do Vinho'],
                 produtor: v['Produtor'] || v['Vinícola'] || '',
@@ -413,6 +414,7 @@ const getFlagUrl = (pais) => {
                 notaF: notaF || null,
                 notaH: notaH || null,
                 foto: resolveFoto(v),
+                numero: idx >= 0 ? vinhos.length - idx : null,
             };
         }
 

@@ -394,6 +394,53 @@ document.addEventListener('error', (e) => {
             ctx.fillRect(0, 0, W, PHOTO_H);
         }
 
+        // selo de nota estilo carimbo, sobre a foto (fora da zona que o Instagram cobre no topo)
+        const notaF = parseFloat(String(vinho.notaF).replace(',', '.')) || null;
+        const notaH = parseFloat(String(vinho.notaH).replace(',', '.')) || null;
+        let notaMedia = null;
+        if (notaF && notaH) notaMedia = ((notaF + notaH) / 2).toFixed(1);
+        else if (notaF) notaMedia = notaF.toFixed(1);
+        else if (notaH) notaMedia = notaH.toFixed(1);
+
+        if (notaMedia) {
+            const bx = W - 148, by = 346, r = 86;
+            ctx.save();
+            ctx.translate(bx, by);
+            ctx.rotate(-8 * Math.PI / 180);
+
+            ctx.beginPath();
+            ctx.arc(0, 0, r, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(10,7,7,0.55)';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = 'rgba(198,161,91,0.85)';
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, r - 10, 0, Math.PI * 2);
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = 'rgba(198,161,91,0.5)';
+            ctx.stroke();
+
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#C6A15B';
+            ctx.font = '18px Georgia, serif';
+            ctx.fillText('★ ★ ★ ★ ★', 0, -18);
+
+            ctx.fillStyle = '#F1E2B8';
+            ctx.font = "600 46px Cinzel, Georgia, serif";
+            ctx.fillText(notaMedia, 0, 30);
+
+            ctx.fillStyle = '#DDB975';
+            ctx.font = "600 13px 'Outfit', Arial, sans-serif";
+            setLetterSpacing(ctx, 2);
+            ctx.fillText('NOTA MÉDIA', 0, 52);
+            setLetterSpacing(ctx, 0);
+
+            ctx.restore();
+            ctx.textAlign = 'left';
+        }
+
         // transição foto → painel (topo fica limpo: zona coberta pelo cabeçalho do Instagram nos Stories)
         const grad = ctx.createLinearGradient(0, PHOTO_H - 280, 0, PHOTO_H);
         grad.addColorStop(0, 'rgba(21,16,15,0)');
@@ -410,6 +457,16 @@ document.addEventListener('error', (e) => {
 
         ctx.textAlign = 'left';
         let cy = PHOTO_H + 78;
+
+        // numeração da coleção (toque pessoal, quando disponível)
+        if (vinho.numero) {
+            ctx.fillStyle = 'rgba(221,185,117,0.85)';
+            ctx.font = "600 20px 'Outfit', Arial, sans-serif";
+            setLetterSpacing(ctx, 3);
+            ctx.fillText(`DEGUSTAÇÃO Nº ${vinho.numero}`, PAD, cy - 18);
+            setLetterSpacing(ctx, 0);
+            cy += 12;
+        }
 
         // selo do tipo de vinho
         if (vinho.tipo && vinho.tipo !== '-') {
@@ -566,6 +623,28 @@ document.addEventListener('error', (e) => {
         ctx.fillText('ADEGA FELLYPE & HWLLY', W / 2, cy);
         setLetterSpacing(ctx, 0);
         ctx.textAlign = 'left';
+
+        // textura de grão + vinheta sutil (acabamento editorial)
+        const noiseCanvas = document.createElement('canvas');
+        noiseCanvas.width = 180; noiseCanvas.height = 180;
+        const noiseCtx = noiseCanvas.getContext('2d');
+        const noiseData = noiseCtx.createImageData(180, 180);
+        for (let i = 0; i < noiseData.data.length; i += 4) {
+            const v = Math.random() < 0.5 ? 0 : 255;
+            noiseData.data[i] = v;
+            noiseData.data[i + 1] = v;
+            noiseData.data[i + 2] = v;
+            noiseData.data[i + 3] = Math.random() * 22;
+        }
+        noiseCtx.putImageData(noiseData, 0, 0);
+        ctx.fillStyle = ctx.createPattern(noiseCanvas, 'repeat');
+        ctx.fillRect(0, 0, W, H);
+
+        const vignette = ctx.createRadialGradient(W / 2, H / 2, H * 0.32, W / 2, H / 2, H * 0.72);
+        vignette.addColorStop(0, 'rgba(0,0,0,0)');
+        vignette.addColorStop(1, 'rgba(0,0,0,0.4)');
+        ctx.fillStyle = vignette;
+        ctx.fillRect(0, 0, W, H);
 
         // moldura dourada
         ctx.strokeStyle = 'rgba(198,161,91,0.55)';
