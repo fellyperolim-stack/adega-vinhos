@@ -463,9 +463,9 @@ document.addEventListener('error', (e) => {
             ctx.fillStyle = 'rgba(221,185,117,0.85)';
             ctx.font = "600 20px 'Outfit', Arial, sans-serif";
             setLetterSpacing(ctx, 3);
-            ctx.fillText(`DEGUSTAÇÃO Nº ${vinho.numero}`, PAD, cy - 18);
+            ctx.fillText(`DEGUSTAÇÃO Nº ${vinho.numero}`, PAD, cy - 24);
             setLetterSpacing(ctx, 0);
-            cy += 12;
+            cy += 26;
         }
 
         // selo do tipo de vinho
@@ -486,7 +486,7 @@ document.addEventListener('error', (e) => {
             ctx.fillText(tipoTxt, PAD + pillW / 2, cy - 1);
             ctx.textAlign = 'left';
             setLetterSpacing(ctx, 0);
-            cy += 54;
+            cy += 70;
         }
 
         // nome do vinho (até 2 linhas)
