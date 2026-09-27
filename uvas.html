@@ -29,16 +29,15 @@
 
         .uva-group {
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid #2E2523;
             border-radius: 14px;
             overflow: hidden;
             transition: var(--transicao);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
         .uva-group:hover { border-color: rgba(198, 161, 91, 0.25); }
 
         .uva-header {
-            background: linear-gradient(90deg, #221b1a, #1a1413);
+            background: var(--card);
             padding: 18px 20px;
             cursor: pointer;
             display: flex;
@@ -49,29 +48,28 @@
 
         .uva-header h2 {
             margin: 0;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            color: var(--dourado-claro);
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            line-height: 1.15;
+            color: var(--titulo);
             display: flex;
             align-items: center;
             gap: 12px;
-            text-transform: uppercase;
-            font-weight: 400;
-            letter-spacing: 2px;
+            font-weight: 600;
         }
 
         .btn-ia {
             background: transparent;
             border: 1px solid rgba(198, 161, 91, 0.3);
             color: var(--dourado);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.68rem;
+            padding: 0 14px;
+            min-height: 40px;
+            border-radius: 999px;
+            font-size: 0.88rem;
             cursor: pointer;
             transition: var(--transicao);
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-corpo);
             font-weight: 500;
-            letter-spacing: 0.5px;
         }
         .btn-ia:hover { background: rgba(198, 161, 91, 0.1); border-color: var(--dourado); }
 
@@ -87,11 +85,11 @@
             padding: 16px;
             border-radius: 10px;
             margin-bottom: 18px;
-            font-size: 0.86rem;
+            font-size: 1.15rem;
             color: var(--dourado-claro);
             display: none;
             font-style: italic;
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-display);
             line-height: 1.7;
             opacity: 0.9;
         }
@@ -109,44 +107,39 @@
             transition: var(--transicao);
             cursor: pointer;
         }
-        .wine-card:hover {
-            transform: translateX(4px);
-            border-color: rgba(138, 34, 51, 0.4);
-            background: rgba(255, 255, 255, 0.04);
-        }
+        .wine-card:hover { border-color: var(--borda-dourada); background: rgba(255, 255, 255, 0.04); }
 
-        .wine-img { width: 56px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .wine-img { width: 56px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; background: var(--card-alt); }
 
         .wine-info h3 {
             margin: 0;
-            font-size: 0.88rem;
-            color: var(--texto);
-            line-height: 1.35;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 400;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--titulo);
+            line-height: 1.2;
         }
 
         .wine-info p {
             margin: 4px 0 0;
-            font-size: 0.76rem;
-            color: var(--texto-fraco);
-            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            color: var(--subtexto);
         }
         .wine-info p i { color: var(--dourado); opacity: 0.8; margin-right: 3px; }
 
         .rating-badge {
             margin-left: auto;
-            background: rgba(198, 161, 91, 0.07);
-            color: var(--dourado);
-            padding: 5px 10px;
-            border-radius: 6px;
+            background: var(--card-alt);
+            color: var(--dourado-claro);
+            padding: 4px 10px;
+            border-radius: 999px;
             font-weight: 600;
-            font-size: 0.82rem;
-            min-width: 48px;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            min-width: 52px;
             text-align: center;
-            border: 1px solid rgba(198, 161, 91, 0.15);
             flex-shrink: 0;
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-display);
         }
 
         /* Skeleton */
@@ -159,22 +152,18 @@
         @media (max-width: 992px) {
             .wine-grid { grid-template-columns: 1fr; }
             .uva-header { padding: 15px 16px; }
-            .uva-header h2 { font-size: 0.9rem; }
         }
 
         @media (max-width: 768px) {
             .content-area { padding: 16px 4%; }
             .uva-header { min-height: 52px; }
-            .btn-ia { padding: 8px 14px; font-size: 0.8rem; min-height: 36px; }
             .wine-item { padding: 12px 14px; min-height: 60px; }
             .wine-item-img { width: 48px; height: 48px; }
         }
 
         @media (max-width: 480px) {
-            .uva-header h2 { font-size: 0.88rem; }
             .wine-item-name { font-size: 0.85rem; }
             .wine-item-sub { font-size: 0.72rem; }
-            .btn-ia { font-size: 0.78rem; padding: 8px 10px; }
         }
 
         @media (hover: none) {
@@ -300,7 +289,7 @@
 
                 section.innerHTML = `
                     <div class="uva-header" onclick="this.parentElement.classList.toggle('active')">
-                        <h2><i class="fas fa-seedling" style="color:var(--vinho-vivo); font-size:0.9rem;" aria-hidden="true"></i> ${uva}</h2>
+                        <h2><i class="fas fa-seedling" style="color:var(--dourado); font-size:0.95rem;" aria-hidden="true"></i> ${uva}</h2>
                         <div style="display:flex; align-items:center; gap:15px;">
                             <button class="btn-ia" onclick="perguntarIA('${uva.replace(/'/g,"\\'")}', event)" title="${I18N.t('uvas.btn_about')}">
                                 <i class="fas fa-magic" aria-hidden="true"></i> <span data-i18n="uvas.btn_about">${I18N.t('uvas.btn_about')}</span>

@@ -2,9 +2,11 @@
    ADEGA FELLYPE & HWLLY — Estilos compartilhados
    shared.css · importado por todas as páginas
    Paleta 2.0: bordô profundo + latão champanhe
+   Redesign 3.0: Cormorant Garamond nos títulos, Cinzel só na marca,
+   caixa-alta só em micro-rótulos, cores sólidas (sem degradês)
    ===================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap');
 
 :root {
     /* Vinho */
@@ -42,7 +44,20 @@
     --raio: 14px;
     --raio-sm: 10px;
     --transicao: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-    --nav-h: 68px;
+    --nav-h: 72px;
+    --tabbar-h: 68px;
+
+    /* Tipografia */
+    --font-display: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+    --font-marca: 'Cinzel', 'Times New Roman', serif;
+    --font-corpo: 'Outfit', system-ui, sans-serif;
+    --titulo: #F3E6CC;
+
+    /* Tipos de vinho (ponto de cor nos cards e filtros) */
+    --tipo-tinto: #9E2A3C;
+    --tipo-branco: #E3CF8A;
+    --tipo-rose: #E39A9A;
+    --tipo-espumante: #F4EBD6;
 }
 
 /* --- BASE --- */
@@ -60,13 +75,26 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Cormorant usa algarismos "antigos" por padrão; notas e contagens ficam alinhadas assim */
+    font-variant-numeric: lining-nums;
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Cinzel', 'Times New Roman', serif;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.15;
     text-wrap: balance;
+}
+
+/* Micro-rótulo: o único lugar onde caixa-alta espaçada é usada */
+.rotulo {
+    font-family: var(--font-corpo);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dourado);
 }
 
 p { text-wrap: pretty; }
@@ -97,27 +125,28 @@ img { max-width: 100%; }
 .skip-link {
     position: absolute;
     left: 50%;
-    top: -60px;
-    transform: translateX(-50%);
+    top: 0;
+    transform: translate(-50%, -100%);
     background: var(--vinho-vivo);
     color: #fff;
     padding: 10px 20px;
     border-radius: 0 0 10px 10px;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
     z-index: 2200;
-    transition: top 0.2s;
+    transition: transform 0.2s;
 }
-.skip-link:focus { top: 0; color: #fff; }
+.skip-link:focus { transform: translate(-50%, 0); color: #fff; }
 
 /* --- NAVBAR --- */
 .navbar {
-    background: rgba(21, 16, 15, 0.92);
+    background: rgba(21, 16, 15, 0.94);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 clamp(16px, 5%, 48px);
+    gap: 16px;
+    padding: 0 clamp(16px, 5.5%, 80px);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -133,40 +162,32 @@ img { max-width: 100%; }
     gap: 12px;
     color: var(--dourado-claro);
     text-decoration: none;
+    min-height: 44px;
 }
 
 .brand-mark {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 9px;
     flex-shrink: 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 
 .brand-name {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-marca);
     font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.16em;
+    font-size: 1rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--dourado-claro);
     white-space: nowrap;
 }
 
-.brand-tagline {
-    font-size: 0.58rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--texto-fraco);
-    font-weight: 500;
-}
-
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 6px;
+    gap: 4px;
     margin: 0;
     padding: 0;
     align-items: center;
@@ -176,16 +197,15 @@ img { max-width: 100%; }
 .nav-link-style {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     text-decoration: none;
-    color: var(--subtexto);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    color: var(--texto-suave);
+    font-size: 0.95rem;
     transition: var(--transicao);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
-    padding: 9px 12px;
+    font-family: var(--font-corpo);
+    font-weight: 400;
+    padding: 10px 14px;
+    min-height: 44px;
     border-radius: 8px;
     background: none;
     border: none;
@@ -193,14 +213,26 @@ img { max-width: 100%; }
 }
 
 .nav-links a:hover,
-.nav-link-style:hover { color: var(--dourado-claro); background: var(--superficie); }
+.nav-link-style:hover { color: var(--titulo); background: var(--superficie); }
 
 .nav-links a.active,
 .nav-link-style.active {
-    color: var(--dourado-claro);
-    background: rgba(138, 34, 51, 0.22);
-    box-shadow: inset 0 0 0 1px var(--borda-dourada);
+    color: var(--titulo);
+    box-shadow: inset 0 -2px 0 var(--dourado);
+    border-radius: 0;
 }
+
+/* Botão "Registrar vinho" do menu (específico o bastante para vencer .nav-links a) */
+.nav-links a.nav-registrar {
+    background: var(--vinho-vivo);
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: var(--raio-sm);
+    box-shadow: none;
+}
+.nav-links a.nav-registrar:hover { background: #9C2A3D; color: #fff; }
+.nav-links a.nav-registrar.active { box-shadow: 0 0 0 2px var(--dourado); border-radius: var(--raio-sm); }
 
 /* --- DROPDOWN --- */
 .dropdown { position: relative; display: inline-block; }
@@ -217,7 +249,7 @@ img { max-width: 100%; }
     z-index: 10;
     border: 1px solid var(--borda-dourada);
     border-radius: 12px;
-    top: 42px;
+    top: 48px;
     right: 0;
     overflow: hidden;
     padding: 6px;
@@ -230,8 +262,8 @@ img { max-width: 100%; }
     display: block;
     text-align: left;
     text-transform: none !important;
-    font-size: 0.8rem;
-    letter-spacing: 0.3px;
+    font-size: 0.95rem;
+    letter-spacing: 0;
     border-radius: 8px;
     font-family: 'Outfit', sans-serif;
     font-weight: 400;
@@ -239,13 +271,14 @@ img { max-width: 100%; }
 }
 
 .dropdown-content a:hover { background: rgba(138, 34, 51, 0.28); color: var(--dourado-claro) !important; }
-.dropdown-content a.active { color: var(--dourado) !important; background: var(--dourado-suave); }
+.dropdown-content a.active { color: var(--dourado) !important; background: var(--dourado-suave); box-shadow: none; border-radius: 8px; }
 
 .dropdown:hover .dropdown-content,
 .dropdown-content.open { display: block; }
 
 /* --- SELETOR DE IDIOMA --- */
-.lang-switcher { position: relative; display: inline-block; margin-left: 4px; }
+.lang-switcher { position: relative; display: inline-block; margin-left: 14px; }
+.nav-registrar-li { margin-left: 8px; }
 
 .lang-trigger {
     display: inline-flex;
@@ -254,13 +287,14 @@ img { max-width: 100%; }
     background: none;
     border: 1px solid var(--borda);
     color: var(--subtexto);
-    padding: 8px 11px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    min-height: 44px;
+    border-radius: 10px;
     cursor: pointer;
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-family: var(--font-corpo);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
     transition: var(--transicao);
 }
 .lang-trigger:hover { color: var(--dourado-claro); border-color: var(--borda-dourada); background: var(--superficie); }
@@ -280,7 +314,7 @@ img { max-width: 100%; }
     display: none;
     position: absolute;
     right: 0;
-    top: 42px;
+    top: 50px;
     background: rgba(29, 23, 22, 0.98);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -304,10 +338,10 @@ img { max-width: 100%; }
     background: none;
     border: none;
     color: var(--texto-suave);
-    font-size: 0.8rem;
-    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-family: var(--font-corpo);
     font-weight: 400;
-    letter-spacing: 0.2px;
+    letter-spacing: 0;
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.18s, color 0.18s;
@@ -337,47 +371,36 @@ img { max-width: 100%; }
 .header-section {
     text-align: center;
     padding: clamp(44px, 7vw, 72px) 16px 36px;
-    background:
-        radial-gradient(120% 90% at 50% 0%, rgba(90, 23, 40, 0.38), transparent 65%),
-        linear-gradient(to bottom, var(--bg-deep), var(--bg));
+    background: var(--bg);
     position: relative;
 }
 
 .header-section h1 {
-    color: var(--dourado);
-    font-family: 'Cinzel', serif;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
+    color: var(--titulo);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0;
     margin: 14px 0 6px;
-    font-size: clamp(1.25rem, 3.4vw, 1.85rem);
-}
-
-.header-section h1::after {
-    content: '';
-    display: block;
-    width: 42px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--dourado), transparent);
-    margin: 16px auto 0;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.05;
 }
 
 .header-section .subtitulo {
     color: var(--subtexto);
-    font-size: 0.9rem;
-    margin: 10px auto 0;
-    max-width: 44ch;
+    font-size: 1.02rem;
+    margin: 12px auto 0;
+    max-width: 52ch;
 }
 
 .shiba-heads { display: flex; justify-content: center; gap: 14px; margin-bottom: 10px; }
 
 .shiba-spotlight {
-    background: linear-gradient(150deg, var(--card-alt), var(--card));
+    background: var(--card-alt);
     border-radius: 18px;
     padding: 2px;
     display: inline-flex;
     border: 1px solid var(--borda-dourada);
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
 .avatar-lg {
@@ -396,103 +419,102 @@ img { max-width: 100%; }
     align-items: center;
     justify-content: center;
     gap: 9px;
-    padding: 14px 22px;
-    background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+    padding: 12px 24px;
+    background: var(--vinho-vivo);
     color: #fff;
     text-decoration: none;
     border-radius: var(--raio-sm);
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-weight: 600;
+    font-family: var(--font-corpo);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
     transition: var(--transicao);
-    border: 1px solid var(--borda-dourada);
+    border: 1px solid transparent;
     cursor: pointer;
-    min-height: 46px;
+    min-height: 48px;
     white-space: nowrap;
 }
 .btn-primario:hover,
-.btn-explorar:hover {
-    color: #fff;
-    box-shadow: 0 8px 26px rgba(138, 34, 51, 0.4);
-    transform: translateY(-1px);
-    border-color: rgba(198, 161, 91, 0.4);
-}
+.btn-explorar:hover { color: #fff; background: #9C2A3D; }
 
 .btn-secundario {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 12px 24px;
     background: none;
-    border: 1px solid var(--borda-dourada);
-    color: var(--dourado);
+    border: 1px solid #5A4A3E;
+    color: var(--dourado-claro);
+    text-decoration: none;
     border-radius: var(--raio-sm);
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    font-weight: 600;
+    font-family: var(--font-corpo);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
     cursor: pointer;
     transition: var(--transicao);
-    min-height: 44px;
+    min-height: 48px;
     white-space: nowrap;
 }
-.btn-secundario:hover { background: var(--dourado-suave); color: var(--dourado-claro); }
+.btn-secundario:hover { background: var(--dourado-suave); color: var(--titulo); border-color: var(--dourado); }
+
+.link-seta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dourado-claro);
+    font-weight: 500;
+    font-size: 0.95rem;
+    min-height: 44px;
+}
+.link-seta:hover { color: var(--titulo); }
 
 /* --- FOOTER --- */
 footer {
-    text-align: center;
-    padding: 56px 20px 40px;
+    padding: 40px clamp(16px, 5.5%, 80px) 36px;
     color: var(--texto-fraco);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     border-top: 1px solid var(--borda);
-    font-family: 'Outfit', sans-serif;
-    background: linear-gradient(to top, rgba(59, 14, 26, 0.28), transparent);
-    letter-spacing: 0.3px;
-    line-height: 1.9;
+    font-family: var(--font-corpo);
+    background: var(--bg);
+    line-height: 1.7;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px 32px;
 }
 
 .footer-brand {
-    font-family: 'Cinzel', serif;
+    font-family: var(--font-marca);
+    font-weight: 600;
     color: var(--dourado);
-    font-size: 0.86rem;
-    letter-spacing: 0.22em;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    margin-bottom: 20px;
 }
 
 .footer-links {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 6px 8px;
-    margin-bottom: 22px;
+    gap: 2px 4px;
 }
 
 .footer-links a {
     color: var(--subtexto);
     text-decoration: none;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
+    font-size: 0.9rem;
     transition: var(--transicao);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 500;
-    padding: 8px 12px;
+    font-family: var(--font-corpo);
+    padding: 10px 10px;
     border-radius: 8px;
 }
 .footer-links a:hover { color: var(--dourado-claro); background: var(--superficie); }
 
-.footer-divider {
-    border: none;
-    border-top: 1px solid var(--borda);
-    margin: 0 auto 22px;
-    max-width: 280px;
-}
+.footer-divider { display: none; }
 
-.footer-nota { color: var(--texto-fraco); font-size: 0.76rem; }
+.footer-nota { color: var(--texto-fraco); font-size: 0.85rem; text-align: right; }
 
 /* --- BACK TO TOP --- */
 .back-to-top {
@@ -545,7 +567,7 @@ footer {
     border: 1px solid var(--borda-dourada);
     background: var(--dourado-suave);
     color: var(--dourado);
-    font-size: 0.66rem;
+    font-size: 0.75rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     font-weight: 600;
@@ -620,17 +642,17 @@ footer {
 .wine-modal-body { padding: 26px; }
 
 .wine-modal-name {
-    font-size: 1.3rem;
-    color: var(--dourado-claro);
-    font-family: 'Cinzel', serif;
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    font-size: 1.9rem;
+    color: var(--titulo);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0;
     margin: 0 0 4px;
-    line-height: 1.35;
+    line-height: 1.1;
 }
 
 .wine-modal-produtor {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--subtexto);
     margin: 0 0 22px;
     font-family: 'Outfit', sans-serif;
@@ -651,7 +673,7 @@ footer {
 }
 
 .wine-modal-field-label {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--dourado);
@@ -660,7 +682,7 @@ footer {
     margin-bottom: 3px;
 }
 
-.wine-modal-field-value { font-size: 0.9rem; color: var(--texto); font-family: 'Outfit', sans-serif; }
+.wine-modal-field-value { font-size: 0.95rem; color: var(--texto); font-family: 'Outfit', sans-serif; }
 
 .wine-modal-notas {
     display: flex;
@@ -671,17 +693,15 @@ footer {
 
 .wine-modal-nota-box {
     flex: 1;
-    background: var(--dourado-suave);
-    border: 1px solid var(--borda-dourada);
+    background: var(--card-alt);
+    border: 1px solid #3A302D;
     border-radius: var(--raio-sm);
     padding: 14px;
     text-align: center;
 }
 
 .wine-modal-nota-label {
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
+    font-size: 0.85rem;
     color: var(--subtexto);
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
@@ -689,10 +709,10 @@ footer {
 }
 
 .wine-modal-nota-valor {
-    font-size: 1.9rem;
+    font-size: 2.4rem;
     font-weight: 600;
-    color: var(--dourado);
-    font-family: 'Cinzel', serif;
+    color: var(--dourado-claro);
+    font-family: var(--font-display);
     line-height: 1;
 }
 
@@ -727,10 +747,10 @@ footer {
 }
 
 .wine-modal-artigo-titulo {
-    font-family: 'Cinzel', serif;
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0;
     color: var(--dourado);
     display: inline-flex;
     align-items: center;
@@ -738,7 +758,7 @@ footer {
 }
 
 .wine-modal-artigo-texto {
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     line-height: 1.75;
     color: var(--texto-suave);
     font-family: 'Outfit', sans-serif;
@@ -771,10 +791,11 @@ footer {
     padding: 7px 12px;
     border-radius: 8px;
     font-family: 'Outfit', sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
+    min-height: 40px;
     align-items: center;
     gap: 6px;
     transition: var(--transicao);
@@ -811,7 +832,7 @@ footer {
     padding: 11px 18px;
     border-radius: 10px;
     border: none;
-    background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
+    background: var(--vinho-vivo);
     color: #fff;
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
@@ -819,7 +840,7 @@ footer {
     cursor: pointer;
     transition: var(--transicao);
 }
-.artigo-btn-aprovar:hover { filter: brightness(1.1); }
+.artigo-btn-aprovar:hover { background: #9C2A3D; }
 
 .wine-modal-artigo-status {
     font-size: 0.8rem;
@@ -902,25 +923,88 @@ footer {
     transform: translateX(-50%) translateY(0);
 }
 
+/* --- BARRA INFERIOR (celular) --- */
+.tabbar { display: none; }
+
 /* --- MOBILE --- */
 @media (max-width: 992px) {
-    .menu-toggle { display: flex; }
+    .menu-toggle { display: none; }
 
+    body { padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px)); }
+    body.sem-tabbar { padding-bottom: 0; }
+
+    /* Sem backdrop-filter aqui: ele prenderia o painel "Explorar" (position: fixed) dentro da barra */
+    .navbar { height: 60px; background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+    .tabbar {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: center;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1001;
+        height: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+        padding: 4px 6px env(safe-area-inset-bottom, 0px);
+        background: rgba(29, 23, 22, 0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid #2E2523;
+    }
+    body.sem-tabbar .tabbar { display: none; }
+
+    .tab-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-height: 56px;
+        font-family: var(--font-corpo);
+        font-size: 0.75rem;
+        color: var(--subtexto);
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 0;
+    }
+    .tab-item i { font-size: 1.15rem; }
+    .tab-item.active,
+    .tab-item[aria-expanded="true"] { color: var(--dourado-claro); }
+    .tab-item:hover { color: var(--titulo); }
+
+    .tab-registrar { justify-content: center; }
+    .tab-registrar span.tab-mais {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: var(--vinho-vivo);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    .tab-registrar.active span.tab-mais { box-shadow: 0 0 0 2px var(--dourado); }
+
+    /* Painel "Explorar": abre acima da barra inferior */
     .nav-links {
         display: none;
         flex-direction: column;
-        position: absolute;
-        top: var(--nav-h);
+        position: fixed;
         left: 0;
-        width: 100%;
-        background: rgba(21, 16, 15, 0.985);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        padding: 14px 16px 22px;
-        gap: 4px;
-        border-bottom: 1px solid var(--borda-dourada);
-        text-align: center;
-        box-shadow: 0 22px 44px rgba(0, 0, 0, 0.6);
+        right: 0;
+        bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+        max-height: calc(100vh - 140px);
+        overflow-y: auto;
+        background: var(--card);
+        padding: 14px 16px 18px;
+        gap: 2px;
+        border-top: 1px solid var(--borda-dourada);
+        border-radius: 18px 18px 0 0;
+        box-shadow: 0 -22px 44px rgba(0, 0, 0, 0.6);
     }
 
     .nav-links.active { display: flex; }
@@ -929,51 +1013,50 @@ footer {
 
     .nav-links a,
     .nav-link-style {
-        font-size: 0.85rem;
-        letter-spacing: 0.12em;
+        font-size: 1.02rem;
         width: 100%;
         min-height: 48px;
-        justify-content: center;
+        justify-content: flex-start;
+        padding: 10px 14px;
     }
+    .nav-links a.active,
+    .nav-link-style.active { box-shadow: inset 3px 0 0 var(--dourado); background: var(--superficie); border-radius: 8px; }
 
+    /* No painel, os atalhos que já estão na barra inferior somem */
+    .nav-links .so-desktop { display: none; }
+
+    .dropbtn { display: none !important; }
     .dropdown { width: 100%; }
-
-    .dropdown:hover .dropdown-content { display: block; }
-
-    .dropdown-content {
+    .dropdown-content,
+    .dropdown:hover .dropdown-content {
         display: block !important;
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        pointer-events: none;
-        transition: max-height 0.35s ease, opacity 0.25s ease;
         position: static;
-        background: var(--superficie);
+        background: none;
         box-shadow: none;
         border: none;
-        border-radius: var(--raio-sm);
+        border-radius: 0;
         min-width: unset;
         width: 100%;
-        margin-top: 2px;
         padding: 0;
+        backdrop-filter: none;
     }
-
-    .dropdown-content.open { max-height: 420px; opacity: 1; pointer-events: auto; padding: 6px; }
-
     .dropdown-content a {
-        text-align: center !important;
-        min-height: 46px;
+        min-height: 48px;
         display: flex;
         align-items: center;
-        justify-content: center;
+        font-size: 1.02rem !important;
     }
 
+    .nav-links > .nav-registrar-li { display: none; }
+
     .wine-modal-grid { grid-template-columns: 1fr 1fr; }
-    .back-to-top { bottom: 20px; right: 20px; }
+    .back-to-top { bottom: calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom, 0px)); right: 16px; }
+    body.sem-tabbar .back-to-top { bottom: 20px; }
+    .wine-share-toast { bottom: calc(var(--tabbar-h) + 20px); }
     .wine-modal-close { width: 44px; height: 44px; }
 
-    .lang-switcher { width: 100%; margin-left: 0; margin-top: 4px; }
-    .lang-trigger { width: 100%; justify-content: center; min-height: 46px; font-size: 0.78rem; }
+    .lang-switcher { width: 100%; margin-left: 0; margin-top: 6px; }
+    .lang-trigger { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
     .lang-dropdown {
         display: block !important;
         max-height: 0;
@@ -993,27 +1076,26 @@ footer {
     }
     .lang-dropdown.open { max-height: 320px; opacity: 1; pointer-events: auto; padding: 6px; }
     .lang-option { justify-content: center; min-height: 46px; }
+
+    footer { flex-direction: column; align-items: flex-start; }
+    .footer-nota { text-align: left; }
 }
 
 @media (max-width: 768px) {
     .wine-modal { border-radius: 18px 18px 0 0; max-height: 92vh; }
-    .wine-modal-backdrop { align-items: flex-end; padding: 0; }
+    .wine-modal-backdrop { align-items: flex-end; padding: 0; z-index: 2100; }
     .wine-modal-img { height: 210px; border-radius: 18px 18px 0 0; }
     .wine-modal-body { padding: 20px; }
-    .wine-modal-name { font-size: 1.12rem; }
-    footer { padding: 40px 15px 32px; }
+    .wine-modal-name { font-size: 1.6rem; }
     .avatar-lg { width: 66px; height: 66px; }
 }
 
 @media (max-width: 480px) {
-    body { font-size: 0.95rem; }
-    .brand-name { font-size: 0.82rem; letter-spacing: 0.13em; }
-    .brand-tagline { font-size: 0.54rem; }
-    .brand-mark { width: 30px; height: 30px; }
+    .brand-name { font-size: 0.88rem; letter-spacing: 0.12em; }
+    .brand-mark { width: 32px; height: 32px; }
     .wine-modal-grid { gap: 6px; }
     .wine-modal-field { padding: 9px 11px; }
-    .wine-modal-field-value { font-size: 0.84rem; }
-    .back-to-top { bottom: 16px; right: 16px; width: 44px; height: 44px; }
+    .back-to-top { width: 44px; height: 44px; }
 }
 
 /* --- ESTADOS DE TOQUE --- */
@@ -1037,6 +1119,6 @@ footer {
 
 /* --- IMPRESSÃO --- */
 @media print {
-    .navbar, .back-to-top, .menu-toggle, footer { display: none !important; }
+    .navbar, .tabbar, .back-to-top, .menu-toggle, footer { display: none !important; }
     body { background: #fff; color: #000; }
 }
