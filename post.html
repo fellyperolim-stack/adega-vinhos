@@ -54,25 +54,25 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 3px;
+            font-family: var(--font-corpo);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--dourado-claro);
-            background: rgba(198, 161, 91, 0.14);
+            background: rgba(21, 16, 15, 0.7);
             border: 1px solid rgba(198, 161, 91, 0.4);
             padding: 7px 16px;
             border-radius: 30px;
             margin-bottom: 20px;
         }
         .post-title {
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-display);
             font-weight: 600;
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            color: #fff;
+            font-size: clamp(2.6rem, 6vw, 4.4rem);
+            color: var(--titulo);
             text-shadow: 0 4px 24px rgba(0,0,0,0.6);
-            line-height: 1.2;
+            line-height: 1.02;
             margin: 0;
         }
 
@@ -81,10 +81,9 @@
             margin: 26px auto 0;
             padding: 0 24px;
             text-align: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
+            font-family: var(--font-corpo);
+            font-size: 0.95rem;
             color: var(--subtexto);
-            letter-spacing: 0.4px;
         }
         .post-byline strong { color: var(--dourado-claro); font-weight: 600; }
         .post-byline .dot { margin: 0 8px; opacity: 0.5; }
@@ -103,8 +102,9 @@
             margin: 0 0 26px;
         }
         .post-body p:first-of-type::first-letter {
-            font-family: 'Cinzel', serif;
-            font-size: 3.6rem;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 4.4rem;
             float: left;
             line-height: 0.8;
             padding: 6px 10px 0 0;
@@ -120,26 +120,24 @@
         }
         .post-verdict-box {
             flex: 1;
-            background: var(--dourado-suave);
-            border: 1px solid var(--borda-dourada);
-            border-radius: var(--raio-sm);
-            padding: 18px;
+            background: var(--card-alt);
+            border: 1px solid #3A302D;
+            border-radius: 14px;
+            padding: 16px 18px;
             text-align: center;
         }
         .post-verdict-label {
-            font-size: 0.62rem;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
+            font-size: 0.9rem;
             color: var(--subtexto);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-family: var(--font-corpo);
+            margin-bottom: 4px;
         }
         .post-verdict-valor {
-            font-size: 2rem;
+            font-size: 2.6rem;
+            line-height: 1;
             font-weight: 600;
-            color: var(--dourado);
-            font-family: 'Cinzel', serif;
+            color: var(--dourado-claro);
+            font-family: var(--font-display);
         }
 
         .post-ficha {
@@ -150,11 +148,10 @@
             border-bottom: 1px solid var(--borda);
         }
         .post-ficha-titulo {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--dourado);
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--titulo);
             margin: 0 0 16px;
             text-align: center;
         }
@@ -165,18 +162,18 @@
         }
         .post-ficha-item { text-align: center; }
         .post-ficha-label {
-            font-size: 0.62rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.14em;
-            color: var(--texto-fraco);
-            font-family: 'Outfit', sans-serif;
+            color: var(--dourado);
+            font-family: var(--font-corpo);
             font-weight: 600;
             margin-bottom: 4px;
         }
         .post-ficha-valor {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--texto);
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-corpo);
         }
 
         .post-share {
@@ -193,10 +190,10 @@
             text-align: center;
             padding: 40px 20px 70px;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             color: var(--subtexto);
         }
-        .post-voltar a { color: var(--dourado); font-weight: 600; }
+        .post-voltar a { color: var(--dourado-claro); font-weight: 500; }
 
         .post-loading, .post-erro {
             padding: 120px 20px;
@@ -210,7 +207,7 @@
             .post-hero { height: 46vh; min-height: 300px; }
             .post-body p { font-size: 1rem; }
             .post-verdict { flex-direction: row; }
-            .post-verdict-valor { font-size: 1.5rem; }
+            .post-verdict-valor { font-size: 2rem; }
         }
     </style>
 </head>
@@ -357,7 +354,7 @@
                         </div>
                     </div>` : ''}
 
-                    <p class="post-voltar"><a href="blog.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> ${I18N.t('post.back_to_blog')}</a></p>
+                    <p class="post-voltar"><a href="blog.html">${I18N.t('post.back_to_blog')}</a></p>
                 `;
             } catch (e) {
                 container.innerHTML = `

@@ -25,304 +25,214 @@
     <link rel="stylesheet" href="shared.css">
 
     <style>
+        .pagina { --gutter: clamp(16px, 5.5vw, 80px); max-width: 1440px; margin: 0 auto; padding: 0 var(--gutter); }
+
         /* --- CABEÇALHO --- */
         .search-section {
-            padding: 65px 20px 15px;
-            text-align: center;
-            background: linear-gradient(to bottom, #1c1413, var(--bg));
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 12px 24px;
+            padding: clamp(36px, 5vw, 56px) 0 28px;
+            outline: none;
+        }
+        .search-section h1 { margin: 0; font-size: clamp(2.6rem, 5vw, 3.8rem); line-height: 1; color: var(--titulo); }
+        .search-section p.sub-titulo { margin: 10px 0 0; color: var(--subtexto); font-size: 1.05rem; }
+
+        .result-count { font-size: 0.98rem; color: var(--subtexto); white-space: nowrap; }
+        .result-count b { font-family: var(--font-display); font-size: 1.9rem; font-weight: 600; color: var(--dourado-claro); margin-right: 4px; }
+
+        /* --- BARRA ÚNICA DE CONTROLES --- */
+        .toolbar {
+            position: sticky;
+            top: calc(var(--nav-h) + 8px);
+            z-index: 50;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 16px;
+            background: rgba(29, 23, 22, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #2E2523;
         }
 
-        .search-section h1 {
-            color: var(--dourado);
-            font-size: 2rem;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 4px;
-            margin-bottom: 6px;
-        }
-
-        .search-section h1::after {
-            content: '';
-            display: block;
-            width: 36px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
-            margin: 12px auto 0;
-        }
-
-        .search-section p.sub-titulo {
-            color: var(--subtexto);
-            font-size: 0.88rem;
-            font-style: italic;
-            margin-bottom: 28px;
-            margin-top: 16px;
-            opacity: 0.8;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .search-container { position: relative; max-width: 580px; margin: 0 auto 20px; }
-        .search-container i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--dourado); opacity: 0.7; }
+        .search-container { position: relative; flex: 1 1 260px; min-width: 0; }
+        .search-container i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--texto-fraco); pointer-events: none; }
 
         #search {
             width: 100%;
-            padding: 14px 20px 14px 54px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03);
+            height: 48px;
+            padding: 0 16px 0 44px;
+            border-radius: 10px;
+            border: 1px solid #3A302D;
+            background: var(--bg);
             color: var(--texto);
             outline: none;
             transition: var(--transicao);
-            font-size: 0.92rem;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.3px;
+            font-size: 1rem;
+            font-family: var(--font-corpo);
         }
-        #search::placeholder { color: #7b6e68; }
-        #search:focus { border-color: rgba(198, 161, 91, 0.4); background: rgba(255, 255, 255, 0.04); }
+        #search::placeholder { color: var(--texto-fraco); }
+        #search:focus { border-color: var(--dourado); }
 
-        /* --- FILTROS --- */
         .filters-bar {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            padding: 0 20px 25px;
-            max-width: 900px;
-            margin: 0 auto;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid #3A302D;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .filters-bar::-webkit-scrollbar { display: none; }
 
         .filter-chip {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #a0938c;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.72rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: var(--texto-suave);
+            font-family: var(--font-corpo);
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transicao);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             white-space: nowrap;
+            transition: var(--transicao);
         }
-        .filter-chip:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado-claro); }
-        .filter-chip.active {
-            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
-            border-color: rgba(198, 161, 91, 0.2);
-            color: rgba(255, 255, 255, 0.9);
-        }
+        .filter-chip:hover { color: var(--titulo); background: var(--superficie-hover); }
+        .filter-chip.active { background: var(--vinho-escuro); color: var(--titulo); font-weight: 500; }
+        .filter-chip .tipo-ponto { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
         .sort-bar {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 6px;
-            padding: 0 20px 20px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.72rem;
-            color: #7b6e68;
-            letter-spacing: 0.5px;
+            gap: 8px;
+            height: 48px;
+            padding: 0 6px 0 14px;
+            border-radius: 10px;
+            border: 1px solid #3A302D;
+            font-size: 0.95rem;
+            color: var(--subtexto);
         }
-
-        .sort-btn {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            color: #8a7d76;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.72rem;
+        .sort-bar select {
+            height: 44px;
+            border: none;
+            background: transparent;
+            color: var(--texto);
+            font-family: var(--font-corpo);
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transicao);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
+            padding-right: 4px;
         }
-        .sort-btn:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado); }
-        .sort-btn.active { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado); background: rgba(198, 161, 91, 0.06); }
+        .sort-bar select option { background: var(--card); color: var(--texto); }
+
+        .view-toggle { display: flex; gap: 4px; padding: 4px; border-radius: 12px; border: 1px solid #3A302D; }
+        .view-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            color: var(--subtexto);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transicao);
+        }
+        .view-btn:hover { color: var(--titulo); }
+        .view-btn.active { background: var(--card-alt); color: var(--dourado-claro); }
 
         /* --- GRID E CARDS --- */
         .vinho-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 24px;
-            padding: 20px 5% 70px;
-            max-width: 1300px;
-            margin: 0 auto;
+            padding: 32px 0 72px;
         }
 
         .vinho-card {
-            background: var(--card);
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: var(--transicao);
-            cursor: pointer;
-            box-shadow: var(--sombra-card);
-        }
-        .vinho-card:hover {
-            transform: translateY(-7px);
-            border-color: rgba(198, 161, 91, 0.3);
-            box-shadow: var(--sombra-hover);
-        }
-
-        .vinho-img-container { width: 100%; aspect-ratio: 4 / 5; background: var(--card-alt); overflow: hidden; }
-        .vinho-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
-        .vinho-card:hover .vinho-img { transform: scale(1.04); }
-
-        .vinho-info { padding: 20px; }
-
-        .vinho-nome {
-            font-size: 1rem;
-            color: var(--dourado-claro);
-            margin: 0 0 6px 0;
-            font-family: 'Cinzel', serif;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            line-height: 1.4;
-        }
-
-        .vinho-data {
-            font-size: 0.72rem;
-            color: #7b6e68;
-            display: block;
-            margin-bottom: 12px;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.5px;
-        }
-
-        .vinho-detalhes {
-            font-size: 0.82rem;
-            color: var(--subtexto);
-            margin-bottom: 18px;
-            line-height: 1.6;
-            font-family: 'Outfit', sans-serif;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #2E2523;
+            transition: var(--transicao);
+            cursor: pointer;
         }
-        .vinho-detalhes i { color: var(--dourado); width: 14px; opacity: 0.85; }
-        .vinho-flag-icon { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+        .vinho-card:hover { border-color: var(--borda-dourada); transform: translateY(-3px); }
+
+        .vinho-img-container { position: relative; width: 100%; aspect-ratio: 4 / 5; background: var(--card-alt); overflow: hidden; }
+        .vinho-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .vinho-card:hover .vinho-img { transform: scale(1.04); }
+
+        .card-tag {
+            position: absolute;
+            top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(21, 16, 15, 0.88);
+            font-size: 0.8rem;
+            color: var(--texto-suave);
+        }
+        .card-tag.tipo { left: 12px; }
+        .card-tag.media { right: 12px; font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; line-height: 1.1; color: var(--dourado-claro); }
+        .card-tag .tipo-ponto { width: 8px; height: 8px; border-radius: 50%; }
+
+        .vinho-info { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
+
+        .vinho-nome { margin: 0; font-size: 1.4rem; line-height: 1.15; color: var(--titulo); }
+        .vinho-detalhes { font-size: 0.92rem; color: var(--subtexto); line-height: 1.5; }
+        .vinho-flag-icon { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; vertical-align: -1px; margin-right: 6px; }
+        .vinho-data { font-size: 0.85rem; color: var(--texto-fraco); }
 
         .notas {
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 14px;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid #2E2523;
+            font-size: 0.88rem;
+            color: var(--subtexto);
         }
-
-        .nota-box { text-align: center; flex: 1; }
-
-        .nota-box span {
-            display: block;
-            font-size: 0.58rem;
-            color: #7b6e68;
-            text-transform: uppercase;
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 1.5px;
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-
-        .nota-valor {
-            color: var(--dourado);
-            font-size: 1.2rem;
-            font-weight: 600;
-            font-family: 'Cinzel', serif;
-        }
+        .notas b { color: var(--dourado-claro); font-weight: 600; margin-left: 4px; }
+        .vinho-info .notas { margin-top: 8px; }
 
         /* --- EMPTY STATE --- */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--subtexto);
-            font-family: 'Outfit', sans-serif;
-            grid-column: 1 / -1;
-        }
-        .empty-state i { font-size: 2.5rem; color: #372e2b; margin-bottom: 18px; display: block; }
-        .empty-state h3 { color: #6a5d57; font-size: 1rem; margin: 0 0 8px; font-weight: 400; font-family: 'Cinzel', serif; letter-spacing: 1px; }
-        .empty-state p { margin: 0; font-size: 0.85rem; color: #7b6e68; }
-
-        .btn-limpar {
-            display: inline-block;
-            margin-top: 18px;
-            padding: 8px 22px;
-            border: 1px solid rgba(198, 161, 91, 0.4);
-            color: var(--dourado);
-            border-radius: 20px;
-            font-size: 0.72rem;
-            cursor: pointer;
-            background: none;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: 0.2s;
-        }
-        .btn-limpar:hover { background: var(--dourado); color: #000; }
+        .empty-state { text-align: center; padding: 72px 20px; color: var(--subtexto); grid-column: 1 / -1; }
+        .empty-state i { font-size: 2rem; color: #4A3E39; margin-bottom: 16px; display: block; }
+        .empty-state h3 { color: var(--texto-suave); font-size: 1.6rem; margin: 0 0 6px; }
+        .empty-state p { margin: 0; font-size: 0.98rem; color: var(--subtexto); }
+        .btn-limpar { margin-top: 20px; }
 
         /* --- SKELETON --- */
-        .skeleton-card { background: var(--card); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
+        .skeleton-card { background: var(--card); border-radius: 16px; overflow: hidden; border: 1px solid #2E2523; }
         .sk-img { aspect-ratio: 4 / 5; }
-        .sk-body { padding: 20px; }
+        .sk-body { padding: 18px; }
         .sk-line { height: 13px; border-radius: 4px; margin-bottom: 10px; }
         .sk-line.short { width: 40%; }
         .sk-line.med { width: 70%; }
 
-        /* --- RESULTADO COUNT --- */
-        .result-count {
-            text-align: center;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.72rem;
-            color: #7b6e68;
-            letter-spacing: 1px;
-            padding-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        /* --- ALTERNÂNCIA DE VISUALIZAÇÃO --- */
-        .view-toggle {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 0 20px 18px;
-        }
-
-        .view-btn {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--subtexto);
-            padding: 9px 18px;
-            border-radius: 8px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transicao);
-        }
-        .view-btn:hover { border-color: rgba(198, 161, 91, 0.4); color: var(--dourado-claro); }
-        .view-btn.active {
-            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
-            border-color: rgba(198, 161, 91, 0.2);
-            color: rgba(255, 255, 255, 0.92);
-        }
-
         /* --- LINHA DO TEMPO --- */
-        .timeline-container { max-width: 720px; margin: 0 auto; padding: 6px 5% 70px; }
-
-        .timeline-month { margin-bottom: 34px; }
-
+        .timeline-container { max-width: 760px; margin: 0 auto; padding: 36px 0 72px; }
+        .timeline-month { margin-bottom: 36px; }
         .timeline-month-label {
-            font-family: 'Cinzel', serif;
-            color: var(--dourado);
-            font-size: 0.98rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 500;
-            margin: 0 0 18px;
+            font-size: 1.7rem;
+            color: var(--titulo);
+            margin: 0 0 16px;
             padding-left: 40px;
             position: relative;
         }
@@ -335,102 +245,62 @@
             width: 10px; height: 10px;
             border-radius: 50%;
             background: var(--dourado);
-            box-shadow: 0 0 0 4px rgba(198, 161, 91, 0.15);
         }
-
-        .timeline-track {
-            position: relative;
-            padding-left: 40px;
-            margin-left: 11px;
-            border-left: 2px solid rgba(198, 161, 91, 0.16);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 16px;
-            cursor: pointer;
-        }
+        .timeline-track { position: relative; padding-left: 40px; margin-left: 11px; border-left: 1px solid #3A302D; }
+        .timeline-item { position: relative; margin-bottom: 12px; cursor: pointer; }
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -46px;
-            top: 26px;
-            width: 8px; height: 8px;
+            left: -45px;
+            top: 50%;
+            width: 9px; height: 9px;
             border-radius: 50%;
-            background: rgba(198, 161, 91, 0.55);
+            transform: translateY(-50%);
+            background: #5A4A3E;
         }
-
         .timeline-card {
             display: flex;
             gap: 14px;
             align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--card);
+            border: 1px solid #2E2523;
             border-radius: 14px;
             padding: 12px;
             transition: var(--transicao);
         }
-        .timeline-card:hover {
-            border-color: rgba(139, 0, 32, 0.4);
-            background: rgba(255, 255, 255, 0.04);
-            transform: translateX(4px);
-        }
-
-        .timeline-img { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-
+        .timeline-card:hover { border-color: var(--borda-dourada); }
+        .timeline-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: var(--card-alt); }
         .timeline-info { flex: 1; min-width: 0; }
-        .timeline-date {
-            font-size: 0.66rem;
-            color: var(--subtexto);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Outfit', sans-serif;
-        }
-        .timeline-nome {
-            font-family: 'Cinzel', serif;
-            color: var(--texto);
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin: 3px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .timeline-meta { font-size: 0.75rem; color: var(--subtexto); font-family: 'Outfit', sans-serif; }
-        .timeline-nota { font-family: 'Cinzel', serif; color: var(--dourado); font-weight: 600; font-size: 1.15rem; flex-shrink: 0; }
+        .timeline-date { font-size: 0.85rem; color: var(--texto-fraco); }
+        .timeline-nome { font-family: var(--font-display); color: var(--titulo); font-size: 1.3rem; font-weight: 600; line-height: 1.2; margin: 1px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .timeline-meta { font-size: 0.9rem; color: var(--subtexto); }
+        .timeline-nota { font-family: var(--font-display); color: var(--dourado-claro); font-weight: 600; font-size: 1.4rem; flex-shrink: 0; }
 
-        @media (max-width: 992px) {
-            .search-section { padding: 45px 15px 10px; }
-            .search-section h1 { font-size: 1.7rem; }
-            .vinho-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); padding: 20px 4%; gap: 16px; }
-            .vinho-img-container { aspect-ratio: 4 / 5; }
+        @media (max-width: 860px) {
+            .toolbar { position: static; }
+            .filters-bar { order: 3; flex: 1 1 100%; }
+            .search-container { flex-basis: 100%; }
+            .sort-bar { flex: 1 1 auto; }
+            .sort-bar select { flex: 1; }
         }
 
-        @media (max-width: 768px) {
-            .search-section h1 { font-size: 1.4rem; }
-            .vinho-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 4%; }
-            .filter-chip { padding: 8px 14px; font-size: 0.78rem; min-height: 38px; }
-            .sort-btn { padding: 8px 12px; font-size: 0.78rem; min-height: 36px; }
-            .sort-bar { flex-wrap: wrap; gap: 6px; padding: 0 15px 16px; }
-            .view-btn { padding: 8px 14px; font-size: 0.75rem; min-height: 38px; }
-        }
-
-        @media (max-width: 480px) {
-            .vinho-grid { grid-template-columns: 1fr; gap: 12px; padding: 12px 4%; }
-            .filter-chip { padding: 10px 16px; font-size: 0.8rem; min-height: 44px; }
-            .filter-chip:active { background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro)); color: #fff; }
-            .sort-btn { padding: 10px 12px; font-size: 0.8rem; min-height: 44px; }
-            .sort-btn:active { color: var(--dourado); }
-            .view-btn { padding: 10px 14px; font-size: 0.76rem; min-height: 44px; }
-            .filters-bar { gap: 6px; padding: 10px 12px; }
-            .search-section h1 { font-size: 1.2rem; }
-            .search-section p.sub-titulo { font-size: 0.85rem; }
+        @media (max-width: 560px) {
+            .vinho-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding-top: 20px; }
             .vinho-img-container { aspect-ratio: 1 / 1; }
-            .timeline-track { padding-left: 30px; margin-left: 6px; }
-            .timeline-month-label { padding-left: 28px; }
-            .timeline-item::before { left: -34px; }
-            .timeline-img { width: 48px; height: 48px; }
-            .timeline-nota { font-size: 0.95rem; }
+            .vinho-info { padding: 12px; }
+            .vinho-nome { font-size: 1.15rem; }
+            .vinho-detalhes { font-size: 0.85rem; }
+            .vinho-data { display: none; }
+            .notas { flex-direction: column; gap: 2px; font-size: 0.82rem; }
+            .card-tag.tipo { display: none; }
+            .timeline-track { padding-left: 26px; margin-left: 6px; }
+            .timeline-month-label { padding-left: 26px; font-size: 1.45rem; }
+            .timeline-item::before { left: -31px; }
+            .timeline-img { width: 50px; height: 50px; }
+        }
+
+        @media (max-width: 360px) {
+            .vinho-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -438,41 +308,48 @@
 
     <div id="navbar-placeholder"></div>
 
+    <main class="pagina">
     <div class="search-section">
-        <h1 data-i18n="catalogo.title">Nossa Adega</h1>
-        <p class="sub-titulo" data-i18n="catalogo.subtitle">Todos os rótulos que já dividimos, com a nota de cada um de nós.</p>
+        <div>
+            <h1 data-i18n="catalogo.title">Nossa Adega</h1>
+            <p class="sub-titulo" data-i18n="catalogo.subtitle">Todos os rótulos que já dividimos, com a nota de cada um de nós.</p>
+        </div>
+        <div class="result-count" id="result-count" aria-live="polite"></div>
+    </div>
+
+    <div class="toolbar" role="search">
         <div class="search-container">
             <i class="fas fa-search" aria-hidden="true"></i>
-            <input type="text" id="search" data-i18n-placeholder="catalogo.search_placeholder" placeholder="Pesquisar vinho, uva ou país..." data-i18n-aria-label="catalogo.search_placeholder" aria-label="Pesquisar vinho">
+            <input type="search" id="search" data-i18n-placeholder="catalogo.search_placeholder" placeholder="Pesquisar vinho, uva ou país..." data-i18n-aria-label="catalogo.search_placeholder" aria-label="Pesquisar vinho" autocomplete="off">
+        </div>
+
+        <div class="filters-bar" id="filters-bar">
+            <button type="button" class="filter-chip active" data-filter="todos" aria-pressed="true"><span data-i18n="catalogo.filter_all">Todos</span></button>
+            <button type="button" class="filter-chip" data-filter="Tinto" aria-pressed="false"><span class="tipo-ponto" style="background:var(--tipo-tinto)"></span><span data-i18n="catalogo.filter_red">Tintos</span></button>
+            <button type="button" class="filter-chip" data-filter="Branco" aria-pressed="false"><span class="tipo-ponto" style="background:var(--tipo-branco)"></span><span data-i18n="catalogo.filter_white">Brancos</span></button>
+            <button type="button" class="filter-chip" data-filter="Rosé" aria-pressed="false"><span class="tipo-ponto" style="background:var(--tipo-rose)"></span><span data-i18n="catalogo.filter_rose">Rosés</span></button>
+            <button type="button" class="filter-chip" data-filter="Espumante" aria-pressed="false"><span class="tipo-ponto" style="background:var(--tipo-espumante)"></span><span data-i18n="catalogo.filter_sparkling">Espumantes</span></button>
+        </div>
+
+        <label class="sort-bar" id="sort-bar">
+            <span data-i18n="catalogo.sort_label">Ordenar:</span>
+            <select id="sort-select">
+                <option value="recentes" data-i18n="catalogo.sort_recent">Mais Recentes</option>
+                <option value="nota-desc" data-i18n="catalogo.sort_rating_desc">Maior Nota</option>
+                <option value="nota-asc" data-i18n="catalogo.sort_rating_asc">Menor Nota</option>
+                <option value="az" data-i18n="catalogo.sort_az">A–Z</option>
+            </select>
+        </label>
+
+        <div class="view-toggle">
+            <button type="button" class="view-btn active" id="view-grade-btn" aria-pressed="true" data-i18n-aria-label="catalogo.view_grid" aria-label="Grade" data-i18n-title="catalogo.view_grid" title="Grade">
+                <i class="fas fa-th-large" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="view-btn" id="view-timeline-btn" aria-pressed="false" data-i18n-aria-label="catalogo.view_timeline" aria-label="Linha do Tempo" data-i18n-title="catalogo.view_timeline" title="Linha do Tempo">
+                <i class="fas fa-stream" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
-
-    <div class="filters-bar" id="filters-bar">
-        <button class="filter-chip active" data-filter="todos" data-i18n="catalogo.filter_all">Todos</button>
-        <button class="filter-chip" data-filter="Tinto" data-i18n="catalogo.filter_red">Tintos</button>
-        <button class="filter-chip" data-filter="Branco" data-i18n="catalogo.filter_white">Brancos</button>
-        <button class="filter-chip" data-filter="Rosé" data-i18n="catalogo.filter_rose">Rosés</button>
-        <button class="filter-chip" data-filter="Espumante" data-i18n="catalogo.filter_sparkling">Espumantes</button>
-    </div>
-
-    <div class="view-toggle">
-        <button class="view-btn active" id="view-grade-btn">
-            <i class="fas fa-th" aria-hidden="true"></i> <span data-i18n="catalogo.view_grid">Grade</span>
-        </button>
-        <button class="view-btn" id="view-timeline-btn">
-            <i class="fas fa-stream" aria-hidden="true"></i> <span data-i18n="catalogo.view_timeline">Linha do Tempo</span>
-        </button>
-    </div>
-
-    <div class="sort-bar" id="sort-bar">
-        <span data-i18n="catalogo.sort_label">Ordenar:</span>
-        <button class="sort-btn active" data-sort="recentes" data-i18n="catalogo.sort_recent">Mais Recentes</button>
-        <button class="sort-btn" data-sort="nota-desc" data-i18n="catalogo.sort_rating_desc">Maior Nota</button>
-        <button class="sort-btn" data-sort="nota-asc" data-i18n="catalogo.sort_rating_asc">Menor Nota</button>
-        <button class="sort-btn" data-sort="az" data-i18n="catalogo.sort_az">A–Z</button>
-    </div>
-
-    <div class="result-count" id="result-count"></div>
 
     <!-- Skeleton loading -->
     <div class="vinho-grid" id="skeleton-grid">
@@ -486,6 +363,7 @@
 
     <div class="vinho-grid" id="vinho-grid" style="display:none;"></div>
     <div class="timeline-container" id="timeline-container" style="display:none;"></div>
+    </main>
 
     <div id="footer-placeholder"></div>
 
@@ -508,6 +386,16 @@ const getFlagUrl = (pais) => {
     };
     return `https://flagcdn.com/w80/${flags[n] || "un"}.png`;
 };
+        const esc = (s) => String(s ?? '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        const fmtNota = (n) => {
+            const lang = I18N.getLang();
+            return Number(n).toLocaleString(lang === 'pt' ? 'pt-BR' : lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+        };
+        const TIPO_COR = [['tinto', 'var(--tipo-tinto)'], ['branco', 'var(--tipo-branco)'], ['ros', 'var(--tipo-rose)'], ['espumante', 'var(--tipo-espumante)']];
+        const corTipo = (t) => (TIPO_COR.find(([k]) => (t || '').toLowerCase().includes(k)) || [0, 'var(--dourado)'])[1];
+
         let vinhos = [];
         let filtroAtual = 'todos';
         let ordenacaoAtual = 'recentes';
@@ -568,7 +456,7 @@ const getFlagUrl = (pais) => {
                 const params = new URLSearchParams(window.location.search);
                 if (params.get('filtro') === 'ultimos') {
                     ordenacaoAtual = 'recentes';
-                    document.querySelector('[data-sort="recentes"]').classList.add('active');
+                    document.getElementById('sort-select').value = 'recentes';
                 }
 
                 document.getElementById('skeleton-grid').style.display = 'none';
@@ -589,9 +477,10 @@ const getFlagUrl = (pais) => {
             } catch (e) {
                 document.getElementById('skeleton-grid').innerHTML = `
                     <div class="empty-state" style="grid-column:1/-1">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                         <h3>${I18N.t('catalogo.error_title')}</h3>
                         <p>${I18N.t('catalogo.error_text')}</p>
+                        <button type="button" class="btn-secundario btn-limpar" onclick="location.reload()">${I18N.t('index.btn_retry')}</button>
                     </div>`;
             }
         }
@@ -664,15 +553,15 @@ const getFlagUrl = (pais) => {
                 count.textContent = '';
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-wine-glass"></i>
+                        <i class="fas fa-wine-glass" aria-hidden="true"></i>
                         <h3>${I18N.t('catalogo.empty_title')}</h3>
                         <p>${I18N.t('catalogo.empty_text')}</p>
-                        <button class="btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
+                        <button type="button" class="btn-secundario btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
                     </div>`;
                 return;
             }
 
-            count.textContent = lista.length + ' ' + (lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular'));
+            count.innerHTML = `<b>${lista.length}</b>${lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular')}`;
 
             const comData = [];
             const semData = [];
@@ -712,7 +601,7 @@ const getFlagUrl = (pais) => {
                             const media = (notaF > 0 && notaH > 0) ? ((notaF + notaH) / 2).toFixed(1) : (notaF || notaH || null);
                             const vinhoObj = toVinhoObj(v);
                             return `
-                            <div class="timeline-item" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
+                            <div class="timeline-item" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/&/g, '&amp;').replace(/'/g, '&#39;')})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
                                 <div class="timeline-card">
                                     <img class="timeline-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || I18N.t('modal.wine_photo')}">
                                     <div class="timeline-info">
@@ -720,7 +609,7 @@ const getFlagUrl = (pais) => {
                                         <div class="timeline-nome">${v['Nome do Vinho'] || I18N.t('catalogo.special_label')}</div>
                                         <div class="timeline-meta">${I18N.translateCountry(v['País']) || ''}${(v['Uva(s)'] || v['Uva']) ? ' · ' + (v['Uva(s)'] || v['Uva']) : ''}</div>
                                     </div>
-                                    <div class="timeline-nota">${media ? '★ ' + media : ''}</div>
+                                    <div class="timeline-nota">${media ? fmtNota(media) : ''}</div>
                                 </div>
                             </div>`;
                         }).join('')}
@@ -736,9 +625,10 @@ const getFlagUrl = (pais) => {
 
         function setViewMode(modo) {
             viewMode = modo;
-            localStorage.setItem('adega_view_mode', modo);
-            document.getElementById('view-grade-btn').classList.toggle('active', modo === 'grade');
-            document.getElementById('view-timeline-btn').classList.toggle('active', modo === 'timeline');
+            try { localStorage.setItem('adega_view_mode', modo); } catch (e) {}
+            const bg = document.getElementById('view-grade-btn'), bt = document.getElementById('view-timeline-btn');
+            bg.classList.toggle('active', modo === 'grade'); bg.setAttribute('aria-pressed', modo === 'grade');
+            bt.classList.toggle('active', modo === 'timeline'); bt.setAttribute('aria-pressed', modo === 'timeline');
             document.getElementById('sort-bar').style.display = modo === 'timeline' ? 'none' : 'flex';
             if (vinhos.length) aplicarFiltros();
         }
@@ -753,15 +643,15 @@ const getFlagUrl = (pais) => {
                 count.textContent = '';
                 grid.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-wine-glass"></i>
+                        <i class="fas fa-wine-glass" aria-hidden="true"></i>
                         <h3>${I18N.t('catalogo.empty_title')}</h3>
                         <p>${I18N.t('catalogo.empty_text')}</p>
-                        <button class="btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
+                        <button type="button" class="btn-secundario btn-limpar" onclick="limparFiltros()">${I18N.t('catalogo.btn_clear')}</button>
                     </div>`;
                 return;
             }
 
-            count.textContent = lista.length + ' ' + (lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular'));
+            count.innerHTML = `<b>${lista.length}</b>${lista.length !== 1 ? I18N.t('catalogo.result_plural') : I18N.t('catalogo.result_singular')}`;
 
             grid.innerHTML = lista.map(v => {
                 const urlFinal = resolveFoto(v);
@@ -769,27 +659,28 @@ const getFlagUrl = (pais) => {
                 const notaH = parseFloat2(v['Pontuação Hwlly']);
                 const vinhoObj = toVinhoObj(v);
 
+                const media = (notaF > 0 && notaH > 0) ? (notaF + notaH) / 2 : (notaF || notaH || 0);
+                const nome = esc(v['Nome do Vinho'] || I18N.t('catalogo.special_label'));
+                const tipo = v['Tipo'] || v['tipo'] || '';
+                const pais = v['País'] || v['Pais'];
+                const uva = v['Uva(s)'] || v['Uva'];
+                const regiao = v['Região'] || v['Regiao'];
+                const data = v['Ano de Consumo'] || v['Data'];
+
                 return `
-                <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/'/g, "\\'")})' tabindex="0" role="button" aria-label="${I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') })}">
+                <div class="vinho-card" onclick='WineModal.open(${JSON.stringify(vinhoObj).replace(/&/g, '&amp;').replace(/'/g, '&#39;')})' tabindex="0" role="button" aria-label="${esc(I18N.t('common.view_details', { nome: v['Nome do Vinho'] || I18N.t('catalogo.special_label') }))}">
                     <div class="vinho-img-container">
-                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="${v['Nome do Vinho'] || I18N.t('modal.wine_photo')}">
+                        <img class="vinho-img" src="${urlFinal}" loading="lazy" onerror="this.src='${IMG_PADRAO}'" alt="" width="400" height="500">
+                        ${tipo ? `<span class="card-tag tipo"><span class="tipo-ponto" style="background:${corTipo(tipo)}"></span>${esc(I18N.translateTipo(tipo))}</span>` : ''}
+                        ${media ? `<span class="card-tag media">${fmtNota(media)}</span>` : ''}
                     </div>
                     <div class="vinho-info">
-                        <h3 class="vinho-nome">${v['Nome do Vinho'] || I18N.t('catalogo.special_label')}</h3>
-                        <span class="vinho-data"><i class="far fa-calendar-alt" aria-hidden="true"></i> ${v['Ano de Consumo'] || 'N/A'}</span>
-                        <div class="vinho-detalhes">
-                            <span><i class="fas fa-seedling" aria-hidden="true"></i> ${v['Uva(s)'] || I18N.t('catalogo.grape_not_informed')}</span>
-                            <span><i class="fas fa-globe-americas" aria-hidden="true"></i> <img src="${getFlagUrl(v['País'] || v['Pais'])}" class="vinho-flag-icon" alt="">${I18N.translateCountry(v['País']) || I18N.t('catalogo.origin_not_informed')}${(v['Região'] || v['Regiao']) ? ' · ' + (v['Região'] || v['Regiao']) : ''}</span>
-                        </div>
+                        <h3 class="vinho-nome">${nome}</h3>
+                        <div class="vinho-detalhes">${pais ? `<img src="${getFlagUrl(pais)}" class="vinho-flag-icon" alt="">${esc(I18N.translateCountry(pais))}${regiao ? ' · ' + esc(regiao) : ''}` : esc(I18N.t('catalogo.origin_not_informed'))}<br>${esc(uva || I18N.t('catalogo.grape_not_informed'))}${v['Safra'] ? ' · ' + esc(v['Safra']) : ''}</div>
+                        ${data ? `<div class="vinho-data">${esc(I18N.t('modal.tasted_on'))} ${esc(data)}</div>` : ''}
                         <div class="notas">
-                            <div class="nota-box">
-                                <span>Fellype</span>
-                                <div class="nota-valor">${notaF || '—'}</div>
-                            </div>
-                            <div class="nota-box">
-                                <span>Hwlly</span>
-                                <div class="nota-valor">${notaH || '—'}</div>
-                            </div>
+                            <span>Fellype<b>${notaF ? fmtNota(notaF) : '—'}</b></span>
+                            <span>Hwlly<b>${notaH ? fmtNota(notaH) : '—'}</b></span>
                         </div>
                     </div>
                 </div>`;
@@ -807,7 +698,7 @@ const getFlagUrl = (pais) => {
             buscaAtual = '';
             filtroAtual = 'todos';
             document.getElementById('search').value = '';
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'todos'));
+            document.querySelectorAll('.filter-chip').forEach(c => { const on = c.dataset.filter === 'todos'; c.classList.toggle('active', on); c.setAttribute('aria-pressed', on); });
             aplicarFiltros();
         }
 
@@ -821,30 +712,23 @@ const getFlagUrl = (pais) => {
         document.getElementById('filters-bar').addEventListener('click', (e) => {
             const chip = e.target.closest('.filter-chip');
             if (!chip) return;
-            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); });
             chip.classList.add('active');
+            chip.setAttribute('aria-pressed', 'true');
             filtroAtual = chip.dataset.filter;
             aplicarFiltros();
         });
 
         // Ordenação
-        document.querySelectorAll('.sort-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                ordenacaoAtual = btn.dataset.sort;
-                aplicarFiltros();
-            });
+        document.getElementById('sort-select').addEventListener('change', (e) => {
+            ordenacaoAtual = e.target.value;
+            aplicarFiltros();
         });
 
         // Alternância Grade / Linha do Tempo
         document.getElementById('view-grade-btn').addEventListener('click', () => setViewMode('grade'));
         document.getElementById('view-timeline-btn').addEventListener('click', () => setViewMode('timeline'));
-        if (viewMode === 'timeline') {
-            document.getElementById('view-grade-btn').classList.remove('active');
-            document.getElementById('view-timeline-btn').classList.add('active');
-            document.getElementById('sort-bar').style.display = 'none';
-        }
+        if (viewMode === 'timeline') setViewMode('timeline');
 
         fetchVinhos();
         window.addEventListener('i18n:change', () => { if (vinhos.length) aplicarFiltros(); });

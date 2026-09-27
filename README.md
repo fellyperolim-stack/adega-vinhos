@@ -34,7 +34,24 @@ assets/           Logo, favicon, ícones PWA, imagem de compartilhamento, placeh
 | `--dourado-claro` | `#E4CB94` | Títulos e destaques |
 | `--texto` / `--subtexto` | `#ECE4DD` / `#A0938C` | Texto e apoio |
 
-Tipografia mantida: **Cinzel** (títulos) + **Outfit** (interface e texto).
+Tipografia (redesign 3.0): **Cormorant Garamond** nos títulos e números, **Outfit** na interface e no texto, **Cinzel** só na marca.
+
+## Redesign 3.0 (set/2026)
+
+- Home mostra o **Escolhido do mês** logo na primeira tela (garrafa, notas dos dois e ficha), seguido dos números da adega, **Últimos brindes** (4 rótulos mais recentes da planilha), origens e sommeliers. A citação virou o fecho da página.
+- Caixa-alta espaçada só em micro-rótulos (classe `.rotulo`); nenhum texto abaixo de 12px.
+- Cores sólidas: sem degradês em botões, cabeçalhos e cards; profundidade por contraste entre superfícies.
+- Menu enxuto: Catálogo · Do mês · Explorar ▾ (países, uvas, vinícolas, estatísticas, games) · Blog + botão **Registrar vinho**. No celular, barra inferior fixa (Início, Catálogo, +, Do mês, Explorar).
+- Catálogo com uma barra única de controles (busca, tipo, ordenação, visualização) e cards com nota média.
+- Quando a planilha falha, a home mostra a apresentação da adega e um único aviso com “Tentar de novo”; os números mostram “Atualizado em…”.
+- Correção: o link “Ir para o conteúdo” não aparece mais como faixa no topo do celular.
+
+## Voltar ao design anterior (rollback)
+
+A versão exata do site antes do redesign está guardada no branch **`backup/pre-redesign`** (commit `7bba7de`).
+
+- **Mais simples:** fazer merge do pull request **“Voltar ao design anterior”** (branch `rollback/design-anterior`), que já desfaz o redesign e sobe a versão do cache.
+- **Manual:** `git revert -m 1 <commit do merge do redesign>` no `main`, e depois incremente `CACHE_NAME` em `sw.js` (senão quem já abriu o site continua vendo a versão em cache).
 
 ## O que mudou nesta refatoração
 

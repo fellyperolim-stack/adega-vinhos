@@ -72,6 +72,14 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
         return data;
     };
 
+    /* Momento (ms) em que os dados dessa URL foram salvos pela última vez, ou null */
+    window.cacheTimestamp = function (url) {
+        try {
+            const c = JSON.parse(localStorage.getItem(hashUrl(url)));
+            return c && c.ts ? c.ts : null;
+        } catch (e) { return null; }
+    };
+
     window.clearWineCache = function () {
         Object.keys(localStorage)
             .filter(k => k.startsWith('adega_cache_'))
@@ -87,16 +95,27 @@ document.addEventListener('error', (e) => {
     el.src = el.dataset.fallback || window.IMG_FALLBACK;
 }, true);
 
+/* Imagens que já falharam antes deste script carregar também recebem o substituto */
+function aplicarFallbackPendentes() {
+    document.querySelectorAll('img').forEach((el) => {
+        if (el.dataset.fbApplied || !el.complete || el.naturalWidth > 0 || !el.getAttribute('src')) return;
+        el.dataset.fbApplied = '1';
+        el.src = el.dataset.fallback || (el.classList.contains('avatar-lg') ? window.AVATAR_FALLBACK : window.IMG_FALLBACK);
+    });
+}
+aplicarFallbackPendentes();
+window.addEventListener('load', aplicarFallbackPendentes);
+
 (function () {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const T = window.I18N ? window.I18N.t : (k) => k;
 
+    /* Menu enxuto (redesign 3.0): Catálogo · Do mês · Explorar ▾ · Blog + "Registrar vinho".
+       No celular, Início/Catálogo/Registrar/Do mês/Explorar ficam na barra inferior e o
+       painel "Explorar" mostra o resto. */
     const mainLinks = [
-        { href: 'index.html',    key: 'nav.home' },
-        { href: 'catalogo.html', key: 'nav.catalog' },
-        { href: 'blog.html',     key: 'nav.blog' },
-        { href: 'melhores.html', key: 'nav.best' },
-        { href: 'games.html',    key: 'nav.games' },
+        { href: 'catalogo.html', key: 'nav.catalog', icon: 'fa-th-large', soDesktop: true },
+        { href: 'melhores.html', key: 'nav.best',    icon: 'fa-medal',    soDesktop: true },
     ];
 
     const explorarLinks = [
@@ -104,14 +123,18 @@ document.addEventListener('error', (e) => {
         { href: 'uvas.html',      key: 'nav.grapes' },
         { href: 'vinicolas.html', key: 'nav.wineries' },
         { href: 'stats.html',     key: 'nav.stats' },
+        { href: 'games.html',     key: 'nav.games' },
     ];
 
     const isExplore = explorarLinks.some(l => l.href === currentPage);
 
     function isActive(href) {
         if (href === 'catalogo.html' && currentPage.startsWith('catalogo')) return true;
+        if (href === 'blog.html' && currentPage === 'post.html') return true;
         return href === currentPage;
     }
+
+    const activeAttr = (href) => isActive(href) ? 'class="active" aria-current="page"' : '';
 
     const langSwitcherHTML = window.I18N ? window.I18N.buildSwitcherHTML() : '';
 
@@ -120,46 +143,62 @@ document.addEventListener('error', (e) => {
         <nav class="navbar" data-i18n-aria-label="common.main_nav_aria" aria-label="${T('common.main_nav_aria')}">
             <div class="nav-logo">
                 <a href="index.html" data-i18n-aria-label="nav.home_aria" aria-label="${T('nav.home_aria')}">
-                    <img src="assets/favicon.svg" class="brand-mark" alt="" width="34" height="34">
+                    <img src="assets/favicon.svg" class="brand-mark" alt="" width="36" height="36">
                     <span class="brand-text">
                         <span class="brand-name">Fellype &amp; Hwlly</span>
-                        <span class="brand-tagline" data-i18n="nav.tagline">${T('nav.tagline')}</span>
                     </span>
                 </a>
             </div>
-            <button class="menu-toggle" id="mobile-menu-icon" data-i18n-aria-label="nav.open_menu" aria-label="${T('nav.open_menu')}" aria-expanded="false" aria-controls="nav-links-container">
-                <i class="fas fa-bars" aria-hidden="true"></i>
-            </button>
             <ul class="nav-links" id="nav-links-container">
                 ${mainLinks.map(l => `
-                    <li>
-                        <a href="${l.href}" data-i18n="${l.key}" ${isActive(l.href) ? 'class="active" aria-current="page"' : ''}>${T(l.key)}</a>
+                    <li class="so-desktop">
+                        <a href="${l.href}" data-i18n="${l.key}" ${activeAttr(l.href)}>${T(l.key)}</a>
                     </li>
                 `).join('')}
                 <li class="dropdown">
-                    <button class="dropbtn nav-link-style${isExplore ? ' active' : ''}" id="dropdown-trigger" aria-haspopup="true" aria-expanded="false">
-                        <span data-i18n="nav.explore">${T('nav.explore')}</span> <i class="fa fa-caret-down" aria-hidden="true" style="font-size:0.75rem;"></i>
+                    <button class="dropbtn nav-link-style${isExplore ? ' active' : ''}" id="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-content">
+                        <span data-i18n="nav.explore">${T('nav.explore')}</span> <i class="fas fa-chevron-down" aria-hidden="true" style="font-size:0.75rem;"></i>
                     </button>
                     <div class="dropdown-content" id="dropdown-content">
                         ${explorarLinks.map(l => `
-                            <a href="${l.href}" data-i18n="${l.key}" ${l.href === currentPage ? 'class="active" aria-current="page"' : ''}>${T(l.key)}</a>
+                            <a href="${l.href}" data-i18n="${l.key}" ${activeAttr(l.href)}>${T(l.key)}</a>
                         `).join('')}
                     </div>
                 </li>
                 <li>
-                    <a href="cadastro.html" class="btn-primario" style="padding:11px 18px; min-height:40px; font-size:0.66rem;">
-                        <i class="fas fa-plus" aria-hidden="true"></i> <span data-i18n="nav.register">${T('nav.register')}</span>
-                    </a>
+                    <a href="blog.html" data-i18n="nav.blog" ${activeAttr('blog.html')}>${T('nav.blog')}</a>
                 </li>
                 ${langSwitcherHTML}
+                <li class="nav-registrar-li">
+                    <a href="cadastro.html" class="nav-registrar${isActive('cadastro.html') ? ' active' : ''}" ${isActive('cadastro.html') ? 'aria-current="page"' : ''}>
+                        <i class="fas fa-plus" aria-hidden="true"></i> <span data-i18n="nav.register_wine">${T('nav.register_wine')}</span>
+                    </a>
+                </li>
             </ul>
+        </nav>`;
+
+    const tabItem = (href, key, icon) => `
+        <a href="${href}" class="tab-item${isActive(href) ? ' active' : ''}" ${isActive(href) ? 'aria-current="page"' : ''}>
+            <i class="fas ${icon}" aria-hidden="true"></i><span data-i18n="${key}">${T(key)}</span>
+        </a>`;
+
+    const tabbarHTML = `
+        <nav class="tabbar" data-i18n-aria-label="nav.shortcuts_aria" aria-label="${T('nav.shortcuts_aria')}">
+            ${tabItem('index.html', 'nav.home', 'fa-home')}
+            ${tabItem('catalogo.html', 'nav.catalog', 'fa-th-large')}
+            <a href="cadastro.html" class="tab-item tab-registrar${isActive('cadastro.html') ? ' active' : ''}" data-i18n-aria-label="nav.register_wine" aria-label="${T('nav.register_wine')}">
+                <span class="tab-mais"><i class="fas fa-plus" aria-hidden="true"></i></span>
+            </a>
+            ${tabItem('melhores.html', 'nav.best', 'fa-medal')}
+            <button type="button" class="tab-item${isExplore || isActive('blog.html') ? ' active' : ''}" id="mobile-menu-icon" aria-expanded="false" aria-controls="nav-links-container">
+                <i class="fas fa-compass" aria-hidden="true"></i><span data-i18n="nav.explore">${T('nav.explore')}</span>
+            </button>
         </nav>`;
 
     const footerHTML = `
         <footer>
             <div class="footer-brand">Fellype &amp; Hwlly</div>
-            <div class="footer-links">
-                <a href="index.html" data-i18n="nav.home">${T('nav.home')}</a>
+            <nav class="footer-links" data-i18n-aria-label="nav.footer_aria" aria-label="${T('nav.footer_aria')}">
                 <a href="catalogo.html" data-i18n="nav.catalog">${T('nav.catalog')}</a>
                 <a href="melhores.html" data-i18n="nav.best">${T('nav.best')}</a>
                 <a href="paises.html" data-i18n="nav.countries">${T('nav.countries')}</a>
@@ -168,13 +207,13 @@ document.addEventListener('error', (e) => {
                 <a href="stats.html" data-i18n="nav.stats">${T('nav.stats')}</a>
                 <a href="games.html" data-i18n="nav.games">${T('nav.games')}</a>
                 <a href="blog.html" data-i18n="nav.blog">${T('nav.blog')}</a>
-            </div>
-            <hr class="footer-divider">
+            </nav>
             <div class="footer-nota">
                 <span data-i18n="footer.tagline">${T('footer.tagline')}</span><br>
                 <span id="footer-year"></span> · <span data-i18n="footer.curation">${T('footer.curation')}</span>
             </div>
         </footer>
+        ${tabbarHTML}
         <button class="back-to-top" id="back-to-top" data-i18n-aria-label="common.back_to_top" aria-label="${T('common.back_to_top')}">
             <i class="fas fa-chevron-up" aria-hidden="true"></i>
         </button>`;
@@ -212,26 +251,22 @@ document.addEventListener('error', (e) => {
     const yearEl = document.getElementById('footer-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    /* ---- Menu mobile ---- */
+    /* ---- Menu mobile (botão "Explorar" da barra inferior) ---- */
     const mobileBtn = document.getElementById('mobile-menu-icon');
     const navLinks  = document.getElementById('nav-links-container');
 
     function closeMenu() {
         navLinks.classList.remove('active');
-        mobileBtn.setAttribute('aria-expanded', 'false');
-        const icon = mobileBtn.querySelector('i');
-        icon.classList.add('fa-bars');
-        icon.classList.remove('fa-times');
+        if (mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
     }
 
-    mobileBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = navLinks.classList.toggle('active');
-        mobileBtn.setAttribute('aria-expanded', isOpen);
-        const icon = mobileBtn.querySelector('i');
-        icon.classList.toggle('fa-bars', !isOpen);
-        icon.classList.toggle('fa-times', isOpen);
-    });
+    if (mobileBtn) {
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navLinks.classList.toggle('active');
+            mobileBtn.setAttribute('aria-expanded', isOpen);
+        });
+    }
 
     /* ---- Dropdown ---- */
     const dropTrigger = document.getElementById('dropdown-trigger');
@@ -245,7 +280,7 @@ document.addEventListener('error', (e) => {
 
     document.addEventListener('click', (e) => {
         if (navLinks.classList.contains('active') &&
-            !navLinks.contains(e.target) && !mobileBtn.contains(e.target)) closeMenu();
+            !navLinks.contains(e.target) && !(mobileBtn && mobileBtn.contains(e.target))) closeMenu();
 
         if (dropContent.classList.contains('open') &&
             !dropTrigger.contains(e.target) && !dropContent.contains(e.target)) {
@@ -443,7 +478,7 @@ document.addEventListener('error', (e) => {
             ctx.fillText('★ ★ ★ ★ ★', 0, -18);
 
             ctx.fillStyle = '#F1E2B8';
-            ctx.font = "600 46px Cinzel, Georgia, serif";
+            ctx.font = "600 56px 'Cormorant Garamond', Georgia, serif";
             ctx.fillText(notaMedia, 0, 30);
 
             ctx.fillStyle = '#DDB975';
@@ -470,6 +505,7 @@ document.addEventListener('error', (e) => {
             try { await document.fonts.ready; } catch (e) {}
         }
         try { await document.fonts.load("900 22px 'Font Awesome 6 Free'"); } catch (e) {}
+        try { await document.fonts.load("600 66px 'Cormorant Garamond'"); } catch (e) {}
 
         ctx.textAlign = 'left';
         let cy = PHOTO_H + 78;
@@ -507,10 +543,10 @@ document.addEventListener('error', (e) => {
 
         // nome do vinho (até 2 linhas)
         ctx.fillStyle = '#E4CB94';
-        ctx.font = "600 50px Cinzel, Georgia, serif";
-        const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial').toUpperCase(), W - PAD * 2, 2);
-        nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 56));
-        cy += (nomeLinhas.length - 1) * 56 + 46;
+        ctx.font = "600 66px 'Cormorant Garamond', Georgia, serif";
+        const nomeLinhas = wrapLines(ctx, (vinho.nome || 'Vinho Especial'), W - PAD * 2, 2);
+        nomeLinhas.forEach((linha, i) => ctx.fillText(linha, PAD, cy + i * 64));
+        cy += (nomeLinhas.length - 1) * 64 + 46;
 
         if (vinho.produtor) {
             ctx.fillStyle = '#A0938C';
@@ -613,8 +649,8 @@ document.addEventListener('error', (e) => {
             setLetterSpacing(ctx, 0);
 
             ctx.fillStyle = '#E4CB94';
-            ctx.font = "600 50px Cinzel, Georgia, serif";
-            ctx.fillText(String(b.valor), bx + boxW / 2, by + 112);
+            ctx.font = "600 62px 'Cormorant Garamond', Georgia, serif";
+            ctx.fillText(String(b.valor), bx + boxW / 2, by + 114);
         });
         cy += boxH;
 

@@ -21,7 +21,6 @@
     <link rel="alternate icon" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-180.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="shared.css">
 
@@ -30,28 +29,8 @@
 
         /* --- HEADER & SCORE --- */
         .header-section {
-            padding: 50px 15px 25px;
+            padding: clamp(40px, 6vw, 64px) 15px 25px;
             position: relative;
-            background: linear-gradient(to bottom, #1c1413, var(--bg));
-        }
-
-        .header-section h1 {
-            color: var(--dourado);
-            font-family: 'Cinzel', serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin: 10px 0 5px;
-            font-size: 1.9rem;
-            text-align: center;
-        }
-
-        .header-section h1::after {
-            content: '';
-            display: block;
-            width: 36px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--dourado), transparent);
-            margin: 12px auto 0;
         }
 
         .score-board {
@@ -61,7 +40,7 @@
             padding: 8px 22px;
             border-radius: 30px;
             color: var(--dourado-claro);
-            font-weight: 600;
+            font-weight: 500;
             font-size: 1rem;
             margin: 0 auto;
             display: flex;
@@ -69,8 +48,7 @@
             gap: 8px;
             width: fit-content;
             transition: 0.3s;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 1px;
+            font-family: var(--font-corpo);
         }
 
         .header-score-wrapper { display: flex; justify-content: center; margin-top: 16px; }
@@ -81,80 +59,72 @@
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
 
         .game-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 28px 18px;
+            background: var(--card);
+            border: 1px solid #2E2523;
+            border-radius: 20px;
+            padding: 32px 22px;
             text-align: center;
             cursor: pointer;
             transition: var(--transicao);
             position: relative;
             overflow: hidden;
-            box-shadow: var(--sombra-card);
         }
-        .game-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(198, 161, 91, 0.35);
-            background: rgba(198, 161, 91, 0.04);
-            box-shadow: var(--sombra-hover);
-        }
+        .game-card:hover { transform: translateY(-3px); border-color: var(--borda-dourada); }
 
         .game-icon { font-size: 2.6rem; color: var(--dourado); margin-bottom: 18px; opacity: 0.85; }
-        .game-card h3 { font-family: 'Cinzel', serif; margin: 0 0 10px 0; font-size: 1.1rem; color: var(--texto); letter-spacing: 1px; }
-        .game-card p { font-size: 0.82rem; color: #8a7d76; margin: 0; font-family: 'Outfit', sans-serif; line-height: 1.5; }
+        .game-card h3 { margin: 0 0 8px 0; font-size: 1.7rem; color: var(--titulo); }
+        .game-card p { font-size: 0.95rem; color: var(--subtexto); margin: 0; line-height: 1.55; }
 
         .badge-bot {
             position: absolute;
             top: 12px;
             right: 12px;
-            font-size: 0.62rem;
-            background: linear-gradient(135deg, var(--vinho-vivo), var(--vinho-escuro));
-            padding: 3px 9px;
-            border-radius: 10px;
+            font-size: 0.75rem;
+            background: var(--vinho-escuro);
+            padding: 4px 10px;
+            border-radius: 999px;
             font-weight: 600;
-            color: rgba(255,255,255,0.85);
-            font-family: 'Outfit', sans-serif;
-            letter-spacing: 0.5px;
+            color: #F0C7CE;
+            font-family: var(--font-corpo);
         }
 
         /* --- TELAS DE JOGO --- */
         .game-screen {
             display: none;
-            background: rgba(14, 14, 14, 0.95);
-            border: 1px solid rgba(198, 161, 91, 0.25);
+            background: var(--card);
+            border: 1px solid #2E2523;
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             position: relative;
             animation: fadeIn 0.4s;
             min-height: 420px;
-            box-shadow: var(--sombra-card);
         }
 
         .btn-voltar {
             position: absolute; top: 15px; left: 15px;
             background: none; border: 1px solid #7b6e68; color: #b8ada6;
-            padding: 8px 15px; border-radius: 8px; cursor: pointer;
+            padding: 0 15px; min-height: 44px; border-radius: 10px; cursor: pointer;
             transition: 0.3s; font-family: 'Outfit', sans-serif;
         }
         .btn-voltar:hover { background: #3a302d; color: #fff; border-color: var(--dourado); }
 
-        .game-title { font-family: 'Cinzel', serif; color: var(--dourado); margin-bottom: 15px; font-size: 1.8rem; }
+        .game-title { color: var(--titulo); margin-bottom: 15px; font-size: 2.2rem; }
 
-        .game-wine-img { width: 100px; height: 140px; object-fit: cover; border-radius: 8px; border: 2px solid var(--dourado); margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .game-wine-name { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #fff; margin: 5px 0; font-weight: bold; }
+        .game-wine-img { width: 100px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid #5A4A3E; margin-bottom: 10px; }
+        .game-wine-name { font-family: var(--font-display); font-size: 1.9rem; color: var(--titulo); margin: 5px 0; font-weight: 600; line-height: 1.15; }
         .game-wine-date { font-size: 0.9rem; color: var(--subtexto); margin-bottom: 20px; font-style: italic; display: none; }
         .quiz-question { font-size: 1.1rem; margin-bottom: 15px; color: var(--dourado-claro); }
 
         .quiz-options { display: flex; flex-direction: column; gap: 10px; max-width: 350px; margin: 0 auto; }
         .btn-game {
             background: var(--vinho-vivo); color: white;
-            border: 1px solid var(--dourado); padding: 12px 25px;
+            border: 1px solid transparent; padding: 12px 25px; min-height: 48px;
             border-radius: 10px; font-size: 1rem; cursor: pointer;
-            transition: 0.3s; font-family: 'Outfit', sans-serif;
-            font-weight: bold; width: 100%; box-sizing: border-box;
+            transition: 0.3s; font-family: var(--font-corpo);
+            font-weight: 500; width: 100%; box-sizing: border-box;
         }
-        .btn-game:hover { background: var(--dourado); color: var(--bg); }
+        .btn-game:hover { background: #9C2A3D; }
         .btn-game:disabled { cursor: not-allowed; opacity: 0.8; }
         .btn-next { background: var(--dourado); color: var(--bg); margin-top: 20px; width: auto; padding: 10px 30px; display: none; margin-left: auto; margin-right: auto; }
 
@@ -191,7 +161,7 @@
         @media (max-width: 768px) {
             .games-grid { grid-template-columns: 1fr 1fr; gap: 14px; padding: 20px 4%; }
             .game-card { padding: 20px 16px; }
-            .game-card h3 { font-size: 1rem; }
+            .game-card h3 { font-size: 1.5rem; }
             .btn-game { padding: 12px 20px; font-size: 0.95rem; min-height: 44px; }
             .key-btn { width: 36px; height: 40px; font-size: 1rem; }
         }
@@ -216,7 +186,7 @@
 
     <div id="navbar-placeholder"></div>
 
-    <header class="header-section" style="text-align:center; background: linear-gradient(to bottom, #1d1716, var(--bg));">
+    <header class="header-section">
         <h1 data-i18n="games.title">Lounge de Jogos</h1>
         <p class="subtitulo" data-i18n="games.subtitle">Desafios criados a partir dos vinhos que já registramos.</p>
         <div class="header-score-wrapper">

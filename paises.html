@@ -30,16 +30,15 @@
 
         .country-group {
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid #2E2523;
             border-radius: 14px;
             overflow: hidden;
             transition: var(--transicao);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         }
         .country-group:hover { border-color: rgba(198, 161, 91, 0.25); }
 
         .country-header {
-            background: linear-gradient(90deg, #221b1a, #1a1413);
+            background: var(--card);
             padding: 18px 20px;
             cursor: pointer;
             display: flex;
@@ -50,18 +49,17 @@
 
         .country-header h2 {
             margin: 0;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            color: var(--dourado-claro);
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            line-height: 1.15;
+            color: var(--titulo);
             display: flex;
             align-items: center;
             gap: 12px;
-            text-transform: uppercase;
-            font-weight: 400;
-            letter-spacing: 2px;
+            font-weight: 600;
         }
 
-        .country-header img { width: 28px; height: auto; border-radius: 3px; box-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .country-header img { width: 28px; height: auto; border-radius: 3px;  }
         .chevron { transition: var(--transicao); color: var(--dourado); font-size: 0.95rem; opacity: 0.7; }
         .country-group.active .chevron { transform: rotate(180deg); opacity: 1; }
 
@@ -81,44 +79,39 @@
             transition: var(--transicao);
             cursor: pointer;
         }
-        .wine-card:hover {
-            transform: translateX(4px);
-            border-color: rgba(138, 34, 51, 0.4);
-            background: rgba(255, 255, 255, 0.04);
-        }
+        .wine-card:hover { border-color: var(--borda-dourada); background: rgba(255, 255, 255, 0.04); }
 
-        .wine-img { width: 56px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+        .wine-img { width: 56px; height: 56px; border-radius: 7px; object-fit: cover; flex-shrink: 0; background: var(--card-alt); }
 
         .wine-info h3 {
             margin: 0;
-            font-size: 0.88rem;
-            color: var(--texto);
-            line-height: 1.35;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 400;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--titulo);
+            line-height: 1.2;
         }
 
         .wine-info p {
             margin: 4px 0 0;
-            font-size: 0.76rem;
-            color: var(--texto-fraco);
-            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            color: var(--subtexto);
         }
         .wine-info p i { color: var(--dourado); opacity: 0.8; margin-right: 3px; }
 
         .rating-badge {
             margin-left: auto;
-            background: rgba(198, 161, 91, 0.07);
-            color: var(--dourado);
-            padding: 5px 10px;
-            border-radius: 6px;
+            background: var(--card-alt);
+            color: var(--dourado-claro);
+            padding: 4px 10px;
+            border-radius: 999px;
             font-weight: 600;
-            font-size: 0.82rem;
-            min-width: 48px;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            min-width: 52px;
             text-align: center;
-            border: 1px solid rgba(198, 161, 91, 0.15);
             flex-shrink: 0;
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-display);
         }
 
         /* Skeleton */
@@ -131,7 +124,6 @@
         @media (max-width: 992px) {
             .wine-grid { grid-template-columns: 1fr; }
             .country-header { padding: 15px 16px; }
-            .country-header h2 { font-size: 0.9rem; }
         }
 
         @media (max-width: 768px) {
@@ -142,7 +134,6 @@
         }
 
         @media (max-width: 480px) {
-            .country-header h2 { font-size: 0.88rem; }
             .wine-item-name { font-size: 0.85rem; }
             .wine-item-sub { font-size: 0.72rem; }
         }
