@@ -110,19 +110,19 @@ window.addEventListener('load', aplicarFallbackPendentes);
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const T = window.I18N ? window.I18N.t : (k) => k;
 
-    /* Menu enxuto (redesign 3.0): Catálogo · Do mês · Explorar ▾ · Blog + "Registrar vinho".
+    /* Menu enxuto (redesign 3.0): Catálogo · Do mês · Estatísticas · Explorar ▾ · Blog + "Registrar vinho".
        No celular, Início/Catálogo/Registrar/Do mês/Explorar ficam na barra inferior e o
        painel "Explorar" mostra o resto. */
     const mainLinks = [
         { href: 'catalogo.html', key: 'nav.catalog', icon: 'fa-th-large', soDesktop: true },
         { href: 'melhores.html', key: 'nav.best',    icon: 'fa-medal',    soDesktop: true },
+        { href: 'stats.html',    key: 'nav.stats',   icon: 'fa-chart-pie' },
     ];
 
     const explorarLinks = [
         { href: 'paises.html',    key: 'nav.countries' },
         { href: 'uvas.html',      key: 'nav.grapes' },
         { href: 'vinicolas.html', key: 'nav.wineries' },
-        { href: 'stats.html',     key: 'nav.stats' },
         { href: 'games.html',     key: 'nav.games' },
     ];
 
@@ -151,7 +151,7 @@ window.addEventListener('load', aplicarFallbackPendentes);
             </div>
             <ul class="nav-links" id="nav-links-container">
                 ${mainLinks.map(l => `
-                    <li class="so-desktop">
+                    <li${l.soDesktop ? ' class="so-desktop"' : ''}>
                         <a href="${l.href}" data-i18n="${l.key}" ${activeAttr(l.href)}>${T(l.key)}</a>
                     </li>
                 `).join('')}
@@ -190,7 +190,7 @@ window.addEventListener('load', aplicarFallbackPendentes);
                 <span class="tab-mais"><i class="fas fa-plus" aria-hidden="true"></i></span>
             </a>
             ${tabItem('melhores.html', 'nav.best', 'fa-medal')}
-            <button type="button" class="tab-item${isExplore || isActive('blog.html') ? ' active' : ''}" id="mobile-menu-icon" aria-expanded="false" aria-controls="nav-links-container">
+            <button type="button" class="tab-item${isExplore || isActive('blog.html') || isActive('stats.html') ? ' active' : ''}" id="mobile-menu-icon" aria-expanded="false" aria-controls="nav-links-container">
                 <i class="fas fa-compass" aria-hidden="true"></i><span data-i18n="nav.explore">${T('nav.explore')}</span>
             </button>
         </nav>`;
