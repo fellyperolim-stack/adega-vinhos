@@ -41,7 +41,7 @@ Tipografia (redesign 3.0): **Cormorant Garamond** nos títulos e números, **Out
 - Home mostra o **Escolhido do mês** logo na primeira tela (garrafa, notas dos dois e ficha), seguido dos números da adega, **Últimos brindes** (4 rótulos mais recentes da planilha), origens e sommeliers. A citação virou o fecho da página.
 - Caixa-alta espaçada só em micro-rótulos (classe `.rotulo`); nenhum texto abaixo de 12px.
 - Cores sólidas: sem degradês em botões, cabeçalhos e cards; profundidade por contraste entre superfícies.
-- Menu enxuto: Catálogo · Do mês · Explorar ▾ (países, uvas, vinícolas, estatísticas, games) · Blog + botão **Registrar vinho**. No celular, barra inferior fixa (Início, Catálogo, +, Do mês, Explorar).
+- Menu enxuto: Catálogo · Do mês · Estatísticas · Explorar ▾ (países, uvas, vinícolas, games) · Blog + botão **Registrar vinho**. No celular, barra inferior fixa (Início, Catálogo, +, Do mês, Explorar).
 - Catálogo com uma barra única de controles (busca, tipo, ordenação, visualização) e cards com nota média.
 - Quando a planilha falha, a home mostra a apresentação da adega e um único aviso com “Tentar de novo”; os números mostram “Atualizado em…”.
 - Correção: o link “Ir para o conteúdo” não aparece mais como faixa no topo do celular.
