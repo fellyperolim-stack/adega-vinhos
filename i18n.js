@@ -30,7 +30,6 @@
     var DICT = {
         pt: {
             nav: {
-                register_wine: 'Registrar vinho', shortcuts_aria: 'Atalhos', footer_aria: 'Mapa do site',
                 home: 'Início', catalog: 'Catálogo', best: 'Do Mês', games: 'Games',
                 explore: 'Explorar', countries: 'Por países', grapes: 'Por uvas',
                 wineries: 'Vinícolas', stats: 'Estatísticas', register: 'Registrar', blog: 'Blog',
@@ -80,17 +79,6 @@
             },
             switcher: { label: 'Idioma' },
             index: {
-                pick_label: 'Escolhido de {mes}', top_label: 'Nosso rótulo mais bem avaliado',
-                btn_see_wine: 'Ver a ficha completa', btn_all_picks: 'Todos os escolhidos',
-                photo_label: 'Foto do rótulo', avg_label: 'Média',
-                stat_wines_short: 'vinhos degustados', stat_countries_short: 'países',
-                stat_grapes_short: 'castas', stat_avg_short: 'nota média do casal',
-                numbers_aria: 'A adega em números', see_all_stats: 'Ver todas as estatísticas',
-                updated_at: 'Atualizado em {data}',
-                recent_eyebrow: 'Direto da planilha', recent_title: 'Últimos brindes', open_catalog: 'Abrir o catálogo',
-                origins_title: 'Por onde já brindamos', explore_by_country: 'Explorar por país',
-                load_error: 'Não conseguimos carregar a adega agora.', btn_retry: 'Tentar de novo',
-                quote_signature: 'Fellype & Hwlly',
                 hero_eyebrow: 'Adega pessoal',
                 hero_quote: '"Este cantinho é só nosso: um lembrete afetuoso de cada taça, cada viagem e cada história que vivemos juntos no universo do vinho."',
                 hero_intro: 'Desde o primeiro brinde, guardamos aqui cada rótulo, cada nota e cada memória — organizados por país, uva e vinícola.',
@@ -253,7 +241,6 @@
 
         en: {
             nav: {
-                register_wine: 'Log a wine', shortcuts_aria: 'Shortcuts', footer_aria: 'Site map',
                 home: 'Home', catalog: 'Catalog', best: 'Of the Month', games: 'Games',
                 explore: 'Explore', countries: 'By Country', grapes: 'By Grape',
                 wineries: 'Wineries', stats: 'Statistics', register: 'Register', blog: 'Blog',
@@ -303,17 +290,6 @@
             },
             switcher: { label: 'Language' },
             index: {
-                pick_label: 'Pick of {mes}', top_label: 'Our highest-rated label',
-                btn_see_wine: 'See the full sheet', btn_all_picks: 'All monthly picks',
-                photo_label: 'Label photo', avg_label: 'Average',
-                stat_wines_short: 'wines tasted', stat_countries_short: 'countries',
-                stat_grapes_short: 'grapes', stat_avg_short: 'our average rating',
-                numbers_aria: 'The cellar in numbers', see_all_stats: 'See all statistics',
-                updated_at: 'Updated on {data}',
-                recent_eyebrow: 'Straight from the sheet', recent_title: 'Latest toasts', open_catalog: 'Open the catalog',
-                origins_title: 'Where we’ve toasted', explore_by_country: 'Explore by country',
-                load_error: 'We couldn’t load the cellar right now.', btn_retry: 'Try again',
-                quote_signature: 'Fellype & Hwlly',
                 hero_eyebrow: 'Personal cellar',
                 hero_quote: '"This little corner is all ours: a warm reminder of every glass, every trip and every story we’ve lived together in the world of wine."',
                 hero_intro: 'Since our first toast, we’ve kept every label, every note and every memory here — organized by country, grape and winery.',
@@ -476,7 +452,6 @@
 
         es: {
             nav: {
-                register_wine: 'Registrar vino', shortcuts_aria: 'Accesos rápidos', footer_aria: 'Mapa del sitio',
                 home: 'Inicio', catalog: 'Catálogo', best: 'Del Mes', games: 'Juegos',
                 explore: 'Explorar', countries: 'Por países', grapes: 'Por uvas',
                 wineries: 'Bodegas', stats: 'Estadísticas', register: 'Registrar', blog: 'Blog',
@@ -526,17 +501,6 @@
             },
             switcher: { label: 'Idioma' },
             index: {
-                pick_label: 'Elegido de {mes}', top_label: 'Nuestra etiqueta mejor valorada',
-                btn_see_wine: 'Ver la ficha completa', btn_all_picks: 'Todos los elegidos',
-                photo_label: 'Foto de la etiqueta', avg_label: 'Media',
-                stat_wines_short: 'vinos degustados', stat_countries_short: 'países',
-                stat_grapes_short: 'uvas', stat_avg_short: 'nota media de la pareja',
-                numbers_aria: 'La bodega en números', see_all_stats: 'Ver todas las estadísticas',
-                updated_at: 'Actualizado el {data}',
-                recent_eyebrow: 'Directo de la planilla', recent_title: 'Últimos brindis', open_catalog: 'Abrir el catálogo',
-                origins_title: 'Por dónde ya brindamos', explore_by_country: 'Explorar por país',
-                load_error: 'No pudimos cargar la bodega ahora.', btn_retry: 'Intentar de nuevo',
-                quote_signature: 'Fellype & Hwlly',
                 hero_eyebrow: 'Bodega personal',
                 hero_quote: '"Este rincón es solo nuestro: un recuerdo cariñoso de cada copa, cada viaje y cada historia que vivimos juntos en el universo del vino."',
                 hero_intro: 'Desde el primer brindis, guardamos aquí cada etiqueta, cada nota y cada recuerdo, organizados por país, uva y bodega.',
@@ -699,7 +663,6 @@
 
         it: {
             nav: {
-                register_wine: 'Registra vino', shortcuts_aria: 'Scorciatoie', footer_aria: 'Mappa del sito',
                 home: 'Home', catalog: 'Catalogo', best: 'Del Mese', games: 'Giochi',
                 explore: 'Esplora', countries: 'Per paese', grapes: 'Per vitigno',
                 wineries: 'Cantine', stats: 'Statistiche', register: 'Registra', blog: 'Blog',
@@ -749,17 +712,6 @@
             },
             switcher: { label: 'Lingua' },
             index: {
-                pick_label: 'Scelto di {mes}', top_label: 'La nostra etichetta più votata',
-                btn_see_wine: 'Vedi la scheda completa', btn_all_picks: 'Tutti gli scelti',
-                photo_label: 'Foto dell’etichetta', avg_label: 'Media',
-                stat_wines_short: 'vini degustati', stat_countries_short: 'paesi',
-                stat_grapes_short: 'vitigni', stat_avg_short: 'voto medio della coppia',
-                numbers_aria: 'La cantina in numeri', see_all_stats: 'Vedi tutte le statistiche',
-                updated_at: 'Aggiornato il {data}',
-                recent_eyebrow: 'Direttamente dal foglio', recent_title: 'Ultimi brindisi', open_catalog: 'Apri il catalogo',
-                origins_title: 'Dove abbiamo già brindato', explore_by_country: 'Esplora per paese',
-                load_error: 'Non siamo riusciti a caricare la cantina adesso.', btn_retry: 'Riprova',
-                quote_signature: 'Fellype & Hwlly',
                 hero_eyebrow: 'Cantina personale',
                 hero_quote: '"Questo angolo è solo nostro: un ricordo affettuoso di ogni calice, ogni viaggio e ogni storia vissuta insieme nel mondo del vino."',
                 hero_intro: 'Dal primo brindisi, conserviamo qui ogni etichetta, ogni nota e ogni ricordo, organizzati per paese, vitigno e cantina.',
@@ -922,7 +874,6 @@
 
         fr: {
             nav: {
-                register_wine: 'Ajouter un vin', shortcuts_aria: 'Raccourcis', footer_aria: 'Plan du site',
                 home: 'Accueil', catalog: 'Catalogue', best: 'Du Mois', games: 'Jeux',
                 explore: 'Explorer', countries: 'Par pays', grapes: 'Par cépage',
                 wineries: 'Domaines viticoles', stats: 'Statistiques', register: 'Enregistrer', blog: 'Blog',
@@ -972,17 +923,6 @@
             },
             switcher: { label: 'Langue' },
             index: {
-                pick_label: 'Choix de {mes}', top_label: 'Notre étiquette la mieux notée',
-                btn_see_wine: 'Voir la fiche complète', btn_all_picks: 'Tous les choix du mois',
-                photo_label: 'Photo de l’étiquette', avg_label: 'Moyenne',
-                stat_wines_short: 'vins dégustés', stat_countries_short: 'pays',
-                stat_grapes_short: 'cépages', stat_avg_short: 'note moyenne du couple',
-                numbers_aria: 'La cave en chiffres', see_all_stats: 'Voir toutes les statistiques',
-                updated_at: 'Mis à jour le {data}',
-                recent_eyebrow: 'Directement du tableur', recent_title: 'Derniers toasts', open_catalog: 'Ouvrir le catalogue',
-                origins_title: 'Là où nous avons trinqué', explore_by_country: 'Explorer par pays',
-                load_error: 'Impossible de charger la cave pour le moment.', btn_retry: 'Réessayer',
-                quote_signature: 'Fellype & Hwlly',
                 hero_eyebrow: 'Cave personnelle',
                 hero_quote: '"Ce petit coin est bien à nous : un souvenir affectueux de chaque verre, chaque voyage et chaque histoire vécue ensemble dans l’univers du vin."',
                 hero_intro: 'Depuis notre premier toast, nous gardons ici chaque étiquette, chaque note et chaque souvenir, organisés par pays, cépage et domaine.',
