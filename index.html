@@ -649,12 +649,15 @@
                     artigo: completo ? w.artigo : null,
                 };
             });
-            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, wines: leve })); } catch (e) {}
+            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, salvoEm: Date.now(), wines: leve })); } catch (e) {}
         }
         function lerResumo() {
             try {
                 const r = JSON.parse(localStorage.getItem(RESUMO_KEY));
-                return r && Array.isArray(r.wines) && r.wines.length ? r : null;
+                if (!r || !Array.isArray(r.wines) || !r.wines.length) return null;
+                /* Resumo com mais de 10 min não é mostrado: espera a planilha atualizada */
+                if (Date.now() - (r.salvoEm || 0) > (window.CACHE_VALIDADE_MS || 600000)) return null;
+                return r;
             } catch (e) { return null; }
         }
 
@@ -664,6 +667,7 @@
             try {
                 const data = await fetchWithCache(API);
                 if (!Array.isArray(data)) throw new Error('formato inesperado');
+                if (resumo && window.cacheTimestamp && window.cacheTimestamp(API) === resumo.ts) return;
                 const brutos = data.filter(v => get(v, 'Nome do Vinho', 'nome') || get(v, 'País', 'Pais') || get(v, 'Uva(s)', 'Uva'));
                 const wines = brutos.map((v, i) => paraVinho(v, i, brutos.length));
                 const ts = (window.cacheTimestamp && window.cacheTimestamp(API)) || Date.now();
