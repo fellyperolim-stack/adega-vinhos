@@ -1166,6 +1166,8 @@
 
         loadStats();
         window.addEventListener('i18n:change', loadStats);
+        /* Planilha trouxe algo novo (ex.: vinho recém-registrado): redesenha com os dados atualizados */
+        window.addEventListener('adega:dados-atualizados', (e) => { if (e.detail && e.detail.url === API_URL) loadStats(); });
     </script>
 </body>
 </html>

@@ -37,11 +37,14 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
     });
 })();
 
-/* ── CACHE DA PLANILHA (validade de 10 min) ─────────────
-   Até 10 min depois de baixar, as páginas usam a cópia salva (abre na hora).
-   Passou disso, SEMPRE buscam a planilha de novo antes de mostrar — assim um
-   vinho recém-registrado aparece para todo mundo em no máximo 10 min.
-   Se a planilha falhar, a cópia antiga é usada como plano B. */
+/* ── CACHE DA PLANILHA ──────────────────────────────────
+   A planilha (Google Apps Script) pode levar vários segundos para responder,
+   então as páginas nunca ficam esperando por ela se já existe uma cópia salva:
+   - até 10 min depois de baixar: usa a cópia e nem consulta a planilha;
+   - depois disso: mostra a cópia na hora E busca a planilha por trás; se vier
+     algo novo (ex.: um vinho recém-registrado), salva e dispara o evento
+     "adega:dados-atualizados" — cada página escuta e se redesenha sozinha.
+   Sem cópia salva (primeira visita), espera a planilha normalmente. */
 window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
 
 (function setupCache() {
@@ -49,6 +52,25 @@ window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
         let h = 0;
         for (let i = 0; i < url.length; i++) h = (Math.imul(31, h) + url.charCodeAt(i)) | 0;
         return 'adega_cache_' + Math.abs(h).toString(36);
+    }
+
+    const emAndamento = {};
+
+    function buscarESalvar(url, key) {
+        if (emAndamento[key]) return emAndamento[key];
+        emAndamento[key] = fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                let texto = null;
+                try { texto = JSON.stringify(data); } catch (e) {}
+                let anterior = null;
+                try { anterior = localStorage.getItem(key); } catch (e) {}
+                const mudou = !anterior || !texto || anterior.indexOf(texto) === -1;
+                try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
+                return { data, mudou };
+            })
+            .finally(() => { delete emAndamento[key]; });
+        return emAndamento[key];
     }
 
     window.fetchWithCache = async function (url, ttlMs) {
@@ -60,15 +82,17 @@ window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
 
         if (cached && Date.now() - cached.ts <= ttlMs) return cached.data;
 
-        try {
-            const res  = await fetch(url);
-            const data = await res.json();
-            try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
-            return data;
-        } catch (err) {
-            if (cached) return cached.data;
-            throw err;
+        if (cached) {
+            buscarESalvar(url, key)
+                .then(({ mudou }) => {
+                    if (mudou) window.dispatchEvent(new CustomEvent('adega:dados-atualizados', { detail: { url } }));
+                })
+                .catch(() => {});
+            return cached.data;
         }
+
+        const { data } = await buscarESalvar(url, key);
+        return data;
     };
 
     /* Momento (ms) em que os dados dessa URL foram salvos pela última vez, ou null */

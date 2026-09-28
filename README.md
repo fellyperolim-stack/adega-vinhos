@@ -72,6 +72,17 @@ Hoje as fotos ainda são carregadas de links externos. Para deixá-las definitiv
 
 Se um link externo falhar, o site já mostra automaticamente `assets/avatar-fallback.svg`.
 
+
+## Cache dos dados da planilha
+
+A planilha (Google Apps Script) pode levar vários segundos para responder, então as páginas não ficam esperando por ela:
+
+- até **10 min** depois de baixar os dados, a página usa a cópia salva no navegador e nem consulta a planilha;
+- depois disso, mostra a cópia salva na hora e busca a planilha por trás; se vier algo novo (um vinho recém-registrado), a página **se atualiza sozinha** em poucos segundos;
+- só a primeira visita de cada navegador espera a planilha.
+
+A validade fica em `CACHE_VALIDADE_MS` no `nav.js`; o evento que as páginas escutam para se redesenhar é `adega:dados-atualizados`.
+
 ## Publicação
 
 Site estático (GitHub Pages, domínio em `CNAME`). Ao publicar uma alteração de CSS/JS, incremente `CACHE_NAME` em `sw.js` para forçar a atualização nos dispositivos já instalados.

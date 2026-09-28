@@ -30,6 +30,22 @@
     <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://lh3.googleusercontent.com">
+    <link rel="preconnect" href="https://script.google.com">
+    <script>
+        /* Começa a baixar a foto do destaque já no <head>, antes de qualquer outra coisa,
+           usando o resumo salvo da última visita (se houver). */
+        (function () {
+            try {
+                var r = JSON.parse(localStorage.getItem('adega_home_resumo_v1'));
+                var f = r && r.hero;
+                if (!f || f.indexOf('data:') === 0) return;
+                var l = document.createElement('link');
+                l.rel = 'preload'; l.as = 'image'; l.href = f; l.setAttribute('fetchpriority', 'high');
+                document.head.appendChild(l);
+            } catch (e) {}
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&amp;family=Outfit:wght@300;400;500;600&amp;display=swap">
@@ -88,7 +104,13 @@
             padding: 0;
             cursor: pointer;
         }
-        .hero-foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .hero-foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease, opacity 0.4s ease; }
+        .hero-foto.carregando img, .brinde-foto.carregando img { opacity: 0; }
+        .hero-foto.carregando, .brinde-foto.carregando {
+            background: linear-gradient(90deg, #221B1A 25%, #2C2422 50%, #221B1A 75%);
+            background-size: 700px 100%;
+            animation: shimmer 1.6s infinite linear;
+        }
         .hero-foto:hover img { transform: scale(1.03); }
         .hero-foto[disabled] { cursor: default; }
         .hero.sem-dados { grid-template-columns: 1fr; }
@@ -161,7 +183,7 @@
             border: 1px solid #2E2523;
             transition: border-color 0.2s;
         }
-        .brinde-foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease; }
+        .brinde-foto img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.45s ease, opacity 0.4s ease; }
         .brinde:hover .brinde-foto { border-color: var(--borda-dourada); }
         .brinde:hover .brinde-foto img { transform: scale(1.04); }
         .tipo-tag {
@@ -316,8 +338,8 @@
                     <a href="melhores.html" class="btn-secundario" id="hero-todos" data-i18n="index.btn_all_picks">Todos os escolhidos</a>
                 </div>
             </div>
-            <button type="button" class="hero-foto" id="hero-foto" data-i18n-aria-label="index.btn_see_wine" aria-label="Ver a ficha completa" disabled>
-                <img id="hero-img" src="assets/wine-placeholder.svg" alt="" width="600" height="750">
+            <button type="button" class="hero-foto carregando" id="hero-foto" data-i18n-aria-label="index.btn_see_wine" aria-label="Ver a ficha completa" disabled>
+                <img id="hero-img" alt="" width="600" height="750" fetchpriority="high" decoding="async">
             </button>
         </header>
 
@@ -512,6 +534,19 @@
             return melhor ? { w: melhor, rotulo: I18N.t('index.top_label') } : null;
         }
 
+        /* Troca a foto só se mudou (evita recarregar ao redesenhar) e mostra um brilho
+           de carregamento no lugar do "sem foto" enquanto ela baixa */
+        function mostrarFoto(img, caixa, url) {
+            if (img.dataset.url === url) return;
+            img.dataset.url = url;
+            caixa.classList.add('carregando');
+            const pronto = () => caixa.classList.remove('carregando');
+            img.onload = pronto;
+            img.onerror = () => { pronto(); img.onerror = null; img.src = IMG_PADRAO; };
+            img.src = url;
+            if (img.complete && img.naturalWidth) pronto();
+        }
+
         function renderHero(dest) {
             const btnVer = $('hero-ver');
             const foto = $('hero-foto');
@@ -525,7 +560,7 @@
                 <div><span class="l">Fellype</span><span class="n">${w.notaF ? fmt(w.notaF) : '—'}</span></div>
                 <div><span class="l">Hwlly</span><span class="n">${w.notaH ? fmt(w.notaH) : '—'}</span></div>
                 <div class="media"><span class="l">${esc(I18N.t('index.avg_label'))}</span><span class="n">${w.media ? fmt(w.media) : '—'}</span></div>` : '';
-            $('hero-img').src = w.foto;
+            mostrarFoto($('hero-img'), foto, w.foto);
             $('hero-img').alt = w.nome;
             const abrir = () => WineModal.open(paraModal(w));
             $('conteudo').classList.remove('sem-dados');
@@ -549,7 +584,7 @@
             $('conteudo').classList.add('sem-dados');
             $('hero-foto').hidden = true;
             $('hero-foto').disabled = true;
-            $('hero-img').src = IMG_PADRAO;
+            mostrarFoto($('hero-img'), $('hero-foto'), IMG_PADRAO);
             $('hero-img').alt = '';
         }
 
@@ -576,14 +611,15 @@
                 btn.type = 'button';
                 btn.className = 'brinde';
                 btn.innerHTML = `
-                    <span class="brinde-foto">
-                        <img src="${esc(w.foto)}" alt="" loading="lazy" width="300" height="400">
+                    <span class="brinde-foto carregando">
+                        <img alt="" loading="lazy" decoding="async" width="300" height="400">
                         ${w.tipo ? `<span class="tipo-tag"><span class="tipo-ponto" style="background:${corTipo(w.tipo)}"></span>${esc(I18N.translateTipo(w.tipo))}</span>` : ''}
                     </span>
                     <span class="brinde-nome">${esc(w.nome)}</span>
                     <span class="brinde-meta">${metaDe(w) || '&nbsp;'}</span>
                     ${(w.notaF || w.notaH) ? `<span class="nota-mini">F ${w.notaF ? fmt(w.notaF) : '—'} · H ${w.notaH ? fmt(w.notaH) : '—'}</span>` : ''}`;
                 btn.setAttribute('aria-label', I18N.t('common.view_details', { nome: w.nome }));
+                mostrarFoto(btn.querySelector('img'), btn.querySelector('.brinde-foto'), w.foto);
                 btn.addEventListener('click', () => WineModal.open(paraModal(w)));
                 box.appendChild(btn);
             });
@@ -649,14 +685,15 @@
                     artigo: completo ? w.artigo : null,
                 };
             });
-            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, salvoEm: Date.now(), wines: leve })); } catch (e) {}
+            const hero = dest && !String(dest.w.foto).startsWith('data:') ? dest.w.foto : null;
+            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, salvoEm: Date.now(), hero, wines: leve })); } catch (e) {}
         }
         function lerResumo() {
             try {
                 const r = JSON.parse(localStorage.getItem(RESUMO_KEY));
                 if (!r || !Array.isArray(r.wines) || !r.wines.length) return null;
-                /* Resumo com mais de 10 min não é mostrado: espera a planilha atualizada */
-                if (Date.now() - (r.salvoEm || 0) > (window.CACHE_VALIDADE_MS || 600000)) return null;
+                /* Mesmo antigo, o resumo aparece na hora: se a planilha tiver novidade,
+                   a página se redesenha sozinha logo em seguida (evento adega:dados-atualizados) */
                 return r;
             } catch (e) { return null; }
         }
@@ -685,6 +722,8 @@
 
         carregar();
         window.addEventListener('i18n:change', carregar);
+        /* Planilha trouxe algo novo (ex.: vinho recém-registrado): redesenha com os dados atualizados */
+        window.addEventListener('adega:dados-atualizados', (e) => { if (e.detail && e.detail.url === API) carregar(); });
     </script>
 </body>
 </html>
