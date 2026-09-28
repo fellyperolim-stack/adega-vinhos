@@ -54,36 +54,77 @@ window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
         return 'adega_cache_' + Math.abs(h).toString(36);
     }
 
+    /* Os dados ficam no IndexedDB: as fotos em base64 deixam a planilha com vários MB,
+       bem acima dos ~5 MB do localStorage (onde a gravação falhava sem avisar e toda
+       visita esperava a planilha de novo). No localStorage fica só o horário. */
+    let dbPromise = null;
+    function abrirDB() {
+        if (!dbPromise) {
+            dbPromise = new Promise((resolve, reject) => {
+                if (!('indexedDB' in window)) return reject(new Error('sem IndexedDB'));
+                const req = indexedDB.open('adega', 1);
+                req.onupgradeneeded = () => req.result.createObjectStore('cache');
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            }).catch((e) => { dbPromise = null; throw e; });
+        }
+        return dbPromise;
+    }
+    function idb(modo, fn) {
+        return abrirDB().then(db => new Promise((resolve, reject) => {
+            const tx = db.transaction('cache', modo);
+            const req = fn(tx.objectStore('cache'));
+            tx.oncomplete = () => resolve(req && req.result);
+            tx.onerror = tx.onabort = () => reject(tx.error);
+        }));
+    }
+
+    async function lerCache(key) {
+        try {
+            const v = await idb('readonly', st => st.get(key));
+            if (v) return v;
+        } catch (e) {}
+        try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
+    }
+
+    async function gravarCache(key, valor) {
+        try { localStorage.setItem(key + '_ts', String(valor.ts)); } catch (e) {}
+        try {
+            await idb('readwrite', st => st.put(valor, key));
+            try { localStorage.removeItem(key); } catch (e) {}
+            return;
+        } catch (e) {}
+        try { localStorage.setItem(key, JSON.stringify(valor)); } catch (e) {}
+    }
+
     const emAndamento = {};
 
-    function buscarESalvar(url, key) {
+    function buscarESalvar(url, key, anterior) {
         if (emAndamento[key]) return emAndamento[key];
         emAndamento[key] = fetch(url)
             .then(r => r.json())
-            .then(data => {
-                let texto = null;
-                try { texto = JSON.stringify(data); } catch (e) {}
-                let anterior = null;
-                try { anterior = localStorage.getItem(key); } catch (e) {}
-                const mudou = !anterior || !texto || anterior.indexOf(texto) === -1;
-                try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
+            .then(async data => {
+                let mudou = true;
+                try { mudou = !anterior || JSON.stringify(anterior.data) !== JSON.stringify(data); } catch (e) {}
+                await gravarCache(key, { data, ts: Date.now() });
                 return { data, mudou };
             })
             .finally(() => { delete emAndamento[key]; });
         return emAndamento[key];
     }
 
+    const urlsUsadas = new Set();
+
     window.fetchWithCache = async function (url, ttlMs) {
         ttlMs = ttlMs !== undefined ? ttlMs : window.CACHE_VALIDADE_MS;
         const key = hashUrl(url);
-
-        let cached = null;
-        try { cached = JSON.parse(localStorage.getItem(key)); } catch (e) {}
+        urlsUsadas.add(url);
+        const cached = await lerCache(key);
 
         if (cached && Date.now() - cached.ts <= ttlMs) return cached.data;
 
         if (cached) {
-            buscarESalvar(url, key)
+            buscarESalvar(url, key, cached)
                 .then(({ mudou }) => {
                     if (mudou) window.dispatchEvent(new CustomEvent('adega:dados-atualizados', { detail: { url } }));
                 })
@@ -91,24 +132,47 @@ window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
             return cached.data;
         }
 
-        const { data } = await buscarESalvar(url, key);
+        const { data } = await buscarESalvar(url, key, null);
         return data;
     };
+
+    /* Página aberta por muito tempo: confere a planilha a cada 10 min (e ao voltar
+       para a aba) e, se houver vinho novo, a página se redesenha sozinha. */
+    async function revalidarAbertas() {
+        if (document.visibilityState === 'hidden') return;
+        for (const url of urlsUsadas) {
+            const key = hashUrl(url);
+            const cached = await lerCache(key);
+            if (cached && Date.now() - cached.ts <= window.CACHE_VALIDADE_MS) continue;
+            buscarESalvar(url, key, cached)
+                .then(({ mudou }) => {
+                    if (mudou) window.dispatchEvent(new CustomEvent('adega:dados-atualizados', { detail: { url } }));
+                })
+                .catch(() => {});
+        }
+    }
+    setInterval(revalidarAbertas, 60 * 1000);
+    document.addEventListener('visibilitychange', revalidarAbertas);
 
     /* Momento (ms) em que os dados dessa URL foram salvos pela última vez, ou null */
     window.cacheTimestamp = function (url) {
         try {
-            const c = JSON.parse(localStorage.getItem(hashUrl(url)));
+            const k = hashUrl(url);
+            const ts = parseInt(localStorage.getItem(k + '_ts'), 10);
+            if (ts) return ts;
+            const c = JSON.parse(localStorage.getItem(k));
             return c && c.ts ? c.ts : null;
         } catch (e) { return null; }
     };
 
     window.clearWineCache = function () {
+        try { idb('readwrite', st => st.clear()).catch(() => {}); } catch (e) {}
         Object.keys(localStorage)
             .filter(k => k.startsWith('adega_cache_') || k.startsWith('adega_home_resumo'))
             .forEach(k => localStorage.removeItem(k));
     };
 })();
+
 
 /* ── Fallback global de imagens quebradas ───────────── */
 document.addEventListener('error', (e) => {

@@ -37,7 +37,7 @@
            usando o resumo salvo da última visita (se houver). */
         (function () {
             try {
-                var r = JSON.parse(localStorage.getItem('adega_home_resumo_v1'));
+                var r = JSON.parse(localStorage.getItem('adega_home_resumo_v2'));
                 var f = r && r.hero;
                 if (!f || f.indexOf('data:') === 0) return;
                 var l = document.createElement('link');
@@ -537,6 +537,7 @@
         /* Troca a foto só se mudou (evita recarregar ao redesenhar) e mostra um brilho
            de carregamento no lugar do "sem foto" enquanto ela baixa */
         function mostrarFoto(img, caixa, url) {
+            if (!url) { caixa.classList.add('carregando'); return; }   /* foto ainda a caminho */
             if (img.dataset.url === url) return;
             img.dataset.url = url;
             caixa.classList.add('carregando');
@@ -671,7 +672,7 @@
            a próxima visita desenha a página na hora, sem esperar a planilha (Apps Script
            pode levar vários segundos) — mesmo quando a planilha inteira é grande demais
            para o cache do nav.js. */
-        const RESUMO_KEY = 'adega_home_resumo_v1';
+        const RESUMO_KEY = 'adega_home_resumo_v2';
         function salvarResumo(wines, ts) {
             const dest = escolherDestaque(wines);
             const manter = new Set(wines.slice(0, 4));
@@ -679,14 +680,22 @@
             const leve = wines.map(w => {
                 const { bruto, ...resto } = w;
                 const completo = manter.has(w);
-                return {
-                    ...resto,
-                    foto: completo && !String(w.foto).startsWith('data:') ? w.foto : IMG_PADRAO,
-                    artigo: completo ? w.artigo : null,
-                };
+                const base64 = String(w.foto).startsWith('data:');
+                /* Fotos em base64 são pesadas: no resumo fica só a do destaque (se couber);
+                   as outras chegam em milissegundos pelo cache do nav.js (IndexedDB) */
+                const foto = !completo ? IMG_PADRAO
+                    : !base64 ? w.foto
+                    : (dest && w === dest.w && w.foto.length < 1500000) ? w.foto
+                    : null;
+                return { ...resto, foto, artigo: completo ? w.artigo : null };
             });
             const hero = dest && !String(dest.w.foto).startsWith('data:') ? dest.w.foto : null;
-            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, salvoEm: Date.now(), hero, wines: leve })); } catch (e) {}
+            const texto = JSON.stringify({ ts, salvoEm: Date.now(), hero, wines: leve });
+            try { localStorage.removeItem('adega_home_resumo_v1'); localStorage.setItem(RESUMO_KEY, texto); }
+            catch (e) {
+                /* Não coube (foto grande): salva sem a foto do destaque */
+                try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, salvoEm: Date.now(), hero: null, wines: leve.map(w => String(w.foto).startsWith('data:') ? { ...w, foto: null } : w) })); } catch (e2) {}
+            }
         }
         function lerResumo() {
             try {
@@ -704,7 +713,6 @@
             try {
                 const data = await fetchWithCache(API);
                 if (!Array.isArray(data)) throw new Error('formato inesperado');
-                if (resumo && window.cacheTimestamp && window.cacheTimestamp(API) === resumo.ts) return;
                 const brutos = data.filter(v => get(v, 'Nome do Vinho', 'nome') || get(v, 'País', 'Pais') || get(v, 'Uva(s)', 'Uva'));
                 const wines = brutos.map((v, i) => paraVinho(v, i, brutos.length));
                 const ts = (window.cacheTimestamp && window.cacheTimestamp(API)) || Date.now();

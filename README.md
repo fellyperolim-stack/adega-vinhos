@@ -81,7 +81,10 @@ A planilha (Google Apps Script) pode levar vários segundos para responder, ent�
 - depois disso, mostra a cópia salva na hora e busca a planilha por trás; se vier algo novo (um vinho recém-registrado), a página **se atualiza sozinha** em poucos segundos;
 - só a primeira visita de cada navegador espera a planilha.
 
-A validade fica em `CACHE_VALIDADE_MS` no `nav.js`; o evento que as páginas escutam para se redesenhar é `adega:dados-atualizados`.
+- página deixada aberta: confere a planilha sozinha quando a cópia passa de 10 min (e ao voltar para a aba) e se atualiza se houver novidade;
+- quem registra um vinho tem o cache apagado na hora, então vê o vinho novo já na próxima página.
+
+Os dados ficam no **IndexedDB** do navegador (as fotos em base64 deixam a planilha com vários MB, acima do limite de ~5 MB do `localStorage`). A validade fica em `CACHE_VALIDADE_MS` no `nav.js`; o evento que as páginas escutam para se redesenhar é `adega:dados-atualizados`.
 
 ## Publicação
 
