@@ -37,7 +37,13 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
     });
 })();
 
-/* ── CACHE API (stale-while-revalidate, TTL 15 min) ─── */
+/* ── CACHE DA PLANILHA (validade de 10 min) ─────────────
+   Até 10 min depois de baixar, as páginas usam a cópia salva (abre na hora).
+   Passou disso, SEMPRE buscam a planilha de novo antes de mostrar — assim um
+   vinho recém-registrado aparece para todo mundo em no máximo 10 min.
+   Se a planilha falhar, a cópia antiga é usada como plano B. */
+window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
+
 (function setupCache() {
     function hashUrl(url) {
         let h = 0;
@@ -46,30 +52,23 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
     }
 
     window.fetchWithCache = async function (url, ttlMs) {
-        ttlMs = ttlMs !== undefined ? ttlMs : 15 * 60 * 1000;
+        ttlMs = ttlMs !== undefined ? ttlMs : window.CACHE_VALIDADE_MS;
         const key = hashUrl(url);
 
         let cached = null;
         try { cached = JSON.parse(localStorage.getItem(key)); } catch (e) {}
 
-        const isStale = !cached || (Date.now() - cached.ts > ttlMs);
+        if (cached && Date.now() - cached.ts <= ttlMs) return cached.data;
 
-        if (cached) {
-            if (isStale) {
-                fetch(url)
-                    .then(r => r.json())
-                    .then(data => {
-                        try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
-                    })
-                    .catch(() => {});
-            }
-            return cached.data;
+        try {
+            const res  = await fetch(url);
+            const data = await res.json();
+            try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
+            return data;
+        } catch (err) {
+            if (cached) return cached.data;
+            throw err;
         }
-
-        const res  = await fetch(url);
-        const data = await res.json();
-        try { localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); } catch (e) {}
-        return data;
     };
 
     /* Momento (ms) em que os dados dessa URL foram salvos pela última vez, ou null */
@@ -82,7 +81,7 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
 
     window.clearWineCache = function () {
         Object.keys(localStorage)
-            .filter(k => k.startsWith('adega_cache_'))
+            .filter(k => k.startsWith('adega_cache_') || k.startsWith('adega_home_resumo'))
             .forEach(k => localStorage.removeItem(k));
     };
 })();
