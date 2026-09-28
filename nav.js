@@ -40,10 +40,10 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
 /* ── CACHE DA PLANILHA ──────────────────────────────────
    A planilha (Google Apps Script) pode levar vários segundos para responder,
    então as páginas nunca ficam esperando por ela se já existe uma cópia salva:
-   - até 5 min depois de baixar: usa a cópia e nem consulta a planilha;
-   - depois disso: mostra a cópia na hora E busca a planilha por trás; se vier
-     algo novo (ex.: um vinho recém-registrado), salva e dispara o evento
-     "adega:dados-atualizados" — cada página escuta e se redesenha sozinha.
+   - ao abrir ou dar F5: mostra a cópia salva na hora E consulta a planilha por
+     trás; se vier algo novo (ex.: um vinho recém-registrado em outro aparelho),
+     salva e dispara "adega:dados-atualizados" — a página se redesenha sozinha;
+   - página deixada aberta: confere de novo a cada 5 min (e ao voltar para a aba).
    Sem cópia salva (primeira visita), espera a planilha normalmente. */
 window.CACHE_VALIDADE_MS = 5 * 60 * 1000;
 
@@ -114,6 +114,7 @@ window.CACHE_VALIDADE_MS = 5 * 60 * 1000;
     }
 
     const urlsUsadas = new Set();
+    const revalidadoNestaPagina = new Set();
 
     window.fetchWithCache = async function (url, ttlMs) {
         ttlMs = ttlMs !== undefined ? ttlMs : window.CACHE_VALIDADE_MS;
@@ -121,9 +122,10 @@ window.CACHE_VALIDADE_MS = 5 * 60 * 1000;
         urlsUsadas.add(url);
         const cached = await lerCache(key);
 
-        if (cached && Date.now() - cached.ts <= ttlMs) return cached.data;
-
         if (cached) {
+            /* Uma consulta por trás a cada abertura da página (não a cada redesenho) */
+            if (revalidadoNestaPagina.has(url) && Date.now() - cached.ts <= ttlMs) return cached.data;
+            revalidadoNestaPagina.add(url);
             buscarESalvar(url, key, cached)
                 .then(({ mudou }) => {
                     if (mudou) window.dispatchEvent(new CustomEvent('adega:dados-atualizados', { detail: { url } }));
@@ -133,6 +135,7 @@ window.CACHE_VALIDADE_MS = 5 * 60 * 1000;
         }
 
         const { data } = await buscarESalvar(url, key, null);
+        revalidadoNestaPagina.add(url);
         return data;
     };
 
