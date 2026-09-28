@@ -40,12 +40,12 @@ window.AVATAR_FALLBACK = 'assets/avatar-fallback.svg';
 /* ── CACHE DA PLANILHA ──────────────────────────────────
    A planilha (Google Apps Script) pode levar vários segundos para responder,
    então as páginas nunca ficam esperando por ela se já existe uma cópia salva:
-   - até 10 min depois de baixar: usa a cópia e nem consulta a planilha;
+   - até 5 min depois de baixar: usa a cópia e nem consulta a planilha;
    - depois disso: mostra a cópia na hora E busca a planilha por trás; se vier
      algo novo (ex.: um vinho recém-registrado), salva e dispara o evento
      "adega:dados-atualizados" — cada página escuta e se redesenha sozinha.
    Sem cópia salva (primeira visita), espera a planilha normalmente. */
-window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
+window.CACHE_VALIDADE_MS = 5 * 60 * 1000;
 
 (function setupCache() {
     function hashUrl(url) {
@@ -136,7 +136,7 @@ window.CACHE_VALIDADE_MS = 10 * 60 * 1000;
         return data;
     };
 
-    /* Página aberta por muito tempo: confere a planilha a cada 10 min (e ao voltar
+    /* Página aberta por muito tempo: confere a planilha a cada 5 min (e ao voltar
        para a aba) e, se houver vinho novo, a página se redesenha sozinha. */
     async function revalidarAbertas() {
         if (document.visibilityState === 'hidden') return;
