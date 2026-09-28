@@ -6,7 +6,8 @@
    caixa-alta só em micro-rótulos, cores sólidas (sem degradês)
    ===================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap');
+/* Fontes (Cinzel, Cormorant Garamond, Outfit) são carregadas por <link> no <head> de cada página:
+   bem mais rápido que @import, que só começa depois de baixar este arquivo. */
 
 :root {
     /* Vinho */

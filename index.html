@@ -30,6 +30,9 @@
     <link rel="apple-touch-icon" href="assets/icon-180.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&amp;family=Outfit:wght@300;400;500;600&amp;display=swap">
     <link rel="stylesheet" href="shared.css">
 
     <style>
@@ -469,6 +472,7 @@
                 linha: v['_linha'] || null,
                 numero: total - idx,
                 escolhido: String(v['Escolhido do Mês'] || '').trim().toLowerCase(),
+                dPick: dataDoRegistro(v),
                 notaF, notaH,
                 media: (notaF > 0 && notaH > 0) ? (notaF + notaH) / 2 : (notaF || notaH || 0),
             };
@@ -497,7 +501,7 @@
         function escolherDestaque(wines) {
             const escolhidos = wines
                 .filter(w => w.escolhido && w.escolhido !== 'não' && w.escolhido !== 'nao')
-                .map(w => ({ w, d: dataDoRegistro(w.bruto), pos: w.escolhido.includes('2') ? 2 : 1 }))
+                .map(w => ({ w, d: w.dPick, pos: w.escolhido.includes('2') ? 2 : 1 }))
                 .filter(x => x.d);
             if (escolhidos.length) {
                 escolhidos.sort((a, b) => (b.d.chave - a.d.chave) || (a.pos - b.pos));
@@ -616,24 +620,57 @@
             $('painel-origens').hidden = true;
         }
 
+        function renderTudo(wines, ts) {
+            $('aviso-erro').hidden = true;
+            $('numeros').hidden = false;
+            $('secao-brindes').hidden = false;
+            $('painel-origens').hidden = false;
+            renderHero(escolherDestaque(wines));
+            renderNumeros(wines, ts);
+            renderBrindes(wines);
+            renderOrigens(wines);
+        }
+
+        /* Resumo leve da home (sem fotos em base64 nem artigos longos), salvo à parte:
+           a próxima visita desenha a página na hora, sem esperar a planilha (Apps Script
+           pode levar vários segundos) — mesmo quando a planilha inteira é grande demais
+           para o cache do nav.js. */
+        const RESUMO_KEY = 'adega_home_resumo_v1';
+        function salvarResumo(wines, ts) {
+            const dest = escolherDestaque(wines);
+            const manter = new Set(wines.slice(0, 4));
+            if (dest) manter.add(dest.w);
+            const leve = wines.map(w => {
+                const { bruto, ...resto } = w;
+                const completo = manter.has(w);
+                return {
+                    ...resto,
+                    foto: completo && !String(w.foto).startsWith('data:') ? w.foto : IMG_PADRAO,
+                    artigo: completo ? w.artigo : null,
+                };
+            });
+            try { localStorage.setItem(RESUMO_KEY, JSON.stringify({ ts, wines: leve })); } catch (e) {}
+        }
+        function lerResumo() {
+            try {
+                const r = JSON.parse(localStorage.getItem(RESUMO_KEY));
+                return r && Array.isArray(r.wines) && r.wines.length ? r : null;
+            } catch (e) { return null; }
+        }
+
         async function carregar() {
+            const resumo = lerResumo();
+            if (resumo) renderTudo(resumo.wines, resumo.ts);
             try {
                 const data = await fetchWithCache(API);
                 if (!Array.isArray(data)) throw new Error('formato inesperado');
                 const brutos = data.filter(v => get(v, 'Nome do Vinho', 'nome') || get(v, 'País', 'Pais') || get(v, 'Uva(s)', 'Uva'));
                 const wines = brutos.map((v, i) => paraVinho(v, i, brutos.length));
-
-                $('aviso-erro').hidden = true;
-                $('numeros').hidden = false;
-                $('secao-brindes').hidden = false;
-                $('painel-origens').hidden = false;
-
-                renderHero(escolherDestaque(wines));
-                renderNumeros(wines, window.cacheTimestamp ? window.cacheTimestamp(API) : null);
-                renderBrindes(wines);
-                renderOrigens(wines);
+                const ts = (window.cacheTimestamp && window.cacheTimestamp(API)) || Date.now();
+                renderTudo(wines, ts);
+                salvarResumo(wines, ts);
             } catch (e) {
-                mostrarErro();
+                if (!resumo) mostrarErro();
             }
         }
 
